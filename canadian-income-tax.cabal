@@ -1,0 +1,51 @@
+cabal-version:      2.4
+name:               canadian-income-tax
+version:            2023.1
+
+synopsis: Calculation of Canadian income tax
+
+-- A longer description of the package.
+-- description:
+
+-- A URL where users can report bugs.
+-- bug-reports:
+
+-- The license under which the package is released.
+license: GPL-3.0-or-later
+author:             Mario Blažević
+maintainer:         blamario@protonmail.com
+
+-- A copyright notice.
+-- copyright:
+-- category:
+extra-source-files: CHANGELOG.md
+
+library
+    exposed-modules:
+        Tax.Canada.T1.Types
+        Tax.Canada.T1.FieldNames
+
+    -- Modules included in this library but not exported.
+    -- other-modules:
+
+    -- LANGUAGE extensions used by modules in this package.
+    -- other-extensions:
+    build-depends:    base == 4.*, text == 1.*, time == 1.*, rank2classes, ca-province-codes == 1.0.*
+    hs-source-dirs:   src
+    default-language: Haskell2010
+
+executable canadian-income-tax
+    main-is:          Main.hs
+
+    -- Modules included in this executable, other than Main.
+    -- other-modules:
+
+    -- LANGUAGE extensions used by modules in this package.
+    -- other-extensions:
+    build-depends:
+        base == 4.*,
+        rank2classes,
+        canadian-income-tax
+
+    hs-source-dirs:   app
+    default-language: Haskell2010
