@@ -1,5 +1,8 @@
 {-# LANGUAGE DuplicateRecordFields #-}
+{-# LANGUAGE InstanceSigs #-}
+{-# LANGUAGE NoFieldSelectors #-}
 {-# LANGUAGE OverloadedRecordDot #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TemplateHaskell #-}
 
 module Tax.Canada.T1.Types where
@@ -300,11 +303,7 @@ data TaxPreparer line = TaxPreparer {
    telephoneOfPreparer :: line Text,
    line49000_WasAFeeCharged :: line Bool}
 
-$(fmap concat . getAp $
-  traverse
-   (foldMap (Ap .) [Rank2.TH.deriveFunctor, Rank2.TH.deriveApply, Rank2.TH.deriveApplicative,
-                    Rank2.TH.deriveFoldable, Rank2.TH.deriveTraversable])
+$(foldMap Rank2.TH.deriveAll
    [''ElectionsCanada, ''Identification, ''MedicalExpenses,
     ''Page1, ''Page2, ''Page3, ''Page4, ''Page5, ''Page6, ''Page7, ''Page8,
     ''Residence, ''Spouse, ''TaxIncomeBracket, ''TaxPreparer])
-
