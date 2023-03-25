@@ -25,6 +25,16 @@ within root (RadioButtons path leaf) = RadioButtons (root:path) leaf
 within root (Switch path yes no leaf) = Switch (root:path) yes no leaf
 within root (Switch' path leaf) = Switch' (root:path) leaf
 
+t1Fields = T1 {
+   page1 = within "Page1" Rank2.<$> page1Fields,
+   page2 = within "Page2" Rank2.<$> page2Fields,
+   page3 = within "Page3" Rank2.<$> page3Fields,
+   page4 = within "Page4" Rank2.<$> page4Fields,
+   page5 = within "Page5" Rank2.<$> page5Fields,
+   page6 = within "Page6" Rank2.<$> page6Fields,
+   page7 = within "Page7" Rank2.<$> page7Fields,
+   page8 = within "Page8" Rank2.<$> page8Fields}
+
 page1Fields = Page1 {
    identification = within "Identification" Rank2.<$> page1IdentificationFields,
    residence = within "Residence_Info" Rank2.<$> page1ResidenceFields,

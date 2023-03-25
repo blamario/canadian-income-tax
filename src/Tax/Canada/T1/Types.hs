@@ -14,7 +14,15 @@ import Data.Time (Day)
 import qualified Data.CAProvinceCodes as Province
 import qualified Rank2.TH
 
-data MaritalStatus = Married | LivingCommonLaw | Widowed | Divorced | Separated | Single deriving (Eq, Enum, Show)
+data T1 line = T1 {
+   page1 :: Page1 line,
+   page2 :: Page2 line,
+   page3 :: Page3 line,
+   page4 :: Page4 line,
+   page5 :: Page5 line,
+   page6 :: Page6 line,
+   page7 :: Page7 line,
+   page8 :: Page8 line}
 
 data Page1 line = Page1 {
    identification :: Identification line,
@@ -36,6 +44,8 @@ data Identification line = Identification {
    iD_RuralRoute :: line Text,
    iD_POBox :: line Text,
    prov_DropDown :: line Province.Code}
+
+data MaritalStatus = Married | LivingCommonLaw | Widowed | Divorced | Separated | Single deriving (Eq, Enum, Show)
 
 data Residence line = Residence {
    prov_DropDown :: line Text,
@@ -304,6 +314,6 @@ data TaxPreparer line = TaxPreparer {
    line49000_WasAFeeCharged :: line Bool}
 
 $(foldMap Rank2.TH.deriveAll
-   [''ElectionsCanada, ''Identification, ''MedicalExpenses,
+   [''T1, ''ElectionsCanada, ''Identification, ''MedicalExpenses,
     ''Page1, ''Page2, ''Page3, ''Page4, ''Page5, ''Page6, ''Page7, ''Page8,
     ''Residence, ''Spouse, ''TaxIncomeBracket, ''TaxPreparer])
