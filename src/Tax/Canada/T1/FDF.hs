@@ -45,7 +45,9 @@ fromFieldMap fieldValues = Rank2.traverse fill t1Fields
   where fill :: FieldConst a -> Either String (Identity a)
         fill Field {path, entry}
           | Just v <- Map.lookup path fieldValues = toEntry entry (Text.unpack v)
-          | otherwise = error ("Unknown field path " ++ show path)
+          | Just v <- Map.lookup ((<> "[0]") <$> path) fieldValues = toEntry entry (Text.unpack v)
+          | otherwise = error ("Unknown field path " ++ show path ++ " between "
+                               ++ show (Map.lookupLT path fieldValues, Map.lookupGT path fieldValues))
         toEntry :: Entry a -> String -> Either String (Identity a)
         toEntry Count v = Identity <$> readEither v
         toEntry Date v = Identity <$> parseTimeM False defaultTimeLocale "%Y%m%d" v
