@@ -1,9 +1,12 @@
 {-# LANGUAGE DuplicateRecordFields #-}
+{-# LANGUAGE ImportQualifiedPost #-}
 {-# LANGUAGE InstanceSigs #-}
 {-# LANGUAGE NoFieldSelectors #-}
 {-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE StandaloneDeriving #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE UndecidableInstances #-}
 
 module Tax.Canada.T1.Types where
 
@@ -11,8 +14,9 @@ import Data.Fixed (Centi)
 import Data.Monoid (Ap(Ap, getAp))
 import Data.Text (Text)
 import Data.Time (Day)
-import qualified Data.CAProvinceCodes as Province
-import qualified Rank2.TH
+import Data.CAProvinceCodes qualified as Province
+import Language.Haskell.TH qualified as TH
+import Rank2.TH qualified
 
 data T1 line = T1 {
    page1 :: Page1 line,
@@ -312,6 +316,16 @@ data TaxPreparer line = TaxPreparer {
    nameOfPreparer :: line Text,
    telephoneOfPreparer :: line Text,
    line49000_WasAFeeCharged :: line Bool}
+
+$(foldMap
+   (\t-> [d|
+           deriving instance (Show (line Bool), Show (line Centi), Show (line Word), Show (line Text),
+                              Show (line Province.Code), Show (line Day), Show (line MaritalStatus))
+                          => Show ($(TH.conT t) line)
+    |])
+   [''T1, ''ElectionsCanada, ''Identification, ''MedicalExpenses,
+    ''Page1, ''Page2, ''Page3, ''Page4, ''Page5, ''Page6, ''Page7, ''Page8,
+    ''Residence, ''Spouse, ''TaxIncomeBracket, ''TaxPreparer])
 
 $(foldMap Rank2.TH.deriveAll
    [''T1, ''ElectionsCanada, ''Identification, ''MedicalExpenses,
