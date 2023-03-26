@@ -32,7 +32,8 @@ library
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
     build-depends:    base == 4.*, text >= 1.0 && < 2.1, time == 1.*, containers >= 0.5 && < 0.7,
-                      rank2classes ^>= 1.5, ca-province-codes == 1.0.*, forms-data-format
+                      rank2classes ^>= 1.5, ca-province-codes == 1.0.*, forms-data-format == 0.1.*,
+                      template-haskell == 2.*
     hs-source-dirs:   src
     default-language: Haskell2010
 
@@ -45,8 +46,8 @@ executable canadian-income-tax
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
     build-depends:
-        base == 4.*,
-        rank2classes,
+        base == 4.*, text,
+        rank2classes, forms-data-format,
         canadian-income-tax
 
     hs-source-dirs:   app
