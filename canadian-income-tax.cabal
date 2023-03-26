@@ -24,14 +24,15 @@ library
     exposed-modules:
         Tax.Canada.T1.Types
         Tax.Canada.T1.FieldNames
+        Tax.Canada.T1.FDF
 
     -- Modules included in this library but not exported.
     -- other-modules:
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
-    build-depends:    base == 4.*, text == 1.*, time == 1.*,
-                      rank2classes ^>= 1.5, ca-province-codes == 1.0.*
+    build-depends:    base == 4.*, text >= 1.0 && < 2.1, time == 1.*, containers >= 0.5 && < 0.7,
+                      rank2classes ^>= 1.5, ca-province-codes == 1.0.*, forms-data-format
     hs-source-dirs:   src
     default-language: Haskell2010
 
