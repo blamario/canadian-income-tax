@@ -40,7 +40,7 @@ t1Fields = within "form1" Rank2.<$> T1 {
    page3 = within "Page3" . within "Step2" Rank2.<$> page3Fields,
    page4 = within "Page4" . within "Step3" Rank2.<$> page4Fields,
    page5 = within "Page5" Rank2.<$> page5Fields,
-   page6 = within "Page6" Rank2.<$> page6Fields,
+   page6 = within "Page6" . within "PartB" Rank2.<$> page6Fields,
    page7 = within "Page7" Rank2.<$> page7Fields,
    page8 = within "Page8" Rank2.<$> page8Fields}
 
@@ -174,6 +174,11 @@ page4Fields = Page4 {
    line_23100_ClergyResDeduction = Field ["Line_23100_ClergyResDeduction", "Line_23100_Amount"] Amount}
                                                                                            
 page5Fields = Page5 {
+   step4_TaxableIncome = within "Step4_TaxableIncome" Rank2.<$> step4Fields,
+   partA_FederalTax = within "PartA" Rank2.<$> partAFields,
+   partB_FederalTaxCredits = within "PartB" Rank2.<$> partBFields}
+
+step4Fields = Step4 {
    line_25000_OtherPayDeductions = Field ["Line_25000_OtherPayDeductions", "Line_25000_Amount"] Amount,
    line_25100_PartnershipLosses = Field ["Line_25100_PartnershipLosses", "Line_25100_Amount"] Amount,
    line_25600_AdditionalDeductions_Specify = Field ["Line_25600_AdditionalDeductions", "Line_25600_Specify"] Textual,
@@ -187,34 +192,36 @@ page5Fields = Page5 {
    line_24900_SecurityDeductions = Field ["Line_24900_SecurityDeductions", "Line_24900_Amount"] Amount,
    line_25500_NorthernDeductions = Field ["Line_25500_NorthernDeductions", "Line_25500_Amount"] Amount,
    line_25700_AddLines_sum = Field ["Line_25700_AddLines", "Line_25700_Amount1"] Amount,
-   line_25700_AddLines_cont = Field ["Line_25700_AddLines", "Line_25700_Amount2"] Amount,
-   -- Part A
-   column1 = TaxIncomeBracket {
-       line67_income = Field ["Column1", "Line36Amount1"] Amount,
-       line69_overThreshold = Field ["Column1", "Line38Amount1"] Amount,
-       line71_timesRate = Field ["Column1", "Line40Amount1"] Amount,
-       line73_equalsTax = Field ["Column1", "Line42Amount1"] Amount},
-   column2 = TaxIncomeBracket {
-       line67_income = Field ["Column2", "Line36Amount2"] Amount,
-       line69_overThreshold = Field ["Column2", "Line38Amount2"] Amount,
-       line71_timesRate = Field ["Column2", "Line40Amount2"] Amount,
-       line73_equalsTax = Field ["Column2", "Line42Amount2"] Amount},
-   column3 = TaxIncomeBracket {
-       line67_income = Field ["Column3", "Line36Amount3"] Amount,
-       line69_overThreshold = Field ["Column3", "Line38Amount3"] Amount,
-       line71_timesRate = Field ["Column3", "Line40Amount3"] Amount,
-       line73_equalsTax = Field ["Column3", "Line42Amount3"] Amount},
-   column4 = TaxIncomeBracket {
-       line67_income = Field ["Column4", "Line36Amount4"] Amount,
-       line69_overThreshold = Field ["Column4", "Line38Amount4"] Amount,
-       line71_timesRate = Field ["Column4", "Line40Amount4"] Amount,
-       line73_equalsTax = Field ["Column4", "Line42Amount4"] Amount},
-   column5 = TaxIncomeBracket {
-       line67_income = Field ["Column5", "Line36Amount5"] Amount,
-       line69_overThreshold = Field ["Column5", "Line38Amount5"] Amount,
-       line71_timesRate = Field ["Column5", "Line40Amount5"] Amount,
-       line73_equalsTax = Field ["Column5", "Line42Amount5"] Amount},
-   -- Part B
+   line_25700_AddLines_cont = Field ["Line_25700_AddLines", "Line_25700_Amount2"] Amount}
+
+partAFields = Page5PartA {
+   column1 = within "Column1" Rank2.<$> TaxIncomeBracket {
+       line67_income = Field ["Line36Amount1"] Amount,
+       line69_overThreshold = Field ["Line38Amount1"] Amount,
+       line71_timesRate = Field ["Line40Amount1"] Amount,
+       line73_equalsTax = Field ["Line42Amount1"] Amount},
+   column2 = within "Column2" Rank2.<$> TaxIncomeBracket {
+       line67_income = Field ["Line36Amount2"] Amount,
+       line69_overThreshold = Field ["Line38Amount2"] Amount,
+       line71_timesRate = Field ["Line40Amount2"] Amount,
+       line73_equalsTax = Field ["Line42Amount2"] Amount},
+   column3 = within "Column3" Rank2.<$> TaxIncomeBracket {
+       line67_income = Field ["Line36Amount3"] Amount,
+       line69_overThreshold = Field ["Line38Amount3"] Amount,
+       line71_timesRate = Field ["Line40Amount3"] Amount,
+       line73_equalsTax = Field ["Line42Amount3"] Amount},
+   column4 = within "Column4" Rank2.<$> TaxIncomeBracket {
+       line67_income = Field ["Line36Amount4"] Amount,
+       line69_overThreshold = Field ["Line38Amount4"] Amount,
+       line71_timesRate = Field ["Line40Amount4"] Amount,
+       line73_equalsTax = Field ["Line42Amount4"] Amount},
+   column5 = within "Column5" Rank2.<$> TaxIncomeBracket {
+       line67_income = Field ["Line36Amount5"] Amount,
+       line69_overThreshold = Field ["Line38Amount5"] Amount,
+       line71_timesRate = Field ["Line40Amount5"] Amount,
+       line73_equalsTax = Field ["Line42Amount5"] Amount}}
+
+partBFields = Page5PartB {
    line30000 = Field ["Line30000_Sub", "Line1_Amount"] Amount,
    line30100 = Field ["Line30100_Sub", "Line2_Amount"] Amount,
    line30300 = Field ["Line30300_Sub", "Line3_Amount"] Amount,
@@ -226,11 +233,9 @@ page5Fields = Page5 {
    line_81 = Field ["Line_81", "Line30_Amount"] Amount}
                                                                                            
 page6Fields = Page6 {
-   -- CPP_QPP
-   line30800 = Field ["Line30800_Sub", "Line8_Amount"] Amount,
-   line31000 = Field ["Line31000_Sub", "Line9_Amount"] Amount,
-   -- EI
-   line31200 = Field ["Line31200_Sub", "Line10_Amount"] Amount,
+   line30800 = Field ["CPP_QPP_Sub", "Line30800_Sub", "Line8_Amount"] Amount,
+   line31000 = Field ["CPP_QPP_Sub", "Line31000_Sub", "Line9_Amount"] Amount,
+   line31200 = Field ["EIPremiums_Sub", "Line31200_Sub", "Line10_Amount"] Amount,
    line31217 = Field ["Line31217_Sub", "Line11_Amount"] Amount,
    line31220 = Field ["Line31220_Sub", "Line12_Amount"] Amount,
    line31240 = Field ["Line31240_Sub", "Line13_Amount"] Amount,
@@ -251,7 +256,7 @@ page6Fields = Page6 {
    line32400 = Field ["Line32400_Sub", "Line23_Amount"] Amount,
    line32600 = Field ["Line32600_Sub", "Line24_Amount"] Amount,
    line104 = Field ["Line103", "Amount1"] Amount,
-   medical_expenses = page6MedicalExpensesFields,
+   medical_expenses = within "Medical_expenses" Rank2.<$> page6MedicalExpensesFields,
    line33200_sum = Field ["Line33200_Sub", "Line29_Amount1"] Amount,
    line33200_cont = Field ["Line33200_Sub", "Line29_Amount2"] Amount,
    line33500 = Field ["Line33500_Sub", "Line30_Amount"] Amount,
@@ -269,7 +274,10 @@ page6MedicalExpensesFields = MedicalExpenses {
    otherDependants = Field ["Line33199_Sub", "Line28_Amount"] Amount}
 
 page7Fields = Page7 {
-   -- Part C
+   partC_NetFederalTax = within "PartC" Rank2.<$> partCFields,
+   step6_RefundOrBalanceOwing = within "Step6" Rank2.<$> page7step6Fields}
+
+partCFields = Page7PartC {
    line116 = Field ["Line108_sub", "Line43Amount"] Amount,
    line40424 = Field ["Line40424_Sub", "Line44Amount"] Amount,
    line40400 = Field ["Line40400_Sub", "Line45Amount1"] Amount,
@@ -296,8 +304,9 @@ page7Fields = Page7 {
    line41700 = Field ["Line41700_sub", "Line58Amount"] Amount,
    line41500 = Field ["Line41500_sub", "Line59Amount"] Amount,
    line41800 = Field ["Line41800_sub", "Line61Amount"] Amount,
-   line42000 = Field ["Line42000_sub", "Line60Amount"] Amount,
-   -- Step 6
+   line42000 = Field ["Line42000_sub", "Line60Amount"] Amount}
+
+page7step6Fields = Page7Step6 {
    line140 = Field ["Line_Y", "Line_42120_Amount"] Amount,
    line_42100_CPPContributions = Field ["Line_42100_CPPContributions", "Line_42100_Amount"] Amount,
    line_42120_EIPremiums = Field ["Line_42120_EIPremiums", "Line_42120_Amount"] Amount,
@@ -306,6 +315,17 @@ page7Fields = Page7 {
    line_43500_TotalPayable = Field ["Line_43500_TotalPayable", "Line_43500_Amount"] Amount}
                                                                                            
 page8Fields = Page8 {
+   step6_RefundOrBalanceOwing = within "Step6" Rank2.<$> page8step6Fields,
+   line48400_Refund = Field ["Line48400_48500", "Line48400", "Line_48400_Amount"] Amount,
+   line48500_BalanceOwing = Field ["Line48400_48500", "Line48500", "Line_48500_Amount"] Amount,
+   telephone = Field ["Certification", "Telephone"] Amount,
+   date = Field ["Certification", "Date"] Amount,
+   taxPreparer = within "Line_49000_IfFeeWasCharged" Rank2.<$> taxPreparerFields,
+   line_1_ONOpportunitiesFund = Field ["ONOpportunitiesFund2", "Line_1", "Amount"] Amount,
+   line_46500 = Field ["ONOpportunitiesFund2", "Line_2", "Amount"] Amount,
+   line_46600 = Field ["ONOpportunitiesFund2", "Line_3", "Amount"] Amount}
+
+page8step6Fields = Page8Step6 {
    line_43500_totalpayable = Field ["Line_43500_totalpayable", "Line_42000_Amount"] Amount,
    line_43700_Total_income_tax_ded = Field ["LIne_43700_Total_income_tax_ded", "Line_43700_Amount"] Amount,
    line_44000Sub = Field ["Line_44000Sub", "Line_44000_Amount"] Amount,
@@ -326,16 +346,7 @@ page8Fields = Page8 {
    line_47900_ProvTerrCredits = Field ["Line_47900_ProvTerrCredits", "Line_47900_Amount"] Amount,
    line_48200_sum = Field ["Line_48200_AddLines", "Line_48200_Amount1"] Amount,
    line_48200_cont = Field ["Line_48200_AddLines", "Line_48200_Amount2"] Amount,
-   line164_Refund_or_BalanceOwing = Field ["Line_162", "Refund_or_BalanceOwing_Amount"] Amount,
-   line48400_Refund = Field ["Line48400_48500", "Line48400", "Line_48400_Amount"] Amount,
-   line48500_BalanceOwing = Field ["Line48400_48500", "Line48500", "Line_48500_Amount"] Amount,
-
-   telephone = Field ["Certification", "Telephone"] Amount,
-   date = Field ["Certification", "Date"] Amount,
-   taxPreparer = within "Line_49000_IfFeeWasCharged" Rank2.<$> taxPreparerFields,
-   line_1_ONOpportunitiesFund = Field ["ONOpportunitiesFund2", "Line_1", "Amount"] Amount,
-   line_46500 = Field ["ONOpportunitiesFund2", "Line_2", "Amount"] Amount,
-   line_46600 = Field ["ONOpportunitiesFund2", "Line_3", "Amount"] Amount}
+   line164_Refund_or_BalanceOwing = Field ["Line_162", "Refund_or_BalanceOwing_Amount"] Amount}
 
 taxPreparerFields = TaxPreparer {
    eFileNumber = Field ["EFileNumber_Comb", "EFile"] Textual,

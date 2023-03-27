@@ -163,6 +163,11 @@ data Page4 line = Page4 {
    line_23100_ClergyResDeduction :: line Centi}
 
 data Page5 line = Page5 {
+   step4_TaxableIncome :: Step4 line,
+   partA_FederalTax :: Page5PartA line,
+   partB_FederalTaxCredits :: Page5PartB line}
+
+data Step4 line = Step4 {
    line_25000_OtherPayDeductions :: line Centi,
    line_25100_PartnershipLosses :: line Centi,
    line_25600_AdditionalDeductions_Specify :: line Text,
@@ -176,14 +181,16 @@ data Page5 line = Page5 {
    line_24900_SecurityDeductions :: line Centi,
    line_25500_NorthernDeductions :: line Centi,
    line_25700_AddLines_sum :: line Centi,
-   line_25700_AddLines_cont :: line Centi,
-   -- Part A
+   line_25700_AddLines_cont :: line Centi}
+
+data Page5PartA line = Page5PartA {
    column1 :: TaxIncomeBracket line,
    column2 :: TaxIncomeBracket line,
    column3 :: TaxIncomeBracket line,
    column4 :: TaxIncomeBracket line,
-   column5 :: TaxIncomeBracket line,
-   -- Part B
+   column5 :: TaxIncomeBracket line}
+
+data Page5PartB line = Page5PartB {
    line30000 :: line Centi,
    line30100 :: line Centi,
    line30300 :: line Centi,
@@ -245,7 +252,10 @@ data MedicalExpenses line = MedicalExpenses {
    otherDependants :: line Centi}
 
 data Page7 line = Page7 {
-   -- Part C
+   partC_NetFederalTax :: Page7PartC line,
+   step6_RefundOrBalanceOwing :: Page7Step6 line}
+
+data Page7PartC line = Page7PartC {
    line116 :: line Centi,
    line40424 :: line Centi,
    line40400 :: line Centi,
@@ -272,8 +282,9 @@ data Page7 line = Page7 {
    line41700 :: line Centi,
    line41500 :: line Centi,
    line41800 :: line Centi,
-   line42000 :: line Centi,
-   -- Step 6
+   line42000 :: line Centi}
+
+data Page7Step6 line = Page7Step6 {
    line140 :: line Centi,
    line_42100_CPPContributions :: line Centi,
    line_42120_EIPremiums :: line Centi,
@@ -282,6 +293,17 @@ data Page7 line = Page7 {
    line_43500_TotalPayable :: line Centi}
 
 data Page8 line = Page8 {
+   step6_RefundOrBalanceOwing :: Page8Step6 line,
+   line48400_Refund :: line Centi,
+   line48500_BalanceOwing :: line Centi,
+   telephone :: line Centi,
+   date :: line Centi,
+   taxPreparer :: TaxPreparer line,
+   line_1_ONOpportunitiesFund :: line Centi,
+   line_46500 :: line Centi,
+   line_46600 :: line Centi}
+
+data Page8Step6 line = Page8Step6 {
    line_43500_totalpayable :: line Centi,
    line_43700_Total_income_tax_ded :: line Centi,
    line_44000Sub :: line Centi,
@@ -302,17 +324,7 @@ data Page8 line = Page8 {
    line_47900_ProvTerrCredits :: line Centi,
    line_48200_sum :: line Centi,
    line_48200_cont :: line Centi,
-   line164_Refund_or_BalanceOwing :: line Centi,
-   line48400_Refund :: line Centi,
-   line48500_BalanceOwing :: line Centi,
-
-   telephone :: line Centi,
-   date :: line Centi,
-   taxPreparer :: TaxPreparer line,
-   line_1_ONOpportunitiesFund :: line Centi,
-   line_46500 :: line Centi,
-   line_46600 :: line Centi}
-
+   line164_Refund_or_BalanceOwing :: line Centi}
 
 data TaxPreparer line = TaxPreparer {
    eFileNumber :: line Text,
@@ -329,9 +341,11 @@ $(foldMap
     |])
    [''T1, ''ElectionsCanada, ''Identification, ''MedicalExpenses,
     ''Page1, ''Page2, ''Page3, ''Page4, ''Page5, ''Page6, ''Page7, ''Page8,
+    ''Step4, ''Page5PartA, ''Page5PartB, ''Page7PartC, ''Page7Step6, ''Page8Step6,
     ''Residence, ''Spouse, ''TaxIncomeBracket, ''TaxPreparer])
 
 $(foldMap Rank2.TH.deriveAll
    [''T1, ''ElectionsCanada, ''Identification, ''MedicalExpenses,
     ''Page1, ''Page2, ''Page3, ''Page4, ''Page5, ''Page6, ''Page7, ''Page8,
+    ''Step4, ''Page5PartA, ''Page5PartB, ''Page7PartC, ''Page7Step6, ''Page8Step6,
     ''Residence, ''Spouse, ''TaxIncomeBracket, ''TaxPreparer])
