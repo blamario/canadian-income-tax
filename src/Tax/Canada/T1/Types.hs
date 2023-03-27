@@ -37,7 +37,7 @@ data Identification line = Identification {
    emailAddress :: line Text,
    dateDeath_Comb :: line Day,
    postalCode :: line Text,
-   your_Language :: line Bool,
+   your_Language :: line LanguageOfCorrespondence,
    iD_City :: line Text,
    sIN_Comb :: line Text,
    iD_LastName :: line Text,
@@ -49,7 +49,10 @@ data Identification line = Identification {
    iD_POBox :: line Text,
    prov_DropDown :: line Province.Code}
 
-data MaritalStatus = Married | LivingCommonLaw | Widowed | Divorced | Separated | Single deriving (Eq, Enum, Show)
+data LanguageOfCorrespondence = English | French deriving (Bounded, Eq, Enum, Show)
+
+data MaritalStatus = Married | LivingCommonLaw | Widowed | Divorced | Separated | Single
+   deriving (Bounded, Eq, Enum, Show)
 
 data Residence line = Residence {
    prov_DropDown :: line Text,
@@ -320,7 +323,8 @@ data TaxPreparer line = TaxPreparer {
 $(foldMap
    (\t-> [d|
            deriving instance (Show (line Bool), Show (line Centi), Show (line Word), Show (line Text),
-                              Show (line Province.Code), Show (line Day), Show (line MaritalStatus))
+                              Show (line Province.Code), Show (line Day),
+                              Show (line LanguageOfCorrespondence), Show (line MaritalStatus))
                           => Show ($(TH.conT t) line)
     |])
    [''T1, ''ElectionsCanada, ''Identification, ''MedicalExpenses,

@@ -24,8 +24,8 @@ data Entry a where
   Textual :: Entry Text
   Amount :: Entry Centi
   Checkbox :: Entry Bool
-  RadioButton :: Entry Bool
-  RadioButtons :: (Enum a, Eq a, Show a) => Text -> [a] -> Entry a
+  RadioButton :: (Bounded a, Enum a, Eq a, Show a) => [a] -> Entry a
+  RadioButtons :: (Bounded a, Enum a, Eq a, Show a) => Text -> [a] -> Entry a
   Switch :: Text -> Text -> Text -> Entry Bool
   Switch' :: Text -> Entry Bool
 
