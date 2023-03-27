@@ -57,6 +57,13 @@ fromFieldMap fieldValues = Rank2.traverse fill t1Fields
             else if yesValue == "1" && noValue `elem` ["", "Off"] then Right (Just True)
             else if yesValue `elem` ["", "Off"] && noValue == "1" then Right (Just False)
             else error ("Can't figure out the checkbox at " <> show (path, entry, yesValue, noValue))
+          | Switch' leaf <- entry,
+            Just yesValue <- Map.lookup (map (<> "[0]") path <> [leaf <> "[0]"]) fieldValues,
+            Just noValue <- Map.lookup (map (<> "[0]") path <> [leaf <> "[1]"]) fieldValues
+          = if yesValue `elem` ["", "Off"] && noValue `elem` ["", "Off"] then Right Nothing
+            else if yesValue == "1" && noValue `elem` ["", "Off"] then Right (Just True)
+            else if yesValue `elem` ["", "Off"] && noValue == "1" then Right (Just False)
+            else error ("Can't figure out the checkbox at " <> show (path, entry, yesValue, noValue))
           | otherwise = error ("Unknown field path " ++ show path ++ " between "
                                ++ show (Map.lookupLT ((<> "[0]") <$> path) fieldValues,
                                         Map.lookupGT ((<> "[0]") <$> path) fieldValues))
