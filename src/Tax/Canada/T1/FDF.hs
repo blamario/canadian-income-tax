@@ -26,7 +26,7 @@ load = fromFieldMap . foldMapWithKey Map.singleton
 update :: T1 Maybe -> FDF -> FDF
 update = mapWithKey . updateKey . Rank2.foldMap (uncurry Map.singleton . getConst) . Rank2.liftA2 pairKey t1Fields
   where pairKey :: FieldConst a -> Maybe a -> Const ([Text], Text) a
-        pairKey Field {path, entry} (Just v) = Const (path, fromEntry entry v)
+        pairKey Field {path, entry} v = Const (path, foldMap (fromEntry entry) v)
         updateKey :: Map [Text] Text -> [Text] -> Text -> Text
         updateKey m k v = Map.findWithDefault v k m
         fromEntry :: Entry a -> a -> Text
