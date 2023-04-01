@@ -13,6 +13,7 @@ import Data.Text (Text)
 import Data.Time (Day)
 import Data.CAProvinceCodes qualified as Province
 import Rank2 qualified
+
 import Tax.Canada.T1.Types
 
 data FieldConst a = Field {path :: [Text], entry :: Entry a}

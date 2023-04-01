@@ -17,6 +17,7 @@ import Data.Time (Day, defaultTimeLocale, formatTime, parseTimeM)
 import Rank2 qualified
 import Text.FDF (FDF, foldMapWithKey, mapWithKey, parse, serialize)
 import Text.Read (readEither)
+
 import Tax.Canada.T1.Types
 import Tax.Canada.T1.FieldNames (FieldConst (Field, path, entry), Entry (..), t1Fields)
 

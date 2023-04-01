@@ -338,6 +338,10 @@ $(foldMap
                               Show (line Province.Code), Show (line Day),
                               Show (line LanguageOfCorrespondence), Show (line MaritalStatus))
                           => Show ($(TH.conT t) line)
+           deriving instance (Eq (line Bool), Eq (line Centi), Eq (line Word), Eq (line Text),
+                              Eq (line Province.Code), Eq (line Day),
+                              Eq (line LanguageOfCorrespondence), Eq (line MaritalStatus))
+                          => Eq ($(TH.conT t) line)
     |])
    [''T1, ''ElectionsCanada, ''Identification, ''MedicalExpenses,
     ''Page1, ''Page2, ''Page3, ''Page4, ''Page5, ''Page6, ''Page7, ''Page8,
