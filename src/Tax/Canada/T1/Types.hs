@@ -35,18 +35,18 @@ data Page1 line = Page1 {
 
 data Identification line = Identification {
    emailAddress :: line Text,
-   dateDeath_Comb :: line Day,
+   dateDeath :: line Day,
    postalCode :: line Text,
    your_Language :: line LanguageOfCorrespondence,
-   iD_City :: line Text,
-   sIN_Comb :: line Text,
-   iD_LastName :: line Text,
-   dateBirth_Comb :: line Day,
-   iD_FirstNameInitial :: line Text,
-   iD_MailingAddress :: line Text,
+   id_City :: line Text,
+   sin :: line Text,
+   id_LastName :: line Text,
+   dateBirth :: line Day,
+   id_FirstNameInitial :: line Text,
+   id_MailingAddress :: line Text,
    maritalStatus :: line MaritalStatus,
-   iD_RuralRoute :: line Text,
-   iD_POBox :: line Text,
+   id_RuralRoute :: line Text,
+   id_POBox :: line Text,
    prov_DropDown :: line Province.Code}
 
 data LanguageOfCorrespondence = English | French deriving (Bounded, Eq, Enum, Show)
@@ -67,7 +67,7 @@ data Spouse line = Spouse {
    spouse_First_Name :: line Text,
    line11700 :: line Centi,
    line21300 :: line Centi,
-   sIN_Comb :: line Text}
+   sin :: line Text}
 
 data Page2 line = Page2 {
    foreign_property :: line Bool,

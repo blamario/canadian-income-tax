@@ -51,18 +51,18 @@ page1Fields = Page1 {
 
 page1IdentificationFields = Identification {
    emailAddress = Field ["EmailAddress"] Textual,
-   dateDeath_Comb = Field ["DateDeath_Comb_BordersAll", "DateDeath_Comb"] Date,
+   dateDeath = Field ["DateDeath_Comb_BordersAll", "DateDeath_Comb"] Date,
    postalCode = Field ["PostalCode_Comb_BordersAll", "PostalCode"] Textual,
    your_Language = Field ["Your_Language", "RadioButtonlanguaget"] $ RadioButton [English, French],
-   iD_City = Field ["ID_City"] Textual,
-   sIN_Comb = Field ["SIN_Comb_BordersAll", "SIN_Comb"] Textual,
-   iD_LastName = Field ["ID_LastName"] Textual,
-   dateBirth_Comb = Field ["DateBirth_Comb_BordersAll", "DateBirth_Comb"] Date,
-   iD_FirstNameInitial = Field ["ID_FirstNameInitial"] Textual,
-   iD_MailingAddress = Field ["ID_MailingAddress"] Textual,
+   id_City = Field ["ID_City"] Textual,
+   sin = Field ["SIN_Comb_BordersAll", "SIN_Comb"] Textual,
+   id_LastName = Field ["ID_LastName"] Textual,
+   dateBirth = Field ["DateBirth_Comb_BordersAll", "DateBirth_Comb"] Date,
+   id_FirstNameInitial = Field ["ID_FirstNameInitial"] Textual,
+   id_MailingAddress = Field ["ID_MailingAddress"] Textual,
    maritalStatus = Field ["MaritalStatus_Checkbox"] $ RadioButtons "MaritalStatus" [Married .. Single],
-   iD_RuralRoute = Field ["ID_RuralRoute"] Textual,
-   iD_POBox = Field ["ID_POBox"] Textual,
+   id_RuralRoute = Field ["ID_RuralRoute"] Textual,
+   id_POBox = Field ["ID_POBox"] Textual,
    prov_DropDown = Field ["Prov_DropDown"] Province}
 
 page1ResidenceFields = Residence {
@@ -78,7 +78,7 @@ page1SpouseFields = Spouse {
    spouse_First_Name = Field ["Spouse_First_Name"] Textual,
    line11700 = Field ["Line11700", "Amount"] Amount,
    line21300 = Field ["Line21300", "Amount"] Amount,
-   sIN_Comb = Field ["SIN_Comb_BordersAll", "SIN_Comb"] Textual}
+   sin = Field ["SIN_Comb_BordersAll", "SIN_Comb"] Textual}
 
 page2Fields = Page2 {
    foreign_property = Field ["Foreign_property", "Line26600"] $ Switch "Option1" "Option2" "ForeignProperty_CheckBox",
