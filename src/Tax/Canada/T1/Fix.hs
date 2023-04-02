@@ -6,7 +6,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
 
-module Tax.Canada.T1.Fix where
+module Tax.Canada.T1.Fix (fixT1) where
 
 import Control.Applicative ((<|>))
 import Data.Fixed (Centi)
@@ -89,8 +89,8 @@ fixPage4 t1 = fixEq $ \page@Page4{..}-> page{
                              line_23200_OtherDeductions,
                              line_23210],
    line_23300_cont = line_23300_sum,
-   line_23400_NetBeforeAdjust = difference line_15000_TotalIncome_2 line_23300_cont,
-   line_23600_NetIncome = difference line_23400_NetBeforeAdjust line_23500_SocialBenefits}
+   line_23400_NetBeforeAdjust = nonNegativeDifference line_15000_TotalIncome_2 line_23300_cont,
+   line_23600_NetIncome = nonNegativeDifference line_23400_NetBeforeAdjust line_23500_SocialBenefits}
 
 fixPage5 :: T1 Maybe -> Page5 Maybe -> Page5 Maybe
 fixPage5 t1 = fixEq $ \Page5{..}-> Page5{
@@ -151,7 +151,7 @@ fixStep4 t1 = fixEq $ \step@Step4{..}-> step{
                                       line_25500_NorthernDeductions,
                                       line_25600_AdditionalDeductions_Amount],
    line_25700_AddLines_cont = line_25700_AddLines_sum,
-   line_26000_TaxableIncome = difference line_23600_NetIncome_2 line_25700_AddLines_cont}
+   line_26000_TaxableIncome = nonNegativeDifference line_23600_NetIncome_2 line_25700_AddLines_cont}
 
 fixPage5PartA :: T1 Maybe -> Page5PartA Maybe -> Page5PartA Maybe
 fixPage5PartA t1 = fixEq $ \part@Page5PartA{..}-> part{
@@ -193,7 +193,7 @@ fixMedicalExpenses t1 = fixEq $ \expenses@MedicalExpenses{familyExpenses, taxabl
    taxableIncome = t1.page4.line_23600_NetIncome,
    taxableIncomeFraction = (* 0.03) <$> taxableIncome,
    threshold = min 2479 <$> taxableIncomeFraction,
-   difference = max 0 <$> difference familyExpenses threshold}
+   difference = max 0 <$> nonNegativeDifference familyExpenses threshold}
 
 fixPage7PartC :: T1 Maybe -> Page7PartC Maybe -> Page7PartC Maybe
 fixPage7PartC t1 = fixEq $ \part@Page7PartC{..}-> part{
@@ -209,11 +209,11 @@ fixPage7PartC t1 = fixEq $ \part@Page7PartC{..}-> part{
    line40427,
    line122_sum = totalOf [line119, line40425, line40427],
    line122_cont = line122_sum,
-   line123 = difference line40400 line122_cont,
+   line123 = nonNegativeDifference line40400 line122_cont,
    line125 = totalOf [line123, line124],
    line127 = difference line125 line40500,
    line129 = totalOf [line127, line128],
-   line131 = difference line129 line130,
+   line131 = nonNegativeDifference line129 line130,
    line41000 = case line40900
                of Just x
                     | x <= 400 -> Just (x * 0.75)
@@ -222,7 +222,7 @@ fixPage7PartC t1 = fixEq $ \part@Page7PartC{..}-> part{
                   Nothing -> Nothing,
    line41600_sum = totalOf [line41000, line41200, line41400],
    line41600_cont = line41600_sum,
-   line41700 = difference line131 line41600_cont,
+   line41700 = nonNegativeDifference line131 line41600_cont,
    line42000 = totalOf [line41700, line41500, line41800]}
 
 fixPage7Step6 :: T1 Maybe -> Page7Step6 Maybe -> Page7Step6 Maybe
@@ -251,7 +251,8 @@ fixPage8Step6 t1 = fixEq $ \step@Page8Step6{..}-> step{
                              line_47557,
                              line_47600_TaxPaid,
                              line_47900_ProvTerrCredits],
-     line164_Refund_or_BalanceOwing = difference line_43500_totalpayable line_48200_sum}
+   line_48200_cont = line_48200_sum,
+   line164_Refund_or_BalanceOwing = difference line_43500_totalpayable line_48200_sum}
 
 fixEq :: Eq a => (a -> a) -> a -> a
 fixEq f a
@@ -265,3 +266,7 @@ totalOf = fmap sum . nonEmpty . mapMaybe id
 difference :: Maybe Centi -> Maybe Centi -> Maybe Centi
 difference Nothing Nothing = Nothing
 difference a b = Just (fromMaybe 0 a - fromMaybe 0 b)
+
+nonNegativeDifference :: Maybe Centi -> Maybe Centi -> Maybe Centi
+nonNegativeDifference Nothing Nothing = Nothing
+nonNegativeDifference a b = Just (max 0 $ fromMaybe 0 a - fromMaybe 0 b)
