@@ -23,8 +23,9 @@ extra-source-files: CHANGELOG.md
 library
     exposed-modules:
         Tax.Canada.T1.Types
-        Tax.Canada.T1.FieldNames
         Tax.Canada.T1.FDF
+        Tax.Canada.T1.FieldNames
+        Tax.Canada.T1.Fix
 
     -- Modules included in this library but not exported.
     -- other-modules:
