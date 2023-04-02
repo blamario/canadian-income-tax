@@ -56,14 +56,14 @@ fromFieldMap fieldValues = Rank2.traverse fill t1Fields
             Just noValue <- Map.lookup ((<> "[0]") <$> (path <> [no, leaf])) fieldValues
           = if yesValue `elem` ["", "Off"] && noValue `elem` ["", "Off"] then Right Nothing
             else if yesValue == "1" && noValue `elem` ["", "Off"] then Right (Just True)
-            else if yesValue `elem` ["", "Off"] && noValue == "1" then Right (Just False)
+            else if yesValue `elem` ["", "Off"] && noValue `elem` ["1", "2"] then Right (Just False)
             else error ("Can't figure out the checkbox at " <> show (path, entry, yesValue, noValue))
           | Switch' leaf <- entry,
             Just yesValue <- Map.lookup (map (<> "[0]") path <> [leaf <> "[0]"]) fieldValues,
             Just noValue <- Map.lookup (map (<> "[0]") path <> [leaf <> "[1]"]) fieldValues
           = if yesValue `elem` ["", "Off"] && noValue `elem` ["", "Off"] then Right Nothing
             else if yesValue == "1" && noValue `elem` ["", "Off"] then Right (Just True)
-            else if yesValue `elem` ["", "Off"] && noValue == "1" then Right (Just False)
+            else if yesValue `elem` ["", "Off"] && noValue `elem` ["1", "2"] then Right (Just False)
             else error ("Can't figure out the checkbox at " <> show (path, entry, yesValue, noValue))
           | otherwise = error ("Unknown field path " ++ show path ++ " between "
                                ++ show (Map.lookupLT ((<> "[0]") <$> path) fieldValues,
@@ -77,6 +77,7 @@ fromFieldMap fieldValues = Rank2.traverse fill t1Fields
         toEntry Amount v = Just <$> readEither v
         toEntry Checkbox "Yes" = Right $ Just True
         toEntry Checkbox "No" = Right $ Just False
+        toEntry Checkbox "Off" = Right $ Just False
         toEntry Checkbox "1" = Right $ Just True
         toEntry Checkbox v = Left ("Bad checkbox value: " <> show v)
         toEntry e@(RadioButton values) v
