@@ -18,7 +18,7 @@ maintainer:         blamario@protonmail.com
 -- A copyright notice.
 -- copyright:
 -- category:
-extra-source-files: CHANGELOG.md
+extra-source-files: CHANGELOG.md, README.md
 
 library
     exposed-modules:
@@ -40,7 +40,7 @@ library
     hs-source-dirs:   src
     default-language: Haskell2010
 
-executable canadian-income-tax
+executable complete-canadian-t1-form
     main-is:          Main.hs
 
     -- Modules included in this executable, other than Main.
