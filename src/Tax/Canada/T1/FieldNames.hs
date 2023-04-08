@@ -4,37 +4,16 @@
 {-# LANGUAGE ImportQualifiedPost #-}
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE StandaloneDeriving #-}
 
 module Tax.Canada.T1.FieldNames where
 
 import Data.Fixed (Centi)
 import Data.Text (Text)
 import Data.Time (Day)
-import Data.CAProvinceCodes qualified as Province
 import Rank2 qualified
 
+import Tax.FDF (FieldConst (Field), Entry (..), within)
 import Tax.Canada.T1.Types
-
-data FieldConst a = Field {path :: [Text], entry :: Entry a}
-
-data Entry a where
-  Count :: Entry Word
-  Date :: Entry Day
-  Province :: Entry Province.Code
-  Textual :: Entry Text
-  Amount :: Entry Centi
-  Percent :: Entry Rational
-  Checkbox :: Entry Bool
-  RadioButton :: (Bounded a, Enum a, Eq a, Show a) => [a] -> Entry a
-  RadioButtons :: (Bounded a, Enum a, Eq a, Show a) => Text -> [a] -> Entry a
-  Switch :: Text -> Text -> Text -> Entry Bool
-  Switch' :: Text -> Entry Bool
-
-deriving instance Show a => Show (Entry a)
-
-within :: Text -> FieldConst x -> FieldConst x
-within root field@Field{path} = field{path = root:path}
 
 t1Fields :: T1 FieldConst
 t1Fields = within "form1" Rank2.<$> T1 {

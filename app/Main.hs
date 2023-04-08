@@ -40,10 +40,10 @@ optionsParser =
 process :: Options -> IO ()
 process Options{inputPath, outputPath, verbose} = do
    bytes <- if inputPath == "-" then ByteString.getContents else ByteString.readFile inputPath
-   case parse bytes >>= (\x-> (,) x <$> FDF.load x) of
+   case parse bytes >>= (\x-> (,) x <$> FDF.load t1Fields x) of
       Left err -> error err
       Right (fdf, t1) -> do
-         let fdf' = FDF.update t1' fdf
+         let fdf' = FDF.update t1Fields t1' fdf
              t1' = fixT1 t1
              write = if outputPath == "-" then ByteString.putStr else ByteString.writeFile outputPath
          when verbose (hPutStrLn stderr $ show t1')

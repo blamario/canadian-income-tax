@@ -12,7 +12,7 @@ import Data.Fixed (Centi)
 import Rank2 qualified
 
 import Tax.Canada.ON428.Types
-import Tax.Canada.T1.FieldNames (Entry (Count, Amount, Percent), FieldConst (Field), within)
+import Tax.FDF (Entry (Count, Amount, Percent), FieldConst (Field), within)
 
 on428Fields = within "form1" Rank2.<$> ON428 {
    page1 = within "Page1" Rank2.<$> page1Fields,

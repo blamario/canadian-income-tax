@@ -3,9 +3,11 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE StandaloneDeriving #-}
 
 module Tax.FDF where
 
+import Data.CAProvinceCodes qualified as Province
 import Data.Fixed (Centi)
 import Data.Foldable (find)
 import Data.Functor.Const (Const (Const, getConst))
@@ -19,14 +21,31 @@ import Rank2 qualified
 import Text.FDF (FDF, foldMapWithKey, mapWithKey, parse, serialize)
 import Text.Read (readEither)
 
-import Tax.Canada.T1.Types
-import Tax.Canada.T1.FieldNames (FieldConst (Field, path, entry), Entry (..), t1Fields)
+data FieldConst a = Field {path :: [Text], entry :: Entry a}
 
-load :: FDF -> Either String (T1 Maybe)
-load = fromFieldMap . foldMapWithKey Map.singleton
+data Entry a where
+  Count :: Entry Word
+  Date :: Entry Day
+  Province :: Entry Province.Code
+  Textual :: Entry Text
+  Amount :: Entry Centi
+  Percent :: Entry Rational
+  Checkbox :: Entry Bool
+  RadioButton :: (Bounded a, Enum a, Eq a, Show a) => [a] -> Entry a
+  RadioButtons :: (Bounded a, Enum a, Eq a, Show a) => Text -> [a] -> Entry a
+  Switch :: Text -> Text -> Text -> Entry Bool
+  Switch' :: Text -> Entry Bool
 
-update :: T1 Maybe -> FDF -> FDF
-update = mapWithKey . updateKey . Rank2.foldMap (uncurry Map.singleton . getConst) . Rank2.liftA2 pairKey t1Fields
+deriving instance Show a => Show (Entry a)
+
+within :: Text -> FieldConst x -> FieldConst x
+within root field@Field{path} = field{path = root:path}
+
+load :: (Rank2.Apply form, Rank2.Traversable form) => form FieldConst -> FDF -> Either String (form Maybe)
+load fields = fromFieldMap fields . foldMapWithKey Map.singleton
+
+update :: (Rank2.Apply form, Rank2.Foldable form) => form FieldConst -> form Maybe -> FDF -> FDF
+update fields = mapWithKey . updateKey . Rank2.foldMap (uncurry Map.singleton . getConst) . Rank2.liftA2 pairKey fields
   where pairKey :: FieldConst a -> Maybe a -> Const ([Text], Text) a
         pairKey Field {path, entry} v = Const ((<> "[0]") <$> path, foldMap (fromEntry entry) v)
         updateKey :: Map [Text] Text -> [Text] -> Text -> Text
@@ -42,8 +61,8 @@ update = mapWithKey . updateKey . Rank2.foldMap (uncurry Map.singleton . getCons
         fromEntry Count v = Text.pack (show v)
         fromEntry Province v = Text.pack (show v)
 
-fromFieldMap :: Map [Text] Text -> Either String (T1 Maybe)
-fromFieldMap fieldValues = Rank2.traverse fill t1Fields
+fromFieldMap :: Rank2.Traversable form => form FieldConst -> Map [Text] Text -> Either String (form Maybe)
+fromFieldMap fields fieldValues = Rank2.traverse fill fields
   where fill :: FieldConst a -> Either String (Maybe a)
         fill Field {path, entry}
           | Just v <- Map.lookup path fieldValues = toEntry entry (Text.unpack v)
