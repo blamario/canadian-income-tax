@@ -9,7 +9,7 @@
 module Tax.Canada.ON428.Fix (fixON428) where
 
 import Control.Applicative (liftA2)
-import Control.Monad (guard)
+import Control.Monad (guard, mfilter)
 import Data.Fixed (Centi)
 import Rank2 qualified
 
@@ -51,10 +51,10 @@ fixPage1PartB :: Page1PartB Maybe -> Page1PartB Maybe
 fixPage1PartB = fixEq $ \part@Page1PartB{..}-> part{
    line9_basic = Just 11141,
    line11_base = Just 10406,
-   line13_difference = nonNegativeDifference line11_base line12_spouseIncome,
+   line13_difference = mfilter (> 0) $ liftA2 (-) line11_base line12_spouseIncome,
    line13_cont = line13_difference,
    line14_base = Just 10406,
-   line16_difference = nonNegativeDifference line14_base line15_dependentIncome,
+   line16_difference = mfilter (> 0) $ liftA2 (-) line14_base line15_dependentIncome,
    line16_cont = line16_difference,
    line18 = totalOf [line9_basic, line10_age, line13_cont, line16_cont, line17_caregiver],
    line24_sum = totalOf [line19_cppQpp,
