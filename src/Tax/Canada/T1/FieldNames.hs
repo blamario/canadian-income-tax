@@ -1,7 +1,5 @@
-{-# LANGUAGE DeriveFunctor #-}
-{-# LANGUAGE DuplicateRecordFields #-}
-{-# LANGUAGE GADTs #-}
 {-# LANGUAGE ImportQualifiedPost #-}
+{-# LANGUAGE DisambiguateRecordFields #-}
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
 

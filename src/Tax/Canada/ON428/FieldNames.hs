@@ -1,10 +1,7 @@
-{-# LANGUAGE DeriveFunctor #-}
-{-# LANGUAGE DuplicateRecordFields #-}
-{-# LANGUAGE GADTs #-}
 {-# LANGUAGE ImportQualifiedPost #-}
+{-# LANGUAGE DisambiguateRecordFields #-}
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE StandaloneDeriving #-}
 
 module Tax.Canada.ON428.FieldNames (on428Fields) where
 
