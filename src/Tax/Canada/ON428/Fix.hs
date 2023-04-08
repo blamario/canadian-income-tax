@@ -8,12 +8,12 @@
 
 module Tax.Canada.ON428.Fix (fixON428) where
 
-import Tax.Canada.T1.Fix (fixEq, nonNegativeDifference, totalOf)
 import Control.Monad (guard)
 import Data.Fixed (Centi)
 import Rank2 qualified
 
 import Tax.Canada.ON428.Types
+import Tax.Util (fixEq, fractionOf, nonNegativeDifference, totalOf)
 
 fixON428 :: ON428 Maybe -> ON428 Maybe
 fixON428 = fixEq $ \on428@ON428{..}-> ON428{page1 = fixPage1 page1,
@@ -181,7 +181,3 @@ fixHealthPremiumBracket income floor ceiling rate base HealthPremiumBracket{..}
        overThreshold = Just $ income - floor,
        timesRate = Just rate `fractionOf` overThreshold,
        equalsTax = totalOf [timesRate, Just base]}
-
-fractionOf :: Maybe Rational -> Maybe Centi -> Maybe Centi
-fractionOf (Just x) (Just amt) = Just $ fromRational (x * toRational amt)
-fractionOf _ _ = Nothing

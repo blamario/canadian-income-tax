@@ -10,13 +10,13 @@ module Tax.Canada.T1.Fix (fixT1, fixEq, nonNegativeDifference, totalOf) where
 
 import Control.Applicative ((<|>))
 import Data.Fixed (Centi)
-import Data.List.NonEmpty (nonEmpty)
-import Data.Maybe (fromMaybe, mapMaybe)
+import Data.Maybe (fromMaybe)
 import Data.Text (Text)
 import Data.Time.Calendar (Year, dayPeriod)
 import Rank2 qualified
 
 import Tax.Canada.T1.Types
+import Tax.Util (difference, fixEq, nonNegativeDifference, totalOf)
 
 fixT1 :: T1 Maybe -> T1 Maybe
 fixT1 = fixEq $ \t1@T1{..}-> T1{page1 = fixPage1 page1,
@@ -253,20 +253,3 @@ fixPage8Step6 t1 = fixEq $ \step@Page8Step6{..}-> step{
                              line_47900_ProvTerrCredits],
    line_48200_cont = line_48200_sum,
    line164_Refund_or_BalanceOwing = difference line_43500_totalpayable line_48200_sum}
-
-fixEq :: Eq a => (a -> a) -> a -> a
-fixEq f a
-   | a == a' = a
-   | otherwise = fixEq f a'
-   where a' = f a
-
-totalOf :: [Maybe Centi] -> Maybe Centi
-totalOf = fmap sum . nonEmpty . mapMaybe id
-
-difference :: Maybe Centi -> Maybe Centi -> Maybe Centi
-difference Nothing Nothing = Nothing
-difference a b = Just (fromMaybe 0 a - fromMaybe 0 b)
-
-nonNegativeDifference :: Maybe Centi -> Maybe Centi -> Maybe Centi
-nonNegativeDifference Nothing Nothing = Nothing
-nonNegativeDifference a b = Just (max 0 $ fromMaybe 0 a - fromMaybe 0 b)
