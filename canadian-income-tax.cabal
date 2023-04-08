@@ -2,23 +2,26 @@ cabal-version:      2.4
 name:               canadian-income-tax
 version:            2022.1
 
-synopsis: Calculation of Canadian income tax
+synopsis: Canadian income tax calculation
 
--- A longer description of the package.
--- description:
+description: This package provides a library and executable to fill out
+             incomplete Canadian tax forms in FDF format and to populate all
+             fields therein that can be automatically calculated from the rest
+             of the form.
 
--- A URL where users can report bugs.
--- bug-reports:
-
--- The license under which the package is released.
-license: GPL-3.0-or-later
+category:           tax, productivity
+license:            GPL-3.0-or-later
+license-files:      LICENSE
+copyright:          (c) 2023 Mario Blažević
 author:             Mario Blažević
 maintainer:         blamario@protonmail.com
+bug-reports:        https://github.com/blamario/canadian-income-tax/issues
+tested-with:        ghc == 9.4.4
 
--- A copyright notice.
--- copyright:
--- category:
 extra-source-files: CHANGELOG.md, README.md
+source-repository head
+  type:     git
+  location: https://github.com/blamario/canadian-income-tax
 
 library
     exposed-modules:
