@@ -7,6 +7,7 @@
 
 module Tax.FDF where
 
+import Data.Char (isDigit)
 import Data.CAProvinceCodes qualified as Province
 import Data.Fixed (Centi)
 import Data.Foldable (find)
@@ -57,7 +58,7 @@ update fields = mapWithKey . updateKey . Rank2.foldMap (uncurry Map.singleton . 
         fromEntry Checkbox False = "No"
         fromEntry (RadioButton values) v = Text.pack $ show $ fromEnum v + 1
         fromEntry Amount v = Text.pack (show v)
-        fromEntry Percent v = Text.pack (show $ v * 100) <> "%"
+        fromEntry Percent v = Text.pack (show (fromRational $ v * 100 :: Centi)) <> "%"
         fromEntry Count v = Text.pack (show v)
         fromEntry Province v = Text.pack (show v)
 
@@ -95,9 +96,16 @@ fromFieldMap fields fieldValues = Rank2.traverse fill fields
         toEntry Date v = Just <$> parseTimeM False defaultTimeLocale "%Y%m%d" v
         toEntry Province v = Just <$> readEither v
         toEntry Textual v = Right $ Just $ Text.pack v
-        toEntry Amount v = Just <$> readEither v
+        toEntry Amount v = Just <$> readEither (dropCommas v)
         toEntry Percent v
-          | Just v' <- stripSuffix "%" v = Just . (/ 100) <$> readEither v'
+          | Just v' <- stripSuffix "%" v,
+            (wholePart, pointyPart) <- span (/= '.') v',
+            Right whole <- fromInteger <$> readEither wholePart,
+            Right decimal <- case pointyPart
+                             of '.' : decimals -> (/ 10 ^ length decimals) . fromInteger <$> readEither decimals
+                                "" -> Right 0
+                                _ -> Left "bad decimals"
+          = Right $ Just ((whole + decimal) / 100)
           | otherwise = Left ("Bad percentage value: " <> show v)
         toEntry Checkbox "Yes" = Right $ Just True
         toEntry Checkbox "No" = Right $ Just False
@@ -110,6 +118,12 @@ fromFieldMap fields fieldValues = Rank2.traverse fill fields
         toEntry e@RadioButtons{} v = error (show (e, v))
         toEntry e@(Switch a b leaf) v = error (show (e, v))
         toEntry e@(Switch' leaf) v = error (show (e, v))
+        dropCommas num
+          | (wholePart, pointyPart@('.' : decimals)) <- span (/= '.') num,
+            length decimals == 2,
+            all isDigit decimals
+          = filter (/= ',') wholePart <> pointyPart
+          | otherwise = num
 
 instance MonadFail (Either String) where
   fail = Left
