@@ -6,7 +6,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
 
-module Tax.Canada.T1.Fix (fixT1) where
+module Tax.Canada.T1.Fix (fixT1, fixEq, nonNegativeDifference, totalOf) where
 
 import Control.Applicative ((<|>))
 import Data.Fixed (Centi)
@@ -122,7 +122,7 @@ fixPage6 t1 = fixEq $ \page@Page6{..}-> page{
    line33500 = totalOf [line104, line33200_cont],
    line33800 = (* 0.15) <$> line33500,
    line35000 = totalOf [line33800, line34900]}
-                         
+
 fixPage7 :: T1 Maybe -> Page7 Maybe -> Page7 Maybe
 fixPage7 t1 = fixEq $ \Page7{partC_NetFederalTax, step6_RefundOrBalanceOwing}-> Page7{
    partC_NetFederalTax = fixPage7PartC t1 partC_NetFederalTax,

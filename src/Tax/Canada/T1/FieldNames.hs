@@ -24,6 +24,7 @@ data Entry a where
   Province :: Entry Province.Code
   Textual :: Entry Text
   Amount :: Entry Centi
+  Percent :: Entry Rational
   Checkbox :: Entry Bool
   RadioButton :: (Bounded a, Enum a, Eq a, Show a) => [a] -> Entry a
   RadioButtons :: (Bounded a, Enum a, Eq a, Show a) => Text -> [a] -> Entry a

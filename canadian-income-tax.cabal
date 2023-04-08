@@ -26,6 +26,9 @@ library
         Tax.Canada.T1.FDF
         Tax.Canada.T1.FieldNames
         Tax.Canada.T1.Fix
+        Tax.Canada.ON428.Types
+        Tax.Canada.ON428.FieldNames
+        Tax.Canada.ON428.Fix
 
     -- Modules included in this library but not exported.
     -- other-modules:

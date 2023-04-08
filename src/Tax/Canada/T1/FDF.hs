@@ -11,6 +11,7 @@ import Data.Foldable (find)
 import Data.Functor.Const (Const (Const, getConst))
 import Data.Map.Lazy (Map)
 import Data.Map.Lazy qualified as Map
+import Data.Semigroup.Cancellative (stripSuffix)
 import Data.Text (Text)
 import Data.Text qualified as Text
 import Data.Time (Day, defaultTimeLocale, formatTime, parseTimeM)
@@ -37,6 +38,7 @@ update = mapWithKey . updateKey . Rank2.foldMap (uncurry Map.singleton . getCons
         fromEntry Checkbox False = "No"
         fromEntry (RadioButton values) v = Text.pack $ show $ fromEnum v + 1
         fromEntry Amount v = Text.pack (show v)
+        fromEntry Percent v = Text.pack (show $ v * 100) <> "%"
         fromEntry Count v = Text.pack (show v)
         fromEntry Province v = Text.pack (show v)
 
@@ -75,6 +77,9 @@ fromFieldMap fieldValues = Rank2.traverse fill t1Fields
         toEntry Province v = Just <$> readEither v
         toEntry Textual v = Right $ Just $ Text.pack v
         toEntry Amount v = Just <$> readEither v
+        toEntry Percent v
+          | Just v' <- stripSuffix "%" v = Just . (/ 100) <$> readEither v'
+          | otherwise = Left ("Bad percentage value: " <> show v)
         toEntry Checkbox "Yes" = Right $ Just True
         toEntry Checkbox "No" = Right $ Just False
         toEntry Checkbox "Off" = Right $ Just False
