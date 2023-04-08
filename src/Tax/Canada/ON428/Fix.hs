@@ -8,6 +8,7 @@
 
 module Tax.Canada.ON428.Fix (fixON428) where
 
+import Control.Applicative (liftA2)
 import Control.Monad (guard)
 import Data.Fixed (Centi)
 import Rank2 qualified
@@ -42,9 +43,9 @@ fixTaxIncomeBracket income nextBracket bracket@TaxIncomeBracket{..} = bracket{
                      let ceiling = nextBracket >>= (.line3_threshold)
                      guard (floor <= i && all (i <) ceiling)
                      income,
-   line4_overThreshold = nonNegativeDifference line2_income line3_threshold,
-   line6_timesRate = line5_rate `fractionOf` line4_overThreshold,
-   line8_equalsTax = totalOf [line6_timesRate, line7_baseTax]}
+   line4_overThreshold = liftA2 (-) line2_income line3_threshold,
+   line6_timesRate = fromRational <$> liftA2 (*) (toRational <$> line4_overThreshold) line5_rate,
+   line8_equalsTax = liftA2 (+) line6_timesRate line7_baseTax}
 
 fixPage1PartB :: Page1PartB Maybe -> Page1PartB Maybe
 fixPage1PartB = fixEq $ \part@Page1PartB{..}-> part{
@@ -139,7 +140,7 @@ fixPage3 on428 = fixEq $ \page@Page3{..}-> page{
    line80_difference = nonNegativeDifference line78_product line79,
    line80_cont = line80_difference,
    line81 = nonNegativeDifference line73 line80_cont,
-   line83 = nonNegativeDifference line80_cont line81}
+   line83 = nonNegativeDifference line81 line82}
 
 fixPage4 :: ON428 Maybe -> Page4 Maybe -> Page4 Maybe
 fixPage4 on428 = fixEq $ \page@Page4{..}-> page{
@@ -175,9 +176,9 @@ fixHealthPremium income = fixEq $ \HealthPremium{..}-> HealthPremium{
 
 fixHealthPremiumBracket :: Centi -> Centi -> Centi -> Rational -> Centi -> HealthPremiumBracket Maybe -> HealthPremiumBracket Maybe
 fixHealthPremiumBracket income floor ceiling rate base HealthPremiumBracket{..}
-   | income > floor && income < ceiling = Rank2.pure Nothing
-   | otherwise = HealthPremiumBracket{
+   | income > floor && income < ceiling = HealthPremiumBracket{
        taxableIncome = Just income,
        overThreshold = Just $ income - floor,
        timesRate = Just rate `fractionOf` overThreshold,
        equalsTax = totalOf [timesRate, Just base]}
+   | otherwise = Rank2.pure Nothing
