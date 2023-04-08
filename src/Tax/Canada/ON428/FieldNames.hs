@@ -6,7 +6,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE StandaloneDeriving #-}
 
-module Tax.Canada.ON428.FieldNames where
+module Tax.Canada.ON428.FieldNames (on428Fields) where
 
 import Data.Fixed (Centi)
 import Rank2 qualified

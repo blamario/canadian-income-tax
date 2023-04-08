@@ -5,7 +5,7 @@
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Tax.Canada.T1.FieldNames where
+module Tax.Canada.T1.FieldNames (t1Fields) where
 
 import Data.Fixed (Centi)
 import Data.Text (Text)
