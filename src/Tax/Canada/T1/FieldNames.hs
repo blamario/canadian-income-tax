@@ -36,6 +36,7 @@ deriving instance Show a => Show (Entry a)
 within :: Text -> FieldConst x -> FieldConst x
 within root field@Field{path} = field{path = root:path}
 
+t1Fields :: T1 FieldConst
 t1Fields = within "form1" Rank2.<$> T1 {
    page1 = within "Page1" . within "Step1" Rank2.<$> page1Fields,
    page2 = within "Page2" Rank2.<$> page2Fields,

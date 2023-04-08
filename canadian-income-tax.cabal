@@ -25,8 +25,8 @@ source-repository head
 
 library
     exposed-modules:
+        Tax.FDF
         Tax.Canada.T1.Types
-        Tax.Canada.T1.FDF
         Tax.Canada.T1.FieldNames
         Tax.Canada.T1.Fix
         Tax.Canada.ON428.Types

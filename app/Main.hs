@@ -13,7 +13,7 @@ import Options.Applicative (Parser, execParser,
 import System.IO (hPutStrLn, stderr)
 import Text.FDF (parse, serialize)
 
-import Tax.Canada.T1.FDF qualified as FDF
+import Tax.FDF qualified as FDF
 import Tax.Canada.T1.FieldNames
 import Tax.Canada.T1.Fix (fixT1)
 import Tax.Canada.T1.Types

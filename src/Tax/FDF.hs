@@ -4,7 +4,7 @@
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Tax.Canada.T1.FDF where
+module Tax.FDF where
 
 import Data.Fixed (Centi)
 import Data.Foldable (find)
