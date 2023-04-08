@@ -136,7 +136,7 @@ page3Fields = Page3 {
    line72 = Field ["Line72", "Amount"] Amount,
    line73 = Field ["Line73", "Amount"] Amount,
    line74_basicReduction = Field ["Line74", "Amount"] Amount,
-   line75_childrenNum = Field ["Line_60969", "Line75", "Number"] Count,
+   line75_childrenNum = Field ["Line75", "Line_60969", "Number"] Count,
    line75_amount = Field ["Line75", "Amount"] Amount,
    line76_childrenNum = Field ["Line76", "Line_60970", "Number"] Count,
    line76_amount = Field ["Line76", "Amount"] Amount,
@@ -154,15 +154,15 @@ page4Fields = Page4 {
    line84 = Field ["Line84", "Amount"] Amount,
    line85_lift = Field ["Line85", "Amount"] Amount,
    line86 = Field ["Line86", "Amount"] Amount,
-   line87_foodDonations = Field ["Line62150", "Line87", "Amount"] Amount,
-   line87_fraction = Field ["Line87", "Amount"] Amount,
+   line87_foodDonations = Field ["Line87", "Line62150", "Amount1"] Amount,
+   line87_fraction = Field ["Line87", "Amount2"] Amount,
    line88 = Field ["Line88", "Amount"] Amount,
    line89_health = Field ["Line89", "Amount"] Amount,
    line90 = Field ["Line90", "Amount"] Amount,
    healthPremium = within "ON_Health_Prenium-worksheet" . within "Chart_ON_Health_Prenium" Rank2.<$> healthPremiumFields}
 
 healthPremiumFields = HealthPremium {
-   row1 = within "Taxable_Line2" Rank2.<$> healthPremiumBracketFields,
+   row1 = within "Taxable_Line2" Rank2.<$> healthPremiumBracketFields{equalsTax = Field ["Amount3"] Amount},
    row2 = within "Taxable_Line4" Rank2.<$> healthPremiumBracketFields,
    row3 = within "Taxable_Line6" Rank2.<$> healthPremiumBracketFields,
    row4 = within "Taxable_Line8" Rank2.<$> healthPremiumBracketFields,
