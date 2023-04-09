@@ -1,6 +1,6 @@
 cabal-version:      2.4
 name:               canadian-income-tax
-version:            2022.1
+version:            2022.2
 
 synopsis: Canadian income tax calculation
 
@@ -43,12 +43,12 @@ library
     build-depends:    base == 4.*, text >= 1.0 && < 2.1,
                       time == 1.*, containers >= 0.5 && < 0.7,
                       monoid-subclasses == 1.*, rank2classes ^>= 1.5,
-                      ca-province-codes == 1.0.*, forms-data-format == 0.1.*,
+                      ca-province-codes == 1.0.*, forms-data-format ^>= 0.2,
                       template-haskell == 2.*
     hs-source-dirs:   src
     default-language: Haskell2010
 
-executable complete-canadian-t1-form
+executable complete-canadian-taxes
     main-is:          Main.hs
 
     -- Modules included in this executable, other than Main.
