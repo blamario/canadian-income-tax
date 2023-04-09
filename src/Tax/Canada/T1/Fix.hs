@@ -16,7 +16,7 @@ import Data.Time.Calendar (Year, dayPeriod)
 import Rank2 qualified
 
 import Tax.Canada.T1.Types
-import Tax.Util (difference, fixEq, nonNegativeDifference, totalOf)
+import Tax.Util (difference, fixEq, leastOf, nonNegativeDifference, totalOf)
 
 fixT1 :: T1 Maybe -> T1 Maybe
 fixT1 = fixEq $ \t1@T1{..}-> T1{page1 = fixPage1 page1,
@@ -101,6 +101,8 @@ fixPage5 t1 = fixEq $ \Page5{..}-> Page5{
 fixPage6 :: T1 Maybe -> Page6 Maybe -> Page6 Maybe
 fixPage6 t1 = fixEq $ \page@Page6{..}-> page{
    line82 = t1.page5.partB_FederalTaxCredits.line_81,
+   line31260 = leastOf [Just 1287,
+                        totalOf [t1.page3.line_10100_EmploymentIncome, t1.page3.line_10400_OtherEmploymentIncome]],
    line94_sum = totalOf [line30800,
                          line31000,
                          line31200,
