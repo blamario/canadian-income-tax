@@ -213,7 +213,7 @@ partBFields = Page5PartB {
    line_81 = Field ["Line_81", "Line30_Amount"] Amount}
                                                                                            
 page6Fields = Page6 {
-   line_79 = Field ["Line_79", "Line43Amount"] Amount,
+   line82 = Field ["Line_79", "Line43Amount"] Amount,
    line30800 = Field ["CPP_QPP_Sub", "Line30800_Sub", "Line8_Amount"] Amount,
    line31000 = Field ["CPP_QPP_Sub", "Line31000_Sub", "Line9_Amount"] Amount,
    line31200 = Field ["EIPremiums_Sub", "Line31200_Sub", "Line10_Amount"] Amount,

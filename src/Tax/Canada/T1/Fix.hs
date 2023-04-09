@@ -100,7 +100,7 @@ fixPage5 t1 = fixEq $ \Page5{..}-> Page5{
 
 fixPage6 :: T1 Maybe -> Page6 Maybe -> Page6 Maybe
 fixPage6 t1 = fixEq $ \page@Page6{..}-> page{
-   line_79 = t1.page5.partB_FederalTaxCredits.line_81,
+   line82 = t1.page5.partB_FederalTaxCredits.line_81,
    line94_sum = totalOf [line30800,
                          line31000,
                          line31200,
@@ -113,7 +113,7 @@ fixPage6 t1 = fixEq $ \page@Page6{..}-> page{
                          line31300,
                          line31350],
    line94_cont = line94_sum,
-   line96 = totalOf [line94_cont, line31400],
+   line96 = totalOf [line82, line94_cont, line31400],
    line99 = totalOf [line96, line31600, line31800],
    line104 = totalOf [line99, line31900, line32300, line32400, line32600],
    medical_expenses = fixMedicalExpenses t1 medical_expenses,

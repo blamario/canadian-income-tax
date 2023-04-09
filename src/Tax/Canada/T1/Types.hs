@@ -209,7 +209,7 @@ data TaxIncomeBracket line = TaxIncomeBracket {
    }
 
 data Page6 line = Page6 {
-   line_79 :: line Centi,
+   line82 :: line Centi,
    -- CPP_QPP
    line30800 :: line Centi,
    line31000 :: line Centi,
