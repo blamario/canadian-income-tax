@@ -195,7 +195,7 @@ fixMedicalExpenses t1 = fixEq $ \expenses@MedicalExpenses{familyExpenses, taxabl
    taxableIncome = t1.page4.line_23600_NetIncome,
    taxableIncomeFraction = (* 0.03) <$> taxableIncome,
    threshold = min 2479 <$> taxableIncomeFraction,
-   difference = max 0 <$> nonNegativeDifference familyExpenses threshold}
+   difference = nonNegativeDifference familyExpenses threshold}
 
 fixPage7PartC :: T1 Maybe -> Page7PartC Maybe -> Page7PartC Maybe
 fixPage7PartC t1 = fixEq $ \part@Page7PartC{..}-> part{
