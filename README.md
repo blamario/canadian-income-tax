@@ -1,7 +1,9 @@
 Canadian Income Tax
 ===================
 
-## Use for Canadians outside Ontario ##
+## Manual ##
+
+### Use for Canadians outside Ontario ###
 
 This Haskell package consists of a library and executable to fill out the Canadian T1 tax form. The way to
 use it is as follows:
@@ -95,7 +97,7 @@ Ubuntu you can simply run
 
 To install the `complete-canadian-t1-form` executable, you'll need Haskell development tools. The simplest
 procedure overall is to install [`ghcup`](https://www.haskell.org/ghcup/), then use it to install `ghc`
-(version 9.2 or greater) and `cabal`, then to run
+(version 9.4 or greater) and `cabal`, then to run
 
     cabal install canadian-income-tax
 
@@ -104,7 +106,7 @@ procedure overall is to install [`ghcup`](https://www.haskell.org/ghcup/), then 
 The executable `complete-canadian-taxes` follows the Unix philosphy of doing one well-defined thing. It doesn't
 attempt to guide you, the user, through the entire process of filing the taxes. It merely performs the task that is
 easy to automate, and therefore also the most boring. It's not likely to make the tax-filing process a joy, but at
-least it's going to involve less drudgery.
+least it's going to reduce the drudgery.
 
 If at any point you find you made a mistake in your initial form entry, or you want to adjust it for any reason, you
 can make the adjustments either on the forms you kept from step #2 or on the final forms, and feed them back in
