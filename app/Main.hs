@@ -11,9 +11,10 @@ import Control.Monad (when)
 import Control.Monad.Trans.State.Strict (get, put, evalState)
 import Data.ByteString qualified as ByteString
 import Data.ByteString.Lazy qualified as ByteString.Lazy
+import Data.Semigroup.Cancellative (isSuffixOf)
 import Options.Applicative (Parser, execParser,
                             helper, info, long, metavar, progDesc, short, strArgument, strOption, switch, value)
-import System.Directory (doesDirectoryExist)
+import System.Directory (createDirectoryIfMissing, doesDirectoryExist)
 import System.FilePath (replaceDirectory, takeFileName)
 import System.IO (hPutStrLn, stderr)
 import Text.FDF (parse, serialize)
@@ -44,6 +45,7 @@ optionsParser =
 
 process :: Options -> IO ()
 process Options{t1InputPath, on428InputPath, outputPath, verbose} = do
+   when ("/" `isSuffixOf` outputPath) (createDirectoryIfMissing True outputPath)
    let read path = if path == "-" then ByteString.getContents else ByteString.readFile path
        writeFrom inputPath content =
           if outputPath == "-"
