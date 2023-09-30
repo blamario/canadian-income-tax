@@ -82,7 +82,7 @@ process Options{t1InputPath, on428InputPath, outputPath, verbose} = do
    let read path = if path == "-" then ByteString.getContents else ByteString.readFile path
        writeFrom baseName inputPath asPDF content = do
           let inputPath' = fromMaybe (baseName <> if asPDF then ".pdf" else ".fdf") inputPath
-          content' <- (if asPDF then pure else fmap Lazy.toStrict . fdf2pdf inputPath' . Lazy.fromStrict) content
+          content' <- (if asPDF then fmap Lazy.toStrict . fdf2pdf inputPath' . Lazy.fromStrict else pure) content
           if outputPath == "-"
              then ByteString.putStr content'
              else do
