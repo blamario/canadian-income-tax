@@ -53,6 +53,14 @@ pdf2fdf pdf = do
       ExitSuccess -> pure fdf
       ExitFailure n -> error ("Error converting PDF to FDF (exit code " <> show n <> ").\n" <> show errors)
 
+fdf2pdf :: FilePath -> Lazy.ByteString -> IO Lazy.ByteString
+fdf2pdf pdfPath fdf = do
+   (exitCode, pdf, errors)
+      <- readProcess (setStdin (byteStringInput fdf) $ shell $ "pdftk " <> pdfPath <> " fill_form - output -")
+   case exitCode of
+      ExitSuccess -> pure pdf
+      ExitFailure n -> error ("Error converting FDF to PDF (exit code " <> show n <> ").\n" <> show errors)
+
 readFDF :: FilePath -> IO (Any, Lazy.ByteString)
 readFDF inputPath = do
    exists <- doesFileExist inputPath
@@ -69,17 +77,19 @@ readMaybeFDF = fmap sequence . traverse readFDF
 
 process :: Options -> IO ()
 process Options{t1InputPath, on428InputPath, outputPath, verbose} = do
-   (Any convertedFromPDF, [t1FDF, on428FDF]) <- sequence <$> traverse readMaybeFDF [t1InputPath, on428InputPath]
+   [(Any t1isPDF, t1FDF), (Any on428isPDF, on428FDF)] <- traverse readMaybeFDF [t1InputPath, on428InputPath]
    when ("/" `isSuffixOf` outputPath) (createDirectoryIfMissing True outputPath)
    let read path = if path == "-" then ByteString.getContents else ByteString.readFile path
-       writeFrom baseName inputPath content =
+       writeFrom baseName inputPath asPDF content = do
+          let inputPath' = fromMaybe (baseName <> if asPDF then ".pdf" else ".fdf") inputPath
+          content' <- (if asPDF then pure else fmap Lazy.toStrict . fdf2pdf inputPath' . Lazy.fromStrict) content
           if outputPath == "-"
-          then ByteString.putStr content
-          else do isDir <- doesDirectoryExist outputPath
-                  if isDir
-                     then ByteString.writeFile (replaceDirectory inputPath' outputPath) content
-                     else ByteString.writeFile outputPath content
-          where inputPath' = fromMaybe (baseName <> if convertedFromPDF then ".pdf" else ".fdf") inputPath
+             then ByteString.putStr content'
+             else do
+                isDir <- doesDirectoryExist outputPath
+                if isDir
+                   then ByteString.writeFile (replaceDirectory inputPath' outputPath) content'
+                   else ByteString.writeFile outputPath content'
    case (Lazy.toStrict <$> t1FDF, Lazy.toStrict <$> on428FDF) of
       (Nothing, Nothing) -> error "You must specify a T1 form, ON428 form, or both."
       (Just t1bytes, Nothing) -> do
@@ -89,7 +99,7 @@ process Options{t1InputPath, on428InputPath, outputPath, verbose} = do
                let fdf' = FDF.update t1Fields form' fdf
                    form' = fixT1 form
                when verbose (hPutStrLn stderr $ show form')
-               writeFrom "t1" t1InputPath (serialize fdf')
+               writeFrom "t1" t1InputPath t1isPDF (serialize fdf')
       (Nothing, Just on428bytes) -> do
          case parse on428bytes >>= \x-> (,) x <$> FDF.load on428Fields x of
             Left err -> error err
@@ -97,7 +107,7 @@ process Options{t1InputPath, on428InputPath, outputPath, verbose} = do
                let fdf' = FDF.update on428Fields form' fdf
                    form' = fixON428 form
                when verbose (hPutStrLn stderr $ show form')
-               writeFrom "on428" on428InputPath (serialize fdf')
+               writeFrom "on428" on428InputPath on428isPDF (serialize fdf')
       (Just t1bytes, Just on428bytes) -> do
          case (,) <$> (parse t1bytes >>= \x-> (,) x <$> FDF.load t1Fields x)
                   <*> (parse on428bytes >>= \x-> (,) x <$> FDF.load on428Fields x) of
@@ -116,6 +126,6 @@ process Options{t1InputPath, on428InputPath, outputPath, verbose} = do
                   then ByteString.putStr tarFile
                   else do isDir <- doesDirectoryExist outputPath
                           if isDir
-                             then do writeFrom "t1" t1InputPath fdf'T1
-                                     writeFrom "on428" on428InputPath fdf'ON
+                             then do writeFrom "t1" t1InputPath t1isPDF fdf'T1
+                                     writeFrom "on428" on428InputPath on428isPDF fdf'ON
                              else ByteString.writeFile outputPath tarFile
