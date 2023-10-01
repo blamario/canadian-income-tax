@@ -9,6 +9,7 @@ import Codec.Archive.Tar.Entry (fileEntry, toTarPath)
 import Control.Applicative ((<**>), optional)
 import Control.Monad (unless, when)
 import Control.Monad.Trans.State.Strict (get, put, evalState)
+import Data.ByteString (ByteString)
 import Data.ByteString qualified as ByteString
 import Data.ByteString.Lazy qualified as Lazy
 import Data.ByteString.Lazy qualified as ByteString.Lazy
@@ -72,43 +73,45 @@ readFDF inputPath = do
            then (,) (Any True) <$> pdf2fdf content
            else error "Expecting an FDF or PDF file"
 
-readMaybeFDF :: Maybe FilePath -> IO (Any, Maybe Lazy.ByteString)
-readMaybeFDF = fmap sequence . traverse readFDF
+readMaybeFDF :: FilePath -> Maybe FilePath -> IO (Maybe (FilePath, Any, ByteString))
+readMaybeFDF baseName path = traverse (\p-> addPath p . fmap Lazy.toStrict <$> readFDF p) path
+   where addPath "-" (isPDF@(Any True), content) = (baseName <> ".pdf", isPDF, content)
+         addPath "-" (isPDF@(Any False), content) = (baseName <> ".fdf", isPDF, content)
+         addPath p (isPDF, content) = (p, isPDF, content)
 
 process :: Options -> IO ()
 process Options{t1InputPath, on428InputPath, outputPath, verbose} = do
-   [(Any t1isPDF, t1FDF), (Any on428isPDF, on428FDF)] <- traverse readMaybeFDF [t1InputPath, on428InputPath]
+   [t1, on428] <- traverse (uncurry readMaybeFDF) [("t1", t1InputPath), ("on428", on428InputPath)]
    when ("/" `isSuffixOf` outputPath) (createDirectoryIfMissing True outputPath)
-   let read path = if path == "-" then ByteString.getContents else ByteString.readFile path
-       writeFrom baseName inputPath asPDF content = do
-          let inputPath' = fromMaybe (baseName <> if asPDF then ".pdf" else ".fdf") inputPath
-          content' <- (if asPDF then fmap Lazy.toStrict . fdf2pdf inputPath' . Lazy.fromStrict else pure) content
+   let writeFrom :: FilePath -> Bool -> ByteString.ByteString -> IO ()
+       writeFrom inputPath asPDF content = do
+          content' <- (if asPDF then fmap Lazy.toStrict . fdf2pdf inputPath . Lazy.fromStrict else pure) content
           if outputPath == "-"
              then ByteString.putStr content'
              else do
                 isDir <- doesDirectoryExist outputPath
                 if isDir
-                   then ByteString.writeFile (replaceDirectory inputPath' outputPath) content'
+                   then ByteString.writeFile (replaceDirectory inputPath outputPath) content'
                    else ByteString.writeFile outputPath content'
-   case (Lazy.toStrict <$> t1FDF, Lazy.toStrict <$> on428FDF) of
+   case (t1, on428) of
       (Nothing, Nothing) -> error "You must specify a T1 form, ON428 form, or both."
-      (Just t1bytes, Nothing) -> do
+      (Just (t1Path, Any t1isPDF, t1bytes), Nothing) -> do
          case parse t1bytes >>= \x-> (,) x <$> FDF.load t1Fields x of
             Left err -> error err
             Right (fdf, form) -> do
                let fdf' = FDF.update t1Fields form' fdf
                    form' = fixT1 form
                when verbose (hPutStrLn stderr $ show form')
-               writeFrom "t1" t1InputPath t1isPDF (serialize fdf')
-      (Nothing, Just on428bytes) -> do
+               writeFrom t1Path t1isPDF (serialize fdf')
+      (Nothing, Just (on428Path, Any on428isPDF, on428bytes)) -> do
          case parse on428bytes >>= \x-> (,) x <$> FDF.load on428Fields x of
             Left err -> error err
             Right (fdf, form) -> do
                let fdf' = FDF.update on428Fields form' fdf
                    form' = fixON428 form
                when verbose (hPutStrLn stderr $ show form')
-               writeFrom "on428" on428InputPath on428isPDF (serialize fdf')
-      (Just t1bytes, Just on428bytes) -> do
+               writeFrom on428Path on428isPDF (serialize fdf')
+      (Just (t1Path, Any t1isPDF, t1bytes), Just (on428path, Any on428isPDF, on428bytes)) -> do
          case (,) <$> (parse t1bytes >>= \x-> (,) x <$> FDF.load t1Fields x)
                   <*> (parse on428bytes >>= \x-> (,) x <$> FDF.load on428Fields x) of
             Left err -> error err
@@ -126,6 +129,6 @@ process Options{t1InputPath, on428InputPath, outputPath, verbose} = do
                   then ByteString.putStr tarFile
                   else do isDir <- doesDirectoryExist outputPath
                           if isDir
-                             then do writeFrom "t1" t1InputPath t1isPDF fdf'T1
-                                     writeFrom "on428" on428InputPath on428isPDF fdf'ON
+                             then do writeFrom t1Path t1isPDF fdf'T1
+                                     writeFrom on428path on428isPDF fdf'ON
                              else ByteString.writeFile outputPath tarFile
