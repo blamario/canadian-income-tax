@@ -42,7 +42,7 @@ library
     -- other-extensions:
     build-depends:    base == 4.*, text >= 1.0 && < 2.1,
                       time == 1.*, containers >= 0.5 && < 0.7,
-                      monoid-subclasses == 1.*, rank2classes ^>= 1.5,
+                      monoid-subclasses == 1.*, rank2classes ^>= 1.5, deep-transformations ^>= 0.2,
                       ca-province-codes == 1.0.*, forms-data-format ^>= 0.2,
                       template-haskell == 2.*
     hs-source-dirs:   src
@@ -65,3 +65,15 @@ executable complete-canadian-taxes
 
     hs-source-dirs:   app
     default-language: Haskell2010
+
+
+test-suite             properties
+    type:                exitcode-stdio-1.0
+    build-depends:       base >= 4.7 && < 5, rank2classes, deep-transformations,
+                         text, time, ca-province-codes,
+                         tasty >= 0.7, tasty-hedgehog ^>= 1.4, hedgehog ^>= 1.4,
+                         canadian-income-tax
+    hs-source-dirs:      test
+    main-is:             Properties.hs
+    other-modules:       Test.Transformations
+    default-language:    Haskell2010

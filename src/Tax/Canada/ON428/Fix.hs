@@ -6,7 +6,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
 
-module Tax.Canada.ON428.Fix (fixON428) where
+module Tax.Canada.ON428.Fix (ON428, fixON428) where
 
 import Control.Applicative (liftA2)
 import Control.Monad (guard, mfilter)

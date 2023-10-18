@@ -6,7 +6,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
 
-module Tax.Canada.T1.Fix (fixT1) where
+module Tax.Canada.T1.Fix (T1, fixT1) where
 
 import Control.Applicative ((<|>))
 import Data.Fixed (Centi)

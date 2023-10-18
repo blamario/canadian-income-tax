@@ -1,11 +1,15 @@
 {-# LANGUAGE DuplicateRecordFields #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE ImportQualifiedPost #-}
 {-# LANGUAGE InstanceSigs #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE NoFieldSelectors #-}
 {-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE StandaloneDeriving #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE UndecidableInstances #-}
 
 module Tax.Canada.T1.Types where
@@ -17,6 +21,7 @@ import Data.Time (Day)
 import Data.CAProvinceCodes qualified as Province
 import Language.Haskell.TH qualified as TH
 import Rank2.TH qualified
+import Transformation.Shallow.TH qualified
 
 data T1 line = T1 {
    page1 :: Page1 line,
@@ -350,6 +355,12 @@ $(foldMap
     ''Residence, ''Spouse, ''TaxIncomeBracket, ''TaxPreparer])
 
 $(foldMap Rank2.TH.deriveAll
+   [''T1, ''ElectionsCanada, ''Identification, ''MedicalExpenses,
+    ''Page1, ''Page2, ''Page3, ''Page4, ''Page5, ''Page6, ''Page7, ''Page8,
+    ''Step4, ''Page5PartA, ''Page5PartB, ''Page7PartC, ''Page7Step6, ''Page8Step6,
+    ''Residence, ''Spouse, ''TaxIncomeBracket, ''TaxPreparer])
+
+$(foldMap Transformation.Shallow.TH.deriveAll
    [''T1, ''ElectionsCanada, ''Identification, ''MedicalExpenses,
     ''Page1, ''Page2, ''Page3, ''Page4, ''Page5, ''Page6, ''Page7, ''Page8,
     ''Step4, ''Page5PartA, ''Page5PartB, ''Page7PartC, ''Page7Step6, ''Page8Step6,

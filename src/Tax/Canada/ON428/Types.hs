@@ -1,11 +1,15 @@
 {-# LANGUAGE DuplicateRecordFields #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE ImportQualifiedPost #-}
 {-# LANGUAGE InstanceSigs #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE NoFieldSelectors #-}
 {-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE StandaloneDeriving #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE UndecidableInstances #-}
 
 module Tax.Canada.ON428.Types where
@@ -13,6 +17,7 @@ module Tax.Canada.ON428.Types where
 import Data.Fixed (Centi)
 import Language.Haskell.TH qualified as TH
 import Rank2.TH qualified
+import Transformation.Shallow.TH qualified
 
 data ON428 line = ON428 {
    page1 :: Page1 line,
@@ -187,6 +192,12 @@ $(foldMap
     ''TaxIncomeBracket, ''HealthPremium, ''HealthPremiumBracket])
 
 $(foldMap Rank2.TH.deriveAll
+   [''ON428, ''Page1, ''Page2, ''Page3, ''Page4,
+    ''Page1PartA, ''Page1PartB, ''Page2PartB, ''Page2PartC,
+    ''MedicalExpenses, ''Donations,
+    ''TaxIncomeBracket, ''HealthPremium, ''HealthPremiumBracket])
+
+$(foldMap Transformation.Shallow.TH.deriveAll
    [''ON428, ''Page1, ''Page2, ''Page3, ''Page4,
     ''Page1PartA, ''Page1PartB, ''Page2PartB, ''Page2PartC,
     ''MedicalExpenses, ''Donations,
