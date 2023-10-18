@@ -180,24 +180,15 @@ data HealthPremiumBracket line = HealthPremiumBracket {
    equalsTax :: line Centi}
 
 $(foldMap
-   (\t-> [d|
+   (\t-> concat <$> sequenceA [
+       [d|
            deriving instance (Show (line Centi), Show (line Rational), Show (line Word))
                           => Show ($(TH.conT t) line)
            deriving instance (Eq (line Centi), Eq (line Rational), Eq (line Word))
                           => Eq ($(TH.conT t) line)
-    |])
-   [''ON428, ''Page1, ''Page2, ''Page3, ''Page4,
-    ''Page1PartA, ''Page1PartB, ''Page2PartB, ''Page2PartC,
-    ''MedicalExpenses, ''Donations,
-    ''TaxIncomeBracket, ''HealthPremium, ''HealthPremiumBracket])
-
-$(foldMap Rank2.TH.deriveAll
-   [''ON428, ''Page1, ''Page2, ''Page3, ''Page4,
-    ''Page1PartA, ''Page1PartB, ''Page2PartB, ''Page2PartC,
-    ''MedicalExpenses, ''Donations,
-    ''TaxIncomeBracket, ''HealthPremium, ''HealthPremiumBracket])
-
-$(foldMap Transformation.Shallow.TH.deriveAll
+       |],
+       Rank2.TH.deriveAll t,
+       Transformation.Shallow.TH.deriveAll t])
    [''ON428, ''Page1, ''Page2, ''Page3, ''Page4,
     ''Page1PartA, ''Page1PartB, ''Page2PartB, ''Page2PartC,
     ''MedicalExpenses, ''Donations,

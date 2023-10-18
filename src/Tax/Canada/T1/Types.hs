@@ -339,7 +339,8 @@ data TaxPreparer line = TaxPreparer {
    line49000_WasAFeeCharged :: line Bool}
 
 $(foldMap
-   (\t-> [d|
+   (\t-> concat <$> sequenceA [
+       [d|
            deriving instance (Show (line Bool), Show (line Centi), Show (line Word), Show (line Text),
                               Show (line Province.Code), Show (line Day),
                               Show (line LanguageOfCorrespondence), Show (line MaritalStatus))
@@ -348,19 +349,9 @@ $(foldMap
                               Eq (line Province.Code), Eq (line Day),
                               Eq (line LanguageOfCorrespondence), Eq (line MaritalStatus))
                           => Eq ($(TH.conT t) line)
-    |])
-   [''T1, ''ElectionsCanada, ''Identification, ''MedicalExpenses,
-    ''Page1, ''Page2, ''Page3, ''Page4, ''Page5, ''Page6, ''Page7, ''Page8,
-    ''Step4, ''Page5PartA, ''Page5PartB, ''Page7PartC, ''Page7Step6, ''Page8Step6,
-    ''Residence, ''Spouse, ''TaxIncomeBracket, ''TaxPreparer])
-
-$(foldMap Rank2.TH.deriveAll
-   [''T1, ''ElectionsCanada, ''Identification, ''MedicalExpenses,
-    ''Page1, ''Page2, ''Page3, ''Page4, ''Page5, ''Page6, ''Page7, ''Page8,
-    ''Step4, ''Page5PartA, ''Page5PartB, ''Page7PartC, ''Page7Step6, ''Page8Step6,
-    ''Residence, ''Spouse, ''TaxIncomeBracket, ''TaxPreparer])
-
-$(foldMap Transformation.Shallow.TH.deriveAll
+       |],
+       Rank2.TH.deriveAll t,
+       Transformation.Shallow.TH.deriveAll t])
    [''T1, ''ElectionsCanada, ''Identification, ''MedicalExpenses,
     ''Page1, ''Page2, ''Page3, ''Page4, ''Page5, ''Page6, ''Page7, ''Page8,
     ''Step4, ''Page5PartA, ''Page5PartB, ''Page7PartC, ''Page7Step6, ''Page8Step6,
