@@ -9,7 +9,7 @@ import Data.Fixed (Centi)
 import Rank2 qualified
 
 import Tax.Canada.ON428.Types
-import Tax.FDF (Entry (Count, Amount, Percent), FieldConst (Field), within)
+import Tax.FDF (Entry (Count, Amount, Percent), FieldConst (Field, NoField), within)
 
 on428Fields = within "form1" Rank2.<$> ON428 {
    page1 = within "Page1" Rank2.<$> page1Fields,
@@ -159,7 +159,7 @@ page4Fields = Page4 {
    healthPremium = within "ON_Health_Prenium-worksheet" . within "Chart_ON_Health_Prenium" Rank2.<$> healthPremiumFields}
 
 healthPremiumFields = HealthPremium {
-   row1 = within "Taxable_Line2" Rank2.<$> healthPremiumBracketFields{equalsTax = Field ["Amount3"] Amount},
+   row1 = within "Taxable_Line2" Rank2.<$> healthPremiumBracketFields{equalsTax = NoField},
    row2 = within "Taxable_Line4" Rank2.<$> healthPremiumBracketFields,
    row3 = within "Taxable_Line6" Rank2.<$> healthPremiumBracketFields,
    row4 = within "Taxable_Line8" Rank2.<$> healthPremiumBracketFields,

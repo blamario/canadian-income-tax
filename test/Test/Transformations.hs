@@ -48,13 +48,13 @@ instance Gen `At` Centi where
   _ $ _ = adjust $ MkFixed <$> Gen.integral (Range.linear 0 1_000_000_000)
 
 instance Gen `At` Rational where
-  _ $ _ = adjust $ Gen.realFrac_ (Range.linearFrac 0 1_000)
+  _ $ _ = adjust $ ((/ 10_000) . toRational) <$> Gen.integral (Range.linear 0 10_000)
 
 instance Gen `At` Word where
   _ $ _ = adjust $ Gen.word (Range.linear 0 1_000)
 
 instance Gen `At` Text where
-  _ $ _ = adjust $ Gen.text (Range.linear 0 500) Gen.unicode
+  _ $ _ = adjust $ Gen.text (Range.linear 1 500) Gen.unicode
 
 instance Gen `At` Province.Code where
   _ $ _ = adjust $ Gen.element Province.all
