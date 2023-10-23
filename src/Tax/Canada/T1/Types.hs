@@ -12,6 +12,7 @@
 {-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE UndecidableInstances #-}
 
+-- | The T1 form type, currently verified only for Ontario. Hopefully it covers the other provinces' T1s as well.
 module Tax.Canada.T1.Types where
 
 import Data.Fixed (Centi)

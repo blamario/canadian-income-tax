@@ -3,11 +3,8 @@
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Tax.Canada.T1.FieldNames (t1Fields) where
+module Tax.Canada.T1.FieldNames where
 
-import Data.Fixed (Centi)
-import Data.Text (Text)
-import Data.Time (Day)
 import Rank2 qualified
 
 import Tax.FDF (FieldConst (Field), Entry (..), within)
