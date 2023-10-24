@@ -122,6 +122,7 @@ fixPage6 t1 = fixEq $ \page@Page6{..}-> page{
    line33200_sum = totalOf [medical_expenses.difference, medical_expenses.otherDependants],
    line33200_cont = line33200_sum,
    line33500 = totalOf [line104, line33200_cont],
+   line112 = Nothing,
    line33800 = (* 0.15) <$> line33500,
    line35000 = totalOf [line33800, line34900]}
 
@@ -162,12 +163,15 @@ fixPage5PartA t1 = fixEq $ \part@Page5PartA{..}-> part{
    column3 = taxIncomeBracket 100392 155625 0.26 17819.53,
    column4 = taxIncomeBracket 155625 221708 0.29 32180.11,
    column5 = taxIncomeBracket 221708 (10^12) 0.33 51344.18} -- a trillion ought to be enough for anybody
-   where taxIncomeBracket threshold ceiling rate baseTax
+   where taxIncomeBracket threshold ceiling rate carry
             | income > threshold && income <= ceiling = TaxIncomeBracket{
                  line67_income = Just income,
+                 line68_threshold = Nothing,
                  line69_overThreshold = Just (income - threshold),
+                 line70_rate = Nothing,
                  line71_timesRate = Just ((income - threshold) * rate),
-                 line73_equalsTax = Just ((income - threshold) * rate + baseTax)}
+                 line72_carry = Nothing,
+                 line73_equalsTax = Just ((income - threshold) * rate + carry)}
             | otherwise = Rank2.pure Nothing
          income = fromMaybe 0 t1.page5.step4_TaxableIncome.line_26000_TaxableIncome
 

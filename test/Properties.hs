@@ -18,17 +18,21 @@ import Paths_canadian_income_tax (getDataDir)
 import Test.Transformations qualified as Transformations
 
 import Data.ByteString qualified as ByteString
+import Data.Either (isRight)
 import Data.Functor.Const (Const (Const, getConst))
 import Data.List qualified as List
+import Data.Maybe (fromMaybe)
 import Data.Semigroup (All (All, getAll))
+import Data.Text (isInfixOf, isSuffixOf, stripSuffix)
 import Rank2 qualified
 import System.Directory (listDirectory)
 import System.Exit (die)
 import System.FilePath.Posix (combine)
 import Transformation.Shallow qualified as Shallow
 import Text.FDF (FDF, parse)
+import Text.FDF qualified
 
-import Hedgehog (Gen, Property, (===), annotateShow, forAll, property)
+import Hedgehog (Gen, Property, (===), annotateShow, assert, forAll, property)
 import Hedgehog.Gen qualified as Gen
 import Test.Tasty
 import Test.Tasty.Hedgehog
@@ -62,13 +66,22 @@ checkFormIdempotent f = checkIdempotent generateForm f
 
 checkFormFields :: (Eq (g Maybe), Show (g Maybe),
                     Rank2.Applicative g, Shallow.Traversable Transformations.Gen g)
-                => g FieldConst ->  Maybe FDF -> Property
+                => g FieldConst -> Maybe FDF -> Property
 checkFormFields _ Nothing = error "Missing FDF template"
 checkFormFields fields (Just fdf) = property $ do
+  annotateShow $ FDF.load fields fdf
+  assert $ isRight $ FDF.load fields fdf
   form <- forAll (Gen.filter (formValidForFDF fields) generateForm)
   let fdf' = FDF.update fields form fdf
-  annotateShow fdf'
+      formKeys = FDF.formKeys fields
+      fdfKeys = Text.FDF.foldMapWithKey (const . (:[]) . map dropIndex) fdf
+      dropIndex t = fromMaybe t (stripSuffix "[0]" t)
+      keyHeads = List.nub $ take 2 <$> formKeys
+      noCheckbox = filter $ not . any (liftA2 (||) (isSuffixOf "Checkbox") (isInfixOf "CheckBox"))
+  -- annotateShow fdf'
+  annotateShow keyHeads
   FDF.load fields fdf' === Right form
+  List.sort (noCheckbox formKeys) === List.sort (noCheckbox $ filter (\x-> any (`List.isPrefixOf` x) keyHeads) fdfKeys)
 
 formValidForFDF :: (Rank2.Apply g, Rank2.Foldable g) => g FieldConst -> g Maybe -> Bool
 formValidForFDF fields = getAll . Rank2.foldMap (All . getConst) . Rank2.liftA2 nonoField fields

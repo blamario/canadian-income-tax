@@ -17,10 +17,12 @@ import Data.Functor.Const (Const (Const, getConst))
 import Data.List (elemIndex)
 import Data.Map.Lazy (Map)
 import Data.Map.Lazy qualified as Map
+import Data.Semigroup (Endo (Endo, appEndo))
 import Data.Semigroup.Cancellative (stripSuffix)
 import Data.Text (Text)
 import Data.Text qualified as Text
 import Data.Time (Day, defaultTimeLocale, formatTime, parseTimeM)
+import Data.Void (Void)
 import Rank2 qualified
 import Text.FDF (FDF, foldMapWithKey, mapWithKey, parse, serialize)
 import Text.Read (readEither)
@@ -29,6 +31,7 @@ data FieldConst a = Field {path :: [Text], entry :: Entry a}
                   | NoField
 
 data Entry a where
+  Constant :: Text -> Entry Void
   Count :: Entry Word
   Date :: Entry Day
   Province :: Entry Province.Code
@@ -46,6 +49,14 @@ deriving instance Show a => Show (Entry a)
 within :: Text -> FieldConst x -> FieldConst x
 within root field@Field{path} = field{path = root:path}
 within _ NoField = NoField
+
+formKeys :: Rank2.Foldable form => form FieldConst -> [[Text]]
+formKeys = flip appEndo [] . Rank2.foldMap addEntry
+  where addEntry :: FieldConst a -> Endo [[Text]]
+        addEntry NoField = mempty
+        addEntry Field{path, entry = Switch yes no leaf} = Endo ([path ++ [yes, leaf], path ++ [no, leaf]] ++)
+        addEntry Field{path, entry = Switch' leaf} = Endo ([path ++ [leaf], path ++ [leaf <> "[1]"]] ++)
+        addEntry Field{path} = Endo (path :)
 
 load :: (Rank2.Apply form, Rank2.Traversable form) => form FieldConst -> FDF -> Either String (form Maybe)
 load fields = fromFieldMap fields . foldMapWithKey Map.singleton
@@ -113,6 +124,9 @@ fill fieldValues Field {path, entry}
 
 toEntry :: Entry a -> String -> Either String (Maybe a)
 toEntry _ "" = Right Nothing
+toEntry (Constant expected) v
+  | expected == Text.strip (Text.pack v) = Right Nothing
+  | otherwise = Left ("Expected " <> show expected <> ", got " <> show v) 
 toEntry Count v = Just <$> readEither v
 toEntry Date v = Just <$> parseTimeM False defaultTimeLocale "%Y%m%d" v
 toEntry Province v = Just <$> readEither v

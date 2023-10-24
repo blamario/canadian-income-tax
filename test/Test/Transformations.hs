@@ -14,6 +14,7 @@
 module Test.Transformations where
 
 import Data.Functor.Compose
+import Data.Void (Void)
 import Data.Word (Word)
 import Data.Text (Text)
 import Data.Time (Day)
@@ -40,6 +41,9 @@ instance Transformation Gen where
 
 adjust :: Hedgehog.Gen a -> Compose Hedgehog.Gen Maybe a
 adjust g = Compose $ Gen.frequency [(4, pure Nothing), (1, Just <$> g)]
+
+instance Gen `At` Void where
+  _ $ _ = Compose (pure Nothing)
 
 instance Gen `At` Bool where
   _ $ _ = adjust Gen.enumBounded
