@@ -15,7 +15,9 @@ import Data.Text (Text)
 import Data.Time.Calendar (Year, dayPeriod)
 import Rank2 qualified
 
+import Tax.Canada.T1.FieldNames (partAFields)
 import Tax.Canada.T1.Types
+import Tax.FDF (Entry (Amount, Constant, Percent), FieldConst (Field, entry))
 import Tax.Util (difference, fixEq, leastOf, nonNegativeDifference, totalOf)
 
 fixT1 :: T1 Maybe -> T1 Maybe
@@ -158,20 +160,26 @@ fixStep4 t1 = fixEq $ \step@Step4{..}-> step{
 
 fixPage5PartA :: T1 Maybe -> Page5PartA Maybe -> Page5PartA Maybe
 fixPage5PartA t1 = fixEq $ \part@Page5PartA{..}-> part{
-   column1 = taxIncomeBracket 0 50197 0.15 0,
-   column2 = taxIncomeBracket 50197 100392 0.205 7529.55,
-   column3 = taxIncomeBracket 100392 155625 0.26 17819.53,
-   column4 = taxIncomeBracket 155625 221708 0.29 32180.11,
-   column5 = taxIncomeBracket 221708 (10^12) 0.33 51344.18} -- a trillion ought to be enough for anybody
-   where taxIncomeBracket threshold ceiling rate carry
+   column1 = taxIncomeBracket partAFields.column1 partAFields.column2,
+   column2 = taxIncomeBracket partAFields.column2 partAFields.column3,
+   column3 = taxIncomeBracket partAFields.column3 partAFields.column4,
+   column4 = taxIncomeBracket partAFields.column4 partAFields.column5,
+   column5 = taxIncomeBracket partAFields.column5
+                              partAFields.column5{line68_threshold = Field [] $ Constant Amount 1e12}}
+                                                  -- a trillion ought to be enough for anybody
+   where taxIncomeBracket :: TaxIncomeBracket FieldConst -> TaxIncomeBracket FieldConst -> TaxIncomeBracket Maybe
+         taxIncomeBracket TaxIncomeBracket{line68_threshold = Field _ (Constant Amount threshold),
+                                           line70_rate = Field _ (Constant Percent rate),
+                                           line72_carry = Field _ (Constant Amount carry)}
+                          TaxIncomeBracket{line68_threshold = Field _ (Constant Amount ceiling)}
             | income > threshold && income <= ceiling = TaxIncomeBracket{
                  line67_income = Just income,
                  line68_threshold = Nothing,
                  line69_overThreshold = Just (income - threshold),
                  line70_rate = Nothing,
-                 line71_timesRate = Just ((income - threshold) * rate),
+                 line71_timesRate = Just ((income - threshold) * fromRational rate),
                  line72_carry = Nothing,
-                 line73_equalsTax = Just ((income - threshold) * rate + carry)}
+                 line73_equalsTax = Just ((income - threshold) * fromRational rate + carry)}
             | otherwise = Rank2.pure Nothing
          income = fromMaybe 0 t1.page5.step4_TaxableIncome.line_26000_TaxableIncome
 
