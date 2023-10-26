@@ -31,7 +31,7 @@ data FieldConst a = Field {path :: [Text], entry :: Entry a}
                   | NoField
 
 data Entry a where
-  Constant :: Text -> Entry Void
+  Constant :: (Eq a, Show a) => Entry a -> a -> Entry Void
   Count :: Entry Word
   Date :: Entry Day
   Province :: Entry Province.Code
@@ -124,9 +124,9 @@ fill fieldValues Field {path, entry}
 
 toEntry :: Entry a -> String -> Either String (Maybe a)
 toEntry _ "" = Right Nothing
-toEntry (Constant expected) v
-  | expected == Text.strip (Text.pack v) = Right Nothing
-  | otherwise = Left ("Expected " <> show expected <> ", got " <> show v) 
+toEntry (Constant entry expected) v
+  | toEntry entry v == Right (Just expected) = Right Nothing
+  | otherwise = Left ("Expected " <> show expected <> ", got " <> show v)
 toEntry Count v = Just <$> readEither v
 toEntry Date v = Just <$> parseTimeM False defaultTimeLocale "%Y%m%d" v
 toEntry Province v = Just <$> readEither v
