@@ -49,9 +49,9 @@ properties :: [(FilePath, FDF)] -> TestTree
 properties fdfMap =
   testGroup "Properties" [
     testGroup "Idempotence" [
-      testProperty "T1" (checkFormIdempotent fixT1),
-      testProperty "ON428" (checkFormIdempotent fixON428),
-      testProperty "T1+ON428" (checkFormIdempotent fixOntarioReturns')],
+      testProperty "T1" (checkFormIdempotent t1Fields fixT1),
+      testProperty "ON428" (checkFormIdempotent on428Fields fixON428),
+      testProperty "T1+ON428" (checkFormIdempotent (Rank2.Pair t1Fields on428Fields) fixOntarioReturns')],
     testGroup "Roundtrip" [
       testProperty "T1 Ontario" (checkFormFields t1Fields $ List.lookup "5006-r-fill-22e.fdf" fdfMap),
       testProperty "T1 British Columbia" (checkFormFields BC.t1Fields $ List.lookup "5010-r-fill-22e.fdf" fdfMap),
@@ -61,8 +61,8 @@ properties fdfMap =
 
 checkFormIdempotent :: (Eq (g Maybe), Show (g Maybe),
                         Rank2.Applicative g, Shallow.Traversable Transformations.Gen g)
-                    => (g Maybe -> g Maybe) -> Property
-checkFormIdempotent f = checkIdempotent generateForm f
+                    => g FieldConst -> (g Maybe -> g Maybe) -> Property
+checkFormIdempotent fields f = checkIdempotent (generateForm fields) f
 
 checkFormFields :: (Eq (g Maybe), Show (g Maybe),
                     Rank2.Applicative g, Shallow.Traversable Transformations.Gen g)
@@ -71,7 +71,7 @@ checkFormFields _ Nothing = error "Missing FDF template"
 checkFormFields fields (Just fdf) = property $ do
   annotateShow $ FDF.load fields fdf
   assert $ isRight $ FDF.load fields fdf
-  form <- forAll (Gen.filter (formValidForFDF fields) generateForm)
+  form <- forAll (generateForm fields)
   let fdf' = FDF.update fields form fdf
       formKeys = FDF.formKeys fields
       fdfKeys = Text.FDF.foldMapWithKey (const . (:[]) . map dropIndex) fdf
@@ -83,16 +83,8 @@ checkFormFields fields (Just fdf) = property $ do
   FDF.load fields fdf' === Right form
   List.sort (noCheckbox formKeys) === List.sort (noCheckbox $ filter (\x-> any (`List.isPrefixOf` x) keyHeads) fdfKeys)
 
-formValidForFDF :: (Rank2.Apply g, Rank2.Foldable g) => g FieldConst -> g Maybe -> Bool
-formValidForFDF fields = getAll . Rank2.foldMap (All . getConst) . Rank2.liftA2 nonoField fields
-  where nonoField :: FieldConst a -> Maybe a -> Const Bool a
-        nonoField Field {entry = Textual} (Just "") = Const False
-        nonoField Field{} _ = Const True
-        nonoField NoField Nothing = Const True
-        nonoField NoField _ = Const False
-
-generateForm :: (Rank2.Applicative g, Shallow.Traversable Transformations.Gen g) => Gen (g Maybe)
-generateForm = Shallow.traverse Transformations.Gen (Rank2.pure Nothing)
+generateForm :: (Rank2.Applicative g, Shallow.Traversable Transformations.Gen g) => g FieldConst -> Gen (g Maybe)
+generateForm = Shallow.traverse Transformations.Gen
 
 checkIdempotent :: (Eq a, Show a) => Gen a -> (a -> a) -> Property
 checkIdempotent gen f = property $ forAll gen >>= \x-> let x' = f x in f x' === x'

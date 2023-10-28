@@ -30,13 +30,14 @@ import Transformation qualified
 import Transformation.Shallow qualified as Shallow
 import Transformation.Shallow.TH qualified as Shallow.TH
 
+import Tax.FDF (FieldConst (NoField))
 import Tax.Canada.T1.Types (LanguageOfCorrespondence, MaritalStatus)
 import Data.Fixed (Centi, Fixed (MkFixed))
 
 data Gen = Gen
 
 instance Transformation Gen where
-  type Domain Gen = Maybe
+  type Domain Gen = FieldConst
   type Codomain Gen = Compose Hedgehog.Gen Maybe
 
 adjust :: Hedgehog.Gen a -> Compose Hedgehog.Gen Maybe a
@@ -46,9 +47,11 @@ instance Gen `At` Void where
   _ $ _ = Compose (pure Nothing)
 
 instance Gen `At` Bool where
+  _ $ NoField = Compose (pure Nothing)
   _ $ _ = adjust Gen.enumBounded
 
 instance Gen `At` Centi where
+  _ $ NoField = Compose (pure Nothing)
   _ $ _ = adjust $ MkFixed <$> Gen.integral (Range.linear 0 1_000_000_000)
 
 instance Gen `At` Rational where
