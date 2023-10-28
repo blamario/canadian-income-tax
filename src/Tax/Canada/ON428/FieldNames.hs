@@ -1,6 +1,7 @@
 {-# LANGUAGE ImportQualifiedPost #-}
 {-# LANGUAGE DisambiguateRecordFields #-}
 {-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE NumericUnderscores #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Tax.Canada.ON428.FieldNames (on428Fields) where
@@ -9,7 +10,7 @@ import Data.Fixed (Centi)
 import Rank2 qualified
 
 import Tax.Canada.ON428.Types
-import Tax.FDF (Entry (Count, Amount, Percent), FieldConst (Field, NoField), within)
+import Tax.FDF (Entry (Count, Constant', Amount, Percent), FieldConst (Field, NoField), within)
 
 on428Fields = within "form1" Rank2.<$> ON428 {
    page1 = within "Page1" Rank2.<$> page1Fields,
@@ -24,19 +25,20 @@ page1Fields = Page1 {
    partB = within "Part_B" Rank2.<$> page1PartBFields}
 
 page1PartAFields = Page1PartA {
-   column1 = within "Column1" Rank2.<$> taxIncomeBracketFields,
-   column2 = within "Column2" Rank2.<$> taxIncomeBracketFields,
-   column3 = within "Column3" Rank2.<$> taxIncomeBracketFields,
-   column4 = within "Column4" Rank2.<$> taxIncomeBracketFields,
-   column5 = within "Column5" Rank2.<$> taxIncomeBracketFields}
+   column1 = within "Column1" Rank2.<$> taxIncomeBracketFields 0 0.0505 0,
+   column2 = within "Column2" Rank2.<$> taxIncomeBracketFields 46_226.00 0.0915 2_334.41,
+   column3 = within "Column3" Rank2.<$> taxIncomeBracketFields 92_454.00 0.1116 6_564.28,
+   column4 = within "Column4" Rank2.<$> taxIncomeBracketFields 150_000.00 0.1216 12_986.41,
+   column5 = within "Column5" Rank2.<$> taxIncomeBracketFields 220_000.00 0.1316 21_498.41}
 
-taxIncomeBracketFields = TaxIncomeBracket {
+taxIncomeBracketFields :: Centi -> Rational -> Centi -> TaxIncomeBracket FieldConst
+taxIncomeBracketFields threshold rate baseTax = TaxIncomeBracket {
    line2_income = Field ["Line2", "Amount"] Amount,
-   line3_threshold = Field ["Line3", "Amount"] Amount,
+   line3_threshold = Field ["Line3", "Amount"] $ Constant' threshold Amount,
    line4_overThreshold = Field ["Line4", "Amount"] Amount,
-   line5_rate = Field ["Line5", "Percent"] Percent,
+   line5_rate = Field ["Line5", "Percent"] $ Constant' rate Percent,
    line6_timesRate = Field ["Line6", "Amount"] Amount,
-   line7_baseTax = Field ["Line7", "Amount"] Amount,
+   line7_baseTax = Field ["Line7", "Amount"] $ Constant' baseTax Amount,
    line8_equalsTax = Field ["Line8", "Amount"] Amount}
 
 page1PartBFields = Page1PartB {

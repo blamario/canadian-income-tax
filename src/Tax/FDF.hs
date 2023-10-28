@@ -32,6 +32,7 @@ data FieldConst a = Field {path :: [Text], entry :: Entry a}
 
 data Entry a where
   Constant :: (Eq a, Show a) => Entry a -> a -> Entry Void
+  Constant' :: (Eq a, Show a) => a -> Entry a -> Entry a
   Count :: Entry Word
   Date :: Entry Day
   Province :: Entry Province.Code
@@ -81,6 +82,7 @@ update fields = mapWithKey
         updateKey :: Map [Text] Text -> [Text] -> Text -> Text
         updateKey m k v = Map.findWithDefault v k m
         fromEntry :: Entry a -> a -> Text
+        fromEntry (Constant' c e) _ = fromEntry e c
         fromEntry Textual v = v
         fromEntry Date v = Text.pack $ formatTime defaultTimeLocale "%Y%m%d" v
         fromEntry Checkbox True = "Yes"
@@ -127,6 +129,11 @@ toEntry _ "" = Right Nothing
 toEntry (Constant entry expected) v
   | toEntry entry v == Right (Just expected) = Right Nothing
   | otherwise = Left ("Expected " <> show expected <> ", got " <> show v)
+toEntry (Constant' expected entry) v = do
+  e <- toEntry entry v
+  if e == Just expected
+    then pure e
+    else Left ("Expected " <> show expected <> ", got " <> show (v, e))
 toEntry Count v = Just <$> readEither v
 toEntry Date v = Just <$> parseTimeM False defaultTimeLocale "%Y%m%d" v
 toEntry Province v = Just <$> readEither v
