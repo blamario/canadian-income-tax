@@ -9,6 +9,7 @@ module Tax.Canada.T1.FieldNames where
 import Rank2 qualified
 
 import Tax.FDF (FieldConst (Field), Entry (..), within)
+import Tax.Canada.Shared (TaxIncomeBracket (..))
 import Tax.Canada.T1.Types
 
 t1Fields :: T1 FieldConst
@@ -174,45 +175,45 @@ step4Fields = Step4 {
 
 partAFields = Page5PartA {
    column1 = within "Column1" Rank2.<$> TaxIncomeBracket {
-       line67_income = Field ["Line36Amount1"] Amount,
-       line68_threshold = Field ["Line37Amount1"] $ Constant 0 Amount,
-       line69_overThreshold = Field ["Line38Amount1"] Amount,
-       line70_rate = Field ["Line39Rate1"] $ Constant 0.15 Percent,
-       line71_timesRate = Field ["Line40Amount1"] Amount,
-       line72_carry = Field ["Line41Amount1"] $ Constant 0 Amount,
-       line73_equalsTax = Field ["Line42Amount1"] Amount},
+       income = Field ["Line36Amount1"] Amount,
+       threshold = Field ["Line37Amount1"] $ Constant 0 Amount,
+       overThreshold = Field ["Line38Amount1"] Amount,
+       rate = Field ["Line39Rate1"] $ Constant 0.15 Percent,
+       timesRate = Field ["Line40Amount1"] Amount,
+       baseTax = Field ["Line41Amount1"] $ Constant 0 Amount,
+       equalsTax = Field ["Line42Amount1"] Amount},
    column2 = within "Column2" Rank2.<$> TaxIncomeBracket {
-       line67_income = Field ["Line36Amount2"] Amount,
-       line68_threshold = Field ["Line37Amount2"] $ Constant 50_197.00 Amount,
-       line69_overThreshold = Field ["Line38Amount2"] Amount,
-       line70_rate = Field ["Line39Rate2"] $ Constant 0.205 Percent,
-       line71_timesRate = Field ["Line40Amount2"] Amount,
-       line72_carry = Field ["Line41Amount2"] $ Constant 7_529.55 Amount,
-       line73_equalsTax = Field ["Line42Amount2"] Amount},
+       income = Field ["Line36Amount2"] Amount,
+       threshold = Field ["Line37Amount2"] $ Constant 50_197.00 Amount,
+       overThreshold = Field ["Line38Amount2"] Amount,
+       rate = Field ["Line39Rate2"] $ Constant 0.205 Percent,
+       timesRate = Field ["Line40Amount2"] Amount,
+       baseTax = Field ["Line41Amount2"] $ Constant 7_529.55 Amount,
+       equalsTax = Field ["Line42Amount2"] Amount},
    column3 = within "Column3" Rank2.<$> TaxIncomeBracket {
-       line67_income = Field ["Line36Amount3"] Amount,
-       line68_threshold = Field ["Line37Amount3"] $ Constant 100_392.00 Amount,
-       line69_overThreshold = Field ["Line38Amount3"] Amount,
-       line70_rate = Field ["Line39Rate3"] $ Constant 0.26 Percent,
-       line71_timesRate = Field ["Line40Amount3"] Amount,
-       line72_carry = Field ["Line41Amount3"] $ Constant 17_819.53 Amount,
-       line73_equalsTax = Field ["Line42Amount3"] Amount},
+       income = Field ["Line36Amount3"] Amount,
+       threshold = Field ["Line37Amount3"] $ Constant 100_392.00 Amount,
+       overThreshold = Field ["Line38Amount3"] Amount,
+       rate = Field ["Line39Rate3"] $ Constant 0.26 Percent,
+       timesRate = Field ["Line40Amount3"] Amount,
+       baseTax = Field ["Line41Amount3"] $ Constant 17_819.53 Amount,
+       equalsTax = Field ["Line42Amount3"] Amount},
    column4 = within "Column4" Rank2.<$> TaxIncomeBracket {
-       line67_income = Field ["Line36Amount4"] Amount,
-       line68_threshold = Field ["Line37Amount4"] $ Constant 155_625.00 Amount,
-       line69_overThreshold = Field ["Line38Amount4"] Amount,
-       line70_rate = Field ["Line39Rate4"] $ Constant 0.29 Percent,
-       line71_timesRate = Field ["Line40Amount4"] Amount,
-       line72_carry = Field ["Line41Amount4"] $ Constant 32_180.11 Amount,
-       line73_equalsTax = Field ["Line42Amount4"] Amount},
+       income = Field ["Line36Amount4"] Amount,
+       threshold = Field ["Line37Amount4"] $ Constant 155_625.00 Amount,
+       overThreshold = Field ["Line38Amount4"] Amount,
+       rate = Field ["Line39Rate4"] $ Constant 0.29 Percent,
+       timesRate = Field ["Line40Amount4"] Amount,
+       baseTax = Field ["Line41Amount4"] $ Constant 32_180.11 Amount,
+       equalsTax = Field ["Line42Amount4"] Amount},
    column5 = within "Column5" Rank2.<$> TaxIncomeBracket {
-       line67_income = Field ["Line36Amount5"] Amount,
-       line68_threshold = Field ["Line37Amount5"] $ Constant 221_708.00 Amount,
-       line69_overThreshold = Field ["Line38Amount5"] Amount,
-       line70_rate = Field ["Line39Rate5"] $ Constant 0.33 Percent,
-       line71_timesRate = Field ["Line40Amount5"] Amount,
-       line72_carry = Field ["Line41Amount5"] $ Constant 51_344.18 Amount,
-       line73_equalsTax = Field ["Line42Amount5"] Amount}}
+       income = Field ["Line36Amount5"] Amount,
+       threshold = Field ["Line37Amount5"] $ Constant 221_708.00 Amount,
+       overThreshold = Field ["Line38Amount5"] Amount,
+       rate = Field ["Line39Rate5"] $ Constant 0.33 Percent,
+       timesRate = Field ["Line40Amount5"] Amount,
+       baseTax = Field ["Line41Amount5"] $ Constant 51_344.18 Amount,
+       equalsTax = Field ["Line42Amount5"] Amount}}
 
 partBFields = Page5PartB {
    line30000 = Field ["Line30000_Sub", "Line1_Amount"] Amount,

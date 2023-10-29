@@ -29,6 +29,7 @@ library
     exposed-modules:
         Tax.FDF
         Tax.Canada
+        Tax.Canada.Shared
         Tax.Canada.T1.Types
         Tax.Canada.T1.FieldNames
         Tax.Canada.T1.FieldNames.BC

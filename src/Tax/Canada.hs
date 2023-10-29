@@ -6,6 +6,8 @@
 
 module Tax.Canada (T1, ON428, fixOntarioReturns, fixT1, fixON428, t1Fields, on428Fields) where
 
+import GHC.Stack (HasCallStack)
+
 import Tax.Canada.T1.Types qualified as T1
 import Tax.Canada.T1.Types (T1 (T1, page7), Page7(Page7, step6_RefundOrBalanceOwing))
 import Tax.Canada.T1.Fix (fixT1)
@@ -17,7 +19,7 @@ import Tax.Canada.ON428.Fix (fixON428)
 import Tax.Canada.ON428.FieldNames (on428Fields)
 import Tax.Util (fixEq)
 
-fixOntarioReturns :: (T1 Maybe, ON428 Maybe) -> (T1 Maybe, ON428 Maybe)
+fixOntarioReturns :: HasCallStack => (T1 Maybe, ON428 Maybe) -> (T1 Maybe, ON428 Maybe)
 fixOntarioReturns =
   fixEq $ \(t1@T1{page7 = page7@Page7{step6_RefundOrBalanceOwing}},
             on428@ON428{page1 = page1@Page1{partB},

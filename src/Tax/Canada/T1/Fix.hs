@@ -13,14 +13,14 @@ import Data.Fixed (Centi)
 import Data.Maybe (fromMaybe)
 import Data.Text (Text)
 import Data.Time.Calendar (Year, dayPeriod)
+import GHC.Stack (HasCallStack)
 import Rank2 qualified
 
-import Tax.Canada.T1.FieldNames (partAFields)
 import Tax.Canada.T1.Types
-import Tax.FDF (Entry (Amount, Constant, Percent), FieldConst (Field, entry))
+import Tax.Canada.Shared (fixTaxIncomeBracket, TaxIncomeBracket (equalsTax))
 import Tax.Util (difference, fixEq, leastOf, nonNegativeDifference, totalOf)
 
-fixT1 :: T1 Maybe -> T1 Maybe
+fixT1 :: HasCallStack => T1 Maybe -> T1 Maybe
 fixT1 = fixEq $ \t1@T1{..}-> T1{page1 = fixPage1 page1,
                                 page2 = fixPage2 page2,
                                 page3 = fixPage3 page3,
@@ -94,7 +94,7 @@ fixPage4 t1 = fixEq $ \page@Page4{..}-> page{
    line_23400_NetBeforeAdjust = nonNegativeDifference line_15000_TotalIncome_2 line_23300_cont,
    line_23600_NetIncome = nonNegativeDifference line_23400_NetBeforeAdjust line_23500_SocialBenefits}
 
-fixPage5 :: T1 Maybe -> Page5 Maybe -> Page5 Maybe
+fixPage5 :: HasCallStack => T1 Maybe -> Page5 Maybe -> Page5 Maybe
 fixPage5 t1 = fixEq $ \Page5{..}-> Page5{
    step4_TaxableIncome = fixStep4 t1 step4_TaxableIncome,
    partA_FederalTax = fixPage5PartA t1 partA_FederalTax,
@@ -158,30 +158,14 @@ fixStep4 t1 = fixEq $ \step@Step4{..}-> step{
    line_25700_AddLines_cont = line_25700_AddLines_sum,
    line_26000_TaxableIncome = nonNegativeDifference line_23600_NetIncome_2 line_25700_AddLines_cont}
 
-fixPage5PartA :: T1 Maybe -> Page5PartA Maybe -> Page5PartA Maybe
+fixPage5PartA :: HasCallStack => T1 Maybe -> Page5PartA Maybe -> Page5PartA Maybe
 fixPage5PartA t1 = fixEq $ \part@Page5PartA{..}-> part{
-   column1 = taxIncomeBracket partAFields.column1 partAFields.column2,
-   column2 = taxIncomeBracket partAFields.column2 partAFields.column3,
-   column3 = taxIncomeBracket partAFields.column3 partAFields.column4,
-   column4 = taxIncomeBracket partAFields.column4 partAFields.column5,
-   column5 = taxIncomeBracket partAFields.column5
-                              partAFields.column5{line68_threshold = Field [] $ Constant 1e12 Amount}}
-                                                  -- a trillion ought to be enough for anybody
-   where taxIncomeBracket :: TaxIncomeBracket FieldConst -> TaxIncomeBracket FieldConst -> TaxIncomeBracket Maybe
-         taxIncomeBracket TaxIncomeBracket{line68_threshold = Field _ (Constant threshold Amount),
-                                           line70_rate = Field _ (Constant rate Percent),
-                                           line72_carry = Field _ (Constant carry Amount)}
-                          TaxIncomeBracket{line68_threshold = Field _ (Constant ceiling Amount)}
-            | income > threshold && income <= ceiling = TaxIncomeBracket{
-                 line67_income = Just income,
-                 line68_threshold = Nothing,
-                 line69_overThreshold = Just (income - threshold),
-                 line70_rate = Nothing,
-                 line71_timesRate = Just ((income - threshold) * fromRational rate),
-                 line72_carry = Nothing,
-                 line73_equalsTax = Just ((income - threshold) * fromRational rate + carry)}
-            | otherwise = Rank2.pure Nothing
-         income = fromMaybe 0 t1.page5.step4_TaxableIncome.line_26000_TaxableIncome
+   column1 = fixTaxIncomeBracket income (Just part.column2) part.column1,
+   column2 = fixTaxIncomeBracket income (Just part.column3) part.column2,
+   column3 = fixTaxIncomeBracket income (Just part.column4) part.column3,
+   column4 = fixTaxIncomeBracket income (Just part.column5) part.column4,
+   column5 = fixTaxIncomeBracket income Nothing             part.column5}
+   where income = t1.page5.step4_TaxableIncome.line_26000_TaxableIncome
 
 fixPage5PartB :: T1 Maybe -> Page5PartB Maybe -> Page5PartB Maybe
 fixPage5PartB t1 = fixEq $ \part@Page5PartB{..}-> part{
@@ -212,11 +196,11 @@ fixMedicalExpenses t1 = fixEq $ \expenses@MedicalExpenses{familyExpenses, taxabl
 fixPage7PartC :: T1 Maybe -> Page7PartC Maybe -> Page7PartC Maybe
 fixPage7PartC t1 = fixEq $ \part@Page7PartC{..}-> part{
    line116 = let partA = t1.page5.partA_FederalTax
-             in partA.column1.line73_equalsTax
-                <|> partA.column2.line73_equalsTax
-                <|> partA.column3.line73_equalsTax
-                <|> partA.column4.line73_equalsTax
-                <|> partA.column5.line73_equalsTax,
+             in partA.column1.equalsTax
+                <|> partA.column2.equalsTax
+                <|> partA.column3.equalsTax
+                <|> partA.column4.equalsTax
+                <|> partA.column5.equalsTax,
    line40400 = totalOf [line116, line40424],
    line119 = t1.page6.line35000,
    line40425,

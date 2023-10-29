@@ -19,6 +19,8 @@ import Language.Haskell.TH qualified as TH
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
+import Tax.Canada.Shared (TaxIncomeBracket)
+
 data ON428 line = ON428 {
    page1 :: Page1 line,
    page2 :: Page2 line,
@@ -36,16 +38,6 @@ data Page1PartA line = Page1PartA {
    column3 :: TaxIncomeBracket line,
    column4 :: TaxIncomeBracket line,
    column5 :: TaxIncomeBracket line}
-
-data TaxIncomeBracket line = TaxIncomeBracket {
-   line2_income :: line Centi,
-   line3_threshold :: line Centi,
-   line4_overThreshold :: line Centi,
-   line5_rate :: line Rational,
-   line6_timesRate :: line Centi,
-   line7_baseTax :: line Centi,
-   line8_equalsTax :: line Centi
-   }
 
 data Page1PartB line = Page1PartB {
    line9_basic :: line Centi,
@@ -192,4 +184,4 @@ $(foldMap
    [''ON428, ''Page1, ''Page2, ''Page3, ''Page4,
     ''Page1PartA, ''Page1PartB, ''Page2PartB, ''Page2PartC,
     ''MedicalExpenses, ''Donations,
-    ''TaxIncomeBracket, ''HealthPremium, ''HealthPremiumBracket])
+    ''HealthPremium, ''HealthPremiumBracket])

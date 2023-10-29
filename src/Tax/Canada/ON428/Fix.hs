@@ -14,6 +14,7 @@ import Data.Fixed (Centi)
 import Rank2 qualified
 
 import Tax.Canada.ON428.Types
+import Tax.Canada.Shared (fixTaxIncomeBracket, TaxIncomeBracket (equalsTax))
 import Tax.Util (fixEq, fractionOf, nonNegativeDifference, totalOf)
 
 fixON428 :: ON428 Maybe -> ON428 Maybe
@@ -35,17 +36,6 @@ fixPage1PartA income = fixEq $ \Page1PartA{..}-> Page1PartA{
    column3 = fixTaxIncomeBracket income (Just column4) column3,
    column4 = fixTaxIncomeBracket income (Just column5) column4,
    column5 = fixTaxIncomeBracket income Nothing column5}
-
-fixTaxIncomeBracket :: Maybe Centi -> Maybe (TaxIncomeBracket Maybe) -> TaxIncomeBracket Maybe -> TaxIncomeBracket Maybe
-fixTaxIncomeBracket income nextBracket bracket@TaxIncomeBracket{..} = bracket{
-   line2_income = do i <- income
-                     floor <- line3_threshold
-                     let ceiling = nextBracket >>= (.line3_threshold)
-                     guard (floor <= i && all (i <) ceiling)
-                     income,
-   line4_overThreshold = liftA2 (-) line2_income line3_threshold,
-   line6_timesRate = fromRational <$> liftA2 (*) (toRational <$> line4_overThreshold) line5_rate,
-   line8_equalsTax = liftA2 (+) line6_timesRate line7_baseTax}
 
 fixPage1PartB :: Page1PartB Maybe -> Page1PartB Maybe
 fixPage1PartB = fixEq $ \part@Page1PartB{..}-> part{
@@ -86,11 +76,11 @@ fixPage2PartB on428 = fixEq $ \part@Page2PartB{..}-> part{
 
 fixPage2PartC :: ON428 Maybe -> Page2PartC Maybe -> Page2PartC Maybe
 fixPage2PartC on428 = fixEq $ \part@Page2PartC{..}-> part{
-   line51_tax = totalOf [on428.page1.partA.column1.line8_equalsTax,
-                         on428.page1.partA.column2.line8_equalsTax,
-                         on428.page1.partA.column3.line8_equalsTax,
-                         on428.page1.partA.column4.line8_equalsTax,
-                         on428.page1.partA.column5.line8_equalsTax],
+   line51_tax = totalOf [on428.page1.partA.column1.equalsTax,
+                         on428.page1.partA.column2.equalsTax,
+                         on428.page1.partA.column3.equalsTax,
+                         on428.page1.partA.column4.equalsTax,
+                         on428.page1.partA.column5.equalsTax],
    line52_credits = on428.page2.partB.line50,
    line53 = nonNegativeDifference line51_tax line52_credits,
    line55 = totalOf [line53, line54],
@@ -174,7 +164,8 @@ fixHealthPremium income = fixEq $ \HealthPremium{..}-> HealthPremium{
    row4 = fixHealthPremiumBracket income 72000 72600 0.25 600 row4,
    row5 = fixHealthPremiumBracket income 200000 200600 0.25 750 row5}
 
-fixHealthPremiumBracket :: Centi -> Centi -> Centi -> Rational -> Centi -> HealthPremiumBracket Maybe -> HealthPremiumBracket Maybe
+fixHealthPremiumBracket :: Centi -> Centi -> Centi -> Rational -> Centi
+                        -> HealthPremiumBracket Maybe -> HealthPremiumBracket Maybe
 fixHealthPremiumBracket income floor ceiling rate base HealthPremiumBracket{..}
    | income > floor && income < ceiling = HealthPremiumBracket{
        taxableIncome = Just income,

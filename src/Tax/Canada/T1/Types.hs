@@ -24,6 +24,8 @@ import Language.Haskell.TH qualified as TH
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
+import Tax.Canada.Shared (TaxIncomeBracket)
+
 data T1 line = T1 {
    page1 :: Page1 line,
    page2 :: Page2 line,
@@ -207,16 +209,6 @@ data Page5PartB line = Page5PartB {
    line30500 :: line Centi,
    line_81 :: line Centi}
 
-data TaxIncomeBracket line = TaxIncomeBracket {
-   line67_income :: line Centi,
-   line68_threshold :: line Centi,
-   line69_overThreshold :: line Centi,
-   line70_rate :: line Rational,
-   line71_timesRate :: line Centi,
-   line72_carry :: line Centi,
-   line73_equalsTax :: line Centi
-   }
-
 data Page6 line = Page6 {
    line82 :: line Centi,
    -- CPP_QPP
@@ -347,11 +339,11 @@ $(foldMap
    (\t-> concat <$> sequenceA [
        [d|
            deriving instance (Show (line Bool), Show (line Centi), Show (line Word), Show (line Text),
-                              Show (line Province.Code), Show (line Day), Show (line Rational),
+                              Show (line Rational), Show (line Province.Code), Show (line Day),
                               Show (line LanguageOfCorrespondence), Show (line MaritalStatus))
                           => Show ($(TH.conT t) line)
            deriving instance (Eq (line Bool), Eq (line Centi), Eq (line Word), Eq (line Text),
-                              Eq (line Province.Code), Eq (line Day), Eq (line Rational),
+                              Eq (line Rational), Eq (line Province.Code), Eq (line Day),
                               Eq (line LanguageOfCorrespondence), Eq (line MaritalStatus))
                           => Eq ($(TH.conT t) line)
        |],
@@ -360,4 +352,4 @@ $(foldMap
    [''T1, ''ElectionsCanada, ''Identification, ''MedicalExpenses,
     ''Page1, ''Page2, ''Page3, ''Page4, ''Page5, ''Page6, ''Page7, ''Page8,
     ''Step4, ''Page5PartA, ''Page5PartB, ''Page7PartC, ''Page7Step6, ''Page8Step6,
-    ''Residence, ''Spouse, ''TaxIncomeBracket, ''TaxPreparer])
+    ''Residence, ''Spouse, ''TaxPreparer])
