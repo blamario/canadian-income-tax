@@ -76,6 +76,9 @@ update fields = mapWithKey
         pairKey Field {path, entry = Switch' leaf} (Just True) = Const $ Just ((<> "[0]") <$> (path ++ [leaf]), "1")
         pairKey Field {path, entry = Switch' leaf} (Just False) =
           Const $ Just (map (<> "[0]") path ++ [leaf <> "[1]"], "1")
+        pairKey Field {path, entry = Constant c e} (Just v)
+          | c == v = Const Nothing
+          | otherwise = error ("Trying to replace constant field " ++ show (path, c) ++ " with " ++ show v)
         pairKey Field {path, entry} v = Const $ Just ((<> "[0]") <$> path, foldMap (fromEntry entry) v)
         pairKey NoField _ = Const Nothing
         updateKey :: Map [Text] Text -> [Text] -> Text -> Text
@@ -88,7 +91,8 @@ update fields = mapWithKey
         fromEntry Checkbox False = "No"
         fromEntry (RadioButton values) v = Text.pack $ show $ fromEnum v + 1
         fromEntry Amount v = Text.pack (show v)
-        fromEntry Percent v = Text.pack (show (fromRational $ v * 100 :: Centi)) <> "%"
+        fromEntry Percent v = dropInsignificantZeros (Text.pack $ show (fromRational $ v * 100 :: Centi)) <> "%"
+          where dropInsignificantZeros = Text.dropWhileEnd (== '.') . Text.dropWhileEnd (== '0')
         fromEntry Count v = Text.pack (show v)
         fromEntry Province v = Text.pack (show v)
 

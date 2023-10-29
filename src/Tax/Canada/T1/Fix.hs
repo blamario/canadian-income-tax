@@ -124,7 +124,7 @@ fixPage6 t1 = fixEq $ \page@Page6{..}-> page{
    line33200_sum = totalOf [medical_expenses.difference, medical_expenses.otherDependants],
    line33200_cont = line33200_sum,
    line33500 = totalOf [line104, line33200_cont],
-   line112 = Nothing,
+   line112 = line112,
    line33800 = (* 0.15) <$> line33500,
    line35000 = totalOf [line33800, line34900]}
 
