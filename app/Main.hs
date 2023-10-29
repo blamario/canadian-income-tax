@@ -25,8 +25,7 @@ import System.Process.Typed (ExitCode (ExitFailure, ExitSuccess), byteStringInpu
 import Text.FDF (parse, serialize)
 
 import Tax.FDF qualified as FDF
-import Tax.Canada (fixOntarioReturns, fixON428, fixT1, on428Fields)
-import Tax.Canada.T1.FieldNames.BC (t1Fields)
+import Tax.Canada (fixOntarioReturns, fixON428, fixT1, on428Fields, t1Fields)
 
 main :: IO ()
 main = execParser (info optionsParser $ progDesc "Update all calculated fields in a Canadian T1 tax form")
