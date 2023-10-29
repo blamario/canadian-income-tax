@@ -30,7 +30,7 @@ import Transformation qualified
 import Transformation.Shallow qualified as Shallow
 import Transformation.Shallow.TH qualified as Shallow.TH
 
-import Tax.FDF (FieldConst (Field, NoField), Entry (Constant'))
+import Tax.FDF (FieldConst (Field, NoField), Entry (Constant))
 import Tax.Canada.T1.Types (LanguageOfCorrespondence, MaritalStatus)
 import Data.Fixed (Centi, Fixed (MkFixed))
 
@@ -52,11 +52,11 @@ instance Gen `At` Bool where
 
 instance Gen `At` Centi where
   _ $ NoField = Compose (pure Nothing)
-  _ $ Field _ (Constant' c _) = Compose (pure $ Just c)
+  _ $ Field _ (Constant c _) = Compose (pure $ Just c)
   _ $ _ = adjust $ MkFixed <$> Gen.integral (Range.linear 0 1_000_000_000)
 
 instance Gen `At` Rational where
-  _ $ Field _ (Constant' c _) = Compose (pure $ Just c)
+  _ $ Field _ (Constant c _) = Compose (pure $ Just c)
   _ $ _ = adjust $ ((/ 10_000) . toRational) <$> Gen.integral (Range.linear 0 10_000)
 
 instance Gen `At` Word where

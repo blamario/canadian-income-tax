@@ -19,7 +19,6 @@ import Data.Fixed (Centi)
 import Data.Monoid (Ap(Ap, getAp))
 import Data.Text (Text)
 import Data.Time (Day)
-import Data.Void (Void)
 import Data.CAProvinceCodes qualified as Province
 import Language.Haskell.TH qualified as TH
 import Rank2.TH qualified
@@ -210,11 +209,11 @@ data Page5PartB line = Page5PartB {
 
 data TaxIncomeBracket line = TaxIncomeBracket {
    line67_income :: line Centi,
-   line68_threshold :: line Void,
+   line68_threshold :: line Centi,
    line69_overThreshold :: line Centi,
-   line70_rate :: line Void,
+   line70_rate :: line Rational,
    line71_timesRate :: line Centi,
-   line72_carry :: line Void,
+   line72_carry :: line Centi,
    line73_equalsTax :: line Centi
    }
 
@@ -249,7 +248,7 @@ data Page6 line = Page6 {
    line33200_sum :: line Centi,
    line33200_cont :: line Centi,
    line33500 :: line Centi,
-   line112 :: line Void,
+   line112 :: line Rational,
    line33800 :: line Centi,
    line34900 :: line Centi,
    line35000 :: line Centi}
@@ -348,11 +347,11 @@ $(foldMap
    (\t-> concat <$> sequenceA [
        [d|
            deriving instance (Show (line Bool), Show (line Centi), Show (line Word), Show (line Text),
-                              Show (line Province.Code), Show (line Day), Show (line Void),
+                              Show (line Province.Code), Show (line Day), Show (line Rational),
                               Show (line LanguageOfCorrespondence), Show (line MaritalStatus))
                           => Show ($(TH.conT t) line)
            deriving instance (Eq (line Bool), Eq (line Centi), Eq (line Word), Eq (line Text),
-                              Eq (line Province.Code), Eq (line Day), Eq (line Void),
+                              Eq (line Province.Code), Eq (line Day), Eq (line Rational),
                               Eq (line LanguageOfCorrespondence), Eq (line MaritalStatus))
                           => Eq ($(TH.conT t) line)
        |],

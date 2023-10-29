@@ -10,7 +10,7 @@ import Data.Fixed (Centi)
 import Rank2 qualified
 
 import Tax.Canada.ON428.Types
-import Tax.FDF (Entry (Count, Constant', Amount, Percent), FieldConst (Field, NoField), within)
+import Tax.FDF (Entry (Count, Constant, Amount, Percent), FieldConst (Field, NoField), within)
 
 on428Fields = within "form1" Rank2.<$> ON428 {
    page1 = within "Page1" Rank2.<$> page1Fields,
@@ -34,11 +34,11 @@ page1PartAFields = Page1PartA {
 taxIncomeBracketFields :: Centi -> Rational -> Centi -> TaxIncomeBracket FieldConst
 taxIncomeBracketFields threshold rate baseTax = TaxIncomeBracket {
    line2_income = Field ["Line2", "Amount"] Amount,
-   line3_threshold = Field ["Line3", "Amount"] $ Constant' threshold Amount,
+   line3_threshold = Field ["Line3", "Amount"] $ Constant threshold Amount,
    line4_overThreshold = Field ["Line4", "Amount"] Amount,
-   line5_rate = Field ["Line5", "Percent"] $ Constant' rate Percent,
+   line5_rate = Field ["Line5", "Percent"] $ Constant rate Percent,
    line6_timesRate = Field ["Line6", "Amount"] Amount,
-   line7_baseTax = Field ["Line7", "Amount"] $ Constant' baseTax Amount,
+   line7_baseTax = Field ["Line7", "Amount"] $ Constant baseTax Amount,
    line8_equalsTax = Field ["Line8", "Amount"] Amount}
 
 page1PartBFields = Page1PartB {

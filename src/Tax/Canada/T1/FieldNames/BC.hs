@@ -80,7 +80,7 @@ page6Fields = BaseNames.page6Fields{
    line99 = Field ["Line99", "Amount"] Amount,
    line104 = Field ["Line104", "Amount"] Amount,
    medical_expenses = page6MedicalExpensesFields,
-   line112 = Field ["Line112", "Rate"] $ Constant Percent 0.15}
+   line112 = Field ["Line112", "Rate"] $ Constant 0.15 Percent}
 
 page6MedicalExpensesFields = MedicalExpenses {
    familyExpenses = Field ["Line33099_Sub", "Amount"] Amount,

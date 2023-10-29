@@ -165,13 +165,13 @@ fixPage5PartA t1 = fixEq $ \part@Page5PartA{..}-> part{
    column3 = taxIncomeBracket partAFields.column3 partAFields.column4,
    column4 = taxIncomeBracket partAFields.column4 partAFields.column5,
    column5 = taxIncomeBracket partAFields.column5
-                              partAFields.column5{line68_threshold = Field [] $ Constant Amount 1e12}}
+                              partAFields.column5{line68_threshold = Field [] $ Constant 1e12 Amount}}
                                                   -- a trillion ought to be enough for anybody
    where taxIncomeBracket :: TaxIncomeBracket FieldConst -> TaxIncomeBracket FieldConst -> TaxIncomeBracket Maybe
-         taxIncomeBracket TaxIncomeBracket{line68_threshold = Field _ (Constant Amount threshold),
-                                           line70_rate = Field _ (Constant Percent rate),
-                                           line72_carry = Field _ (Constant Amount carry)}
-                          TaxIncomeBracket{line68_threshold = Field _ (Constant Amount ceiling)}
+         taxIncomeBracket TaxIncomeBracket{line68_threshold = Field _ (Constant threshold Amount),
+                                           line70_rate = Field _ (Constant rate Percent),
+                                           line72_carry = Field _ (Constant carry Amount)}
+                          TaxIncomeBracket{line68_threshold = Field _ (Constant ceiling Amount)}
             | income > threshold && income <= ceiling = TaxIncomeBracket{
                  line67_income = Just income,
                  line68_threshold = Nothing,
