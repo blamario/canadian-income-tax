@@ -46,7 +46,7 @@ library
     -- other-extensions:
     build-depends:    base == 4.*, text >= 1.0 && < 2.2,
                       time == 1.*, containers >= 0.5 && < 0.7,
-                      monoid-subclasses == 1.*, rank2classes ^>= 1.5, deep-transformations ^>= 0.2,
+                      monoid-subclasses == 1.*, rank2classes ^>= 1.5.3, deep-transformations ^>= 0.2.2,
                       ca-province-codes == 1.0.*, forms-data-format ^>= 0.2,
                       template-haskell == 2.*
     hs-source-dirs:   src
