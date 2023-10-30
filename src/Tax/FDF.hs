@@ -69,10 +69,10 @@ update fields = mapWithKey
   where pairKey :: FieldConst a -> Maybe a -> Const (Maybe ([Text], Text)) a
         pairKey Field {path, entry = RadioButtons leaf values} (Just v)
           | Just i <- elemIndex v values
-          = Const $ Just (map (<> "[0]") path ++ [leaf <> "[" <> Text.pack (show i) <> "]"], "1")
+          = Const $ Just (map (<> "[0]") path ++ [leaf <> "[" <> Text.pack (show i) <> "]"], Text.pack $ show $ succ i)
           | otherwise = error ("Missing enum value " <> show v)
         pairKey Field {path, entry = Switch yes no leaf} (Just v) =
-          Const $ Just ((<> "[0]") <$> (path ++ [if v then yes else no, leaf]), "1")
+          Const $ Just ((<> "[0]") <$> (path ++ [if v then yes else no, leaf]), if v then "1" else "2")
         pairKey Field {path, entry = Switch' leaf} (Just True) = Const $ Just ((<> "[0]") <$> (path ++ [leaf]), "1")
         pairKey Field {path, entry = Switch' leaf} (Just False) =
           Const $ Just (map (<> "[0]") path ++ [leaf <> "[1]"], "1")
