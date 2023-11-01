@@ -8,6 +8,7 @@ module Main where
 
 import Tax.Canada (fixOntarioReturns)
 import Tax.Canada.T1.FieldNames (t1Fields)
+import Tax.Canada.T1.FieldNames.AB qualified as AB (t1Fields)
 import Tax.Canada.T1.FieldNames.BC qualified as BC (t1Fields)
 import Tax.Canada.T1.Fix (T1, fixT1)
 import Tax.Canada.ON428.FieldNames (on428Fields)
@@ -53,8 +54,9 @@ properties fdfMap =
       testProperty "ON428" (checkFormIdempotent on428Fields fixON428),
       testProperty "T1+ON428" (checkFormIdempotent (Rank2.Pair t1Fields on428Fields) fixOntarioReturns')],
     testGroup "Roundtrip" [
-      testProperty "T1 Ontario" (checkFormFields t1Fields $ List.lookup "5006-r-fill-22e.fdf" fdfMap),
+      testProperty "T1 Alberta" (checkFormFields AB.t1Fields $ List.lookup "5015-r-fill-22e.fdf" fdfMap),
       testProperty "T1 British Columbia" (checkFormFields BC.t1Fields $ List.lookup "5010-r-fill-22e.fdf" fdfMap),
+      testProperty "T1 Ontario" (checkFormFields t1Fields $ List.lookup "5006-r-fill-22e.fdf" fdfMap),
       testProperty "ON428" (checkFormFields on428Fields $ List.lookup "5006-c-fill-22e.fdf" fdfMap)]]
   where fixOntarioReturns' :: Rank2.Product T1 ON428 Maybe -> Rank2.Product T1 ON428 Maybe
         fixOntarioReturns' (Rank2.Pair x y) = uncurry Rank2.Pair $ fixOntarioReturns (x, y)

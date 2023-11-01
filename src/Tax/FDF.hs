@@ -69,17 +69,17 @@ update fields = mapWithKey
   where pairKey :: FieldConst a -> Maybe a -> Const (Maybe ([Text], Text)) a
         pairKey Field {path, entry = RadioButtons leaf values} (Just v)
           | Just i <- elemIndex v values
-          = Const $ Just (map (<> "[0]") path ++ [leaf <> "[" <> Text.pack (show i) <> "]"], Text.pack $ show $ succ i)
+          = Const $ Just (map addIndex path ++ [leaf <> "[" <> Text.pack (show i) <> "]"], Text.pack $ show $ succ i)
           | otherwise = error ("Missing enum value " <> show v)
         pairKey Field {path, entry = Switch yes no leaf} (Just v) =
-          Const $ Just ((<> "[0]") <$> (path ++ [if v then yes else no, leaf]), if v then "1" else "2")
-        pairKey Field {path, entry = Switch' leaf} (Just True) = Const $ Just ((<> "[0]") <$> (path ++ [leaf]), "1")
+          Const $ Just (addIndex <$> (path ++ [if v then yes else no, leaf]), if v then "1" else "2")
+        pairKey Field {path, entry = Switch' leaf} (Just True) = Const $ Just (addIndex <$> (path ++ [leaf]), "1")
         pairKey Field {path, entry = Switch' leaf} (Just False) =
-          Const $ Just (map (<> "[0]") path ++ [leaf <> "[1]"], "1")
+          Const $ Just (map addIndex path ++ [leaf <> "[1]"], "1")
         pairKey Field {path, entry = Constant c e} (Just v)
           | c == v = Const Nothing
           | otherwise = error ("Trying to replace constant field " ++ show (path, c) ++ " with " ++ show v)
-        pairKey Field {path, entry} v = Const $ Just ((<> "[0]") <$> path, foldMap (fromEntry entry) v)
+        pairKey Field {path, entry} v = Const $ Just (addIndex <$> path, foldMap (fromEntry entry) v)
         pairKey NoField _ = Const Nothing
         updateKey :: Map [Text] Text -> [Text] -> Text -> Text
         updateKey m k v = Map.findWithDefault v k m
@@ -103,29 +103,29 @@ fill :: forall a. Map [Text] Text -> FieldConst a -> Either String (Maybe a)
 fill fieldValues NoField = Right Nothing
 fill fieldValues Field {path, entry}
   | Just v <- Map.lookup path fieldValues = toEntry entry (Text.unpack v)
-  | Just v <- Map.lookup ((<> "[0]") <$> path) fieldValues = toEntry entry (Text.unpack v)
+  | Just v <- Map.lookup (addIndex <$> path) fieldValues = toEntry entry (Text.unpack v)
   | RadioButtons leaf values <- entry,
-    alts <- [ (Map.lookup (((<> "[0]") <$> path) <> [leaf <> "[" <> Text.pack (show i) <> "]"]) fieldValues, v)
+    alts <- [ (Map.lookup ((addIndex <$> path) <> [leaf <> "[" <> Text.pack (show i) <> "]"]) fieldValues, v)
             | (i, v) <- zip [0 ..] values ]
   = if null alts then error ("No radio buttons on path " <> show path)
     else Right $ snd <$> find (any (`notElem` ["", "Off"]) . fst) (alts :: [(Maybe Text, a)])
   | Switch yes no leaf <- entry,
-    Just yesValue <- Map.lookup ((<> "[0]") <$> (path <> [yes, leaf])) fieldValues,
-    Just noValue <- Map.lookup ((<> "[0]") <$> (path <> [no, leaf])) fieldValues
+    Just yesValue <- Map.lookup (addIndex <$> (path <> [yes, leaf])) fieldValues,
+    Just noValue <- Map.lookup (addIndex <$> (path <> [no, leaf])) fieldValues
   = if yesValue `elem` ["", "Off"] && noValue `elem` ["", "Off"] then Right Nothing
     else if yesValue == "1" && noValue `elem` ["", "Off"] then Right (Just True)
     else if yesValue `elem` ["", "Off"] && noValue `elem` ["1", "2"] then Right (Just False)
     else error ("Can't figure out the checkbox at " <> show (path, entry, yesValue, noValue))
   | Switch' leaf <- entry,
-    Just yesValue <- Map.lookup (map (<> "[0]") path <> [leaf <> "[0]"]) fieldValues,
-    Just noValue <- Map.lookup (map (<> "[0]") path <> [leaf <> "[1]"]) fieldValues
+    Just yesValue <- Map.lookup (map addIndex path <> [leaf <> "[0]"]) fieldValues,
+    Just noValue <- Map.lookup (map addIndex path <> [leaf <> "[1]"]) fieldValues
   = if yesValue `elem` ["", "Off"] && noValue `elem` ["", "Off"] then Right Nothing
     else if yesValue == "1" && noValue `elem` ["", "Off"] then Right (Just True)
     else if yesValue `elem` ["", "Off"] && noValue `elem` ["1", "2"] then Right (Just False)
     else error ("Can't figure out the checkbox at " <> show (path, entry, yesValue, noValue))
   | otherwise = error ("Unknown field path " ++ show path ++ " between "
-                       ++ show (Map.lookupLT ((<> "[0]") <$> path) fieldValues,
-                                Map.lookupGT ((<> "[0]") <$> path) fieldValues))
+                       ++ show (Map.lookupLT (addIndex <$> path) fieldValues,
+                                Map.lookupGT (addIndex <$> path) fieldValues))
 
 toEntry :: Entry a -> String -> Either String (Maybe a)
 toEntry _ "" = Right Nothing
@@ -166,6 +166,11 @@ toEntry e@(RadioButton values) v
 toEntry e@RadioButtons{} v = error (show (e, v))
 toEntry e@(Switch a b leaf) v = error (show (e, v))
 toEntry e@(Switch' leaf) v = error (show (e, v))
+
+addIndex :: Text -> Text
+addIndex key
+  | "]" `Text.isSuffixOf` key = key
+  | otherwise = key <> "[0]"
 
 instance MonadFail (Either String) where
   fail = Left
