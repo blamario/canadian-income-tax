@@ -107,7 +107,7 @@ fill fieldValues Field {path, entry}
   | RadioButtons leaf values <- entry,
     alts <- [ (Map.lookup ((addIndex <$> path) <> [leaf <> "[" <> Text.pack (show i) <> "]"]) fieldValues, v)
             | (i, v) <- zip [0 ..] values ]
-  = if null alts then error ("No radio buttons on path " <> show path)
+  = if null alts then Left ("No radio buttons on path " <> show path)
     else Right $ snd <$> find (any (`notElem` ["", "Off"]) . fst) (alts :: [(Maybe Text, a)])
   | Switch yes no leaf <- entry,
     Just yesValue <- Map.lookup (addIndex <$> (path <> [yes, leaf])) fieldValues,
@@ -115,15 +115,15 @@ fill fieldValues Field {path, entry}
   = if yesValue `elem` ["", "Off"] && noValue `elem` ["", "Off"] then Right Nothing
     else if yesValue == "1" && noValue `elem` ["", "Off"] then Right (Just True)
     else if yesValue `elem` ["", "Off"] && noValue `elem` ["1", "2"] then Right (Just False)
-    else error ("Can't figure out the checkbox at " <> show (path, entry, yesValue, noValue))
+    else Left ("Can't figure out the checkbox at " <> show (path, entry, yesValue, noValue))
   | Switch' leaf <- entry,
     Just yesValue <- Map.lookup (map addIndex path <> [leaf <> "[0]"]) fieldValues,
     Just noValue <- Map.lookup (map addIndex path <> [leaf <> "[1]"]) fieldValues
   = if yesValue `elem` ["", "Off"] && noValue `elem` ["", "Off"] then Right Nothing
     else if yesValue == "1" && noValue `elem` ["", "Off"] then Right (Just True)
     else if yesValue `elem` ["", "Off"] && noValue `elem` ["1", "2"] then Right (Just False)
-    else error ("Can't figure out the checkbox at " <> show (path, entry, yesValue, noValue))
-  | otherwise = error ("Unknown field path " ++ show path ++ " between "
+    else Left ("Can't figure out the checkbox at " <> show (path, entry, yesValue, noValue))
+  | otherwise = Left ("Unknown field path " ++ show path ++ " between "
                        ++ show (Map.lookupLT (addIndex <$> path) fieldValues,
                                 Map.lookupGT (addIndex <$> path) fieldValues))
 
@@ -152,7 +152,7 @@ toEntry Percent v
     Right decimal <- case pointyPart
                      of '.' : decimals -> (/ 10 ^ length decimals) . fromInteger <$> readEither decimals
                         "" -> Right 0
-                        _ -> Left "bad decimals"
+                        _ -> Left ("Bad decimals: " <> show v')
   = Right $ Just ((whole + decimal) / 100)
   | otherwise = Left ("Bad percentage value: " <> show v)
 toEntry Checkbox "Yes" = Right $ Just True
@@ -163,9 +163,9 @@ toEntry Checkbox v = Left ("Bad checkbox value: " <> show v)
 toEntry e@(RadioButton values) v
   | Right n <- readEither v, n > 0, x:_ <- drop (n - 1) values = Right $ Just x
   | otherwise = Left ("Bad radio button value: " <> show (e, v))
-toEntry e@RadioButtons{} v = error (show (e, v))
-toEntry e@(Switch a b leaf) v = error (show (e, v))
-toEntry e@(Switch' leaf) v = error (show (e, v))
+toEntry e@RadioButtons{} v = Left (show (e, v))
+toEntry e@(Switch a b leaf) v = Left (show (e, v))
+toEntry e@(Switch' leaf) v = Left (show (e, v))
 
 addIndex :: Text -> Text
 addIndex key

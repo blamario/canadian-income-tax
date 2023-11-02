@@ -19,7 +19,7 @@ import Paths_canadian_income_tax (getDataDir)
 import Test.Transformations qualified as Transformations
 
 import Data.ByteString qualified as ByteString
-import Data.Either (isRight)
+import Data.Either (isLeft, isRight)
 import Data.Functor.Const (Const (Const, getConst))
 import Data.List qualified as List
 import Data.Maybe (fromMaybe)
@@ -57,9 +57,18 @@ properties fdfMap =
       testProperty "T1 Alberta" (checkFormFields AB.t1Fields $ List.lookup "5015-r-fill-22e.fdf" fdfMap),
       testProperty "T1 British Columbia" (checkFormFields BC.t1Fields $ List.lookup "5010-r-fill-22e.fdf" fdfMap),
       testProperty "T1 Ontario" (checkFormFields t1Fields $ List.lookup "5006-r-fill-22e.fdf" fdfMap),
-      testProperty "ON428" (checkFormFields on428Fields $ List.lookup "5006-c-fill-22e.fdf" fdfMap)]]
+      testProperty "ON428" (checkFormFields on428Fields $ List.lookup "5006-c-fill-22e.fdf" fdfMap)],
+    testGroup "Load mismatch" [
+      testProperty ("Load T1 for " <> p1name <> " from FDF for " <> p2name) $ property $ assert
+        $ any (isLeft  . FDF.load p1fields) $ List.lookup (p2fdfPrefix <> "-r-fill-22e.fdf") fdfMap
+      | (p1name, p1fields, _) <- provinces,
+        (p2name, _, p2fdfPrefix) <- provinces,
+        p1name /= p2name]]
   where fixOntarioReturns' :: Rank2.Product T1 ON428 Maybe -> Rank2.Product T1 ON428 Maybe
         fixOntarioReturns' (Rank2.Pair x y) = uncurry Rank2.Pair $ fixOntarioReturns (x, y)
+        provinces = [("Ontario", t1Fields, "5006"),
+                     ("British Columbia", BC.t1Fields, "5010"),
+                     ("Alberta", AB.t1Fields, "5015")]
 
 checkFormIdempotent :: (Eq (g Maybe), Show (g Maybe),
                         Rank2.Applicative g, Shallow.Traversable Transformations.Gen g)
