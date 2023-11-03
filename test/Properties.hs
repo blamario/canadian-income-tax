@@ -54,10 +54,8 @@ properties fdfMap =
       testProperty "ON428" (checkFormIdempotent on428Fields fixON428),
       testProperty "T1+ON428" (checkFormIdempotent (Rank2.Pair t1Fields on428Fields) fixOntarioReturns')],
     testGroup "Roundtrip" [
-      testProperty "T1 Alberta" (checkFormFields AB.t1Fields $ List.lookup "5015-r-fill-22e.fdf" fdfMap),
-      testProperty "T1 British Columbia" (checkFormFields BC.t1Fields $ List.lookup "5010-r-fill-22e.fdf" fdfMap),
-      testProperty "T1 Ontario" (checkFormFields t1Fields $ List.lookup "5006-r-fill-22e.fdf" fdfMap),
-      testProperty "ON428" (checkFormFields on428Fields $ List.lookup "5006-c-fill-22e.fdf" fdfMap)],
+      testProperty ("T1 " <> name) (checkFormFields fields $ List.lookup (prefix <> "-r-fill-22e.fdf") fdfMap)
+      | (name, fields, prefix) <- provinces],
     testGroup "Load mismatch" [
       testProperty ("Load T1 for " <> p1name <> " from FDF for " <> p2name) $ property $ assert
         $ any (isLeft  . FDF.load p1fields) $ List.lookup (p2fdfPrefix <> "-r-fill-22e.fdf") fdfMap
