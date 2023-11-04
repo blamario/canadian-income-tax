@@ -37,7 +37,7 @@ fixPage2 :: Page2 Maybe -> Page2 Maybe
 fixPage2 = id
 
 fixPage3 :: Page3 Maybe -> Page3 Maybe
-fixPage3 = fixEq $ \page@Page3{..}-> page{
+fixPage3 = fixEq $ \page@Page3{selfEmployment=SelfEmploymentIncome{..}, ..}-> page{
    line_19 = totalOf [line_10100_EmploymentIncome ,
                       line_10400_OtherEmploymentIncome,
                       line_11300_OldAgeSecurityPension,

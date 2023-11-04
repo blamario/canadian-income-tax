@@ -14,7 +14,7 @@ import Tax.Canada.T1.FieldNames
   hiding (t1Fields,
           page2Fields, page3Fields, page4Fields, page5Fields, page6Fields, page7Fields, page8Fields,
           step4Fields, partBFields, page6MedicalExpensesFields, partCFields, page7step6Fields, page8step6Fields,
-          taxPreparerFields)
+          selfEmploymentFields, taxPreparerFields)
 import Tax.Canada.T1.FieldNames qualified as BaseNames
 import Tax.Canada.T1.FieldNames.BC qualified as BC
 
@@ -63,16 +63,7 @@ page3Fields = BC.page3Fields{
    line_13000_OtherIncomeSource = Field ["Line17", "Line_13000_Specify"] Textual,
    line_13010_Taxablescholarship = Field ["Line18", "Line_13010_Amount"] Amount,
    line_19 = Field ["Line19", "Line_15000_Amount"] Amount,
-   line_13499_Amount = Field ["Line20", "Line13499", "Amount"] Amount,
-   line_13500_Amount = Field ["Line20", "Amount"] Amount,
-   line_13699_Amount = Field ["Line21", "Line13699", "Line_13699_Amount"] Amount,
-   line_13700_Amount = Field ["Line21", "Line_13700_Amount"] Amount,
-   line_13899_Amount = Field ["Line22", "Line13899", "Line_13899_Amount"] Amount,
-   line_13900_Amount = Field ["Line22", "Line_13900_Amount"] Amount,
-   line_14099_Amount = Field ["Line23", "Line14099", "Line_14099_Amount"] Amount,
-   line_14100_Amount = Field ["Line23", "Line_14100_Amount"] Amount,
-   line_14299_Amount = Field ["Line24", "Line14299", "Line_14299_Amount"] Amount,
-   line_14300_Amount = Field ["Line24", "Line_14300_Amount"] Amount,
+   selfEmployment = selfEmploymentFields,
    line_25_sum = Field ["Line25", "I1", "Amount"] Amount,
    line_25_cont = Field ["Line25", "I2", "Amount"] Amount,
    line_26 = Field ["Line26", "Line_15000_Amount"] Amount,
@@ -82,6 +73,18 @@ page3Fields = BC.page3Fields{
    line_14700_EqualsAmount = Field ["Line30", "I1", "Amount"] Amount,
    line_14700_PlusAmount = Field ["Line30", "I2", "Amount"] Amount,
    line_15000_TotalIncome = Field ["Line31", "Amount"] Amount}
+
+selfEmploymentFields = SelfEmploymentIncome {
+   line_13499_Amount = Field ["Line20", "Line13499", "Amount"] Amount,
+   line_13500_Amount = Field ["Line20", "Amount"] Amount,
+   line_13699_Amount = Field ["Line21", "Line13699", "Line_13699_Amount"] Amount,
+   line_13700_Amount = Field ["Line21", "Line_13700_Amount"] Amount,
+   line_13899_Amount = Field ["Line22", "Line13899", "Line_13899_Amount"] Amount,
+   line_13900_Amount = Field ["Line22", "Line_13900_Amount"] Amount,
+   line_14099_Amount = Field ["Line23", "Line14099", "Line_14099_Amount"] Amount,
+   line_14100_Amount = Field ["Line23", "Line_14100_Amount"] Amount,
+   line_14299_Amount = Field ["Line24", "Line14299", "Line_14299_Amount"] Amount,
+   line_14300_Amount = Field ["Line24", "Line_14300_Amount"] Amount}
 
 page4Fields = Page4{
    line_15000_TotalIncome_2 = Field ["Line32", "Line_15000_Amount"] Amount,

@@ -119,16 +119,7 @@ data Page3 line = Page3 {
    line_13000_OtherIncomeSource :: line Text,
    line_13010_Taxablescholarship :: line Centi,
    line_19 :: line Centi,
-   line_13499_Amount :: line Centi,
-   line_13500_Amount :: line Centi,
-   line_13699_Amount :: line Centi,
-   line_13700_Amount :: line Centi,
-   line_13899_Amount :: line Centi,
-   line_13900_Amount :: line Centi,
-   line_14099_Amount :: line Centi,
-   line_14100_Amount :: line Centi,
-   line_14299_Amount :: line Centi,
-   line_14300_Amount :: line Centi,
+   selfEmployment :: SelfEmploymentIncome line,
    line_25_sum :: line Centi,
    line_25_cont :: line Centi,
    line_26 :: line Centi,
@@ -138,6 +129,18 @@ data Page3 line = Page3 {
    line_14700_EqualsAmount :: line Centi,
    line_14700_PlusAmount :: line Centi,
    line_15000_TotalIncome :: line Centi}
+
+data SelfEmploymentIncome line = SelfEmploymentIncome {
+   line_13499_Amount :: line Centi,
+   line_13500_Amount :: line Centi,
+   line_13699_Amount :: line Centi,
+   line_13700_Amount :: line Centi,
+   line_13899_Amount :: line Centi,
+   line_13900_Amount :: line Centi,
+   line_14099_Amount :: line Centi,
+   line_14100_Amount :: line Centi,
+   line_14299_Amount :: line Centi,
+   line_14300_Amount :: line Centi}
 
 data Page4 line = Page4 {
    line_15000_TotalIncome_2 :: line Centi,
@@ -352,4 +355,4 @@ $(foldMap
    [''T1, ''ElectionsCanada, ''Identification, ''MedicalExpenses,
     ''Page1, ''Page2, ''Page3, ''Page4, ''Page5, ''Page6, ''Page7, ''Page8,
     ''Step4, ''Page5PartA, ''Page5PartB, ''Page7PartC, ''Page7Step6, ''Page8Step6,
-    ''Residence, ''Spouse, ''TaxPreparer])
+    ''Residence, ''Spouse, ''SelfEmploymentIncome, ''TaxPreparer])

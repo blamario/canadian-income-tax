@@ -13,7 +13,7 @@ import Tax.Canada.T1.FieldNames
   hiding (t1Fields,
           page2Fields, page3Fields, page4Fields, page5Fields, page6Fields, page7Fields, page8Fields,
           step4Fields, partBFields, page6MedicalExpensesFields, partCFields, page7step6Fields, page8step6Fields,
-          taxPreparerFields)
+          selfEmploymentFields, taxPreparerFields)
 import Tax.Canada.T1.FieldNames qualified as BaseNames
 
 t1Fields :: T1 FieldConst
@@ -38,6 +38,11 @@ page3Fields = BaseNames.page3Fields{
    line_25_sum = Field ["Line25", "Amount1"] Amount,
    line_25_cont = Field ["Line25", "Amount2"] Amount,
    line_26 = Field ["Line26", "Amount"] Amount,
+   selfEmployment = selfEmploymentFields,
+   line_14700_EqualsAmount = Field ["Line_14700", "Amount1"] Amount,
+   line_14700_PlusAmount = Field ["Line_14700", "Amount2"] Amount}
+
+selfEmploymentFields = SelfEmploymentIncome {
    line_13499_Amount = Field ["Line_13499_13500_BusinessIncome", "Line_13499_Amount"] Amount,
    line_13500_Amount = Field ["Line_13499_13500_BusinessIncome", "Line_13500_Amount"] Amount,
    line_13700_Amount = Field ["Line_13699_13700_ProfessionalIncome", "Line_13700_Amount"] Amount,
@@ -47,9 +52,7 @@ page3Fields = BaseNames.page3Fields{
    line_14100_Amount = Field ["Line_14099_14100_FarmingIncome", "Line_14100_Amount"] Amount,
    line_14099_Amount = Field ["Line_14099_14100_FarmingIncome", "Line_14099_Amount"] Amount,
    line_14299_Amount = Field ["Line_14299_14300_FishingIncome", "Line_14299_Amount"] Amount,
-   line_14300_Amount = Field ["Line_14299_14300_FishingIncome", "Line_14300_Amount"] Amount,
-   line_14700_EqualsAmount = Field ["Line_14700", "Amount1"] Amount,
-   line_14700_PlusAmount = Field ["Line_14700", "Amount2"] Amount}
+   line_14300_Amount = Field ["Line_14299_14300_FishingIncome", "Line_14300_Amount"] Amount}
 
 page4Fields = BaseNames.page4Fields{
    line_15000_TotalIncome_2 = Field ["Line32", "Line_15000_Amount"] Amount,
