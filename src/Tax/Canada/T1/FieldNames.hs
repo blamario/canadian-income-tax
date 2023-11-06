@@ -8,6 +8,9 @@ module Tax.Canada.T1.FieldNames where
 
 import Rank2 qualified
 
+import Data.Text.Lazy (toStrict)
+import Data.Text.Lazy.Builder (toLazyText)
+import Data.Text.Lazy.Builder.Int (decimal)
 import Tax.FDF (FieldConst (Field), Entry (..), within)
 import Tax.Canada.Shared (TaxIncomeBracket (..))
 import Tax.Canada.T1.Types
@@ -157,7 +160,7 @@ page4Fields = Page4 {
 
 page5Fields = Page5 {
    step4_TaxableIncome = within "Step4_TaxableIncome" Rank2.<$> step4Fields,
-   partA_FederalTax = within "PartA" Rank2.<$> partAFields,
+   partA_FederalTax = within "PartA" Rank2.<$> partAFields 36,
    partB_FederalTaxCredits = within "PartB" Rank2.<$> partBFields}
 
 step4Fields = Step4 {
@@ -176,47 +179,24 @@ step4Fields = Step4 {
    line_25700_AddLines_cont = Field ["Line_25700_AddLines", "Line_25700_Amount2"] Amount,
    line_26000_TaxableIncome = Field ["Line_26000_TaxableIncome", "Line_26000_Amount"] Amount}
 
-partAFields = Page5PartA {
-   column1 = within "Column1" Rank2.<$> TaxIncomeBracket {
-       income = Field ["Line36Amount1"] Amount,
-       threshold = Field ["Line37Amount1"] $ Constant 0 Amount,
-       overThreshold = Field ["Line38Amount1"] Amount,
-       rate = Field ["Line39Rate1"] $ Constant 0.15 Percent,
-       timesRate = Field ["Line40Amount1"] Amount,
-       baseTax = Field ["Line41Amount1"] $ Constant 0 Amount,
-       equalsTax = Field ["Line42Amount1"] Amount},
-   column2 = within "Column2" Rank2.<$> TaxIncomeBracket {
-       income = Field ["Line36Amount2"] Amount,
-       threshold = Field ["Line37Amount2"] $ Constant 50_197.00 Amount,
-       overThreshold = Field ["Line38Amount2"] Amount,
-       rate = Field ["Line39Rate2"] $ Constant 0.205 Percent,
-       timesRate = Field ["Line40Amount2"] Amount,
-       baseTax = Field ["Line41Amount2"] $ Constant 7_529.55 Amount,
-       equalsTax = Field ["Line42Amount2"] Amount},
-   column3 = within "Column3" Rank2.<$> TaxIncomeBracket {
-       income = Field ["Line36Amount3"] Amount,
-       threshold = Field ["Line37Amount3"] $ Constant 100_392.00 Amount,
-       overThreshold = Field ["Line38Amount3"] Amount,
-       rate = Field ["Line39Rate3"] $ Constant 0.26 Percent,
-       timesRate = Field ["Line40Amount3"] Amount,
-       baseTax = Field ["Line41Amount3"] $ Constant 17_819.53 Amount,
-       equalsTax = Field ["Line42Amount3"] Amount},
-   column4 = within "Column4" Rank2.<$> TaxIncomeBracket {
-       income = Field ["Line36Amount4"] Amount,
-       threshold = Field ["Line37Amount4"] $ Constant 155_625.00 Amount,
-       overThreshold = Field ["Line38Amount4"] Amount,
-       rate = Field ["Line39Rate4"] $ Constant 0.29 Percent,
-       timesRate = Field ["Line40Amount4"] Amount,
-       baseTax = Field ["Line41Amount4"] $ Constant 32_180.11 Amount,
-       equalsTax = Field ["Line42Amount4"] Amount},
-   column5 = within "Column5" Rank2.<$> TaxIncomeBracket {
-       income = Field ["Line36Amount5"] Amount,
-       threshold = Field ["Line37Amount5"] $ Constant 221_708.00 Amount,
-       overThreshold = Field ["Line38Amount5"] Amount,
-       rate = Field ["Line39Rate5"] $ Constant 0.33 Percent,
-       timesRate = Field ["Line40Amount5"] Amount,
-       baseTax = Field ["Line41Amount5"] $ Constant 51_344.18 Amount,
-       equalsTax = Field ["Line42Amount5"] Amount}}
+partAFields :: Int -> Page5PartA FieldConst
+partAFields startLine = Page5PartA {
+   column1 = column 1 0 0.15 0,
+   column2 = column 2 50_197.00 0.205 7_529.55,
+   column3 = column 3 100_392.00 0.26 17_819.53,
+   column4 = column 4 155_625.00 0.29 32_180.11,
+   column5 = column 5 221_708.00 0.33 51_344.18}
+   where column n threshold rate baseTax = within (toText $ "Column" <> decimal n) Rank2.<$> TaxIncomeBracket {
+            income = Field [toText $ "Line" <> decimal startLine <> "Amount" <> decimal n] Amount,
+            threshold = Field [toText $ "Line" <> decimal (startLine + 1) <> "Amount" <> decimal n]
+                        $ Constant threshold Amount,
+            overThreshold = Field [toText $ "Line" <> decimal (startLine + 2) <> "Amount" <> decimal n] Amount,
+            rate = Field [toText $ "Line" <> decimal (startLine + 3) <> "Rate" <> decimal n] $ Constant rate Percent,
+            timesRate = Field [toText $ "Line" <> decimal (startLine + 4) <> "Amount" <> decimal n] Amount,
+            baseTax = Field [toText $ "Line" <> decimal (startLine + 5) <> "Amount" <> decimal n]
+                      $ Constant baseTax Amount,
+            equalsTax = Field [toText $ "Line" <> decimal (startLine + 6) <> "Amount" <> decimal n] Amount}
+         toText = toStrict . toLazyText
 
 partBFields = Page5PartB {
    line30000 = Field ["Line30000_Sub", "Line1_Amount"] Amount,

@@ -63,7 +63,7 @@ page4Fields = BaseNames.page4Fields{
 
 page5Fields = BaseNames.page5Fields{
    step4_TaxableIncome = within "Step4" Rank2.<$> step4Fields,
-   partA_FederalTax = within "Step5" . within "PartA" Rank2.<$> partAFields,
+   partA_FederalTax = within "Step5" . within "PartA" Rank2.<$> partAFields 36,
    partB_FederalTaxCredits = within "Step5" . within "PartB" Rank2.<$> partBFields}
 
 step4Fields = BaseNames.step4Fields{
