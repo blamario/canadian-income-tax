@@ -10,6 +10,7 @@ import Tax.Canada (fixOntarioReturns)
 import Tax.Canada.T1.FieldNames (t1Fields)
 import Tax.Canada.T1.FieldNames.AB qualified as AB (t1Fields)
 import Tax.Canada.T1.FieldNames.BC qualified as BC (t1Fields)
+import Tax.Canada.T1.FieldNames.QC qualified as QC (t1Fields)
 import Tax.Canada.T1.Fix (T1, fixT1)
 import Tax.Canada.ON428.FieldNames (on428Fields)
 import Tax.Canada.ON428.Fix (ON428, fixON428)
@@ -64,7 +65,8 @@ properties fdfMap =
         p1name /= p2name]]
   where fixOntarioReturns' :: Rank2.Product T1 ON428 Maybe -> Rank2.Product T1 ON428 Maybe
         fixOntarioReturns' (Rank2.Pair x y) = uncurry Rank2.Pair $ fixOntarioReturns (x, y)
-        provinces = [("Ontario", t1Fields, "5006"),
+        provinces = [("Quebec", QC.t1Fields, "5005"),
+                     ("Ontario", t1Fields, "5006"),
                      ("British Columbia", BC.t1Fields, "5010"),
                      ("Alberta", AB.t1Fields, "5015")]
 

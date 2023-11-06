@@ -11,7 +11,7 @@ import Rank2 qualified
 import Data.Text.Lazy (toStrict)
 import Data.Text.Lazy.Builder (toLazyText)
 import Data.Text.Lazy.Builder.Int (decimal)
-import Tax.FDF (FieldConst (Field), Entry (..), within)
+import Tax.FDF (FieldConst (Field, NoField), Entry (..), within)
 import Tax.Canada.Shared (TaxIncomeBracket (..))
 import Tax.Canada.T1.Types
 
@@ -146,6 +146,7 @@ page4Fields = Page4 {
    line_22100_CarryingChargesInterest = Field ["Line_22100_CarryingChargesInterest", "Line_22100_Amount"] Amount,
    line_22200_CPP_QPP_Contributions = Field ["Line_22200_CPP_QPP_Contributions", "Line_22200_Amount"] Amount,
    line_22215_DeductionCPP_QPP = Field ["Line_22215_DeductionCPP_QPP", "Line_22215_Amount"] Amount,
+   line_22300_DeductionPPIP = NoField,
    line_22400_XplorationDevExpenses = Field ["Line_22400_XplorationDevExpenses", "Line_22400_Amount"] Amount,
    line_22900_OtherEmployExpenses = Field ["Line_22900_OtherEmployExpenses", "Line_22900_Amount"] Amount,
    line_23100_ClergyResDeduction = Field ["Line_23100_ClergyResDeduction", "Line_23100_Amount"] Amount,
@@ -214,6 +215,9 @@ page6Fields = Page6 {
    line30800 = Field ["CPP_QPP_Sub", "Line30800_Sub", "Line8_Amount"] Amount,
    line31000 = Field ["CPP_QPP_Sub", "Line31000_Sub", "Line9_Amount"] Amount,
    line31200 = Field ["EIPremiums_Sub", "Line31200_Sub", "Line10_Amount"] Amount,
+   line31205 = NoField,
+   line31210 = NoField,
+   line31215 = NoField,
    line31217 = Field ["Line31217_Sub", "Line11_Amount"] Amount,
    line31220 = Field ["Line31220_Sub", "Line12_Amount"] Amount,
    line31240 = Field ["Line31240_Sub", "Line13_Amount"] Amount,
@@ -307,9 +311,16 @@ page8Fields = Page8 {
 page8step6Fields = Page8Step6 {
    line_43500_totalpayable = Field ["Line_43500_totalpayable", "Line_42000_Amount"] Amount,
    line_43700_Total_income_tax_ded = Field ["LIne_43700_Total_income_tax_ded", "Line_43700_Amount"] Amount,
+   line_43800_TaxTransferQC = NoField,
+   line_43850_diff = NoField,
+   line_43850_cont = NoField,
+   line_42900_copy = NoField,
    line_44000 = Field ["Line_44000Sub", "Line_44000_Amount"] Amount,
    line_44800_CPPOverpayment = Field ["Line_44800_CPPOverpayment", "Line_44800_Amount"] Amount,
    line_45000_EIOverpayment = Field ["Line_45000_EIOverpayment", "Line_45000_Amount"] Amount,
+   line_31210_copy = NoField,
+   line_45100_diff = NoField,
+   line_45100_cont = NoField,
    line_45200_MedicalExpense = Field ["Line_45200_MedicalExpense", "Line_45200_Amount"] Amount,
    line_45300_CWB = Field ["Line_45300_CWB", "Line_45300_Amount"] Amount,
    line_45350_CTC = Field ["Line_45350_CTC", "Line_45300_Amount"] Amount,
