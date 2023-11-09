@@ -1,0 +1,2175 @@
+%FDF-1.2
+%‚„œ”
+1 0 obj
+
+<<
+/FDF
+<<
+/Fields [
+<<
+/T (form1[0])
+/Kids [
+<<
+/T (Page3[0])
+/Kids [
+<<
+/T (Step2[0])
+/Kids [
+<<
+/T (Line_10400_OtherEmploymentIncome[0])
+/Kids [
+<<
+/T (Line_10400_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_12100_InvestmentIncome[0])
+/Kids [
+<<
+/T (Line_12100_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_11300_OldAgeSecurityPension[0])
+/Kids [
+<<
+/T (Line_11300_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_11500_OtherPensions[0])
+/Kids [
+<<
+/T (Line_11500_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_13000_OtherIncome[0])
+/Kids [
+<<
+/T (Line_13000_Amount[0])
+/V ()
+>>
+<<
+/T (Line_13000_Specify[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_11410_DisabilityBenefits[0])
+/Kids [
+<<
+/T (Line_11410_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_14400_WorkersCompBen[0])
+/Kids [
+<<
+/T (Line_14400_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_11400_CPP_QPP[0])
+/Kids [
+<<
+/T (Line_11400_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_25[0])
+/Kids [
+<<
+/T (Amount2[0])
+/V (50000.00)
+>>
+<<
+/T (Amount1[0])
+/V (50000.00)
+>>]
+>>
+<<
+/T (Line_11700_UCCB[0])
+/Kids [
+<<
+/T (Line_11700_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_10100_EmploymentIncome[0])
+/Kids [
+<<
+/T (Line_10100_Amount[0])
+/V (20000.00)
+>>]
+>>
+<<
+/T (Line_12700_TaxableCapitalGains[0])
+/Kids [
+<<
+/T (Line_12700_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line21[0])
+/Kids [
+<<
+/T (Line_13700_Amount[0])
+/V ()
+>>
+<<
+/T (Line_13699_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_11900_EmploymentInsurance[0])
+/Kids [
+<<
+/T (Line_11900_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line23[0])
+/Kids [
+<<
+/T (Line_14100_Amount[0])
+/V ()
+>>
+<<
+/T (Line_14099_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_10120_Commissions[0])
+/Kids [
+<<
+/T (Line_10120_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_11600_ElectedSplitPension[0])
+/Kids [
+<<
+/T (Line_11600_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_14700_AddLines[0])
+/Kids [
+<<
+/T (Line_14700_EqualsAmount[0])
+/V ()
+>>
+<<
+/T (Line_14700_PlusAmount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_13010_Taxablescholarship[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_19[0])
+/Kids [
+<<
+/T (Amount[0])
+/V (21000.00)
+>>]
+>>
+<<
+/T (Line_12599_12600_RentalIncome[0])
+/Kids [
+<<
+/T (Line_12599_Amount[0])
+/V ()
+>>
+<<
+/T (Line_12600_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_12200_PartnershipIncome[0])
+/Kids [
+<<
+/T (Line_12200_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_11905_Employmentmaternity[0])
+/Kids [
+<<
+/T (Line_11905_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_14500_SocialAssistPay[0])
+/Kids [
+<<
+/T (Line_14500_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_15000_TotalIncome[0])
+/Kids [
+<<
+/T (Line_15000_Amount[0])
+/V (71000.00)
+>>]
+>>
+<<
+/T (Line_10105_Taxexemptamount[0])
+/Kids [
+<<
+/T (Line_10105_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_12900_RRSPIncome[0])
+/Kids [
+<<
+/T (Line_12900_Amount[0])
+/V (1000.00)
+>>]
+>>
+<<
+/T (Line_12500_RDSP[0])
+/Kids [
+<<
+/T (Line_12500_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_26[0])
+/Kids [
+<<
+/T (Amount1[0])
+/V (71000.00)
+>>]
+>>
+<<
+/T (Line_12000_TaxableDividends[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_14600_NetFedSupplements[0])
+/Kids [
+<<
+/T (Line_14600_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_10130_sf[0])
+/Kids [
+<<
+/T (Line_10130_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_12010_OtherTaxableDividends[0])
+/Kids [
+<<
+/T (Line_12010_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_11701_UCCBDesignated[0])
+/Kids [
+<<
+/T (Line_11701_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line20[0])
+/Kids [
+<<
+/T (Line_13499_Amount[0])
+/V (100000.00)
+>>
+<<
+/T (Line_13500_Amount[0])
+/V (50000.00)
+>>]
+>>
+<<
+/T (Line_12799_12800_SupportPayReceived[0])
+/Kids [
+<<
+/T (Line_12800_Amount[0])
+/V ()
+>>
+<<
+/T (Line_12799_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line24[0])
+/Kids [
+<<
+/T (Line_14299_Amount[0])
+/V ()
+>>
+<<
+/T (Line_14300_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line22[0])
+/Kids [
+<<
+/T (Line_13900_Amount[0])
+/V ()
+>>
+<<
+/T (Line_13899_Amount[0])
+/V ()
+>>]
+>>]
+>>]
+>>
+<<
+/T (Page2[0])
+/Kids [
+<<
+/T (Foreign_property[0])
+/Kids [
+<<
+/T (Line26600[0])
+/Kids [
+<<
+/T (Option2[0])
+/Kids [
+<<
+/T (ForeignProperty_CheckBox[0])
+/V (2)
+>>]
+>>
+<<
+/T (Option1[0])
+/Kids [
+<<
+/T (ForeignProperty_CheckBox[0])
+/V ()
+>>]
+>>]
+>>]
+>>
+<<
+/T (Tax_exempt[0])
+/Kids [
+<<
+/T (Exempt[0])
+/Kids [
+<<
+/T (Spouse_SelfEmployed[0])
+/V ()
+>>]
+>>]
+>>
+<<
+/T (ElectionsCanada[0])
+/Kids [
+<<
+/T (LineA[0])
+/Kids [
+<<
+/T (Option2[0])
+/Kids [
+<<
+/T (A_CheckBox[0])
+/V ()
+>>]
+>>
+<<
+/T (Option1[0])
+/Kids [
+<<
+/T (A_CheckBox[0])
+/V (1)
+>>]
+>>]
+>>
+<<
+/T (LineB[0])
+/Kids [
+<<
+/T (Option2[0])
+/Kids [
+<<
+/T (B_Authorize_CheckBox[0])
+/V ()
+>>]
+>>
+<<
+/T (Option1[0])
+/Kids [
+<<
+/T (B_Authorize_CheckBox[0])
+/V (1)
+>>]
+>>]
+>>]
+>>
+<<
+/T (CAI[0])
+/Kids [
+<<
+/T (CAI_ON[0])
+/Kids [
+<<
+/T (Tick_box[0])
+/V ()
+>>]
+>>]
+>>
+<<
+/T (Organ_donor[0])
+/Kids [
+<<
+/T (Question[0])
+/Kids [
+<<
+/T (Option2[0])
+/Kids [
+<<
+/T (OrganDonor_CheckBox[0])
+/V ()
+>>]
+>>
+<<
+/T (Option1[0])
+/Kids [
+<<
+/T (OrganDonor_CheckBox[0])
+/V (1)
+>>]
+>>]
+>>]
+>>]
+>>
+<<
+/T (Page1[0])
+/Kids [
+<<
+/T (Step1[0])
+/Kids [
+<<
+/T (Identification[0])
+/Kids [
+<<
+/T (EmailAddress[0])
+/V ()
+>>
+<<
+/T (DateDeath_Comb_BordersAll[0])
+/Kids [
+<<
+/T (DateDeath_Comb[0])
+/V ()
+>>]
+>>
+<<
+/T (PostalCode_Comb_BordersAll[0])
+/Kids [
+<<
+/T (PostalCode[0])
+/V ()
+>>]
+>>
+<<
+/T (Your_Language[0])
+/Kids [
+<<
+/T (RadioButtonlanguaget[0])
+/V (1)
+>>]
+>>
+<<
+/T (ID_City[0])
+/V ()
+>>
+<<
+/T (SIN_Comb_BordersAll[0])
+/Kids [
+<<
+/T (SIN_Comb[0])
+/V ()
+>>]
+>>
+<<
+/T (ID_LastName[0])
+/V ()
+>>
+<<
+/T (DateBirth_Comb_BordersAll[0])
+/Kids [
+<<
+/T (DateBirth_Comb[0])
+/V ()
+>>]
+>>
+<<
+/T (ID_FirstNameInitial[0])
+/V ()
+>>
+<<
+/T (ID_MailingAddress[0])
+/V ()
+>>
+<<
+/T (MaritalStatus_Checkbox[0])
+/Kids [
+<<
+/T (MaritalStatus[2])
+/V ()
+>>
+<<
+/T (MaritalStatus[1])
+/V ()
+>>
+<<
+/T (MaritalStatus[0])
+/V ()
+>>
+<<
+/T (MaritalStatus[5])
+/V ()
+>>
+<<
+/T (MaritalStatus[4])
+/V (5)
+>>
+<<
+/T (MaritalStatus[3])
+/V ()
+>>]
+>>
+<<
+/T (ID_RuralRoute[0])
+/V ()
+>>
+<<
+/T (ID_POBox[0])
+/V ()
+>>
+<<
+/T (Prov_DropDown[0])
+/V (ON)
+>>]
+>>
+<<
+/T (Residence_Info[0])
+/Kids [
+<<
+/T (Prov_DropDown-Business[0])
+/V (ON)
+>>
+<<
+/T (Prov_DropDown-Residence[0])
+/V (ON)
+>>
+<<
+/T (Date_Departure[0])
+/Kids [
+<<
+/T (DateMMDD_Comb_BordersAll_Std[0])
+/Kids [
+<<
+/T (DateMMDD_Comb[0])
+/V ()
+>>]
+>>]
+>>
+<<
+/T (Date_Entry[0])
+/Kids [
+<<
+/T (DateMMDD_Comb_BordersAll_Std[0])
+/Kids [
+<<
+/T (DateMMDD_Comb[0])
+/V ()
+>>]
+>>]
+>>
+<<
+/T (Prov_DropDown[0])
+/V ()
+>>]
+>>
+<<
+/T (Info_Spouse_CLP[0])
+/Kids [
+<<
+/T (Line23600[0])
+/Kids [
+<<
+/T (Amount[0])
+/V (10000.00)
+>>]
+>>
+<<
+/T (Self-employment[0])
+/Kids [
+<<
+/T (Checkbox[0])
+/V (No)
+>>]
+>>
+<<
+/T (Spouse_First_Name[0])
+/V ()
+>>
+<<
+/T (Line11700[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line21300[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (SIN_Comb_BordersAll[0])
+/Kids [
+<<
+/T (SIN_Comb[0])
+/V ()
+>>]
+>>]
+>>]
+>>]
+>>
+<<
+/T (#pageSet[0])
+/Kids [
+<<
+/T (Page1[2])
+/Kids [
+<<
+/T (ClearData_EN[0])
+/V ()
+>>]
+>>
+<<
+/T (Page1[1])
+/Kids [
+<<
+/T (ClearData_EN[0])
+/V ()
+>>]
+>>
+<<
+/T (Page1[0])
+/Kids [
+<<
+/T (ClearData_EN[0])
+/V ()
+>>]
+>>
+<<
+/T (Page1[6])
+/Kids [
+<<
+/T (ClearData_EN[0])
+/V ()
+>>]
+>>
+<<
+/T (Page1[5])
+/Kids [
+<<
+/T (ClearData_EN[0])
+/V ()
+>>]
+>>
+<<
+/T (Page1[4])
+/Kids [
+<<
+/T (ClearData_EN[0])
+/V ()
+>>]
+>>
+<<
+/T (Page1[3])
+/Kids [
+<<
+/T (ClearData_EN[0])
+/V ()
+>>]
+>>
+<<
+/T (Page1[7])
+/Kids [
+<<
+/T (ClearData_EN[0])
+/V ()
+>>]
+>>]
+>>
+<<
+/T (Page5[0])
+/Kids [
+<<
+/T (Step4_TaxableIncome[0])
+/Kids [
+<<
+/T (Line_25000_OtherPayDeductions[0])
+/Kids [
+<<
+/T (Line_25000_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_25100_PartnershipLosses[0])
+/Kids [
+<<
+/T (Line_25100_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_25600_AdditionalDeductions[0])
+/Kids [
+<<
+/T (Line_25600_Specify[0])
+/V ()
+>>
+<<
+/T (Line_25600_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_25300_NetCapitalLosses[0])
+/Kids [
+<<
+/T (Line_25300_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_25200_NoncapitalLosses[0])
+/Kids [
+<<
+/T (Line_25200_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_24400_MilitaryPoliceDeduction[0])
+/Kids [
+<<
+/T (Line_24400_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_26000_TaxableIncome[0])
+/Kids [
+<<
+/T (Line_26000_Amount[0])
+/V (71000.00)
+>>]
+>>
+<<
+/T (Line_23600_NetIncome_2[0])
+/Kids [
+<<
+/T (Line_15000_Amount[0])
+/V (71000.00)
+>>]
+>>
+<<
+/T (Line_25400_CapitalGainsDeduction[0])
+/Kids [
+<<
+/T (Line_25400_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_24900_SecurityDeductions[0])
+/Kids [
+<<
+/T (Line_24900_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_25500_NorthernDeductions[0])
+/Kids [
+<<
+/T (Line_25500_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_25700_AddLines[0])
+/Kids [
+<<
+/T (Line_25700_Amount2[0])
+/V ()
+>>
+<<
+/T (Line_25700_Amount1[0])
+/V ()
+>>]
+>>]
+>>
+<<
+/T (PartB[0])
+/Kids [
+<<
+/T (Line30425_sub[0])
+/Kids [
+<<
+/T (Line4_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line30450_Sub[0])
+/Kids [
+<<
+/T (Line6_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line30500[0])
+/Kids [
+<<
+/T (Line7_ChildrenNum[0])
+/V ()
+>>
+<<
+/T (Line7_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_81[0])
+/Kids [
+<<
+/T (Line30_Amount[0])
+/V (14398.00)
+>>]
+>>
+<<
+/T (Line30300_Sub[0])
+/Kids [
+<<
+/T (Line3_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line30100_Sub[0])
+/Kids [
+<<
+/T (Line2_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line30000_Sub[0])
+/Kids [
+<<
+/T (Line1_Amount[0])
+/V (14398.00)
+>>]
+>>
+<<
+/T (Line30400_Sub[0])
+/Kids [
+<<
+/T (Line4_Amount[0])
+/V ()
+>>]
+>>]
+>>
+<<
+/T (PartA[0])
+/Kids [
+<<
+/T (Column3[0])
+/Kids [
+<<
+/T (Line37Amount3[0])
+/V ( 100,392.00)
+>>
+<<
+/T (Line42Amount3[0])
+/V ()
+>>
+<<
+/T (Line36Amount3[0])
+/V ()
+>>
+<<
+/T (Line39Rate3[0])
+/V (26%)
+>>
+<<
+/T (Line41Amount3[0])
+/V ( 17,819.53)
+>>
+<<
+/T (Line40Amount3[0])
+/V ()
+>>
+<<
+/T (Line38Amount3[0])
+/V ()
+>>]
+>>
+<<
+/T (Column5[0])
+/Kids [
+<<
+/T (Line41Amount5[0])
+/V ( 51,344.18)
+>>
+<<
+/T (Line36Amount5[0])
+/V ()
+>>
+<<
+/T (Line37Amount5[0])
+/V ( 221,708.00)
+>>
+<<
+/T (Line39Rate5[0])
+/V (33%)
+>>
+<<
+/T (Line40Amount5[0])
+/V ()
+>>
+<<
+/T (Line42Amount5[0])
+/V ()
+>>
+<<
+/T (Line38Amount5[0])
+/V ()
+>>]
+>>
+<<
+/T (Column4[0])
+/Kids [
+<<
+/T (Line37Amount4[0])
+/V ( 155,625.00)
+>>
+<<
+/T (Line36Amount4[0])
+/V ()
+>>
+<<
+/T (Line39Rate4[0])
+/V (29%)
+>>
+<<
+/T (Line41Amount4[0])
+/V ( 32,180.11)
+>>
+<<
+/T (Line40Amount4[0])
+/V ()
+>>
+<<
+/T (Line42Amount4[0])
+/V ()
+>>
+<<
+/T (Line38Amount4[0])
+/V ()
+>>]
+>>
+<<
+/T (Column1[0])
+/Kids [
+<<
+/T (Line38Amount1[0])
+/V ()
+>>
+<<
+/T (Line37Amount1[0])
+/V ( 0.00)
+>>
+<<
+/T (Line36Amount1[0])
+/V ()
+>>
+<<
+/T (Line39Rate1[0])
+/V (15%)
+>>
+<<
+/T (Line40Amount1[0])
+/V ()
+>>
+<<
+/T (Line41Amount1[0])
+/V ( 0.00)
+>>
+<<
+/T (Line42Amount1[0])
+/V ()
+>>]
+>>
+<<
+/T (Column2[0])
+/Kids [
+<<
+/T (Line37Amount2[0])
+/V ( 50,197.00)
+>>
+<<
+/T (Line36Amount2[0])
+/V (71000.00)
+>>
+<<
+/T (Line41Amount2[0])
+/V ( 7,529.55)
+>>
+<<
+/T (Line40Amount2[0])
+/V (4264.61)
+>>
+<<
+/T (Line39Rate2[0])
+/V (20.5%)
+>>
+<<
+/T (Line38Amount2[0])
+/V (20803.00)
+>>
+<<
+/T (Line42Amount2[0])
+/V (11794.16)
+>>]
+>>]
+>>]
+>>
+<<
+/T (Page4[0])
+/Kids [
+<<
+/T (Step3[0])
+/Kids [
+<<
+/T (Line_21000_SplitPensionDeduction[0])
+/Kids [
+<<
+/T (Line_21000_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_23500_SocialBenefits[0])
+/Kids [
+<<
+/T (Line_23500_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_23400_NetBeforeAdjust[0])
+/Kids [
+<<
+/T (Line_23400_Amount[0])
+/V (71000.00)
+>>]
+>>
+<<
+/T (Line_22100_CarryingChargesInterest[0])
+/Kids [
+<<
+/T (Line_22100_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_21500_DisabilityDeduction[0])
+/Kids [
+<<
+/T (Line_21500_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_15000_TotalIncome_2[0])
+/Kids [
+<<
+/T (Line_15000_Amount[0])
+/V (71000.00)
+>>]
+>>
+<<
+/T (Line_22900_OtherEmployExpenses[0])
+/Kids [
+<<
+/T (Line_22900_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_20800_RRSPDeduction[0])
+/Kids [
+<<
+/T (Line_20800_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line42[0])
+/Kids [
+<<
+/T (Line_22000_Amount[0])
+/V ()
+>>
+<<
+/T (Line_21999_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line40[0])
+/Kids [
+<<
+/T (Line_21699_Amount[0])
+/V ()
+>>
+<<
+/T (Line_21700_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line23210[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_20810_PRPP[0])
+/Kids [
+<<
+/T (Line_20810_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_20700_RPPDeduction[0])
+/Kids [
+<<
+/T (Line_20700_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_22215_DeductionCPP_QPP[0])
+/Kids [
+<<
+/T (Line_22215_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_23300_AddLines[0])
+/Kids [
+<<
+/T (Line_23300_Amount2[0])
+/V ()
+>>
+<<
+/T (Line_23300_Amount1[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_23600_NetIncome[0])
+/Kids [
+<<
+/T (Line_23600_Amount[0])
+/V (71000.00)
+>>]
+>>
+<<
+/T (Line_21200_Dues[0])
+/Kids [
+<<
+/T (Line_21200_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_20600_PensionAdjustment[0])
+/Kids [
+<<
+/T (Line_20600_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_22400_XplorationDevExpenses[0])
+/Kids [
+<<
+/T (Line_22400_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_23200_OtherDeductions[0])
+/Kids [
+<<
+/T (Line_23200_Amount[0])
+/V ()
+>>
+<<
+/T (Line_23200_Specify[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_21900_MovingExpenses[0])
+/Kids [
+<<
+/T (Line_21900_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_21400_ChildCareExpenses[0])
+/Kids [
+<<
+/T (Line_21400_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_22200_CPP_QPP_Contributions[0])
+/Kids [
+<<
+/T (Line_22200_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_21300_UCCBRepayment[0])
+/Kids [
+<<
+/T (Line_21300_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_23100_ClergyResDeduction[0])
+/Kids [
+<<
+/T (Line_23100_Amount[0])
+/V ()
+>>]
+>>]
+>>]
+>>
+<<
+/T (Page6[0])
+/Kids [
+<<
+/T (PartB[0])
+/Kids [
+<<
+/T (Line31350_Sub[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line31800_Sub[0])
+/Kids [
+<<
+/T (Line20_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line32400_Sub[0])
+/Kids [
+<<
+/T (Line23_Amount[0])
+/V (1000.00)
+>>]
+>>
+<<
+/T (Line98[0])
+/Kids [
+<<
+/T (Amount1[0])
+/V (16385.00)
+>>]
+>>
+<<
+/T (Line35000_Sub[0])
+/Kids [
+<<
+/T (Line34_Amount[0])
+/V (2607.75)
+>>]
+>>
+<<
+/T (Medical_expenses[0])
+/Kids [
+<<
+/T (Line26_Sub[0])
+/Kids [
+<<
+/T (Line26_Amount[0])
+/V (2130.00)
+>>]
+>>
+<<
+/T (Line33199_Sub[0])
+/Kids [
+<<
+/T (Line28_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line104[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line105[0])
+/Kids [
+<<
+/T (Amount2[0])
+/V (2130.00)
+>>
+<<
+/T (Amount1[0])
+/V (71000.00)
+>>]
+>>
+<<
+/T (Line27_Sub[0])
+/Kids [
+<<
+/T (Line27_Amount[0])
+/V (0.00)
+>>]
+>>]
+>>
+<<
+/T (Line33800_Sub[0])
+/Kids [
+<<
+/T (Line32_Amount[0])
+/V (2607.75)
+>>]
+>>
+<<
+/T (Line_79[0])
+/Kids [
+<<
+/T (Line43Amount[0])
+/V (14398.00)
+>>]
+>>
+<<
+/T (Line32600_Sub[0])
+/Kids [
+<<
+/T (Line24_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line31217_Sub[0])
+/Kids [
+<<
+/T (Line11_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line33500_Sub[0])
+/Kids [
+<<
+/T (Line30_Amount[0])
+/V (17385.00)
+>>]
+>>
+<<
+/T (Line31240_Sub[0])
+/Kids [
+<<
+/T (Line13_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line34900_Sub[0])
+/Kids [
+<<
+/T (Line33_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line31400_Sub[0])
+/Kids [
+<<
+/T (Line18_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line31220_Sub[0])
+/Kids [
+<<
+/T (Line12_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (CPP_QPP_Sub[0])
+/Kids [
+<<
+/T (Line31000_Sub[0])
+/Kids [
+<<
+/T (Line9_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line30800_Sub[0])
+/Kids [
+<<
+/T (Line8_Amount[0])
+/V (500.00)
+>>]
+>>]
+>>
+<<
+/T (Line33200_Sub[0])
+/Kids [
+<<
+/T (Line29_Amount1[0])
+/V (0.00)
+>>
+<<
+/T (Line29_Amount2[0])
+/V (0.00)
+>>]
+>>
+<<
+/T (Line32300_Sub[0])
+/Kids [
+<<
+/T (Line22_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (EIPremiums_Sub[0])
+/Kids [
+<<
+/T (Line31200_Sub[0])
+/Kids [
+<<
+/T (Line10_Amount[0])
+/V (200.00)
+>>]
+>>]
+>>
+<<
+/T (Line31270_Sub[0])
+/Kids [
+<<
+/T (Line15_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line31285_sub[0])
+/Kids [
+<<
+/T (Line16_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line31260_Sub[0])
+/Kids [
+<<
+/T (Line14_Amount[0])
+/V (1287.00)
+>>]
+>>
+<<
+/T (Line31900_Sub[0])
+/Kids [
+<<
+/T (Line21_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line31300_Sub[0])
+/Kids [
+<<
+/T (Line17_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line31600_Sub[0])
+/Kids [
+<<
+/T (Line19_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line93[0])
+/Kids [
+<<
+/T (Amount2[0])
+/V (1987.00)
+>>
+<<
+/T (Amount1[0])
+/V (1987.00)
+>>]
+>>
+<<
+/T (Line95[0])
+/Kids [
+<<
+/T (Amount1[0])
+/V (16385.00)
+>>]
+>>
+<<
+/T (Line31_Sub[0])
+/Kids [
+<<
+/T (Line31_Rate[0])
+/V (15%)
+>>]
+>>
+<<
+/T (Line103[0])
+/Kids [
+<<
+/T (Amount1[0])
+/V (17385.00)
+>>]
+>>]
+>>]
+>>
+<<
+/T (Page7[0])
+/Kids [
+<<
+/T (Step6[0])
+/Kids [
+<<
+/T (Line_42200_SocialBenefits[0])
+/Kids [
+<<
+/T (Line_42200_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_42800_ProvTerrTax[0])
+/Kids [
+<<
+/T (Line_42800_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_42100_CPPContributions[0])
+/Kids [
+<<
+/T (Line_42100_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_42120_EIPremiums[0])
+/Kids [
+<<
+/T (Line_42120_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_Y[0])
+/Kids [
+<<
+/T (Line_42120_Amount[0])
+/V (9186.41)
+>>]
+>>
+<<
+/T (Line_43500_TotalPayable[0])
+/Kids [
+<<
+/T (Line_43500_Amount[0])
+/V (9186.41)
+>>]
+>>]
+>>
+<<
+/T (PartC[0])
+/Kids [
+<<
+/T (Line122[0])
+/Kids [
+<<
+/T (Amount[0])
+/V (9186.41)
+>>]
+>>
+<<
+/T (Line42000_sub[0])
+/Kids [
+<<
+/T (Line60Amount[0])
+/V (9186.41)
+>>]
+>>
+<<
+/T (Line124[0])
+/Kids [
+<<
+/T (Amount[0])
+/V (9186.41)
+>>]
+>>
+<<
+/T (Line40427_Sub[0])
+/Kids [
+<<
+/T (Line48Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line123[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line41700_sub[0])
+/Kids [
+<<
+/T (Line58Amount[0])
+/V (9186.41)
+>>]
+>>
+<<
+/T (Line127[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line35000_sub[0])
+/Kids [
+<<
+/T (Line46Amount[0])
+/V (2607.75)
+>>]
+>>
+<<
+/T (Line40400_Sub[0])
+/Kids [
+<<
+/T (Line45Amount1[0])
+/V (11794.16)
+>>]
+>>
+<<
+/T (Line129[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line128[0])
+/Kids [
+<<
+/T (Amount[0])
+/V (9186.41)
+>>]
+>>
+<<
+/T (Line40500_sub[0])
+/Kids [
+<<
+/T (Line51Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line41400_sub[0])
+/Kids [
+<<
+/T (Line56Amount2[0])
+/V ()
+>>
+<<
+/T (Line56Amount1[0])
+/V ()
+>>]
+>>
+<<
+/T (Line41800_sub[0])
+/Kids [
+<<
+/T (Line61Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line114_sub[0])
+/Kids [
+<<
+/T (Line49Amount1[0])
+/V (2607.75)
+>>
+<<
+/T (Line49Amount2[0])
+/V (2607.75)
+>>]
+>>
+<<
+/T (Line41200_sub[0])
+/Kids [
+<<
+/T (Line55Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line131[0])
+/Kids [
+<<
+/T (F40900[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line108_sub[0])
+/Kids [
+<<
+/T (Line43Amount[0])
+/V (11794.16)
+>>]
+>>
+<<
+/T (Line130[0])
+/Kids [
+<<
+/T (Amount[0])
+/V (9186.41)
+>>]
+>>
+<<
+/T (Line41500_sub[0])
+/Kids [
+<<
+/T (Line59Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line40424_Sub[0])
+/Kids [
+<<
+/T (Line44Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line40600_sub[0])
+/Kids [
+<<
+/T (Line52Amount[0])
+/V (9186.41)
+>>]
+>>
+<<
+/T (Line40425_Sub[0])
+/Kids [
+<<
+/T (Line47Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line41600_sub[0])
+/Kids [
+<<
+/T (Line57Amount2[0])
+/V ()
+>>
+<<
+/T (Line57Amount1[0])
+/V ()
+>>]
+>>]
+>>]
+>>
+<<
+/T (Page8[0])
+/Kids [
+<<
+/T (Line_49000_IfFeeWasCharged[0])
+/Kids [
+<<
+/T (TelephoneOfPreparer[0])
+/V ()
+>>
+<<
+/T (NameOfPreparer[0])
+/V ()
+>>
+<<
+/T (EFileNumber_Comb[0])
+/Kids [
+<<
+/T (EFile[0])
+/V ()
+>>]
+>>
+<<
+/T (Line49000_CheckBoxGroup[0])
+/Kids [
+<<
+/T (Line49000_CheckBox_EN[0])
+/V ()
+>>
+<<
+/T (Line49000_CheckBox_EN[1])
+/V ()
+>>]
+>>]
+>>
+<<
+/T (Certification[0])
+/Kids [
+<<
+/T (Date[0])
+/V ()
+>>
+<<
+/T (Telephone[0])
+/V ()
+>>]
+>>
+<<
+/T (ONOpportunitiesFund2[0])
+/Kids [
+<<
+/T (Line_3[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_2[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_1[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>]
+>>
+<<
+/T (Step6[0])
+/Kids [
+<<
+/T (Line_48200_AddLines[0])
+/Kids [
+<<
+/T (Line_48200_Amount1[0])
+/V (10100.00)
+>>
+<<
+/T (Line_48200_Amount2[0])
+/V (10100.00)
+>>]
+>>
+<<
+/T (EligibleEducatorSchoolSypplyTaxCredit[0])
+/Kids [
+<<
+/T (F46800[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_44000Sub[0])
+/Kids [
+<<
+/T (Line_44000_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_45600_TrustTaxCredit[0])
+/Kids [
+<<
+/T (Line_45600_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_47900_ProvTerrCredits[0])
+/Kids [
+<<
+/T (Line_47900_Amount[0])
+/V (100.00)
+>>]
+>>
+<<
+/T (Line_43500_totalpayable[0])
+/Kids [
+<<
+/T (Line_42000_Amount[0])
+/V (9186.41)
+>>]
+>>
+<<
+/T (Line_45300_CWB[0])
+/Kids [
+<<
+/T (Line_45300_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_162[0])
+/Kids [
+<<
+/T (Refund_or_BalanceOwing_Amount[0])
+/V (-913.59)
+>>]
+>>
+<<
+/T (Line_45700_GST_HST_Rebate[0])
+/Kids [
+<<
+/T (Line_45700_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_47600_TaxPaid[0])
+/Kids [
+<<
+/T (Line_47600_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_45350_CTC[0])
+/Kids [
+<<
+/T (Line_45300_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line160[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_45200_MedicalExpense[0])
+/Kids [
+<<
+/T (Line_45200_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_45000_EIOverpayment[0])
+/Kids [
+<<
+/T (Line_45000_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_44800_CPPOverpayment[0])
+/Kids [
+<<
+/T (Line_44800_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line_47555_TaxPaid[0])
+/Kids [
+<<
+/T (Line_47600_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line159[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (LIne_43700_Total_income_tax_ded[0])
+/Kids [
+<<
+/T (Line_43700_Amount[0])
+/V (10000.00)
+>>]
+>>
+<<
+/T (Line_45400_InvestmentTaxCredit[0])
+/Kids [
+<<
+/T (Line_45400_Amount[0])
+/V ()
+>>]
+>>]
+>>
+<<
+/T (Line48400_48500[0])
+/Kids [
+<<
+/T (Line48500[0])
+/Kids [
+<<
+/T (Line_48500_Amount[0])
+/V ()
+>>]
+>>
+<<
+/T (Line48400[0])
+/Kids [
+<<
+/T (Line_48400_Amount[0])
+/V (913.59)
+>>]
+>>]
+>>]
+>>]
+>>
+]
+>>
+>>
+endobj
+
+trailer
+
+<<
+/Root 1 0 R
+>>
+%%EOF
