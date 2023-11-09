@@ -211,11 +211,11 @@ fixPage7PartC t1 = fixEq $ \part@Page7PartC{..}-> part{
    line40427,
    line122_sum = totalOf [line119, line40425, line40427],
    line122_cont = line122_sum,
-   line123 = nonNegativeDifference line40400 line122_cont,
-   line125 = totalOf [line123, line124],
+   line42900 = nonNegativeDifference line40400 line122_cont,
+   line125 = totalOf [line42900, line124],
    line127 = difference line125 line40500,
    line129 = totalOf [line127, line128],
-   line131 = nonNegativeDifference line129 line130,
+   line40600 = nonNegativeDifference line129 line130,
    line41000 = case line40900
                of Just x
                     | x <= 400 -> Just (x * 0.75)
@@ -224,7 +224,7 @@ fixPage7PartC t1 = fixEq $ \part@Page7PartC{..}-> part{
                   Nothing -> Nothing,
    line41600_sum = totalOf [line41000, line41200, line41400],
    line41600_cont = line41600_sum,
-   line41700 = nonNegativeDifference line131 line41600_cont,
+   line41700 = nonNegativeDifference line40600 line41600_cont,
    line42000 = totalOf [line41700, line41500, line41800]}
 
 fixPage7Step6 :: T1 Maybe -> Page7Step6 Maybe -> Page7Step6 Maybe
