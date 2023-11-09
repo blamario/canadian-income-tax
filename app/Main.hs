@@ -8,7 +8,6 @@ import Codec.Archive.Tar qualified as Tar
 import Codec.Archive.Tar.Entry (fileEntry, toTarPath)
 import Control.Applicative ((<**>), optional)
 import Control.Monad (unless, when)
-import Control.Monad.Trans.State.Strict (get, put, evalState)
 import Data.ByteString (ByteString)
 import Data.ByteString qualified as ByteString
 import Data.ByteString.Lazy qualified as Lazy
