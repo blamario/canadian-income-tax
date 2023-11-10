@@ -39,6 +39,7 @@ library
         Tax.Canada.ON428.Types
         Tax.Canada.ON428.FieldNames
         Tax.Canada.ON428.Fix
+        Tax.PDFtk
         Tax.Util
 
     -- Modules included in this library but not exported.
@@ -46,10 +47,10 @@ library
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
-    build-depends:    base == 4.*, text >= 1.0 && < 2.2,
+    build-depends:    base == 4.*, text >= 1.0 && < 2.2, bytestring >= 0.10.4 && < 1,
                       time == 1.*, containers >= 0.5 && < 0.7,
                       monoid-subclasses == 1.*, rank2classes ^>= 1.5.3, deep-transformations ^>= 0.2.2,
-                      ca-province-codes == 1.0.*, forms-data-format ^>= 0.2,
+                      ca-province-codes == 1.0.*, forms-data-format ^>= 0.2, typed-process >= 0.1 && ^>=0.2,
                       template-haskell == 2.*
     hs-source-dirs:   src
     default-language: Haskell2010
@@ -63,10 +64,9 @@ executable complete-canadian-taxes
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
     build-depends:
-        base == 4.*, text, bytestring >= 0.10.4 && < 1,
+        base == 4.*, text, bytestring,
         monoid-subclasses, optparse-applicative >= 0.15 && < 0.18,
         filepath >= 1.3 && < 1.5, directory >= 1.2 && < 1.4, tar >= 0.4 && < 0.6,
-        typed-process >= 0.1 && ^>=0.2,
         forms-data-format, canadian-income-tax
 
     hs-source-dirs:   app
@@ -81,7 +81,7 @@ executable serve-canadian-taxes
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
     build-depends:
-        base == 4.*, text, bytestring >= 0.10.4 && < 1,
+        base == 4.*, text, bytestring,
         http-types ^>= 0.12, scotty ^>= 0.20, wai-extra ^>= 3.1.10, wai-middleware-static ^>= 0.9.1,
         forms-data-format, canadian-income-tax
 
@@ -91,7 +91,7 @@ executable serve-canadian-taxes
 
 test-suite             properties
     type:                exitcode-stdio-1.0
-    build-depends:       base >= 4.7 && < 5, bytestring >= 0.10.4 && < 1,
+    build-depends:       base >= 4.7 && < 5, bytestring,
                          directory ^>= 1.3, filepath ^>= 1.4,
                          forms-data-format,
                          rank2classes, deep-transformations,
@@ -106,7 +106,7 @@ test-suite             properties
 
 test-suite             regression
     type:                exitcode-stdio-1.0
-    build-depends:       base >= 4.7 && < 5, bytestring >= 0.10.4 && < 1,
+    build-depends:       base >= 4.7 && < 5, bytestring,
                          directory ^>= 1.3, filepath ^>= 1.4,
                          forms-data-format,
                          rank2classes, deep-transformations,

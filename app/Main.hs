@@ -20,11 +20,11 @@ import Options.Applicative (Parser, execParser,
 import System.Directory (createDirectoryIfMissing, doesDirectoryExist, doesFileExist)
 import System.FilePath (replaceDirectory, takeFileName)
 import System.IO (hPutStrLn, stderr)
-import System.Process.Typed (ExitCode (ExitFailure, ExitSuccess), byteStringInput, readProcess, setStdin, shell)
 import Text.FDF (parse, serialize)
 
-import Tax.FDF qualified as FDF
 import Tax.Canada (fixOntarioReturns, fixON428, fixT1, on428Fields, t1Fields)
+import Tax.FDF qualified as FDF
+import Tax.PDFtk (fdf2pdf, pdf2fdf)
 
 main :: IO ()
 main = execParser (info optionsParser $ progDesc "Update all calculated fields in a Canadian T1 tax form")
@@ -46,21 +46,6 @@ optionsParser =
    <*> switch (short 'v' <> long "verbose")
    <**> helper
 
-pdf2fdf :: Lazy.ByteString -> IO Lazy.ByteString
-pdf2fdf pdf = do
-   (exitCode, fdf, errors) <- readProcess (setStdin (byteStringInput pdf) $ shell "pdftk - generate_fdf output -")
-   case exitCode of
-      ExitSuccess -> pure fdf
-      ExitFailure n -> error ("Error converting PDF to FDF (exit code " <> show n <> ").\n" <> show errors)
-
-fdf2pdf :: FilePath -> Lazy.ByteString -> IO Lazy.ByteString
-fdf2pdf pdfPath fdf = do
-   (exitCode, pdf, errors)
-      <- readProcess (setStdin (byteStringInput fdf) $ shell $ "pdftk " <> pdfPath <> " fill_form - output -")
-   case exitCode of
-      ExitSuccess -> pure pdf
-      ExitFailure n -> error ("Error converting FDF to PDF (exit code " <> show n <> ").\n" <> show errors)
-
 readFDF :: FilePath -> IO (Any, Lazy.ByteString)
 readFDF inputPath = do
    exists <- doesFileExist inputPath
@@ -69,7 +54,7 @@ readFDF inputPath = do
    if "%FDF-1." `isPrefixOf` content
       then pure (Any False, content)
       else if "%PDF-1." `isPrefixOf` content
-           then (,) (Any True) <$> pdf2fdf content
+           then either error ((,) (Any True)) <$> pdf2fdf content
            else error "Expecting an FDF or PDF file"
 
 readMaybeFDF :: FilePath -> Maybe FilePath -> IO (Maybe (FilePath, Any, ByteString))
@@ -84,7 +69,7 @@ process Options{t1InputPath, on428InputPath, outputPath, verbose} = do
    when ("/" `isSuffixOf` outputPath) (createDirectoryIfMissing True outputPath)
    let writeFrom :: FilePath -> Bool -> ByteString.ByteString -> IO ()
        writeFrom inputPath asPDF content = do
-          content' <- (if asPDF then fmap Lazy.toStrict . fdf2pdf inputPath . Lazy.fromStrict else pure) content
+          content' <- (if asPDF then (either error Lazy.toStrict <$>) . fdf2pdf inputPath . Lazy.fromStrict else pure) content
           if outputPath == "-"
              then ByteString.putStr content'
              else do
