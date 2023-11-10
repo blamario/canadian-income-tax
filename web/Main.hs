@@ -10,6 +10,8 @@ import Data.ByteString.Lazy qualified as Lazy
 import Data.ByteString.Lazy qualified as ByteString.Lazy
 import Data.String (fromString)
 import Network.HTTP.Types.Status (ok200, unsupportedMediaType415)
+import Network.Wai.Middleware.RequestLogger
+import Network.Wai.Middleware.Static
 import Text.FDF (parse, serialize)
 import Web.Scotty
 
@@ -17,7 +19,11 @@ import Tax.FDF qualified as FDF
 import Tax.Canada (fixOntarioReturns, fixON428, fixT1, on428Fields, t1Fields)
 
 main :: IO ()
-main = scotty 3000 $
+main = scotty 3000 $ do
+   middleware logStdoutDev
+   get "/" $ do
+      setHeader "Content-Type" "text/html; charset=utf-8"
+      file "web/client/build/index.html"
    post "/t1/FDF" $ do
       bytes <- body
       case parse (Lazy.toStrict bytes) >>= \fdf-> (,) fdf <$> FDF.load t1Fields fdf of
@@ -28,3 +34,4 @@ main = scotty 3000 $
           status ok200
           setHeader "Content-Type" "application/fdf"
           raw (Lazy.fromStrict $ serialize fdf')
+   middleware $ staticPolicy (noDots >-> addBase "web/client/build")
