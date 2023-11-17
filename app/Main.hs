@@ -12,39 +12,58 @@ import Data.ByteString (ByteString)
 import Data.ByteString qualified as ByteString
 import Data.ByteString.Lazy qualified as Lazy
 import Data.ByteString.Lazy qualified as ByteString.Lazy
+import Data.CAProvinceCodes qualified as Province
+import Data.Char (toUpper)
+import Data.List (intercalate)
 import Data.Maybe (fromMaybe)
 import Data.Semigroup (Any (Any))
 import Data.Semigroup.Cancellative (isPrefixOf, isSuffixOf)
-import Options.Applicative (Parser, execParser,
-                            helper, info, long, metavar, progDesc, short, strArgument, strOption, switch, value)
+import Options.Applicative (Parser, ReadM, long, metavar, short)
+import Options.Applicative qualified as OptsAp
 import System.Directory (createDirectoryIfMissing, doesDirectoryExist, doesFileExist)
 import System.FilePath (replaceDirectory, takeFileName)
 import System.IO (hPutStrLn, stderr)
 import Text.FDF (parse, serialize)
 
-import Tax.Canada (fixOntarioReturns, fixON428, fixT1, on428Fields, t1Fields)
+import Tax.Canada (fixOntarioReturns, fixON428, fixT1, on428Fields)
+import Tax.Canada.T1.FieldNames.AB qualified as AB
+import Tax.Canada.T1.FieldNames.BC qualified as BC
+import Tax.Canada.T1.FieldNames qualified as ON
+import Tax.Canada.T1.FieldNames.QC qualified as QC
 import Tax.FDF qualified as FDF
 import Tax.PDFtk (fdf2pdf, pdf2fdf)
 
 main :: IO ()
-main = execParser (info optionsParser $ progDesc "Update all calculated fields in a Canadian T1 tax form")
+main = OptsAp.execParser (OptsAp.info optionsParser
+                          $ OptsAp.progDesc "Update all calculated fields in a Canadian T1 tax form")
        >>= process
 
 data Options = Options {
+   province :: Province.Code,
    t1InputPath :: Maybe FilePath,
    on428InputPath :: Maybe FilePath,
    outputPath :: FilePath,
    verbose :: Bool}
 
-
 optionsParser :: Parser Options
 optionsParser =
    Options
-   <$> optional (strOption (long "t1" <> metavar "<input T1 FDF file>"))
-   <*> optional (strOption (long "on428" <> metavar "<input ON428 FDF file>"))
-   <*> strOption (short 'o' <> long "output" <> value "-" <> metavar "<output FDF file>")
-   <*> switch (short 'v' <> long "verbose")
-   <**> helper
+   <$> OptsAp.argument readProvince (metavar "<two-letter province code>")
+   <*> optional (OptsAp.strOption (long "t1" <> metavar "<input T1 file>"))
+   <*> optional (OptsAp.strOption (long "on428" <> metavar "<input ON428 file>"))
+   <*> OptsAp.strOption (short 'o' <> long "output" <> OptsAp.value "-" <> metavar "<output FDF file>")
+   <*> OptsAp.switch (short 'v' <> long "verbose")
+   <**> OptsAp.helper
+
+readProvince :: ReadM Province.Code
+readProvince = OptsAp.eitherReader (tryRead . map toUpper)
+   where tryRead s = case reads s
+                     of [(p, "")] -> Right p
+                        _ -> Left ("Invalid province code " <> s <> " - expecting one of "
+                                   <> intercalate ", " (onLast ("or " <>) $ show <$> Province.all))
+         onLast f [x] = [f x]
+         onLast f (x:xs) = x : onLast f xs
+         onLast _ [] = []
 
 readFDF :: FilePath -> IO (Any, Lazy.ByteString)
 readFDF inputPath = do
@@ -64,7 +83,7 @@ readMaybeFDF baseName path = traverse (\p-> addPath p . fmap Lazy.toStrict <$> r
          addPath p (isPDF, content) = (p, isPDF, content)
 
 process :: Options -> IO ()
-process Options{t1InputPath, on428InputPath, outputPath, verbose} = do
+process Options{province, t1InputPath, on428InputPath, outputPath, verbose} = do
    [t1, on428] <- traverse (uncurry readMaybeFDF) [("t1", t1InputPath), ("on428", on428InputPath)]
    when ("/" `isSuffixOf` outputPath) (createDirectoryIfMissing True outputPath)
    let writeFrom :: FilePath -> Bool -> ByteString.ByteString -> IO ()
@@ -77,6 +96,12 @@ process Options{t1InputPath, on428InputPath, outputPath, verbose} = do
                 if isDir
                    then ByteString.writeFile (replaceDirectory inputPath outputPath) content'
                    else ByteString.writeFile outputPath content'
+   let t1Fields = case province of
+         Province.AB -> AB.t1Fields
+         Province.BC -> BC.t1Fields
+         Province.ON -> ON.t1Fields
+         Province.QC -> QC.t1Fields
+         _ -> error "Only AB, BC, ON, and QC provinces are supported so far."
    case (t1, on428) of
       (Nothing, Nothing) -> error "You must specify a T1 form, ON428 form, or both."
       (Just (t1Path, Any t1isPDF, t1bytes), Nothing) -> do
