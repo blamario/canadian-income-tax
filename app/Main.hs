@@ -99,9 +99,12 @@ process Options{province, t1InputPath, on428InputPath, outputPath, verbose} = do
    let t1Fields = case province of
          Province.AB -> AB.t1Fields
          Province.BC -> BC.t1Fields
+         Province.MB -> AB.t1Fields
+         Province.NS -> AB.t1Fields
          Province.ON -> ON.t1Fields
          Province.QC -> QC.t1Fields
-         _ -> error "Only AB, BC, ON, and QC provinces are supported so far."
+         Province.SK -> AB.t1Fields
+         _ -> error "Only AB, BC, MB, NS, ON, QC, and SK provinces are supported so far."
    case (t1, on428) of
       (Nothing, Nothing) -> error "You must specify a T1 form, ON428 form, or both."
       (Just (t1Path, Any t1isPDF, t1bytes), Nothing) -> do
