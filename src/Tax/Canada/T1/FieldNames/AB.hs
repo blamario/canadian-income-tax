@@ -3,7 +3,7 @@
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Tax.Canada.T1.FieldNames.AB (t1Fields) where
+module Tax.Canada.T1.FieldNames.AB (module Tax.Canada.T1.FieldNames.AB, page1Fields) where
 
 import Rank2 qualified
 

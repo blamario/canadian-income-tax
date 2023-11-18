@@ -10,6 +10,7 @@ import Tax.Canada (fixOntarioReturns)
 import Tax.Canada.T1.FieldNames (t1Fields)
 import Tax.Canada.T1.FieldNames.AB qualified as AB (t1Fields)
 import Tax.Canada.T1.FieldNames.BC qualified as BC (t1Fields)
+import Tax.Canada.T1.FieldNames.NB qualified as NB (t1Fields)
 import Tax.Canada.T1.FieldNames.QC qualified as QC (t1Fields)
 import Tax.Canada.T1.Fix (T1, fixT1)
 import Tax.Canada.ON428.FieldNames (on428Fields)
@@ -55,7 +56,7 @@ properties fdfMap =
       testProperty "ON428" (checkFormIdempotent on428Fields fixON428),
       testProperty "T1+ON428" (checkFormIdempotent (Rank2.Pair t1Fields on428Fields) fixOntarioReturns')],
     testGroup "Roundtrip" [
-      testProperty ("T1 " <> name) (checkFormFields fields $ List.lookup (prefix <> "-r-fill-22e.fdf") fdfMap)
+      testProperty ("T1 for " <> name) (checkFormFields fields $ List.lookup (prefix <> "-r-fill-22e.fdf") fdfMap)
       | (name, fields, prefix) <- provinces],
     testGroup "Load mismatch" [
       testProperty ("Load T1 for " <> p1name <> " from FDF for " <> p2name) $ property $ assert
@@ -65,10 +66,11 @@ properties fdfMap =
         p1name /= p2name]]
   where fixOntarioReturns' :: Rank2.Product T1 ON428 Maybe -> Rank2.Product T1 ON428 Maybe
         fixOntarioReturns' (Rank2.Pair x y) = uncurry Rank2.Pair $ fixOntarioReturns (x, y)
-        provinces = [("Quebec", QC.t1Fields, "5005"),
+        provinces = [("New Brunswick & PEI", NB.t1Fields, "5000"),
+                     ("Quebec", QC.t1Fields, "5005"),
                      ("Ontario", t1Fields, "5006"),
                      ("British Columbia", BC.t1Fields, "5010"),
-                     ("Alberta", AB.t1Fields, "5015")]
+                     ("Alberta, Manitoba, Nova Scotia, and Saskatchewan", AB.t1Fields, "5015")]
 
 checkFormIdempotent :: (Eq (g Maybe), Show (g Maybe),
                         Rank2.Applicative g, Shallow.Traversable Transformations.Gen g)
