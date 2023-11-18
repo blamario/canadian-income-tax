@@ -29,7 +29,7 @@ import Data.Text (isInfixOf, isSuffixOf, stripSuffix)
 import Rank2 qualified
 import System.Directory (listDirectory)
 import System.Exit (die)
-import System.FilePath.Posix (combine)
+import System.FilePath.Posix (combine, isExtensionOf)
 import Transformation.Shallow qualified as Shallow
 import Text.FDF (FDF, parse)
 import Text.FDF qualified
@@ -41,7 +41,7 @@ import Test.Tasty.Hedgehog
 
 main = do
   dataDir <- getDataDir
-  fdfFileNames <- listDirectory dataDir
+  fdfFileNames <- filter (".fdf" `isExtensionOf`) <$> listDirectory dataDir
   fdfBytes <- traverse (ByteString.readFile . combine dataDir) fdfFileNames
   case traverse parse fdfBytes of
     Left err -> die err
