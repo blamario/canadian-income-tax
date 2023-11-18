@@ -16,7 +16,6 @@ import Tax.Canada.T1.FieldNames
           step4Fields, partBFields, page6MedicalExpensesFields, partCFields, page7step6Fields, page8step6Fields,
           selfEmploymentFields, taxPreparerFields)
 import Tax.Canada.T1.FieldNames qualified as BaseNames
-import Tax.Canada.T1.FieldNames.BC qualified as BC
 
 t1Fields :: T1 FieldConst
 t1Fields = within "form1" Rank2.<$> T1 {
@@ -33,7 +32,7 @@ page2Fields = BaseNames.page2Fields {
    cai = Field ["CAI", "AB_CAI", "Tick_box"] Checkbox,
    organ_donor = NoField}
 
-page3Fields = BC.page3Fields{
+page3Fields = Page3{
    line_10100_EmploymentIncome = Field ["Line1", "Line_10100_Amount"] Amount,
    line_10105_Taxexemptamount = Field ["Line10105", "Line_10105_Amount"] Amount,
    line_10120_Commissions = Field ["Line10120", "Line_10120_Amount"] Amount,
@@ -74,19 +73,15 @@ page3Fields = BC.page3Fields{
    line_14700_PlusAmount = Field ["Line30", "I2", "Amount"] Amount,
    line_15000_TotalIncome = Field ["Line31", "Amount"] Amount}
 
-selfEmploymentFields = SelfEmploymentIncome {
+selfEmploymentFields = BaseNames.selfEmploymentFields {
    line_13499_Amount = Field ["Line20", "Line13499", "Amount"] Amount,
    line_13500_Amount = Field ["Line20", "Amount"] Amount,
    line_13699_Amount = Field ["Line21", "Line13699", "Line_13699_Amount"] Amount,
-   line_13700_Amount = Field ["Line21", "Line_13700_Amount"] Amount,
    line_13899_Amount = Field ["Line22", "Line13899", "Line_13899_Amount"] Amount,
-   line_13900_Amount = Field ["Line22", "Line_13900_Amount"] Amount,
    line_14099_Amount = Field ["Line23", "Line14099", "Line_14099_Amount"] Amount,
-   line_14100_Amount = Field ["Line23", "Line_14100_Amount"] Amount,
-   line_14299_Amount = Field ["Line24", "Line14299", "Line_14299_Amount"] Amount,
-   line_14300_Amount = Field ["Line24", "Line_14300_Amount"] Amount}
+   line_14299_Amount = Field ["Line24", "Line14299", "Line_14299_Amount"] Amount}
 
-page4Fields = Page4{
+page4Fields = BaseNames.page4Fields{
    line_15000_TotalIncome_2 = Field ["Line32", "Line_15000_Amount"] Amount,
    line_20600_PensionAdjustment = Field ["Line20600", "Line_20600_Amount"] Amount,
    line_20700_RPPDeduction = Field ["Line33", "Line_20700_Amount"] Amount,
@@ -98,14 +93,11 @@ page4Fields = Page4{
    line_21400_ChildCareExpenses = Field ["Line38", "Line_21400_Amount"] Amount,
    line_21500_DisabilityDeduction = Field ["Line39", "Line_21500_Amount"] Amount,
    line_21699_Amount = Field ["Line40", "Line21699", "Line_21699_Amount"] Amount,
-   line_21700_Amount = Field ["Line40", "Line_21700_Amount"] Amount,
    line_21900_MovingExpenses = Field ["Line41", "Line_21900_Amount"] Amount,
    line_21999_Amount = Field ["Line42", "Line21999", "Line_21999_Amount"] Amount,
-   line_22000_Amount = Field ["Line42", "Line_22000_Amount"] Amount,
    line_22100_CarryingChargesInterest = Field ["Line43", "Line_22100_Amount"] Amount,
    line_22200_CPP_QPP_Contributions = Field ["Line44", "Line_22200_Amount"] Amount,
    line_22215_DeductionCPP_QPP = Field ["Line45", "Line_22215_Amount"] Amount,
-   line_22300_DeductionPPIP = NoField,
    line_22400_XplorationDevExpenses = Field ["Line46", "Line_22400_Amount"] Amount,
    line_22900_OtherEmployExpenses = Field ["Line47", "Line_22900_Amount"] Amount,
    line_23100_ClergyResDeduction = Field ["Line48", "Line_23100_Amount"] Amount,
@@ -150,14 +142,11 @@ partBFields = Page5PartB {
    line30500 = Field ["Line80", "Line7_Amount"] Amount,
    line_81 = Field ["Line81", "Line30_Amount"] Amount}
 
-page6Fields = Page6 {
+page6Fields = BaseNames.page6Fields {
    line82 = Field ["Line82", "Line43Amount"] Amount,
    line30800 = Field ["Line83", "Line8_Amount"] Amount,
    line31000 = Field ["Line84", "Line9_Amount"] Amount,
    line31200 = Field ["Line85", "Line10_Amount"] Amount,
-   line31205 = NoField,
-   line31210 = NoField,
-   line31215 = NoField,
    line31217 = Field ["Line86", "Line11_Amount"] Amount,
    line31220 = Field ["Line87", "Line12_Amount"] Amount,
    line31240 = Field ["Line88", "Line13_Amount"] Amount,
