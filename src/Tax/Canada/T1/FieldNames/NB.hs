@@ -3,7 +3,7 @@
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Tax.Canada.T1.FieldNames.NB (t1Fields) where
+module Tax.Canada.T1.FieldNames.NB (t1Fields, page2Fields) where
 
 import Rank2 qualified
 
@@ -18,8 +18,7 @@ t1Fields = AB.t1Fields{
    page8 = within "form1" . within "Page8" Rank2.<$> page8Fields}
 
 page2Fields = AB.page2Fields {
-   cai = NoField,
-   organ_donor = NoField}
+   cai = NoField}
 
 page8Fields = AB.page8Fields {
    Page8.step6_RefundOrBalanceOwing = page8step6Fields}

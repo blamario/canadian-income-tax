@@ -30,6 +30,7 @@ import Tax.Canada.T1.FieldNames.AB qualified as AB
 import Tax.Canada.T1.FieldNames.BC qualified as BC
 import Tax.Canada.T1.FieldNames qualified as ON
 import Tax.Canada.T1.FieldNames.NB qualified as NB
+import Tax.Canada.T1.FieldNames.NU qualified as NU
 import Tax.Canada.T1.FieldNames.NL qualified as NL
 import Tax.Canada.T1.FieldNames.QC qualified as QC
 import Tax.FDF qualified as FDF
@@ -105,6 +106,7 @@ process Options{province, t1InputPath, on428InputPath, outputPath, verbose} = do
          Province.NB -> NB.t1Fields
          Province.NL -> NL.t1Fields
          Province.NS -> AB.t1Fields
+         Province.NU -> NU.t1Fields
          Province.ON -> ON.t1Fields
          Province.PE -> NB.t1Fields
          Province.QC -> QC.t1Fields
