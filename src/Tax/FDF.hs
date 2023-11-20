@@ -40,7 +40,7 @@ data Entry a where
   Percent :: Entry Rational
   Checkbox :: Entry Bool
   RadioButton :: (Bounded a, Enum a, Eq a, Show a) => [a] -> Entry a
-  RadioButtons :: (Bounded a, Enum a, Eq a, Show a) => Text -> [a] -> Entry a
+  RadioButtons :: (Bounded a, Enum a, Eq a, Show a) => Int -> Int -> Text -> [a] -> Entry a
   Switch :: Text -> Text -> Text -> Entry Bool
   Switch' :: Text -> Entry Bool
 
@@ -67,9 +67,10 @@ update fields = mapWithKey
                 . Rank2.foldMap (foldMap (uncurry Map.singleton) . getConst)
                 . Rank2.liftA2 pairKey fields
   where pairKey :: FieldConst a -> Maybe a -> Const (Maybe ([Text], Text)) a
-        pairKey Field {path, entry = RadioButtons leaf values} (Just v)
+        pairKey Field {path, entry = RadioButtons start step leaf values} (Just v)
           | Just i <- elemIndex v values
-          = Const $ Just (map addIndex path ++ [leaf <> "[" <> Text.pack (show i) <> "]"], Text.pack $ show $ succ i)
+          = Const $ Just (map addIndex path ++ [leaf <> "[" <> Text.pack (show $ start + i*step) <> "]"],
+                          Text.pack $ show $ succ i)
           | otherwise = error ("Missing enum value " <> show v)
         pairKey Field {path, entry = Switch yes no leaf} (Just v) =
           Const $ Just (addIndex <$> (path ++ [if v then yes else no, leaf]), if v then "1" else "2")
@@ -104,8 +105,9 @@ fill fieldValues NoField = Right Nothing
 fill fieldValues Field {path, entry}
   | Just v <- Map.lookup path fieldValues = toEntry entry (Text.unpack v)
   | Just v <- Map.lookup (addIndex <$> path) fieldValues = toEntry entry (Text.unpack v)
-  | RadioButtons leaf values <- entry,
-    alts <- [ (Map.lookup ((addIndex <$> path) <> [leaf <> "[" <> Text.pack (show i) <> "]"]) fieldValues, v)
+  | RadioButtons start step leaf values <- entry,
+    alts <- [ (Map.lookup (map addIndex path <> [leaf <> "[" <> Text.pack (show $ start + i*step) <> "]"]) fieldValues,
+               v)
             | (i, v) <- zip [0 ..] values ]
   = if null alts then Left ("No radio buttons on path " <> show path)
     else Right $ snd <$> find (any (`notElem` ["", "Off"]) . fst) (alts :: [(Maybe Text, a)])

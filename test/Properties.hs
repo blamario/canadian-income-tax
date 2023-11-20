@@ -11,6 +11,7 @@ import Tax.Canada.T1.FieldNames (t1Fields)
 import Tax.Canada.T1.FieldNames.AB qualified as AB (t1Fields)
 import Tax.Canada.T1.FieldNames.BC qualified as BC (t1Fields)
 import Tax.Canada.T1.FieldNames.NB qualified as NB (t1Fields)
+import Tax.Canada.T1.FieldNames.NL qualified as NL (t1Fields)
 import Tax.Canada.T1.FieldNames.QC qualified as QC (t1Fields)
 import Tax.Canada.T1.Fix (T1, fixT1)
 import Tax.Canada.ON428.FieldNames (on428Fields)
@@ -67,6 +68,7 @@ properties fdfMap =
   where fixOntarioReturns' :: Rank2.Product T1 ON428 Maybe -> Rank2.Product T1 ON428 Maybe
         fixOntarioReturns' (Rank2.Pair x y) = uncurry Rank2.Pair $ fixOntarioReturns (x, y)
         provinces = [("New Brunswick & PEI", NB.t1Fields, "5000"),
+                     ("Newfoundland and Labrador", NL.t1Fields, "5001"),
                      ("Quebec", QC.t1Fields, "5005"),
                      ("Ontario", t1Fields, "5006"),
                      ("British Columbia", BC.t1Fields, "5010"),
@@ -92,7 +94,6 @@ checkFormFields fields (Just fdf) = property $ do
       keyHeads = List.nub $ take 2 <$> formKeys
       noCheckbox = filter $ not . any (liftA2 (||) (isSuffixOf "Checkbox") (isInfixOf "CheckBox"))
   -- annotateShow fdf'
-  annotateShow keyHeads
   FDF.load fields fdf' === Right form
   List.sort (noCheckbox formKeys) === List.sort (noCheckbox $ filter (\x-> any (`List.isPrefixOf` x) keyHeads) fdfKeys)
 
