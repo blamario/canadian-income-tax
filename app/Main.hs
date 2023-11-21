@@ -30,6 +30,7 @@ import Tax.Canada.T1.FieldNames.AB qualified as AB
 import Tax.Canada.T1.FieldNames.BC qualified as BC
 import Tax.Canada.T1.FieldNames qualified as ON
 import Tax.Canada.T1.FieldNames.NB qualified as NB
+import Tax.Canada.T1.FieldNames.NT qualified as NT
 import Tax.Canada.T1.FieldNames.NU qualified as NU
 import Tax.Canada.T1.FieldNames.NL qualified as NL
 import Tax.Canada.T1.FieldNames.QC qualified as QC
@@ -106,12 +107,13 @@ process Options{province, t1InputPath, on428InputPath, outputPath, verbose} = do
          Province.NB -> NB.t1Fields
          Province.NL -> NL.t1Fields
          Province.NS -> AB.t1Fields
+         Province.NT -> NT.t1Fields
          Province.NU -> NU.t1Fields
          Province.ON -> ON.t1Fields
          Province.PE -> NB.t1Fields
          Province.QC -> QC.t1Fields
          Province.SK -> AB.t1Fields
-         _ -> error "Only AB, BC, MB, NB, NL, NS, ON, PE, QC, and SK provinces are supported so far."
+         _ -> error "Only AB, BC, MB, NB, NL, NS, ON, PE, QC, and SK provinces and NT and NU territories are supported so far."
    case (t1, on428) of
       (Nothing, Nothing) -> error "You must specify a T1 form, ON428 form, or both."
       (Just (t1Path, Any t1isPDF, t1bytes), Nothing) -> do

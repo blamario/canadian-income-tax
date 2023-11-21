@@ -8,6 +8,7 @@ module Tax.Canada.T1.FieldNames where
 
 import Rank2 qualified
 
+import Data.Text (Text)
 import Data.Text.Lazy (toStrict)
 import Data.Text.Lazy.Builder (toLazyText)
 import Data.Text.Lazy.Builder.Int (decimal)
@@ -161,7 +162,7 @@ page4Fields = Page4 {
 
 page5Fields = Page5 {
    step4_TaxableIncome = within "Step4_TaxableIncome" Rank2.<$> step4Fields,
-   partA_FederalTax = within "PartA" Rank2.<$> partAFields 36,
+   partA_FederalTax = within "PartA" Rank2.<$> partAFields "Column" 36,
    partB_FederalTaxCredits = within "PartB" Rank2.<$> partBFields}
 
 step4Fields = Step4 {
@@ -180,14 +181,14 @@ step4Fields = Step4 {
    line_25700_AddLines_cont = Field ["Line_25700_AddLines", "Line_25700_Amount2"] Amount,
    line_26000_TaxableIncome = Field ["Line_26000_TaxableIncome", "Line_26000_Amount"] Amount}
 
-partAFields :: Int -> Page5PartA FieldConst
-partAFields startLine = Page5PartA {
+partAFields :: Text -> Int -> Page5PartA FieldConst
+partAFields columnPrefix startLine = Page5PartA {
    column1 = column 1 0 0.15 0,
    column2 = column 2 50_197.00 0.205 7_529.55,
    column3 = column 3 100_392.00 0.26 17_819.53,
    column4 = column 4 155_625.00 0.29 32_180.11,
    column5 = column 5 221_708.00 0.33 51_344.18}
-   where column n threshold rate baseTax = within (toText $ "Column" <> decimal n) Rank2.<$> TaxIncomeBracket {
+   where column n threshold rate baseTax = within (columnPrefix <> toText (decimal n)) Rank2.<$> TaxIncomeBracket {
             income = Field [toText $ "Line" <> decimal startLine <> "Amount" <> decimal n] Amount,
             threshold = Field [toText $ "Line" <> decimal (startLine + 1) <> "Amount" <> decimal n]
                         $ Constant threshold Amount,

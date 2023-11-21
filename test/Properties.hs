@@ -12,6 +12,7 @@ import Tax.Canada.T1.FieldNames.AB qualified as AB (t1Fields)
 import Tax.Canada.T1.FieldNames.BC qualified as BC (t1Fields)
 import Tax.Canada.T1.FieldNames.NB qualified as NB (t1Fields)
 import Tax.Canada.T1.FieldNames.NL qualified as NL (t1Fields)
+import Tax.Canada.T1.FieldNames.NT qualified as NT (t1Fields)
 import Tax.Canada.T1.FieldNames.NU qualified as NU (t1Fields)
 import Tax.Canada.T1.FieldNames.QC qualified as QC (t1Fields)
 import Tax.Canada.T1.Fix (T1, fixT1)
@@ -74,6 +75,7 @@ properties fdfMap =
                      ("Quebec", QC.t1Fields, "5005"),
                      ("Ontario", t1Fields, "5006"),
                      ("British Columbia", BC.t1Fields, "5010"),
+                     ("Northwest Territories", NT.t1Fields, "5012"),
                      ("Nunavut", NU.t1Fields, "5014"),
                      ("Alberta, Manitoba, Nova Scotia, and Saskatchewan", AB.t1Fields, "5015")]
 
