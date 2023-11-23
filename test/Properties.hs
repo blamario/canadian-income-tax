@@ -15,6 +15,7 @@ import Tax.Canada.T1.FieldNames.NL qualified as NL (t1Fields)
 import Tax.Canada.T1.FieldNames.NT qualified as NT (t1Fields)
 import Tax.Canada.T1.FieldNames.NU qualified as NU (t1Fields)
 import Tax.Canada.T1.FieldNames.QC qualified as QC (t1Fields)
+import Tax.Canada.T1.FieldNames.YT qualified as YT (t1Fields)
 import Tax.Canada.T1.Fix (T1, fixT1)
 import Tax.Canada.ON428.FieldNames (on428Fields)
 import Tax.Canada.ON428.Fix (ON428, fixON428)
@@ -76,6 +77,7 @@ properties fdfMap =
                      ("Ontario", t1Fields, "5006"),
                      ("British Columbia", BC.t1Fields, "5010"),
                      ("Northwest Territories", NT.t1Fields, "5012"),
+                     ("Yukon", YT.t1Fields, "5011"),
                      ("Nunavut", NU.t1Fields, "5014"),
                      ("Alberta, Manitoba, Nova Scotia, and Saskatchewan", AB.t1Fields, "5015")]
 
@@ -97,7 +99,7 @@ checkFormFields fields (Just fdf) = property $ do
       fdfKeys = Text.FDF.foldMapWithKey (const . (:[]) . map dropIndex) fdf
       dropIndex t = fromMaybe t (stripSuffix "[0]" t)
       keyHeads = List.nub $ take 2 <$> formKeys
-      noCheckbox = filter $ not . any (liftA2 (||) (isSuffixOf "Checkbox") (isInfixOf "CheckBox"))
+      noCheckbox = filter $ not . any (liftA2 (||) (isSuffixOf "Checkbox") $ liftA2 (||) (isInfixOf "CheckBox") (== "QuestionA"))
   -- annotateShow fdf'
   FDF.load fields fdf' === Right form
   List.sort (noCheckbox formKeys) === List.sort (noCheckbox $ filter (\x-> any (`List.isPrefixOf` x) keyHeads) fdfKeys)

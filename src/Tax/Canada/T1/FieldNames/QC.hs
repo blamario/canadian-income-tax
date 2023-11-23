@@ -242,6 +242,7 @@ page7step6Fields = Page7Step6 {
    line_42120_EIPremiums = Field ["Line_145", "Line_42120_Amount"] Amount,
    line_42200_SocialBenefits = Field ["Line_146", "Line_42200_Amount"] Amount,
    line_42800_ProvTerrTax = Field ["Line_147", "Line_42800_Amount"] Amount,
+   line_43200_FirstNationsTax = NoField,
    line_43500_TotalPayable = Field ["Line_148", "Line_43500_Amount"] Amount}
 
 page8Fields = BaseNames.page8Fields {

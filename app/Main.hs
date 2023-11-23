@@ -34,6 +34,7 @@ import Tax.Canada.T1.FieldNames.NT qualified as NT
 import Tax.Canada.T1.FieldNames.NU qualified as NU
 import Tax.Canada.T1.FieldNames.NL qualified as NL
 import Tax.Canada.T1.FieldNames.QC qualified as QC
+import Tax.Canada.T1.FieldNames.YT qualified as YT
 import Tax.FDF qualified as FDF
 import Tax.PDFtk (fdf2pdf, pdf2fdf)
 
@@ -113,7 +114,7 @@ process Options{province, t1InputPath, on428InputPath, outputPath, verbose} = do
          Province.PE -> NB.t1Fields
          Province.QC -> QC.t1Fields
          Province.SK -> AB.t1Fields
-         _ -> error "Only AB, BC, MB, NB, NL, NS, ON, PE, QC, and SK provinces and NT and NU territories are supported so far."
+         Province.YT -> YT.t1Fields
    case (t1, on428) of
       (Nothing, Nothing) -> error "You must specify a T1 form, ON428 form, or both."
       (Just (t1Path, Any t1isPDF, t1bytes), Nothing) -> do

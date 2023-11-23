@@ -301,6 +301,7 @@ data Page7Step6 line = Page7Step6 {
    line_42120_EIPremiums :: line Centi,
    line_42200_SocialBenefits :: line Centi,
    line_42800_ProvTerrTax :: line Centi,
+   line_43200_FirstNationsTax :: line Centi,
    line_43500_TotalPayable :: line Centi}
 
 data Page8 line = Page8 {
@@ -322,6 +323,7 @@ data Page8Step6 line = Page8Step6 {
    line_43850_cont :: line Centi,
    line_42900_copy :: line Centi,
    line_44000 :: line Centi,
+   line_44100 :: line Centi,
    line_44800_CPPOverpayment :: line Centi,
    line_45000_EIOverpayment :: line Centi,
    line_31210_copy :: line Centi,

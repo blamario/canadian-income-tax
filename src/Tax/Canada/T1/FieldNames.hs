@@ -296,6 +296,7 @@ page7step6Fields = Page7Step6 {
    line_42120_EIPremiums = Field ["Line_42120_EIPremiums", "Line_42120_Amount"] Amount,
    line_42200_SocialBenefits = Field ["Line_42200_SocialBenefits", "Line_42200_Amount"] Amount,
    line_42800_ProvTerrTax = Field ["Line_42800_ProvTerrTax", "Line_42800_Amount"] Amount,
+   line_43200_FirstNationsTax = NoField,
    line_43500_TotalPayable = Field ["Line_43500_TotalPayable", "Line_43500_Amount"] Amount}
                                                                                            
 page8Fields = Page8 {
@@ -317,6 +318,7 @@ page8step6Fields = Page8Step6 {
    line_43850_cont = NoField,
    line_42900_copy = NoField,
    line_44000 = Field ["Line_44000Sub", "Line_44000_Amount"] Amount,
+   line_44100 = NoField,
    line_44800_CPPOverpayment = Field ["Line_44800_CPPOverpayment", "Line_44800_Amount"] Amount,
    line_45000_EIOverpayment = Field ["Line_45000_EIOverpayment", "Line_45000_Amount"] Amount,
    line_31210_copy = NoField,

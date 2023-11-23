@@ -39,6 +39,7 @@ library
         Tax.Canada.T1.FieldNames.NT
         Tax.Canada.T1.FieldNames.NU
         Tax.Canada.T1.FieldNames.QC
+        Tax.Canada.T1.FieldNames.YT
         Tax.Canada.T1.Fix
         Tax.Canada.ON428.Types
         Tax.Canada.ON428.FieldNames
