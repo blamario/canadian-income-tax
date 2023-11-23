@@ -28,7 +28,7 @@ import Text.FDF (parse, serialize)
 import Tax.Canada (fixOntarioReturns, fixON428, fixT1, on428Fields)
 import Tax.Canada.T1.FieldNames.AB qualified as AB
 import Tax.Canada.T1.FieldNames.BC qualified as BC
-import Tax.Canada.T1.FieldNames qualified as ON
+import Tax.Canada.T1.FieldNames.ON qualified as ON
 import Tax.Canada.T1.FieldNames.NB qualified as NB
 import Tax.Canada.T1.FieldNames.NT qualified as NT
 import Tax.Canada.T1.FieldNames.NU qualified as NU

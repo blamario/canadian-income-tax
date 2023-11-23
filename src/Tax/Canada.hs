@@ -11,7 +11,7 @@ import GHC.Stack (HasCallStack)
 import Tax.Canada.T1.Types qualified as T1
 import Tax.Canada.T1.Types (T1 (T1, page7), Page7(Page7, step6_RefundOrBalanceOwing))
 import Tax.Canada.T1.Fix (fixT1)
-import Tax.Canada.T1.FieldNames (t1Fields)
+import Tax.Canada.T1.FieldNames.ON (t1Fields)
 import Tax.Canada.ON428.Types qualified as ON hiding (Page1(..))
 import Tax.Canada.ON428.Types (ON428 (ON428, page1, page2),
                                Page1(Page1, line1, partB))

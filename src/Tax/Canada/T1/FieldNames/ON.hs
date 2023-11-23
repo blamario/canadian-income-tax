@@ -4,7 +4,7 @@
 {-# LANGUAGE NumericUnderscores #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Tax.Canada.T1.FieldNames where
+module Tax.Canada.T1.FieldNames.ON where
 
 import Rank2 qualified
 

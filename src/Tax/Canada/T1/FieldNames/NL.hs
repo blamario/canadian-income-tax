@@ -12,13 +12,13 @@ import Tax.FDF (FieldConst (Field, NoField), Entry (..), within)
 import Tax.Canada.Shared (TaxIncomeBracket(timesRate))
 import Tax.Canada.T1.Types
 import Tax.Canada.T1.Types qualified as Page8 (Page8(..))
-import Tax.Canada.T1.FieldNames
+import Tax.Canada.T1.FieldNames.ON
   hiding (t1Fields,
           page1Fields, page2Fields, page3Fields, page4Fields, page5Fields, page6Fields, page7Fields, page8Fields,
           page1IdentificationFields,
           step4Fields, partBFields, page6MedicalExpensesFields, partCFields, page7step6Fields, page8step6Fields,
           selfEmploymentFields, taxPreparerFields)
-import Tax.Canada.T1.FieldNames qualified as BaseNames
+import Tax.Canada.T1.FieldNames.ON qualified as ON
 import Tax.Canada.T1.FieldNames.AB qualified as AB
 
 t1Fields :: T1 FieldConst
@@ -37,7 +37,7 @@ page1Fields = Page1 {
    residence = within "Residence_Info" Rank2.<$> page1ResidenceFields,
    spouse = within "Info_Spouse_CLP" Rank2.<$> page1SpouseFields}
 
-page1IdentificationFields = BaseNames.page1IdentificationFields{
+page1IdentificationFields = ON.page1IdentificationFields{
    dateBirth = Field ["DateYYYYMMDD_Comb_BordersAll", "DateYYYYMMDD_Comb"] Date,
    dateDeath = Field ["DateYYYYMMDD_Comb_BordersAll1", "DateYYYYMMDD_Comb1"] Date,
    maritalStatus = Field ["MaritalStatus_Checkbox"] $ RadioButtons 1 2 "MaritalStatus1" [Married .. Single]}
@@ -46,7 +46,7 @@ page2Fields = AB.page2Fields {
    foreign_property = Field ["Foreign_property", "Line26600"] $ Switch' "ForeignProperty_CheckBox",
    tax_exempt = Field ["Indian_Act", "IndianAct_Question", "Checkbox"] Checkbox}
 
-page3Fields = BaseNames.page3Fields {
+page3Fields = ON.page3Fields {
    line_12000_TaxableDividends = Field ["Line_12000_TaxableDividends", "Line_12000_Amount"] Amount,
    line_12599_12600_RentalIncome = Field ["Line13", "Line12599", "Line_12599_Amount"] Amount,
    line_12600_Amount = Field ["Line13", "Line_12600_Amount"] Amount,
@@ -77,27 +77,27 @@ selfEmploymentFields = SelfEmploymentIncome {
    line_14299_Amount = Field ["Line_24", "Line_14299", "Line_14299_Amount"] Amount,
    line_14300_Amount = Field ["Line_24", "Line_14300_Amount"] Amount}
 
-page4Fields = BaseNames.page4Fields{
+page4Fields = ON.page4Fields{
    line_15000_TotalIncome_2 = Field ["Line_32", "Line32_Amount"] Amount,
    line_21699_Amount = Field ["Line40", "Line_21699", "Line_21699_Amount"] Amount,
    line_21999_Amount = Field ["Line42", "Line_21999", "Line_21999_Amount"] Amount,
    line_23210 = Field ["Line_23210_Covid", "Line_23210_Amount"] Amount}
 
-page5Fields = BaseNames.page5Fields{
+page5Fields = ON.page5Fields{
    step4_TaxableIncome = step4Fields,
-   partA_FederalTax = BaseNames.page5Fields.partA_FederalTax {
-      column1 = BaseNames.page5Fields.partA_FederalTax.column1 {
+   partA_FederalTax = ON.page5Fields.partA_FederalTax {
+      column1 = ON.page5Fields.partA_FederalTax.column1 {
          timesRate = Field ["PartA", "Column1", "Line40Amount2"] Amount}},
    partB_FederalTaxCredits = within "PartB" Rank2.<$> partBFields}
 
-step4Fields = BaseNames.step4Fields {
+step4Fields = ON.step4Fields {
    line_23600_NetIncome_2 = Field ["Line_23600_TotalIncome_2", "Line_15000_Amount"] Amount}
 
-partBFields = BaseNames.partBFields {
+partBFields = ON.partBFields {
    line30499_ChildrenNum = Field ["Line30500", "Line30499", "Line7_ChildrenNum"] Count,
    line_81 = Field ["Line_78", "Line30_Amount"] Amount}
 
-page6Fields = BaseNames.page6Fields {
+page6Fields = ON.page6Fields {
    line82 = Field ["Line_82", "Line43Amount"] Amount,
    line30800 = Field ["Line30800_Sub", "Line8_Amount"] Amount,
    line31000 = Field ["Line31000_Sub", "Line9_Amount"] Amount,
@@ -111,7 +111,7 @@ page6Fields = BaseNames.page6Fields {
    medical_expenses = page6MedicalExpensesFields,
    line112 = Field ["Line112", "Rate"] $ Constant 0.15 Percent}
 
-page6MedicalExpensesFields = BaseNames.page6MedicalExpensesFields {
+page6MedicalExpensesFields = ON.page6MedicalExpensesFields {
    familyExpenses = Field ["Line33099", "Amount"] Amount,
    taxableIncome = Field ["Line106", "Amount1"] Amount,
    taxableIncomeFraction = Field ["Line106", "Amount2"] Amount,
@@ -122,7 +122,7 @@ page7Fields = Page7 {
    partC_NetFederalTax = within "PartC" Rank2.<$> partCFields,
    step6_RefundOrBalanceOwing = within "Step6" Rank2.<$> page7step6Fields}
 
-partCFields = BaseNames.partCFields {
+partCFields = ON.partCFields {
    line116 = Field ["Line116", "Line43Amount"] Amount,
    line40400 = Field ["Line40400_Sub", "Line45Amount2"] Amount,
    line122_sum = Field ["Line122_sub", "Line49Amount1"] Amount,
@@ -143,10 +143,10 @@ partCFields = BaseNames.partCFields {
    line41800 = Field ["Line41800_sub", "Line60Amount"] Amount,
    line42000 = Field ["Line42000_sub", "Line61Amount"] Amount}
 
-page7step6Fields = BaseNames.page7step6Fields {
+page7step6Fields = ON.page7step6Fields {
    line140 = Field ["Line_140", "Line_42120_Amount"] Amount}
 
-page8Fields = BaseNames.page8Fields {
+page8Fields = ON.page8Fields {
    Page8.step6_RefundOrBalanceOwing = page8step6Fields,
    line48400_Refund = Field ["Lines_48400-48500", "Line_48400_Refund", "Line_48400_Amount"] Amount,
    line48500_BalanceOwing = Field ["Lines_48400-48500", "Line_48500_BalanceOwing", "Line_48500_Amount"] Amount,
@@ -157,7 +157,7 @@ page8Fields = BaseNames.page8Fields {
    line_46500 = NoField,
    line_46600 = NoField}
 
-page8step6Fields = BaseNames.page8step6Fields {
+page8step6Fields = ON.page8step6Fields {
    line_43500_totalpayable = Field ["Line_146", "Line_42000_Amount"] Amount,
    line_43700_Total_income_tax_ded = Field ["Line_43700_TotalIncomeTaxDeducted", "Line_43700_Amount"] Amount,
    line_44000 = Field ["Line_44000_QuebecAbatement", "Line_44000_Amount"] Amount,
@@ -169,6 +169,6 @@ page8step6Fields = BaseNames.page8step6Fields {
    line_47557 = Field ["Line_47557_AirQuality", "Amount"] Amount,
    line164_Refund_or_BalanceOwing = Field ["Line162", "Refund_or_BalanceOwing_Amount"] Amount}
 
-taxPreparerFields = BaseNames.taxPreparerFields {
+taxPreparerFields = ON.taxPreparerFields {
    eFileNumber = Field ["Line48900", "EFile"] Textual,
    line49000_WasAFeeCharged = Field ["Line49000", "Line49000_CheckBoxGroup"] $ Switch' "Line49000_CheckBox_EN"}

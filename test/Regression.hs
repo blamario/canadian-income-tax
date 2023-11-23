@@ -7,7 +7,7 @@
 module Main where
 
 import Tax.Canada (fixOntarioReturns)
-import Tax.Canada.T1.FieldNames (t1Fields)
+import Tax.Canada.T1.FieldNames.ON qualified as ON (t1Fields)
 import Tax.Canada.T1.FieldNames.AB qualified as AB (t1Fields)
 import Tax.Canada.T1.FieldNames.BC qualified as BC (t1Fields)
 import Tax.Canada.T1.FieldNames.QC qualified as QC (t1Fields)
@@ -52,5 +52,5 @@ golden fdfMap =
       goldenVsString
          path
          (combine referenceDir path)
-         (pure $ fromStrict $ serialize $ FDF.update t1Fields (fixT1 $ either error id $ FDF.load t1Fields fdf) fdf)
+         (pure $ fromStrict $ serialize $ FDF.update ON.t1Fields (fixT1 $ either error id $ FDF.load ON.t1Fields fdf) fdf)
       | (path, fdf) <- fdfMap]

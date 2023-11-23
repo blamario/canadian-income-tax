@@ -31,7 +31,7 @@ library
         Tax.Canada
         Tax.Canada.Shared
         Tax.Canada.T1.Types
-        Tax.Canada.T1.FieldNames
+        Tax.Canada.T1.FieldNames.ON
         Tax.Canada.T1.FieldNames.AB
         Tax.Canada.T1.FieldNames.BC
         Tax.Canada.T1.FieldNames.NB

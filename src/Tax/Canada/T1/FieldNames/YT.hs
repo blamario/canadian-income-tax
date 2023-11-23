@@ -12,7 +12,7 @@ import Tax.Canada.T1.Types
 import Tax.Canada.T1.Types qualified as Page8 (Page8(..))
 import Tax.Canada.T1.FieldNames.BC qualified as BC
 import Tax.Canada.T1.FieldNames.NT qualified as NT
-import Tax.Canada.T1.FieldNames qualified as ON
+import Tax.Canada.T1.FieldNames.ON qualified as ON
 
 t1Fields :: T1 FieldConst
 t1Fields = NT.t1Fields{

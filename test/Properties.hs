@@ -7,7 +7,7 @@
 module Main where
 
 import Tax.Canada (fixOntarioReturns)
-import Tax.Canada.T1.FieldNames (t1Fields)
+import Tax.Canada.T1.FieldNames.ON qualified as ON (t1Fields)
 import Tax.Canada.T1.FieldNames.AB qualified as AB (t1Fields)
 import Tax.Canada.T1.FieldNames.BC qualified as BC (t1Fields)
 import Tax.Canada.T1.FieldNames.NB qualified as NB (t1Fields)
@@ -56,9 +56,9 @@ properties :: [(FilePath, FDF)] -> TestTree
 properties fdfMap =
   testGroup "Properties" [
     testGroup "Idempotence" [
-      testProperty "T1" (checkFormIdempotent t1Fields fixT1),
+      testProperty "T1" (checkFormIdempotent ON.t1Fields fixT1),
       testProperty "ON428" (checkFormIdempotent on428Fields fixON428),
-      testProperty "T1+ON428" (checkFormIdempotent (Rank2.Pair t1Fields on428Fields) fixOntarioReturns')],
+      testProperty "T1+ON428" (checkFormIdempotent (Rank2.Pair ON.t1Fields on428Fields) fixOntarioReturns')],
     testGroup "Roundtrip" [
       testProperty ("T1 for " <> name) (checkFormFields fields $ List.lookup (prefix <> "-r-fill-22e.fdf") fdfMap)
       | (name, fields, prefix) <- provinces],
@@ -74,7 +74,7 @@ properties fdfMap =
         provinces = [("New Brunswick & PEI", NB.t1Fields, "5000"),
                      ("Newfoundland and Labrador", NL.t1Fields, "5001"),
                      ("Quebec", QC.t1Fields, "5005"),
-                     ("Ontario", t1Fields, "5006"),
+                     ("Ontario", ON.t1Fields, "5006"),
                      ("British Columbia", BC.t1Fields, "5010"),
                      ("Northwest Territories", NT.t1Fields, "5012"),
                      ("Yukon", YT.t1Fields, "5011"),

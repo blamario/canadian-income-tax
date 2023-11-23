@@ -9,12 +9,12 @@ import Rank2 qualified
 
 import Tax.FDF (FieldConst (Field, NoField), Entry (..), within)
 import Tax.Canada.T1.Types
-import Tax.Canada.T1.FieldNames
+import Tax.Canada.T1.FieldNames.ON
   hiding (t1Fields,
           page2Fields, page3Fields, page4Fields, page5Fields, page6Fields, page7Fields, page8Fields,
           step4Fields, partBFields, page6MedicalExpensesFields, partCFields, page7step6Fields, page8step6Fields,
           selfEmploymentFields, taxPreparerFields)
-import Tax.Canada.T1.FieldNames qualified as BaseNames
+import Tax.Canada.T1.FieldNames.ON qualified as ON
 
 t1Fields :: T1 FieldConst
 t1Fields = within "form1" Rank2.<$> T1 {
@@ -27,11 +27,11 @@ t1Fields = within "form1" Rank2.<$> T1 {
    page7 = within "Page7" Rank2.<$> page7Fields,
    page8 = within "Page8" Rank2.<$> page8Fields}
 
-page2Fields = BaseNames.page2Fields {
+page2Fields = ON.page2Fields {
    cai = NoField,
    organ_donor = NoField}
 
-page3Fields = BaseNames.page3Fields{
+page3Fields = ON.page3Fields{
    line_12000_TaxableDividends = Field ["Line_12000_TaxableDividends", "Line_12000_Amount"] Amount,
    line_13010_Taxablescholarship = Field ["Line_13010", "Amount"] Amount,
    line_19 = Field ["Line19", "Amount"] Amount,
@@ -54,26 +54,26 @@ selfEmploymentFields = SelfEmploymentIncome {
    line_14299_Amount = Field ["Line_14299_14300_FishingIncome", "Line_14299_Amount"] Amount,
    line_14300_Amount = Field ["Line_14299_14300_FishingIncome", "Line_14300_Amount"] Amount}
 
-page4Fields = BaseNames.page4Fields{
+page4Fields = ON.page4Fields{
    line_15000_TotalIncome_2 = Field ["Line32", "Line_15000_Amount"] Amount,
    line_21699_Amount = Field ["Line_21699_21700_BusinessLoss", "Line_21699_Amount"] Amount,
    line_21700_Amount = Field ["Line_21699_21700_BusinessLoss", "Line_21700_Amount"] Amount,
    line_22000_Amount = Field ["Line_21999_22000_SupportPayments", "Line_22000_Amount"] Amount,
    line_21999_Amount = Field ["Line_21999_22000_SupportPayments", "Line_21999_Amount"] Amount}
 
-page5Fields = BaseNames.page5Fields{
+page5Fields = ON.page5Fields{
    step4_TaxableIncome = within "Step4" Rank2.<$> step4Fields,
    partA_FederalTax = within "Step5" . within "PartA" Rank2.<$> partAFields "Column" 36,
    partB_FederalTaxCredits = within "Step5" . within "PartB" Rank2.<$> partBFields}
 
-step4Fields = BaseNames.step4Fields{
+step4Fields = ON.step4Fields{
    line_23600_NetIncome_2 = Field ["Line55", "Line_15000_Amount"] Amount}
 
-partBFields = BaseNames.partBFields {
+partBFields = ON.partBFields {
    line30499_ChildrenNum = Field ["Line30500", "Multiplication", "Line7_ChildrenNum"] Count,
    line_81 = Field ["Line81", "Line30_Amount"] Amount}
 
-page6Fields = BaseNames.page6Fields{
+page6Fields = ON.page6Fields{
    line82 = Field ["Line_82", "Line43Amount"] Amount,
    line31217 = Field ["EIPremiums_Sub", "Line31217_Sub", "Line11_Amount"] Amount,
    line31350 = Field ["Line31350_Sub", "Line24_Amount"] Amount,
@@ -97,7 +97,7 @@ page7Fields = Page7 {
    partC_NetFederalTax = within "PartC" Rank2.<$> partCFields,
    step6_RefundOrBalanceOwing = within "Step6" Rank2.<$> page7step6Fields}
 
-partCFields = BaseNames.partCFields {
+partCFields = ON.partCFields {
    line116 = Field ["Line116", "Line43Amount"] Amount,
    line40400 = Field ["Line40400_Sub", "Line45Amount2"] Amount,
    line119 = Field ["Line119", "Line46Amount"] Amount,
@@ -118,7 +118,7 @@ partCFields = BaseNames.partCFields {
    line41800 = Field ["Line41800_sub", "Line60Amount"] Amount,
    line42000 = Field ["Line42000_sub", "Line61Amount"] Amount}
 
-page7step6Fields = BaseNames.page7step6Fields {
+page7step6Fields = ON.page7step6Fields {
    line140 = Field ["Line140", "Line_42120_Amount"] Amount}
 
 page8Fields = Page8 {
@@ -132,7 +132,7 @@ page8Fields = Page8 {
    line_46500 = NoField,
    line_46600 = NoField}
 
-page8step6Fields = BaseNames.page8step6Fields {
+page8step6Fields = ON.page8step6Fields {
    line_43500_totalpayable = Field ["Line_43500_TotalPayable2", "Line_42000_Amount"] Amount,
    line_43700_Total_income_tax_ded = Field ["Line_43700_TotalIncomeTaxDeducted", "Line_43700_Amount"] Amount,
    line_44000 = Field ["Line_44000_QuebecAbatement", "Line_44000_Amount"] Amount,
@@ -144,6 +144,6 @@ page8step6Fields = BaseNames.page8step6Fields {
    line_47557 = Field ["Line_47557_AirQuality", "Amount"] Amount,
    line164_Refund_or_BalanceOwing = Field ["Line164", "Refund_or_BalanceOwing_Amount"] Amount}
 
-taxPreparerFields = BaseNames.taxPreparerFields {
+taxPreparerFields = ON.taxPreparerFields {
    eFileNumber = Field ["Line48900", "EFile"] Textual,
    line49000_WasAFeeCharged = Field ["Line49000", "Line49000_CheckBoxGroup"] $ Switch' "Line49000_CheckBox_EN"}

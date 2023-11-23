@@ -11,14 +11,14 @@ import Rank2 qualified
 import Tax.FDF (FieldConst (Field, NoField), Entry (..), within)
 import Tax.Canada.T1.Types
 import Tax.Canada.T1.Types qualified as Page8 (Page8(..))
-import Tax.Canada.T1.FieldNames
+import Tax.Canada.T1.FieldNames.ON
   hiding (t1Fields,
           page2Fields, page3Fields, page4Fields, page5Fields, page6Fields, page7Fields, page8Fields,
           step4Fields, partBFields, page6MedicalExpensesFields, partCFields, page7step6Fields, page8step6Fields,
           selfEmploymentFields, taxPreparerFields)
 import Tax.Canada.T1.FieldNames.AB qualified as AB
 import Tax.Canada.T1.FieldNames.BC qualified as BC
-import Tax.Canada.T1.FieldNames qualified as ON
+import Tax.Canada.T1.FieldNames.ON qualified as ON
 
 t1Fields :: T1 FieldConst
 t1Fields = within "form1" Rank2.<$> T1 {
