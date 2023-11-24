@@ -39,7 +39,7 @@ main = scotty 3000 $ do
           let fdf' = FDF.update t1Fields form' fdf
               form' = fixT1 form
           dataDir <- liftIO getDataDir
-          liftIO (fdf2pdf (combine dataDir "empty/5006-r-fill-22e.pdf") (Lazy.fromStrict $ serialize fdf')) >>= \case
+          liftIO (fdf2pdf (combine dataDir "T1/empty/5006-r-fill-22e.pdf") (Lazy.fromStrict $ serialize fdf')) >>= \case
             Left err -> do
               status internalServerError500
               text (fromString err)

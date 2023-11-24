@@ -46,8 +46,8 @@ import Test.Tasty.Hedgehog
 
 main = do
   dataDir <- getDataDir
-  fdfFileNames <- filter (".fdf" `isExtensionOf`) <$> listDirectory dataDir
-  fdfBytes <- traverse (ByteString.readFile . combine dataDir) fdfFileNames
+  fdfFileNames <- filter (".fdf" `isExtensionOf`) <$> listDirectory (combine dataDir "T1")
+  fdfBytes <- traverse (ByteString.readFile . combine dataDir . combine "T1") fdfFileNames
   case traverse parse fdfBytes of
     Left err -> die err
     Right fdfs -> defaultMain $ properties $ zip fdfFileNames fdfs
