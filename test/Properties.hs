@@ -46,40 +46,46 @@ import Test.Tasty.Hedgehog
 
 main = do
   dataDir <- getDataDir
-  fdfFileNames <- filter (".fdf" `isExtensionOf`) <$> listDirectory (combine dataDir "T1")
-  fdfBytes <- traverse (ByteString.readFile . combine dataDir . combine "T1") fdfFileNames
-  case traverse parse fdfBytes of
+  fdfT1FileNames <- filter (".fdf" `isExtensionOf`) <$> listDirectory (combine dataDir "T1")
+  fdf428FileNames <- filter (".fdf" `isExtensionOf`) <$> listDirectory (combine dataDir "428")
+  fdfT1Bytes <- traverse (ByteString.readFile . combine dataDir . combine "T1") fdfT1FileNames
+  fdf428Bytes <- traverse (ByteString.readFile . combine dataDir . combine "428") fdf428FileNames
+  case (,) <$> traverse parse fdfT1Bytes <*> traverse parse fdf428Bytes of
     Left err -> die err
-    Right fdfs -> defaultMain $ properties $ zip fdfFileNames fdfs
+    Right (fdfsT1, fdfs428) -> defaultMain $ properties (zip fdfT1FileNames fdfsT1) (zip fdf428FileNames fdfs428)
 
-properties :: [(FilePath, FDF)] -> TestTree
-properties fdfMap =
+properties :: [(FilePath, FDF)] -> [(FilePath, FDF)] -> TestTree
+properties fdfT1Map fdf428Map =
   testGroup "Properties" [
     testGroup "Idempotence" [
       testProperty "T1" (checkFormIdempotent ON.t1Fields fixT1),
       testProperty "ON428" (checkFormIdempotent on428Fields fixON428),
       testProperty "T1+ON428" (checkFormIdempotent (Rank2.Pair ON.t1Fields on428Fields) fixOntarioReturns')],
     testGroup "Roundtrip" [
-      testProperty ("T1 for " <> name) (checkFormFields fields $ List.lookup (prefix <> "-r-fill-22e.fdf") fdfMap)
-      | (name, fields, prefix) <- provinces],
+      testGroup "T1" [
+        testProperty ("T1 for " <> name) (checkFormFields fields $ List.lookup (prefix <> "-r-fill-22e.fdf") fdfT1Map)
+        | (name, prefix, fields, _) <- provinces],
+      testGroup "428" [
+        testProperty ("Form 428 for " <> name) (checkFormFields fields $ List.lookup (prefix <> "-c-fill-22e.fdf") fdf428Map)
+        | (name, prefix, _, Just fields) <- provinces]],
     testGroup "Load mismatch" [
       testProperty ("Load T1 for " <> p1name <> " from FDF for " <> p2name) $ property $ assert
-        $ any (isLeft  . FDF.load p1fields) $ List.lookup (p2fdfPrefix <> "-r-fill-22e.fdf") fdfMap
-      | (p1name, p1fields, _) <- provinces,
-        (p2name, _, p2fdfPrefix) <- provinces,
+        $ any (isLeft  . FDF.load p1fields) $ List.lookup (p2fdfPrefix <> "-r-fill-22e.fdf") fdfT1Map
+      | (p1name, _, p1fields, _) <- provinces,
+        (p2name, p2fdfPrefix, _, _) <- provinces,
         p1name /= p2name,
         not (p1name == "New Brunswick & PEI" && p2name == "Nunavut")]]
   where fixOntarioReturns' :: Rank2.Product T1 ON428 Maybe -> Rank2.Product T1 ON428 Maybe
         fixOntarioReturns' (Rank2.Pair x y) = uncurry Rank2.Pair $ fixOntarioReturns (x, y)
-        provinces = [("New Brunswick & PEI", NB.t1Fields, "5000"),
-                     ("Newfoundland and Labrador", NL.t1Fields, "5001"),
-                     ("Quebec", QC.t1Fields, "5005"),
-                     ("Ontario", ON.t1Fields, "5006"),
-                     ("British Columbia", BC.t1Fields, "5010"),
-                     ("Northwest Territories", NT.t1Fields, "5012"),
-                     ("Yukon", YT.t1Fields, "5011"),
-                     ("Nunavut", NU.t1Fields, "5014"),
-                     ("Alberta, Manitoba, Nova Scotia, and Saskatchewan", AB.t1Fields, "5015")]
+        provinces = [("New Brunswick & PEI", "5000", NB.t1Fields, Nothing),
+                     ("Newfoundland and Labrador", "5001", NL.t1Fields, Nothing),
+                     ("Quebec", "5005", QC.t1Fields, Nothing),
+                     ("Ontario", "5006", ON.t1Fields, Just on428Fields),
+                     ("British Columbia", "5010", BC.t1Fields, Nothing),
+                     ("Northwest Territories", "5012", NT.t1Fields, Nothing),
+                     ("Yukon", "5011", YT.t1Fields, Nothing),
+                     ("Nunavut", "5014", NU.t1Fields, Nothing),
+                     ("Alberta, Manitoba, Nova Scotia, and Saskatchewan", "5015", AB.t1Fields, Nothing)]
 
 checkFormIdempotent :: (Eq (g Maybe), Show (g Maybe),
                         Rank2.Applicative g, Shallow.Traversable Transformations.Gen g)
