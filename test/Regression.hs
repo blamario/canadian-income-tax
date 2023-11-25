@@ -12,8 +12,8 @@ import Tax.Canada.T1.FieldNames.AB qualified as AB (t1Fields)
 import Tax.Canada.T1.FieldNames.BC qualified as BC (t1Fields)
 import Tax.Canada.T1.FieldNames.QC qualified as QC (t1Fields)
 import Tax.Canada.T1.Fix (T1, fixT1)
-import Tax.Canada.ON428.FieldNames (on428Fields)
-import Tax.Canada.ON428.Fix (ON428, fixON428)
+import Tax.Canada.Province.ON.ON428.FieldNames (on428Fields)
+import Tax.Canada.Province.ON.ON428.Fix (ON428, fixON428)
 import Tax.FDF as FDF
 
 import Data.ByteString qualified as ByteString

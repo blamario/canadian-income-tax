@@ -41,9 +41,9 @@ library
         Tax.Canada.T1.FieldNames.QC
         Tax.Canada.T1.FieldNames.YT
         Tax.Canada.T1.Fix
-        Tax.Canada.ON428.Types
-        Tax.Canada.ON428.FieldNames
-        Tax.Canada.ON428.Fix
+        Tax.Canada.Province.ON.ON428.Types
+        Tax.Canada.Province.ON.ON428.FieldNames
+        Tax.Canada.Province.ON.ON428.Fix
         Tax.PDFtk
         Tax.Util
 

@@ -17,8 +17,8 @@ import Tax.Canada.T1.FieldNames.NU qualified as NU (t1Fields)
 import Tax.Canada.T1.FieldNames.QC qualified as QC (t1Fields)
 import Tax.Canada.T1.FieldNames.YT qualified as YT (t1Fields)
 import Tax.Canada.T1.Fix (T1, fixT1)
-import Tax.Canada.ON428.FieldNames (on428Fields)
-import Tax.Canada.ON428.Fix (ON428, fixON428)
+import Tax.Canada.Province.ON.ON428.FieldNames (on428Fields)
+import Tax.Canada.Province.ON.ON428.Fix (ON428, fixON428)
 import Tax.FDF as FDF
 import Paths_canadian_income_tax (getDataDir)
 

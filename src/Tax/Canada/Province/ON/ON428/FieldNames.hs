@@ -4,13 +4,13 @@
 {-# LANGUAGE NumericUnderscores #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Tax.Canada.ON428.FieldNames (on428Fields) where
+module Tax.Canada.Province.ON.ON428.FieldNames (on428Fields) where
 
 import Data.Fixed (Centi)
 import Rank2 qualified
 
-import Tax.Canada.ON428.Types
-import Tax.Canada.ON428.Types qualified as HealthPremiumBracket (HealthPremiumBracket(..))
+import Tax.Canada.Province.ON.ON428.Types
+import Tax.Canada.Province.ON.ON428.Types qualified as HealthPremiumBracket (HealthPremiumBracket(..))
 import Tax.Canada.Shared (TaxIncomeBracket (..))
 import Tax.FDF (Entry (Count, Constant, Amount, Percent), FieldConst (Field, NoField), within)
 

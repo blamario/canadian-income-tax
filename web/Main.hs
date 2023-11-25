@@ -20,7 +20,8 @@ import Text.FDF (parse, serialize)
 import Web.Scotty
 
 import Paths_canadian_income_tax (getDataDir)
-import Tax.Canada (fixOntarioReturns, fixON428, fixT1, on428Fields, t1Fields)
+import Tax.Canada (fixOntarioReturns, fixT1)
+import Tax.Canada.T1.FieldNames.ON (t1Fields)
 import Tax.FDF qualified as FDF
 import Tax.PDFtk (fdf2pdf, pdf2fdf)
 

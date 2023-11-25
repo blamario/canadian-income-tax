@@ -12,7 +12,7 @@
 {-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE UndecidableInstances #-}
 
-module Tax.Canada.ON428.Types where
+module Tax.Canada.Province.ON.ON428.Types where
 
 import Data.Fixed (Centi)
 import Language.Haskell.TH qualified as TH
