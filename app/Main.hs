@@ -26,15 +26,7 @@ import System.IO (hPutStrLn, stderr)
 import Text.FDF (parse, serialize)
 
 import Tax.Canada (fixOntarioReturns, fixON428, fixT1, on428Fields)
-import Tax.Canada.T1.FieldNames.AB qualified as AB
-import Tax.Canada.T1.FieldNames.BC qualified as BC
-import Tax.Canada.T1.FieldNames.ON qualified as ON
-import Tax.Canada.T1.FieldNames.NB qualified as NB
-import Tax.Canada.T1.FieldNames.NT qualified as NT
-import Tax.Canada.T1.FieldNames.NU qualified as NU
-import Tax.Canada.T1.FieldNames.NL qualified as NL
-import Tax.Canada.T1.FieldNames.QC qualified as QC
-import Tax.Canada.T1.FieldNames.YT qualified as YT
+import Tax.Canada.T1.FieldNames (t1FieldsForProvince)
 import Tax.FDF qualified as FDF
 import Tax.PDFtk (fdf2pdf, pdf2fdf)
 
@@ -101,20 +93,7 @@ process Options{province, t1InputPath, on428InputPath, outputPath, verbose} = do
                 if isDir
                    then ByteString.writeFile (replaceDirectory inputPath outputPath) content'
                    else ByteString.writeFile outputPath content'
-   let t1Fields = case province of
-         Province.AB -> AB.t1Fields
-         Province.BC -> BC.t1Fields
-         Province.MB -> AB.t1Fields
-         Province.NB -> NB.t1Fields
-         Province.NL -> NL.t1Fields
-         Province.NS -> AB.t1Fields
-         Province.NT -> NT.t1Fields
-         Province.NU -> NU.t1Fields
-         Province.ON -> ON.t1Fields
-         Province.PE -> NB.t1Fields
-         Province.QC -> QC.t1Fields
-         Province.SK -> AB.t1Fields
-         Province.YT -> YT.t1Fields
+       t1Fields = t1FieldsForProvince province
    case (t1, on428) of
       (Nothing, Nothing) -> error "You must specify a T1 form, ON428 form, or both."
       (Just (t1Path, Any t1isPDF, t1bytes), Nothing) -> do
