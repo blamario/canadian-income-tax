@@ -9,8 +9,8 @@
 module Tax.FDF where
 
 import Control.Monad (join)
-import Data.Char (isDigit)
 import Data.CAProvinceCodes qualified as Province
+import Data.Char (isDigit, isSpace)
 import Data.Fixed (Centi)
 import Data.Foldable (find)
 import Data.Functor.Const (Const (Const, getConst))
@@ -151,7 +151,7 @@ toEntry Percent v
   | Just v' <- stripSuffix "%" v,
     (wholePart, pointyPart) <- span (/= '.') v',
     Right whole <- fromInteger <$> readEither wholePart,
-    Right decimal <- case pointyPart
+    Right decimal <- case takeWhile (not . isSpace) pointyPart
                      of '.' : decimals -> (/ 10 ^ length decimals) . fromInteger <$> readEither decimals
                         "" -> Right 0
                         _ -> Left ("Bad decimals: " <> show v')
