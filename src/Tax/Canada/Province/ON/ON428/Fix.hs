@@ -40,10 +40,8 @@ fixPage1PartA income = fixEq $ \Page1PartA{..}-> Page1PartA{
 fixPage1PartB :: Page1PartB Maybe -> Page1PartB Maybe
 fixPage1PartB = fixEq $ \part@Page1PartB{..}-> part{
    line9_basic = Just 11141,
-   line11_base = Just 10406,
    line13_difference = mfilter (> 0) $ liftA2 (-) line11_base line12_spouseIncome,
    line13_cont = line13_difference,
-   line14_base = Just 10406,
    line16_difference = mfilter (> 0) $ liftA2 (-) line14_base line15_dependentIncome,
    line16_cont = line16_difference,
    line18 = totalOf [line9_basic, line10_age, line13_cont, line16_cont, line17_caregiver],
@@ -92,7 +90,6 @@ fixPage2PartC on428 = fixEq $ \part@Page2PartC{..}-> part{
 
 fixMedicalExpenses :: MedicalExpenses Maybe -> MedicalExpenses Maybe
 fixMedicalExpenses = fixEq $ \part@MedicalExpenses{..} -> part{
-   line38_rate = Just 0.03,
    line39_fraction = line38_rate `fractionOf` line37_income,
    line40_lesser = min 2522 <$> line39_fraction,
    line41_difference = nonNegativeDifference line36_expenses line40_lesser}
@@ -120,7 +117,6 @@ fixPage3 on428 = fixEq $ \page@Page3{..}-> page{
    line70 = on428.page2.partC.line57,
    line71 = nonNegativeDifference line69 line70,
    line73 = totalOf [line71, line72],
-   line74_basicReduction = Just 257,
    line75_amount = ((475 *) . fromIntegral) <$> line75_childrenNum,
    line76_amount = ((475 *) . fromIntegral) <$> line76_childrenNum,
    line77 = totalOf [line74_basicReduction, line75_amount, line76_amount],
