@@ -17,6 +17,7 @@ import Tax.Canada.T1.FieldNames.NU qualified as NU (t1Fields)
 import Tax.Canada.T1.FieldNames.QC qualified as QC (t1Fields)
 import Tax.Canada.T1.FieldNames.YT qualified as YT (t1Fields)
 import Tax.Canada.T1.Fix (T1, fixT1)
+import Tax.Canada.Province.BC.BC428.FieldNames (bc428Fields)
 import Tax.Canada.Province.ON.ON428.FieldNames (on428Fields)
 import Tax.Canada.Province.ON.ON428.Fix (ON428, fixON428)
 import Tax.FDF as FDF
@@ -66,8 +67,8 @@ properties fdfT1Map fdf428Map =
         testProperty ("T1 for " <> name) (checkFormFields fields $ List.lookup (prefix <> "-r-fill-22e.fdf") fdfT1Map)
         | (name, prefix, fields, _) <- provinces],
       testGroup "428" [
-        testProperty ("Form 428 for " <> name) (checkFormFields fields $ List.lookup (prefix <> "-c-fill-22e.fdf") fdf428Map)
-        | (name, prefix, _, Just fields) <- provinces]],
+        testProperty ("Form 428 for " <> name) (checkFields $ List.lookup (prefix <> "-c-fill-22e.fdf") fdf428Map)
+        | (name, prefix, _, Just checkFields) <- provinces]],
     testGroup "Load mismatch" [
       testProperty ("Load T1 for " <> p1name <> " from FDF for " <> p2name) $ property $ assert
         $ any (isLeft  . FDF.load p1fields) $ List.lookup (p2fdfPrefix <> "-r-fill-22e.fdf") fdfT1Map
@@ -80,8 +81,8 @@ properties fdfT1Map fdf428Map =
         provinces = [("New Brunswick & PEI", "5000", NB.t1Fields, Nothing),
                      ("Newfoundland and Labrador", "5001", NL.t1Fields, Nothing),
                      ("Quebec", "5005", QC.t1Fields, Nothing),
-                     ("Ontario", "5006", ON.t1Fields, Just on428Fields),
-                     ("British Columbia", "5010", BC.t1Fields, Nothing),
+                     ("Ontario", "5006", ON.t1Fields, Just $ checkFormFields on428Fields),
+                     ("British Columbia", "5010", BC.t1Fields, Just $ checkFormFields bc428Fields),
                      ("Northwest Territories", "5012", NT.t1Fields, Nothing),
                      ("Yukon", "5011", YT.t1Fields, Nothing),
                      ("Nunavut", "5014", NU.t1Fields, Nothing),
