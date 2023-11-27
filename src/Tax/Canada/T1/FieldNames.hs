@@ -1,9 +1,10 @@
 {-# LANGUAGE ImportQualifiedPost #-}
+{-# LANGUAGE LambdaCase #-}
 
 module Tax.Canada.T1.FieldNames where
 
-import GHC.Arr (Array, array, (!))
 import Data.CAProvinceCodes qualified as Province
+import Data.Enum.Memo (memoize)
 
 import Tax.FDF (FieldConst)
 import Tax.Canada.T1.Types (T1)
@@ -18,20 +19,17 @@ import Tax.Canada.T1.FieldNames.QC qualified as QC
 import Tax.Canada.T1.FieldNames.YT qualified as YT
 
 t1FieldsForProvince :: Province.Code -> T1 FieldConst
-t1FieldsForProvince p = fieldNames ! fromEnum p
-
-fieldNames :: Array Int (T1 FieldConst)
-fieldNames = array (minBound, maxBound) $
-             [(fromEnum Province.AB, AB.t1Fields),
-              (fromEnum Province.BC, BC.t1Fields),
-              (fromEnum Province.MB, AB.t1Fields),
-              (fromEnum Province.NB, NB.t1Fields),
-              (fromEnum Province.NL, NL.t1Fields),
-              (fromEnum Province.NS, AB.t1Fields),
-              (fromEnum Province.NT, NT.t1Fields),
-              (fromEnum Province.NU, NU.t1Fields),
-              (fromEnum Province.ON, ON.t1Fields),
-              (fromEnum Province.PE, NB.t1Fields),
-              (fromEnum Province.QC, QC.t1Fields),
-              (fromEnum Province.SK, AB.t1Fields),
-              (fromEnum Province.YT, YT.t1Fields)]
+t1FieldsForProvince = memoize $ \case
+   Province.AB -> AB.t1Fields
+   Province.BC -> BC.t1Fields
+   Province.MB -> AB.t1Fields
+   Province.NB -> NB.t1Fields
+   Province.NL -> NL.t1Fields
+   Province.NS -> AB.t1Fields
+   Province.NT -> NT.t1Fields
+   Province.NU -> NU.t1Fields
+   Province.ON -> ON.t1Fields
+   Province.PE -> NB.t1Fields
+   Province.QC -> QC.t1Fields
+   Province.SK -> AB.t1Fields
+   Province.YT -> YT.t1Fields
