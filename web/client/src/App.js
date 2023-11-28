@@ -26,8 +26,8 @@ export default function Uploads() {
     }
 
     function handleSubmit (event) {
-        if (t1input) {
-            fetch("/t1/PDF", {"method": "POST", "mode": "same-origin", "body": t1input})
+        if (t1input && province) {
+            fetch("/t1/PDF/" + province.value.code, {"method": "POST", "mode": "same-origin", "body": t1input})
                 .then(handleResponse, setError)
                 .catch(setError);
             setSubmitted(true);
@@ -35,10 +35,20 @@ export default function Uploads() {
     }
 
     const provinces = [
-        {label: 'Alberta',          value: {code: 'AB', formPrefix: '5015'}},
-        {label: 'British Columbia', value: {code: 'BC', formPrefix: '5010'}},
-        {label: 'Ontario',          value: {code: 'ON', formPrefix: '5006'}},
-        {label: 'Quebec',           value: {code: 'QC', formPrefix: '5005'}}]
+        {label: 'Alberta',                   value: {code: 'AB', formPrefix: '5015'}},
+        {label: 'British Columbia',          value: {code: 'BC', formPrefix: '5010'}},
+        {label: 'Manitoba',                  value: {code: 'MB', formPrefix: '5015'}},
+        {label: 'New Brunswick',             value: {code: 'NB', formPrefix: '5000'}},
+        {label: 'Newfoundland and Labrador', value: {code: 'NL', formPrefix: '5001'}},
+        {label: 'Northwest Territories',     value: {code: 'NT', formPrefix: '5012'}},
+        {label: 'Nova Scotia',               value: {code: 'NS', formPrefix: '5015'}},
+        {label: 'Nunavut',                   value: {code: 'NU', formPrefix: '5014'}},
+        {label: 'Ontario',                   value: {code: 'ON', formPrefix: '5006'}},
+        {label: 'PEI',                       value: {code: 'NB', formPrefix: '5000'}},
+        {label: 'Quebec',                    value: {code: 'QC', formPrefix: '5005'}},
+        {label: 'Saskatchewan',              value: {code: 'SK', formPrefix: '5015'}},
+        {label: 'Yukon',                     value: {code: 'YT', formPrefix: '5011'}}
+    ];
 
     return (
       <>

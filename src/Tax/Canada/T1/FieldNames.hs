@@ -18,6 +18,22 @@ import Tax.Canada.T1.FieldNames.ON qualified as ON
 import Tax.Canada.T1.FieldNames.QC qualified as QC
 import Tax.Canada.T1.FieldNames.YT qualified as YT
 
+formPrefixForProvince :: Province.Code -> String
+formPrefixForProvince = memoize $ \case
+   Province.AB -> "5015"
+   Province.BC -> "5010"
+   Province.MB -> "5015"
+   Province.NB -> "5000"
+   Province.NL -> "5001"
+   Province.NS -> "5015"
+   Province.NT -> "5012"
+   Province.NU -> "5014"
+   Province.ON -> "5006"
+   Province.PE -> "5000"
+   Province.QC -> "5005"
+   Province.SK -> "5015"
+   Province.YT -> "5011"
+
 t1FieldsForProvince :: Province.Code -> T1 FieldConst
 t1FieldsForProvince = memoize $ \case
    Province.AB -> AB.t1Fields
