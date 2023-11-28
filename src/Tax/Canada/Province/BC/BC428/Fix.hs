@@ -34,7 +34,7 @@ fixPage1PartA = fixEq $ \Page1PartA{..}-> Page1PartA{
    column2 = fixTaxIncomeBracket income (Just column3) column2,
    column3 = fixTaxIncomeBracket income (Just column4) column3,
    column4 = fixTaxIncomeBracket income (Just column5) column4,
-   column5 = fixTaxIncomeBracket income (Just column7) column5,
+   column5 = fixTaxIncomeBracket income (Just column6) column5,
    column6 = fixTaxIncomeBracket income (Just column7) column6,
    column7 = fixTaxIncomeBracket income Nothing column7}
 
@@ -110,7 +110,7 @@ fixPage3 bc428 = fixEq $ \page@Page3{..}-> page{
    line80_difference = nonNegativeDifference partC.line72 line79_cont,
    line82_difference = nonNegativeDifference line80_difference line81_logging,
    line85_difference = nonNegativeDifference line82_difference line84_political,
-   line88_sum = totalOf [line86_esop20, line87_evcc30],
+   line88_sum = min 2000 <$> totalOf [line86_esop20, line87_evcc30],
    line88_cont = line88_sum,
    line89_difference = nonNegativeDifference line85_difference line88_cont,
    line91_tax = nonNegativeDifference line89_difference line90_mining}
