@@ -47,9 +47,9 @@ import Test.Tasty.Hedgehog
 
 main = do
   dataDir <- getDataDir
-  fdfT1FileNames <- filter (".fdf" `isExtensionOf`) <$> listDirectory (combine dataDir "T1")
+  fdfT1FileNames <- listDirectory (combine dataDir "T1/fdf")
   fdf428FileNames <- filter (".fdf" `isExtensionOf`) <$> listDirectory (combine dataDir "428")
-  fdfT1Bytes <- traverse (ByteString.readFile . combine dataDir . combine "T1") fdfT1FileNames
+  fdfT1Bytes <- traverse (ByteString.readFile . combine dataDir . combine "T1/fdf") fdfT1FileNames
   fdf428Bytes <- traverse (ByteString.readFile . combine dataDir . combine "428") fdf428FileNames
   case (,) <$> traverse parse fdfT1Bytes <*> traverse parse fdf428Bytes of
     Left err -> die err
