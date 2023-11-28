@@ -2,3 +2,8 @@
     display: inline-block;
     vertical-align: middle;
 }
+
+.provinceMenu {
+    height: fit-content;
+    max-height: inherit;
+}

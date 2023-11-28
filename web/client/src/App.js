@@ -13,6 +13,7 @@ export default function Uploads() {
     function handleUpload (event) {
         setT1input(event.target.files[0]);
         setSubmitted(false);
+        setError("");
         setT1output(null);
     }
 
@@ -54,18 +55,24 @@ export default function Uploads() {
       <>
         <h2>T1 form completion</h2>
 
-        <h3>Step 1. <Dropdown className='provinceRoot' options={provinces} default={province} onChange={setProvince} placeholder="Select your province"/></h3>
+        <h3>Step 1. <Dropdown className='provinceRoot' menuClassName='provinceMenu' options={provinces} default={province} onChange={setProvince} placeholder="Select your province"/></h3>
 
         {province && <>
          <h3>Step 2. Download the <em>fillable</em> PDF form <tt>{province.value.formPrefix}-r-fill-22e.pdf</tt> from <a href="https://canada.ca">canada.ca</a></h3>
-         <h3>Step 3. Fill in the downloaded T1 form; don't bother with any fields that are calculated from other fields in the same form, that part will be performed automatically.</h3>
+         <h3>Step 3. Fill in the downloaded T1 form.</h3>
+         <p>Don't bother with any fields that are calculated from other fields in the same form, that part will be done for you automatically.</p>
+         <p>You can leave out your name, SIN, and other private data, since they're not affecting any numbers.</p>
          <h3>Step 4. Upload the filled form: <input type="file" name="T1 PDF" onChange={handleUpload}/></h3>
          <h3>Step 5. <button name="Calculate" disabled={submitted !== false} onClick={handleSubmit}>Calculate</button></h3>
-         {t1output &&
+         {t1output && <>
           <h3>Step 6. <a name="Download" download="t1.pdf"
                          href={URL.createObjectURL(new File([t1output],
                                                             {name: "t1.pdf", type: 'application/PDF'}))}>Download</a>
           </h3>
+          <h3>Step 7. Carefully examine the downloaded form. You can also make adjustments and go to Step 4 again.</h3>
+          <h3>Step 8. Fill in your name, address, SIN, and other private information.</h3>
+          <h3>Step 9. Print the form and mail your return to CRA.</h3>
+          </>
          }
          </>
         }
