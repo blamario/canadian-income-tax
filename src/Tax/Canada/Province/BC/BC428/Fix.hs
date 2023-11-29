@@ -40,7 +40,7 @@ fixPage1PartA = fixEq $ \Page1PartA{..}-> Page1PartA{
 
 fixPage1PartB :: Page1PartB Maybe -> Page1PartB Maybe
 fixPage1PartB = fixEq $ \part@Page1PartB{..}-> part{
-   line16_basic = Just 1130,
+   line16_basic = Just 11302,
    line20_difference = mfilter (> 0) $ liftA2 (-) line18_base line19_spouseIncome,
    line20_cont = line20_difference,
    line23_difference = mfilter (> 0) $ liftA2 (-) line21_base line22_dependentIncome,
@@ -90,8 +90,9 @@ fixPartC bc428 = fixEq $ \part@PartC{..}-> part{
                          bc428.page1.partA.column6.equalsTax,
                          bc428.page1.partA.column7.equalsTax],
    line63 = totalOf [line61_tax, line62_splitIncomeTax],
+   line64_copy = bc428.page2.partB.line60,
    line66_fraction = Just 0.337 `fractionOf` line66_copy,
-   line67_sum = totalOf [line64_nonRefundableCredits, line65_dividendCredits, line66_fraction],
+   line67_sum = totalOf [line64_copy, line65_dividendCredits, line66_fraction],
    line67_cont = line67_sum,
    line68 = nonNegativeDifference line63 line67_cont,
    line69_fraction = Just 0.337 `fractionOf` line69_copy,

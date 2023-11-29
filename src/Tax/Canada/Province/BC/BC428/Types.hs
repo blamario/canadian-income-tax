@@ -104,7 +104,7 @@ data PartC line = PartC {
    line61_tax :: line Centi,
    line62_splitIncomeTax :: line Centi,
    line63 :: line Centi,
-   line64_nonRefundableCredits :: line Centi,
+   line64_copy :: line Centi,
    line65_dividendCredits :: line Centi,
    line66_copy :: line Centi,
    line66_fraction :: line Centi,

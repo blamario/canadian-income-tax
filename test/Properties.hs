@@ -17,6 +17,7 @@ import Tax.Canada.T1.FieldNames.NU qualified as NU (t1Fields)
 import Tax.Canada.T1.FieldNames.QC qualified as QC (t1Fields)
 import Tax.Canada.T1.FieldNames.YT qualified as YT (t1Fields)
 import Tax.Canada.T1.Fix (T1, fixT1)
+import Tax.Canada.Province.AB.AB428.FieldNames (ab428Fields)
 import Tax.Canada.Province.BC.BC428.FieldNames (bc428Fields)
 import Tax.Canada.Province.ON.ON428.FieldNames (on428Fields)
 import Tax.Canada.Province.ON.ON428.Fix (ON428, fixON428)
@@ -65,28 +66,31 @@ properties fdfT1Map fdf428Map =
     testGroup "Roundtrip" [
       testGroup "T1" [
         testProperty ("T1 for " <> name) (checkFormFields fields $ List.lookup (prefix <> "-r-fill-22e.fdf") fdfT1Map)
-        | (name, prefix, fields, _) <- provinces],
+        | (name, prefix, fields) <- provincesT1],
       testGroup "428" [
         testProperty ("Form 428 for " <> name) (checkFields $ List.lookup (prefix <> "-c-fill-22e.fdf") fdf428Map)
-        | (name, prefix, _, Just checkFields) <- provinces]],
+        | (name, prefix, checkFields) <- provinces428]],
     testGroup "Load mismatch" [
       testProperty ("Load T1 for " <> p1name <> " from FDF for " <> p2name) $ property $ assert
         $ any (isLeft  . FDF.load p1fields) $ List.lookup (p2fdfPrefix <> "-r-fill-22e.fdf") fdfT1Map
-      | (p1name, _, p1fields, _) <- provinces,
-        (p2name, p2fdfPrefix, _, _) <- provinces,
+      | (p1name, _, p1fields) <- provincesT1,
+        (p2name, p2fdfPrefix, _) <- provincesT1,
         p1name /= p2name,
         not (p1name == "New Brunswick & PEI" && p2name == "Nunavut")]]
   where fixOntarioReturns' :: Rank2.Product T1 ON428 Maybe -> Rank2.Product T1 ON428 Maybe
         fixOntarioReturns' (Rank2.Pair x y) = uncurry Rank2.Pair $ fixOntarioReturns (x, y)
-        provinces = [("New Brunswick & PEI", "5000", NB.t1Fields, Nothing),
-                     ("Newfoundland and Labrador", "5001", NL.t1Fields, Nothing),
-                     ("Quebec", "5005", QC.t1Fields, Nothing),
-                     ("Ontario", "5006", ON.t1Fields, Just $ checkFormFields on428Fields),
-                     ("British Columbia", "5010", BC.t1Fields, Just $ checkFormFields bc428Fields),
-                     ("Northwest Territories", "5012", NT.t1Fields, Nothing),
-                     ("Yukon", "5011", YT.t1Fields, Nothing),
-                     ("Nunavut", "5014", NU.t1Fields, Nothing),
-                     ("Alberta, Manitoba, Nova Scotia, and Saskatchewan", "5015", AB.t1Fields, Nothing)]
+        provincesT1 = [("New Brunswick & PEI", "5000", NB.t1Fields),
+                       ("Newfoundland and Labrador", "5001", NL.t1Fields),
+                       ("Quebec", "5005", QC.t1Fields),
+                       ("Ontario", "5006", ON.t1Fields),
+                       ("British Columbia", "5010", BC.t1Fields),
+                       ("Northwest Territories", "5012", NT.t1Fields),
+                       ("Yukon", "5011", YT.t1Fields),
+                       ("Nunavut", "5014", NU.t1Fields),
+                       ("Alberta, Manitoba, Nova Scotia, and Saskatchewan", "5015", AB.t1Fields)]
+        provinces428 = [("Ontario", "5006", checkFormFields on428Fields),
+                        ("Alberta", "5009", checkFormFields ab428Fields),
+                        ("British Columbia", "5010", checkFormFields bc428Fields)]
 
 checkFormIdempotent :: (Eq (g Maybe), Show (g Maybe),
                         Rank2.Applicative g, Shallow.Traversable Transformations.Gen g)
