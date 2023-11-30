@@ -6,7 +6,7 @@
 
 module Main where
 
-import Tax.Canada (fixOntarioReturns)
+import Tax.Canada (fixAlbertaReturns, fixBritishColumbiaReturns, fixOntarioReturns)
 import Tax.Canada.T1.FieldNames.ON qualified as ON (t1Fields)
 import Tax.Canada.T1.FieldNames.AB qualified as AB (t1Fields)
 import Tax.Canada.T1.FieldNames.BC qualified as BC (t1Fields)
@@ -20,6 +20,8 @@ import Tax.Canada.T1.Fix (T1, fixT1)
 import Tax.Canada.Province.AB.AB428.FieldNames (ab428Fields)
 import Tax.Canada.Province.BC.BC428.FieldNames (bc428Fields)
 import Tax.Canada.Province.ON.ON428.FieldNames (on428Fields)
+import Tax.Canada.Province.AB.AB428.Fix (AB428, fixAB428)
+import Tax.Canada.Province.BC.BC428.Fix (BC428, fixBC428)
 import Tax.Canada.Province.ON.ON428.Fix (ON428, fixON428)
 import Tax.FDF as FDF
 import Paths_canadian_income_tax (getDataDir)
@@ -61,8 +63,12 @@ properties fdfT1Map fdf428Map =
   testGroup "Properties" [
     testGroup "Idempotence" [
       testProperty "T1" (checkFormIdempotent ON.t1Fields fixT1),
+      testProperty "AB428" (checkFormIdempotent ab428Fields fixAB428),
+      testProperty "T1+AB428" (checkFormPairIdempotent AB.t1Fields ab428Fields fixAlbertaReturns),
+      testProperty "BC428" (checkFormIdempotent bc428Fields fixBC428),
+      testProperty "T1+BC428" (checkFormPairIdempotent BC.t1Fields bc428Fields fixBritishColumbiaReturns),
       testProperty "ON428" (checkFormIdempotent on428Fields fixON428),
-      testProperty "T1+ON428" (checkFormIdempotent (Rank2.Pair ON.t1Fields on428Fields) fixOntarioReturns')],
+      testProperty "T1+ON428" (checkFormPairIdempotent ON.t1Fields on428Fields fixOntarioReturns)],
     testGroup "Roundtrip" [
       testGroup "T1" [
         testProperty ("T1 for " <> name) (checkFormFields fields $ List.lookup (prefix <> "-r-fill-22e.fdf") fdfT1Map)
@@ -77,9 +83,7 @@ properties fdfT1Map fdf428Map =
         (p2name, p2fdfPrefix, _) <- provincesT1,
         p1name /= p2name,
         not (p1name == "New Brunswick & PEI" && p2name == "Nunavut")]]
-  where fixOntarioReturns' :: Rank2.Product T1 ON428 Maybe -> Rank2.Product T1 ON428 Maybe
-        fixOntarioReturns' (Rank2.Pair x y) = uncurry Rank2.Pair $ fixOntarioReturns (x, y)
-        provincesT1 = [("New Brunswick & PEI", "5000", NB.t1Fields),
+  where provincesT1 = [("New Brunswick & PEI", "5000", NB.t1Fields),
                        ("Newfoundland and Labrador", "5001", NL.t1Fields),
                        ("Quebec", "5005", QC.t1Fields),
                        ("Ontario", "5006", ON.t1Fields),
@@ -91,6 +95,13 @@ properties fdfT1Map fdf428Map =
         provinces428 = [("Ontario", "5006", checkFormFields on428Fields),
                         ("Alberta", "5009", checkFormFields ab428Fields),
                         ("British Columbia", "5010", checkFormFields bc428Fields)]
+
+checkFormPairIdempotent :: (Eq (g Maybe), Show (g Maybe), Eq (h Maybe), Show (h Maybe),
+                            Rank2.Applicative g, Shallow.Traversable Transformations.Gen g,
+                            Rank2.Applicative h, Shallow.Traversable Transformations.Gen h)
+                        => g FieldConst -> h FieldConst -> ((g Maybe, h Maybe) -> (g Maybe, h Maybe)) -> Property
+checkFormPairIdempotent fields1 fields2 f =
+   checkFormIdempotent (Rank2.Pair fields1 fields2) (\(Rank2.Pair x y)-> uncurry Rank2.Pair $ curry f x y)
 
 checkFormIdempotent :: (Eq (g Maybe), Show (g Maybe),
                         Rank2.Applicative g, Shallow.Traversable Transformations.Gen g)
