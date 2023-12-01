@@ -62,13 +62,18 @@ properties :: [(FilePath, FDF)] -> [(FilePath, FDF)] -> TestTree
 properties fdfT1Map fdf428Map =
   testGroup "Properties" [
     testGroup "Idempotence" [
-      testProperty "T1" (checkFormIdempotent ON.t1Fields fixT1),
-      testProperty "AB428" (checkFormIdempotent ab428Fields fixAB428),
-      testProperty "T1+AB428" (checkFormPairIdempotent AB.t1Fields ab428Fields fixAlbertaReturns),
-      testProperty "BC428" (checkFormIdempotent bc428Fields fixBC428),
-      testProperty "T1+BC428" (checkFormPairIdempotent BC.t1Fields bc428Fields fixBritishColumbiaReturns),
-      testProperty "ON428" (checkFormIdempotent on428Fields fixON428),
-      testProperty "T1+ON428" (checkFormPairIdempotent ON.t1Fields on428Fields fixOntarioReturns)],
+      testGroup "Alberta" [
+        testProperty "T1" (checkFormIdempotent AB.t1Fields fixT1),
+        testProperty "AB428" (checkFormIdempotent ab428Fields fixAB428),
+        testProperty "T1+AB428" (checkFormPairIdempotent AB.t1Fields ab428Fields fixAlbertaReturns)],
+      testGroup "British Columbia" [
+        testProperty "T1" (checkFormIdempotent BC.t1Fields fixT1),
+        testProperty "BC428" (checkFormIdempotent bc428Fields fixBC428),
+        testProperty "T1+BC428" (checkFormPairIdempotent BC.t1Fields bc428Fields fixBritishColumbiaReturns)],
+      testGroup "Ontario" [
+        testProperty "T1" (checkFormIdempotent ON.t1Fields fixT1),
+        testProperty "ON428" (checkFormIdempotent on428Fields fixON428),
+        testProperty "T1+ON428" (checkFormPairIdempotent ON.t1Fields on428Fields fixOntarioReturns)]],
     testGroup "Roundtrip" [
       testGroup "T1" [
         testProperty ("T1 for " <> name) (checkFormFields fields $ List.lookup (prefix <> "-r-fill-22e.fdf") fdfT1Map)
