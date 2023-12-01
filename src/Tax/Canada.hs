@@ -4,7 +4,7 @@
 {-# LANGUAGE NoFieldSelectors #-}
 {-# LANGUAGE OverloadedRecordDot #-}
 
-module Tax.Canada (T1, fixBritishColumbiaReturns, fixOntarioReturns, fixON428, fixT1, on428Fields) where
+module Tax.Canada (T1, fixBritishColumbiaReturns, fixOntarioReturns, fixT1) where
 
 import GHC.Stack (HasCallStack)
 

@@ -25,8 +25,10 @@ import System.FilePath (replaceDirectory, takeFileName)
 import System.IO (hPutStrLn, stderr)
 import Text.FDF (parse, serialize)
 
-import Tax.Canada (fixOntarioReturns, fixON428, fixT1, on428Fields)
+import Tax.Canada (fixOntarioReturns, fixT1)
 import Tax.Canada.T1.FieldNames (t1FieldsForProvince)
+import Tax.Canada.Province.ON.ON428.Fix (fixON428)
+import Tax.Canada.Province.ON.ON428.FieldNames (on428Fields)
 import Tax.FDF qualified as FDF
 import Tax.PDFtk (fdf2pdf, pdf2fdf)
 
