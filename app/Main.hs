@@ -18,15 +18,20 @@ import Data.List (intercalate)
 import Data.Maybe (fromMaybe)
 import Data.Semigroup (Any (Any))
 import Data.Semigroup.Cancellative (isPrefixOf, isSuffixOf)
+import Data.Text (Text)
 import Options.Applicative (Parser, ReadM, long, metavar, short)
 import Options.Applicative qualified as OptsAp
 import System.Directory (createDirectoryIfMissing, doesDirectoryExist, doesFileExist)
 import System.FilePath (replaceDirectory, takeFileName)
 import System.IO (hPutStrLn, stderr)
-import Text.FDF (parse, serialize)
+import Text.FDF (FDF, parse, serialize)
 
-import Tax.Canada (fixOntarioReturns, fixT1)
+import Tax.Canada (T1, fixAlbertaReturns, fixBritishColumbiaReturns, fixOntarioReturns, fixT1)
 import Tax.Canada.T1.FieldNames (t1FieldsForProvince)
+import Tax.Canada.Province.AB.AB428.Fix (fixAB428)
+import Tax.Canada.Province.AB.AB428.FieldNames (ab428Fields)
+import Tax.Canada.Province.BC.BC428.Fix (fixBC428)
+import Tax.Canada.Province.BC.BC428.FieldNames (bc428Fields)
 import Tax.Canada.Province.ON.ON428.Fix (fixON428)
 import Tax.Canada.Province.ON.ON428.FieldNames (on428Fields)
 import Tax.FDF qualified as FDF
@@ -40,7 +45,7 @@ main = OptsAp.execParser (OptsAp.info optionsParser
 data Options = Options {
    province :: Province.Code,
    t1InputPath :: Maybe FilePath,
-   on428InputPath :: Maybe FilePath,
+   p428InputPath :: Maybe FilePath,
    outputPath :: FilePath,
    verbose :: Bool}
 
@@ -48,9 +53,9 @@ optionsParser :: Parser Options
 optionsParser =
    Options
    <$> OptsAp.argument readProvince (metavar "<two-letter province code>")
-   <*> optional (OptsAp.strOption (long "t1" <> metavar "<input T1 file>"))
-   <*> optional (OptsAp.strOption (long "on428" <> metavar "<input ON428 file>"))
-   <*> OptsAp.strOption (short 'o' <> long "output" <> OptsAp.value "-" <> metavar "<output FDF file>")
+   <*> optional (OptsAp.strOption (long "t1" <> metavar "<input T1 form file>"))
+   <*> optional (OptsAp.strOption (long "428" <> metavar "<input 428 form file>"))
+   <*> OptsAp.strOption (short 'o' <> long "output" <> OptsAp.value "-" <> metavar "<output file or directory>")
    <*> OptsAp.switch (short 'v' <> long "verbose")
    <**> OptsAp.helper
 
@@ -81,9 +86,19 @@ readMaybeFDF baseName path = traverse (\p-> addPath p . fmap Lazy.toStrict <$> r
          addPath "-" (isPDF@(Any False), content) = (baseName <> ".fdf", isPDF, content)
          addPath p (isPDF, content) = (p, isPDF, content)
 
+fix428fdf :: Province.Code -> FDF -> Either String FDF
+fix428fdf Province.AB = FDF.mapForm ab428Fields fixAB428
+fix428fdf Province.BC = FDF.mapForm bc428Fields fixBC428
+fix428fdf Province.ON = FDF.mapForm on428Fields fixON428
+
+fix428t1fdfs :: Province.Code -> T1 FDF.FieldConst -> (FDF, FDF) -> Either String (FDF, FDF)
+fix428t1fdfs Province.AB t1Fields = FDF.mapForm2 (t1Fields, ab428Fields) fixAlbertaReturns
+fix428t1fdfs Province.BC t1Fields = FDF.mapForm2 (t1Fields, bc428Fields) fixBritishColumbiaReturns
+fix428t1fdfs Province.ON t1Fields = FDF.mapForm2 (t1Fields, on428Fields) fixOntarioReturns
+
 process :: Options -> IO ()
-process Options{province, t1InputPath, on428InputPath, outputPath, verbose} = do
-   [t1, on428] <- traverse (uncurry readMaybeFDF) [("t1", t1InputPath), ("on428", on428InputPath)]
+process Options{province, t1InputPath, p428InputPath, outputPath, verbose} = do
+   [t1, p428] <- traverse (uncurry readMaybeFDF) [("t1", t1InputPath), ("428", p428InputPath)]
    when ("/" `isSuffixOf` outputPath) (createDirectoryIfMissing True outputPath)
    let writeFrom :: FilePath -> Bool -> ByteString.ByteString -> IO ()
        writeFrom inputPath asPDF content = do
@@ -96,8 +111,8 @@ process Options{province, t1InputPath, on428InputPath, outputPath, verbose} = do
                    then ByteString.writeFile (replaceDirectory inputPath outputPath) content'
                    else ByteString.writeFile outputPath content'
        t1Fields = t1FieldsForProvince province
-   case (t1, on428) of
-      (Nothing, Nothing) -> error "You must specify a T1 form, ON428 form, or both."
+   case (t1, p428) of
+      (Nothing, Nothing) -> error "You must specify a T1 form, provincial 428 form, or both."
       (Just (t1Path, Any t1isPDF, t1bytes), Nothing) -> do
          case parse t1bytes >>= \x-> (,) x <$> FDF.load t1Fields x of
             Left err -> error err
@@ -106,32 +121,26 @@ process Options{province, t1InputPath, on428InputPath, outputPath, verbose} = do
                    form' = fixT1 form
                when verbose (hPutStrLn stderr $ show form')
                writeFrom t1Path t1isPDF (serialize fdf')
-      (Nothing, Just (on428Path, Any on428isPDF, on428bytes)) -> do
-         case parse on428bytes >>= \x-> (,) x <$> FDF.load on428Fields x of
+      (Nothing, Just (p428Path, Any p428isPDF, bytes428)) -> do
+         case parse bytes428 >>= fix428fdf province of
             Left err -> error err
-            Right (fdf, form) -> do
-               let fdf' = FDF.update on428Fields form' fdf
-                   form' = fixON428 form
-               when verbose (hPutStrLn stderr $ show form')
-               writeFrom on428Path on428isPDF (serialize fdf')
-      (Just (t1Path, Any t1isPDF, t1bytes), Just (on428path, Any on428isPDF, on428bytes)) -> do
-         case (,) <$> (parse t1bytes >>= \x-> (,) x <$> FDF.load t1Fields x)
-                  <*> (parse on428bytes >>= \x-> (,) x <$> FDF.load on428Fields x) of
+            Right fdf' -> writeFrom p428Path p428isPDF (serialize fdf')
+      (Just (t1Path, Any t1isPDF, t1bytes), Just (p428path, Any p428isPDF, bytes428)) -> do
+        case (,) <$> parse t1bytes <*> parse bytes428 >>= fix428t1fdfs province t1Fields of
             Left err -> error err
-            Right ((fdfT1, formT1), (fdfON, formON)) -> do
-               let fdf'T1 = serialize $ FDF.update t1Fields form'T1 fdfT1
-                   fdf'ON = serialize $ FDF.update on428Fields form'ON fdfON
-                   (form'T1, form'ON) = fixOntarioReturns (formT1, formON)
+            Right (fdfT1, fdf428) -> do
+               let bytesT1' = serialize fdfT1
+                   bytes428' = serialize fdf428
                    fdfEntry path content =
                       (`fileEntry` ByteString.Lazy.fromStrict content) <$> toTarPath False (takeFileName path)
-                   tarEntries = sequenceA [fdfEntry (fromMaybe "t1.fdf" t1InputPath) fdf'T1,
-                                           fdfEntry (fromMaybe "on428.fdf" on428InputPath) fdf'ON]
+                   tarEntries = sequenceA [fdfEntry (fromMaybe "t1.fdf" t1InputPath) bytesT1',
+                                           fdfEntry (fromMaybe "p428.fdf" p428InputPath) bytes428']
                    tarFile = either (error . ("Can't tar: " <>)) (ByteString.Lazy.toStrict . Tar.write) tarEntries 
-               when verbose (hPutStrLn stderr $ show (form'T1, form'ON))
+               -- when verbose (hPutStrLn stderr $ show (form'T1, form'ON))
                if outputPath == "-"
                   then ByteString.putStr tarFile
                   else do isDir <- doesDirectoryExist outputPath
                           if isDir
-                             then do writeFrom t1Path t1isPDF fdf'T1
-                                     writeFrom on428path on428isPDF fdf'ON
+                             then do writeFrom t1Path t1isPDF bytesT1'
+                                     writeFrom p428path p428isPDF bytes428'
                              else ByteString.writeFile outputPath tarFile

@@ -9,6 +9,8 @@
 module Tax.FDF where
 
 import Control.Monad (join)
+import Data.Biapplicative (biliftA2, biliftA3)
+import Data.Bitraversable (bisequence, bitraverse)
 import Data.CAProvinceCodes qualified as Province
 import Data.Char (isDigit, isSpace)
 import Data.Fixed (Centi)
@@ -58,8 +60,22 @@ formKeys = flip appEndo [] . Rank2.foldMap addEntry
         addEntry Field{path, entry = Switch' leaf} = Endo ([path ++ [leaf], path ++ [leaf <> "[1]"]] ++)
         addEntry Field{path} = Endo (path :)
 
+mapForm :: (Rank2.Apply form, Rank2.Traversable form)
+        => form FieldConst -> (form Maybe -> form Maybe) -> FDF -> Either String FDF
+mapForm fields f fdf = store fields fdf . f <$> load fields fdf
+
+mapForm2 :: (Rank2.Apply form1, Rank2.Apply form2, Rank2.Traversable form1, Rank2.Traversable form2)
+         => (form1 FieldConst, form2 FieldConst)
+         -> ((form1 Maybe, form2 Maybe) -> (form1 Maybe, form2 Maybe))
+         -> (FDF, FDF)
+         -> Either String (FDF, FDF)
+mapForm2 fields f fdfs = biliftA3 store store fields fdfs . f <$> bisequence (biliftA2 load load fields fdfs)
+
 load :: (Rank2.Apply form, Rank2.Traversable form) => form FieldConst -> FDF -> Either String (form Maybe)
 load fields = fromFieldMap fields . foldMapWithKey Map.singleton
+
+store :: (Rank2.Apply form, Rank2.Foldable form) => form FieldConst -> FDF -> form Maybe -> FDF
+store fields = flip (update fields)
 
 update :: (Rank2.Apply form, Rank2.Foldable form) => form FieldConst -> form Maybe -> FDF -> FDF
 update fields = mapWithKey
