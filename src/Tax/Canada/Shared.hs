@@ -17,8 +17,11 @@ module Tax.Canada.Shared where
 
 import Control.Monad (guard)
 import Data.Fixed (Centi)
+import Language.Haskell.TH qualified as TH
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
+
+import Tax.Util (fractionOf, nonNegativeDifference)
 
 data TaxIncomeBracket line = TaxIncomeBracket {
    income :: line Centi,
@@ -28,6 +31,14 @@ data TaxIncomeBracket line = TaxIncomeBracket {
    timesRate :: line Centi,
    baseTax :: line Centi,
    equalsTax :: line Centi}
+
+data MedicalExpenses line = MedicalExpenses {
+   expenses :: line Centi,
+   netIncome :: line Centi,
+   incomeRate :: line Rational,
+   fraction :: line Centi,
+   lesser :: line Centi,
+   difference :: line Centi}
 
 fixTaxIncomeBracket :: Maybe Centi -> Maybe (TaxIncomeBracket Maybe) -> TaxIncomeBracket Maybe -> TaxIncomeBracket Maybe
 fixTaxIncomeBracket theIncome nextBracket bracket@TaxIncomeBracket{..} = bracket{
@@ -40,7 +51,21 @@ fixTaxIncomeBracket theIncome nextBracket bracket@TaxIncomeBracket{..} = bracket
    timesRate = fromRational <$> liftA2 (*) (toRational <$> overThreshold) rate,
    equalsTax = liftA2 (+) timesRate baseTax}
 
-deriving instance (Show (line Centi), Show (line Rational)) => Show (TaxIncomeBracket line)
-deriving instance (Eq (line Centi), Eq (line Rational)) => Eq (TaxIncomeBracket line)
-Rank2.TH.deriveAll ''TaxIncomeBracket
-Transformation.Shallow.TH.deriveAll ''TaxIncomeBracket
+fixMedicalExpenses :: Centi -> MedicalExpenses Maybe -> MedicalExpenses Maybe
+fixMedicalExpenses ceiling part@MedicalExpenses{..} = part{
+   fraction = incomeRate `fractionOf` netIncome,
+   lesser = min ceiling <$> fraction,
+   difference = nonNegativeDifference expenses lesser}
+
+
+$(foldMap
+   (\t-> concat <$> sequenceA [
+       [d|
+           deriving instance (Show (line Centi), Show (line Rational), Show (line Word))
+                          => Show ($(TH.conT t) line)
+           deriving instance (Eq (line Centi), Eq (line Rational), Eq (line Word))
+                          => Eq ($(TH.conT t) line)
+       |],
+       Rank2.TH.deriveAll t,
+       Transformation.Shallow.TH.deriveAll t])
+   [''MedicalExpenses, ''TaxIncomeBracket])

@@ -30,6 +30,7 @@ import Tax.Canada.Province.ON.ON428.Types qualified as ON.Page1 (Page1(..))
 import Tax.Canada.Province.ON.ON428.Types qualified as ON.Page2 (Page2(..))
 import Tax.Canada.Province.ON.ON428.Fix (fixON428)
 import Tax.Canada.Province.ON.ON428.FieldNames (on428Fields)
+import Tax.Canada.Shared(MedicalExpenses(..))
 import Tax.Util (fixEq)
 
 fixAlbertaReturns :: HasCallStack => (T1 Maybe, AB428 Maybe) -> (T1 Maybe, AB428 Maybe)
@@ -55,10 +56,9 @@ fixAlbertaReturns =
                              AB.page2 =
                              page2{AB.Page2.partB = partB2{AB.line33_interest = t1.page6.line31900,
                                                            AB.medicalExpenses =
-                                                           medicalExpenses{AB.line37_expenses =
-                                                                           t1.page6.medical_expenses.familyExpenses,
-                                                                           AB.line38_income =
-                                                                           t1.page4.line_23600_NetIncome}}},
+                                                           medicalExpenses{
+                                                              expenses = t1.page6.medical_expenses.familyExpenses,
+                                                              netIncome = t1.page4.line_23600_NetIncome}}},
                              AB.page3 =
                              page3{AB.partC = partC{AB.line57_copy = t1.page7.partC_NetFederalTax.line40427}}})
 
@@ -81,10 +81,9 @@ fixBritishColumbiaReturns =
                                                            BC.line30_employmentInsurance = t1.page6.line31217,
                                                            BC.line41_interest = t1.page6.line31900,
                                                            BC.medicalExpenses =
-                                                           medicalExpenses{BC.line46_expenses =
-                                                                           t1.page6.medical_expenses.familyExpenses,
-                                                                           BC.line47_income =
-                                                                           t1.page4.line_23600_NetIncome}}},
+                                                           medicalExpenses{
+                                                              expenses = t1.page6.medical_expenses.familyExpenses,
+                                                              netIncome = t1.page4.line_23600_NetIncome}}},
                               BC.page3 =
                               page3{BC.partC = partC{BC.line66_copy = t1.page7.partC_NetFederalTax.line40427},
                                     BC.line74_copy = t1.page4.line_23600_NetIncome}})
@@ -108,6 +107,6 @@ fixOntarioReturns =
                              ON.page2 =
                              page2{ON.Page2.partB = partB2{ON.line32_interest = t1.page6.line31900,
                                                            ON.medicalExpenses =
-                                                           medicalExpenses{ON.line37_income =
-                                                                           t1.page4.line_23600_NetIncome}},
+                                                           medicalExpenses{
+                                                              netIncome = t1.page4.line_23600_NetIncome}},
                                    ON.partC = partC{ON.line59_copy = t1.page7.partC_NetFederalTax.line40427}}})

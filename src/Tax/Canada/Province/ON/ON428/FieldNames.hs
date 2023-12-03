@@ -11,7 +11,7 @@ import Rank2 qualified
 
 import Tax.Canada.Province.ON.ON428.Types
 import Tax.Canada.Province.ON.ON428.Types qualified as HealthPremiumBracket (HealthPremiumBracket(..))
-import Tax.Canada.Shared (TaxIncomeBracket (..))
+import Tax.Canada.Shared (MedicalExpenses(..), TaxIncomeBracket (..))
 import Tax.FDF (Entry (Count, Constant, Amount, Percent), FieldConst (Field, NoField), within)
 
 on428Fields = within "form1" Rank2.<$> ON428 {
@@ -91,12 +91,12 @@ page2PartBFields = Page2PartB {
    line50 = Field ["Line50", "Amount"] Amount}
 
 medicalExpensesFields = MedicalExpenses {
-   line36_expenses = Field ["Line36", "Amount"] Amount,
-   line37_income = Field ["Line37", "Amount"] Amount,
-   line38_rate = Field ["Line38", "Percent_ReadOnly"] $ Constant 0.03 Percent,
-   line39_fraction = Field ["Line39", "Amount"] Amount,
-   line40_lesser = Field ["Line40", "Amount"] Amount,
-   line41_difference = Field ["Line41", "Amount"] Amount}
+   expenses = Field ["Line36", "Amount"] Amount,
+   netIncome = Field ["Line37", "Amount"] Amount,
+   incomeRate = Field ["Line38", "Percent_ReadOnly"] $ Constant 0.03 Percent,
+   fraction = Field ["Line39", "Amount"] Amount,
+   lesser = Field ["Line40", "Amount"] Amount,
+   difference = Field ["Line41", "Amount"] Amount}
 
 donationsFields = Donations {
    line47_base = Field ["Line47", "Amount1"] Amount,

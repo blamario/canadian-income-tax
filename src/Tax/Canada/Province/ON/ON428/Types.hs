@@ -19,7 +19,7 @@ import Language.Haskell.TH qualified as TH
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
-import Tax.Canada.Shared (TaxIncomeBracket)
+import Tax.Canada.Shared (MedicalExpenses, TaxIncomeBracket)
 
 data ON428 line = ON428 {
    page1 :: Page1 line,
@@ -85,14 +85,6 @@ data Page2PartB line = Page2PartB {
    line46_fraction :: line Centi,
    donations :: Donations line,
    line50 :: line Centi}
-
-data MedicalExpenses line = MedicalExpenses {
-   line36_expenses :: line Centi,
-   line37_income :: line Centi,
-   line38_rate :: line Rational,
-   line39_fraction :: line Centi,
-   line40_lesser :: line Centi,
-   line41_difference :: line Centi}
 
 data Donations line = Donations {
    line47_base :: line Centi,
@@ -183,5 +175,4 @@ $(foldMap
        Transformation.Shallow.TH.deriveAll t])
    [''ON428, ''Page1, ''Page2, ''Page3, ''Page4,
     ''Page1PartA, ''Page1PartB, ''Page2PartB, ''Page2PartC,
-    ''MedicalExpenses, ''Donations,
-    ''HealthPremium, ''HealthPremiumBracket])
+    ''Donations, ''HealthPremium, ''HealthPremiumBracket])

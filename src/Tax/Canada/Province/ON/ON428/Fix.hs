@@ -14,7 +14,8 @@ import Data.Fixed (Centi)
 import Rank2 qualified
 
 import Tax.Canada.Province.ON.ON428.Types
-import Tax.Canada.Shared (fixTaxIncomeBracket, TaxIncomeBracket (equalsTax))
+import Tax.Canada.Shared (fixMedicalExpenses, fixTaxIncomeBracket,
+                          MedicalExpenses (difference), TaxIncomeBracket (equalsTax))
 import Tax.Util (fixEq, fractionOf, nonNegativeDifference, totalOf)
 
 fixON428 :: ON428 Maybe -> ON428 Maybe
@@ -64,8 +65,8 @@ fixPage2PartB on428 = fixEq $ \part@Page2PartB{..}-> part{
    line28 = totalOf [line26, line27_pension],
    line31 = totalOf [line28, line29_disability, line30],
    line35 = totalOf [line31, line32_interest, line33_education, line34_transferred],
-   medicalExpenses = fixMedicalExpenses medicalExpenses,
-   line43_sum = totalOf [medicalExpenses.line41_difference, line42],
+   medicalExpenses = fixMedicalExpenses 2522 medicalExpenses,
+   line43_sum = totalOf [medicalExpenses.difference, line42],
    line43_cont = line43_sum,
    line44 = totalOf [line35, line43_cont],
    line46_fraction = line45_rate `fractionOf` line44,
@@ -87,12 +88,6 @@ fixPage2PartC on428 = fixEq $ \part@Page2PartC{..}-> part{
    line59_product = Just 0.3367 `fractionOf` line59_copy,
    line60_lesser = min <$> line58 <*> line59_product,
    line61 = nonNegativeDifference line55 line60_lesser}
-
-fixMedicalExpenses :: MedicalExpenses Maybe -> MedicalExpenses Maybe
-fixMedicalExpenses = fixEq $ \part@MedicalExpenses{..} -> part{
-   line39_fraction = line38_rate `fractionOf` line37_income,
-   line40_lesser = min 2522 <$> line39_fraction,
-   line41_difference = nonNegativeDifference line36_expenses line40_lesser}
 
 fixDonations :: Donations Maybe -> Donations Maybe
 fixDonations = fixEq $ \part@Donations{..} -> part{

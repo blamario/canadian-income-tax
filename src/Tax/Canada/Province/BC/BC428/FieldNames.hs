@@ -10,7 +10,7 @@ import Data.Fixed (Centi)
 import Rank2 qualified
 
 import Tax.Canada.Province.BC.BC428.Types
-import Tax.Canada.Shared (TaxIncomeBracket (..))
+import Tax.Canada.Shared (MedicalExpenses(..), TaxIncomeBracket (..))
 import Tax.FDF (Entry (Count, Constant, Amount, Percent), FieldConst (Field, NoField), within)
 
 bc428Fields = within "form1" Rank2.<$> BC428 {
@@ -106,12 +106,12 @@ page2PartBFields = Page2PartB {
    line60 = Field ["Line60", "Amount"] Amount}
 
 medicalExpensesFields = MedicalExpenses {
-   line46_expenses = Field ["Line46", "Amount"] Amount,
-   line47_income = Field ["Line47", "Amount"] Amount,
-   line48_rate = Field ["Line48", "PercentAmount_ReadOnly"] $ Constant 0.03 Percent,
-   line49_fraction = Field ["Line49", "Amount"] Amount,
-   line50_lesser = Field ["Line50", "Amount"] Amount,
-   line51_difference = Field ["Line51", "Amount"] Amount}
+   expenses = Field ["Line46", "Amount"] Amount,
+   netIncome = Field ["Line47", "Amount"] Amount,
+   incomeRate = Field ["Line48", "PercentAmount_ReadOnly"] $ Constant 0.03 Percent,
+   fraction = Field ["Line49", "Amount"] Amount,
+   lesser = Field ["Line50", "Amount"] Amount,
+   difference = Field ["Line51", "Amount"] Amount}
 
 partCFields = PartC {
    line61_tax = Field ["Line61", "Amount"] Amount,
