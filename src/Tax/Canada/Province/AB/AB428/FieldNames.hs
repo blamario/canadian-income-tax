@@ -10,7 +10,7 @@ import Data.Fixed (Centi)
 import Rank2 qualified
 
 import Tax.Canada.Province.AB.AB428.Types
-import Tax.Canada.Shared (MedicalExpenses(..), TaxIncomeBracket (..))
+import Tax.Canada.Shared (BaseCredit(..), MedicalExpenses(..), TaxIncomeBracket (..))
 import Tax.FDF (Entry (Count, Constant, Amount, Percent), FieldConst (Field, NoField), within)
 
 ab428Fields = within "form1" Rank2.<$> AB428 {
@@ -44,14 +44,16 @@ taxIncomeBracketFields threshold rate baseTax = TaxIncomeBracket {
 page1PartBFields = Page1PartB {
    line9_basic = Field ["Line9", "Amount"] Amount,
    line10_age = Field ["Line10", "Amount"] Amount,
-   line11_base = Field ["Line11to13", "Line11", "Amount_Fixed"] $ Constant 19_814 Amount,
-   line12_spouseIncome = Field ["Line11to13", "Line12", "Amount"] Amount,
-   line13_difference = Field ["Line11to13", "Line13", "Amount1"] Amount,
-   line13_cont = Field ["Line11to13", "Line13", "Amount2"] Amount,
-   line14_base = Field ["Line14to16", "Line14", "Amount_Fixed"] $ Constant 19_814 Amount,
-   line15_dependentIncome = Field ["Line14to16", "Line15", "Amount"] Amount,
-   line16_difference = Field ["Line14to16", "Line16", "Amount1"] Amount,
-   line16_cont = Field ["Line14to16", "Line16", "Amount2"] Amount,
+   spouseAmount = within "Line11to13" Rank2.<$> BaseCredit{
+       baseAmount = Field ["Line11", "Amount_Fixed"] $ Constant 19_814 Amount,
+       reduction = Field ["Line12", "Amount"] Amount,
+       difference = Field ["Line13", "Amount1"] Amount,
+       cont = Field ["Line13", "Amount2"] Amount},
+   dependantAmount = within "Line14to16" Rank2.<$> BaseCredit{
+       baseAmount = Field ["Line14", "Amount_Fixed"] $ Constant 19_814 Amount,
+       reduction = Field ["Line15", "Amount"] Amount,
+       difference = Field ["Line16", "Amount1"] Amount,
+       cont = Field ["Line16", "Amount2"] Amount},
    line17_infirm = Field ["Line17", "Amount"] Amount,
    line18 = Field ["Line18", "Amount"] Amount,
    line19_cppQpp = Field ["Line19to20", "Line19", "Amount"] Amount,

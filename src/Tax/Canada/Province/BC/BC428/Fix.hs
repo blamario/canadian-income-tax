@@ -14,8 +14,8 @@ import Data.Fixed (Centi)
 import Rank2 qualified
 
 import Tax.Canada.Province.BC.BC428.Types
-import Tax.Canada.Shared (fixMedicalExpenses, fixTaxIncomeBracket,
-                          MedicalExpenses (difference), TaxIncomeBracket (equalsTax))
+import Tax.Canada.Shared (fixBaseCredit, fixMedicalExpenses, fixTaxIncomeBracket,
+                          BaseCredit(cont), MedicalExpenses (difference), TaxIncomeBracket (equalsTax))
 import Tax.Util (fixEq, fractionOf, nonNegativeDifference, totalOf)
 
 fixBC428 :: BC428 Maybe -> BC428 Maybe
@@ -42,11 +42,9 @@ fixPage1PartA = fixEq $ \Page1PartA{..}-> Page1PartA{
 fixPage1PartB :: Page1PartB Maybe -> Page1PartB Maybe
 fixPage1PartB = fixEq $ \part@Page1PartB{..}-> part{
    line16_basic = Just 11302,
-   line20_difference = mfilter (> 0) $ liftA2 (-) line18_base line19_spouseIncome,
-   line20_cont = line20_difference,
-   line23_difference = mfilter (> 0) $ liftA2 (-) line21_base line22_dependentIncome,
-   line23_cont = line23_difference,
-   line25 = totalOf [line16_basic, line17_age, line20_cont, line23_cont, line24_caregiver]}
+   spouseAmount = fixBaseCredit spouseAmount,
+   dependantAmount = fixBaseCredit dependantAmount,
+   line25 = totalOf [line16_basic, line17_age, spouseAmount.cont, dependantAmount.cont, line24_caregiver]}
 
 fixPage2 :: BC428 Maybe -> Page2 Maybe -> Page2 Maybe
 fixPage2 bc428 = fixEq $ \Page2{..}-> Page2{

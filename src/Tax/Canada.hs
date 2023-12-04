@@ -30,14 +30,14 @@ import Tax.Canada.Province.ON.ON428.Types qualified as ON.Page1 (Page1(..))
 import Tax.Canada.Province.ON.ON428.Types qualified as ON.Page2 (Page2(..))
 import Tax.Canada.Province.ON.ON428.Fix (fixON428)
 import Tax.Canada.Province.ON.ON428.FieldNames (on428Fields)
-import Tax.Canada.Shared(MedicalExpenses(..))
+import Tax.Canada.Shared(MedicalExpenses(..), BaseCredit(..))
 import Tax.Util (fixEq)
 
 fixAlbertaReturns :: HasCallStack => (T1 Maybe, AB428 Maybe) -> (T1 Maybe, AB428 Maybe)
 fixAlbertaReturns =
   fixEq $ \(t1@T1{page7 = page7@Page7{step6_RefundOrBalanceOwing},
                   page8 = page8@Page8{step6_RefundOrBalanceOwing = page8step6}},
-            ab428@AB428{page1 = page1@AB.Page1{partA, partB},
+            ab428@AB428{page1 = page1@AB.Page1{partA, partB = partB1@AB.Page1PartB{spouseAmount}},
                         page2 = page2@AB.Page2{AB.partB = partB2@AB.Page2PartB{AB.medicalExpenses}},
                         page3 = page3@AB.Page3{AB.partC}})
           -> (fixT1 t1{page7 =
@@ -48,11 +48,11 @@ fixAlbertaReturns =
                              page8step6{T1.line_47900_ProvTerrCredits = ab428.page3.partD.line69_credits}}},
               fixAB428 ab428{AB.page1 =
                              page1{AB.Page1.income = t1.page5.step4_TaxableIncome.line_26000_TaxableIncome,
-                                   AB.Page1.partB = partB{AB.line12_spouseIncome = t1.page1.spouse.line23600,
-                                                          AB.line19_cppQpp = t1.page6.line30800,
-                                                          AB.line20_cppQpp = t1.page6.line31000,
-                                                          AB.line21_employmentInsurance = t1.page6.line31200,
-                                                          AB.line22_employmentInsurance = t1.page6.line31217}},
+                                   AB.Page1.partB = partB1{AB.spouseAmount = spouseAmount{baseAmount = t1.page1.spouse.line23600},
+                                                           AB.line19_cppQpp = t1.page6.line30800,
+                                                           AB.line20_cppQpp = t1.page6.line31000,
+                                                           AB.line21_employmentInsurance = t1.page6.line31200,
+                                                           AB.line22_employmentInsurance = t1.page6.line31217}},
                              AB.page2 =
                              page2{AB.Page2.partB = partB2{AB.line33_interest = t1.page6.line31900,
                                                            AB.medicalExpenses =
@@ -65,7 +65,7 @@ fixAlbertaReturns =
 fixBritishColumbiaReturns :: HasCallStack => (T1 Maybe, BC428 Maybe) -> (T1 Maybe, BC428 Maybe)
 fixBritishColumbiaReturns =
   fixEq $ \(t1@T1{page7 = page7@Page7{step6_RefundOrBalanceOwing}},
-            bc428@BC428{page1 = page1@BC.Page1{partA, partB},
+            bc428@BC428{page1 = page1@BC.Page1{partA, partB = partB1@BC.Page1PartB{spouseAmount}},
                         page2 = page2@BC.Page2{BC.partB = partB2@BC.Page2PartB{BC.medicalExpenses}},
                         page3 = page3@BC.Page3{BC.partC}})
           -> (fixT1 t1{page7 =
@@ -73,7 +73,8 @@ fixBritishColumbiaReturns =
                              step6_RefundOrBalanceOwing{T1.line_42800_ProvTerrTax = bc428.page3.line91_tax}}},
               fixBC428 bc428{BC.page1 =
                              page1{BC.Page1.partA = partA{BC.income = t1.page5.step4_TaxableIncome.line_26000_TaxableIncome},
-                                   BC.Page1.partB = partB{BC.line19_spouseIncome = t1.page1.spouse.line23600}},
+                                   BC.Page1.partB = partB1{BC.spouseAmount = spouseAmount{baseAmount = t1.page1.spouse.line23600}}
+                                  },
                              BC.page2 =
                              page2{BC.Page2.partB = partB2{BC.line27_cppQpp = t1.page6.line30800,
                                                            BC.line28_cppQpp = t1.page6.line31000,
@@ -91,7 +92,7 @@ fixBritishColumbiaReturns =
 fixOntarioReturns :: HasCallStack => (T1 Maybe, ON428 Maybe) -> (T1 Maybe, ON428 Maybe)
 fixOntarioReturns =
   fixEq $ \(t1@T1{page7 = page7@Page7{step6_RefundOrBalanceOwing}},
-            on428@ON428{page1 = page1@ON.Page1{partB},
+            on428@ON428{page1 = page1@ON.Page1{partB = partB1@ON.Page1PartB{spouseAmount}},
                         page2 = page2@ON.Page2{ON.partB = partB2@ON.Page2PartB{ON.medicalExpenses},
                                                ON.partC}})
           -> (fixT1 t1{page7 =
@@ -99,11 +100,11 @@ fixOntarioReturns =
                              step6_RefundOrBalanceOwing{T1.line_42800_ProvTerrTax = on428.page4.line90}}},
               fixON428 on428{ON.page1 =
                              page1{ON.line1 = t1.page5.step4_TaxableIncome.line_26000_TaxableIncome,
-                                   ON.Page1.partB = partB{ON.line12_spouseIncome = t1.page1.spouse.line23600,
-                                                          ON.line19_cppQpp = t1.page6.line30800,
-                                                          ON.line20_cppQpp = t1.page6.line31000,
-                                                          ON.line21_employmentInsurance = t1.page6.line31200,
-                                                          ON.line22_employmentInsurance = t1.page6.line31217}},
+                                   ON.Page1.partB = partB1{ON.spouseAmount = spouseAmount{baseAmount = t1.page1.spouse.line23600},
+                                                           ON.line19_cppQpp = t1.page6.line30800,
+                                                           ON.line20_cppQpp = t1.page6.line31000,
+                                                           ON.line21_employmentInsurance = t1.page6.line31200,
+                                                           ON.line22_employmentInsurance = t1.page6.line31217}},
                              ON.page2 =
                              page2{ON.Page2.partB = partB2{ON.line32_interest = t1.page6.line31900,
                                                            ON.medicalExpenses =

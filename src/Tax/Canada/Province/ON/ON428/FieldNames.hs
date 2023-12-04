@@ -11,7 +11,7 @@ import Rank2 qualified
 
 import Tax.Canada.Province.ON.ON428.Types
 import Tax.Canada.Province.ON.ON428.Types qualified as HealthPremiumBracket (HealthPremiumBracket(..))
-import Tax.Canada.Shared (MedicalExpenses(..), TaxIncomeBracket (..))
+import Tax.Canada.Shared (BaseCredit(..), MedicalExpenses(..), TaxIncomeBracket (..))
 import Tax.FDF (Entry (Count, Constant, Amount, Percent), FieldConst (Field, NoField), within)
 
 on428Fields = within "form1" Rank2.<$> ON428 {
@@ -46,14 +46,16 @@ taxIncomeBracketFields threshold rate baseTax = TaxIncomeBracket {
 page1PartBFields = Page1PartB {
    line9_basic = Field ["Line9", "Amount"] Amount,
    line10_age = Field ["Line10", "Amount"] Amount,
-   line11_base = Field ["Spouse-Amount", "Line11", "Amount"] $ Constant 10_406 Amount,
-   line12_spouseIncome = Field ["Spouse-Amount", "Line12", "Amount"] Amount,
-   line13_difference = Field ["Spouse-Amount", "Line13", "Amount1"] Amount,
-   line13_cont = Field ["Spouse-Amount", "Line13", "Amount2"] Amount,
-   line14_base = Field ["Eligible-Dependant", "Line14", "Amount"] $ Constant 10_406 Amount,
-   line15_dependentIncome = Field ["Eligible-Dependant", "Line15", "Amount"] Amount,
-   line16_difference = Field ["Eligible-Dependant", "Line16", "Amount1"] Amount,
-   line16_cont = Field ["Eligible-Dependant", "Line16", "Amount2"] Amount,
+   spouseAmount = within "Spouse-Amount" Rank2.<$> BaseCredit{
+       baseAmount = Field ["Line11", "Amount"] $ Constant 10_406 Amount,
+       reduction = Field ["Line12", "Amount"] Amount,
+       difference = Field ["Line13", "Amount1"] Amount,
+       cont = Field ["Line13", "Amount2"] Amount},
+   dependantAmount = within "Eligible-Dependant" Rank2.<$> BaseCredit{
+       baseAmount = Field ["Line14", "Amount"] $ Constant 10_406 Amount,
+       reduction = Field ["Line15", "Amount"] Amount,
+       difference = Field ["Line16", "Amount1"] Amount,
+       cont = Field ["Line16", "Amount2"] Amount},
    line17_caregiver = Field ["Line17", "Amount"] Amount,
    line18 = Field ["Line18", "Amount"] Amount,
    line19_cppQpp = Field ["CPP-QPP", "Line19", "Amount"] Amount,

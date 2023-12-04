@@ -9,13 +9,13 @@
 module Tax.Canada.Province.AB.AB428.Fix (AB428, fixAB428) where
 
 import Control.Applicative (liftA2)
-import Control.Monad (guard, mfilter)
+import Control.Monad (guard)
 import Data.Fixed (Centi)
 import Rank2 qualified
 
 import Tax.Canada.Province.AB.AB428.Types
-import Tax.Canada.Shared (fixMedicalExpenses, fixTaxIncomeBracket,
-                          MedicalExpenses (difference), TaxIncomeBracket (equalsTax))
+import Tax.Canada.Shared (fixBaseCredit, fixMedicalExpenses, fixTaxIncomeBracket,
+                          BaseCredit(cont), MedicalExpenses (difference), TaxIncomeBracket (equalsTax))
 import Tax.Util (fixEq, fractionOf, nonNegativeDifference, totalOf)
 
 fixAB428 :: AB428 Maybe -> AB428 Maybe
@@ -40,11 +40,9 @@ fixPage1PartA income = fixEq $ \Page1PartA{..}-> Page1PartA{
 fixPage1PartB :: Page1PartB Maybe -> Page1PartB Maybe
 fixPage1PartB = fixEq $ \part@Page1PartB{..}-> part{
    line9_basic = Just 19814,
-   line13_difference = mfilter (> 0) $ liftA2 (-) line11_base line12_spouseIncome,
-   line13_cont = line13_difference,
-   line16_difference = mfilter (> 0) $ liftA2 (-) line14_base line15_dependentIncome,
-   line16_cont = line16_difference,
-   line18 = totalOf [line9_basic, line10_age, line13_cont, line16_cont, line17_infirm],
+   spouseAmount = fixBaseCredit spouseAmount,
+   dependantAmount = fixBaseCredit dependantAmount,
+   line18 = totalOf [line9_basic, line10_age, spouseAmount.cont, dependantAmount.cont, line17_infirm],
    line24_sum = totalOf [line19_cppQpp,
                          line20_cppQpp,
                          line21_employmentInsurance,

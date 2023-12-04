@@ -10,7 +10,7 @@ import Data.Fixed (Centi)
 import Rank2 qualified
 
 import Tax.Canada.Province.BC.BC428.Types
-import Tax.Canada.Shared (MedicalExpenses(..), TaxIncomeBracket (..))
+import Tax.Canada.Shared (BaseCredit(..), MedicalExpenses(..), TaxIncomeBracket (..))
 import Tax.FDF (Entry (Count, Constant, Amount, Percent), FieldConst (Field, NoField), within)
 
 bc428Fields = within "form1" Rank2.<$> BC428 {
@@ -56,14 +56,16 @@ taxIncomeBracketFields' threshold rate baseTax = TaxIncomeBracket {
 page1PartBFields = Page1PartB {
    line16_basic = Field ["Line16", "Amount"] Amount,
    line17_age = Field ["Line17", "Amount"] Amount,
-   line18_base = Field ["Spouse_CPL_Amount", "Line18", "Amount"] $ Constant 10_646 Amount,
-   line19_spouseIncome = Field ["Spouse_CPL_Amount", "Line19", "Amount"] Amount,
-   line20_difference = Field ["Spouse_CPL_Amount", "Line20", "Amount1"] Amount,
-   line20_cont = Field ["Spouse_CPL_Amount", "Line20", "Amount2"] Amount,
-   line21_base = Field ["Amount_Eligible_Dependant", "Line21", "Amount"] $ Constant 10_646 Amount,
-   line22_dependentIncome = Field ["Amount_Eligible_Dependant", "Line22", "Amount"] Amount,
-   line23_difference = Field ["Amount_Eligible_Dependant", "Line23", "Amount1"] Amount,
-   line23_cont = Field ["Amount_Eligible_Dependant", "Line23", "Amount2"] Amount,
+   spouseAmount = within "Spouse_CPL_Amount" Rank2.<$> BaseCredit{
+       baseAmount = Field ["Line18", "Amount"] $ Constant 10_646 Amount,
+       reduction = Field ["Line19", "Amount"] Amount,
+       difference = Field ["Line20", "Amount1"] Amount,
+       cont = Field ["Line20", "Amount2"] Amount},
+   dependantAmount = within "Amount_Eligible_Dependant" Rank2.<$> BaseCredit{
+       baseAmount = Field ["Line21", "Amount"] $ Constant 10_646 Amount,
+       reduction = Field ["Line22", "Amount"] Amount,
+       difference = Field ["Line23", "Amount1"] Amount,
+       cont = Field ["Line23", "Amount2"] Amount},
    line24_caregiver = Field ["Line24", "Amount"] Amount,
    line25 = Field ["Line25", "Amount"] Amount}
 

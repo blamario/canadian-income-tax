@@ -19,7 +19,7 @@ import Language.Haskell.TH qualified as TH
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
-import Tax.Canada.Shared (MedicalExpenses, TaxIncomeBracket)
+import Tax.Canada.Shared (BaseCredit, MedicalExpenses, TaxIncomeBracket)
 
 data ON428 line = ON428 {
    page1 :: Page1 line,
@@ -42,14 +42,8 @@ data Page1PartA line = Page1PartA {
 data Page1PartB line = Page1PartB {
    line9_basic :: line Centi,
    line10_age :: line Centi,
-   line11_base :: line Centi,
-   line12_spouseIncome :: line Centi,
-   line13_difference :: line Centi,
-   line13_cont :: line Centi,
-   line14_base :: line Centi,
-   line15_dependentIncome :: line Centi,
-   line16_difference :: line Centi,
-   line16_cont :: line Centi,
+   spouseAmount :: BaseCredit line,
+   dependantAmount :: BaseCredit line,
    line17_caregiver :: line Centi,
    line18 :: line Centi,
    line19_cppQpp :: line Centi,
