@@ -4,7 +4,7 @@
 {-# LANGUAGE NoFieldSelectors #-}
 {-# LANGUAGE OverloadedRecordDot #-}
 
-module Tax.Canada (T1, fixAlbertaReturns, fixBritishColumbiaReturns, fixOntarioReturns, fixT1) where
+module Tax.Canada (T1, fixAlbertaReturns, fixBritishColumbiaReturns, fixManitobaReturns, fixOntarioReturns, fixT1) where
 
 import GHC.Stack (HasCallStack)
 
@@ -24,6 +24,12 @@ import Tax.Canada.Province.BC.BC428.Types qualified as BC.Page2 (Page2(..))
 import Tax.Canada.Province.BC.BC428.Types (BC428 (BC428))
 import Tax.Canada.Province.BC.BC428.Fix (fixBC428)
 import Tax.Canada.Province.BC.BC428.FieldNames (bc428Fields)
+import Tax.Canada.Province.MB.MB428.Types qualified as MB
+import Tax.Canada.Province.MB.MB428.Types qualified as MB.Page1 (Page1(..))
+import Tax.Canada.Province.MB.MB428.Types qualified as MB.Page2 (Page2(..))
+import Tax.Canada.Province.MB.MB428.Types (MB428 (MB428))
+import Tax.Canada.Province.MB.MB428.Fix (fixMB428)
+import Tax.Canada.Province.MB.MB428.FieldNames (mb428Fields)
 import Tax.Canada.Province.ON.ON428.Types qualified as ON
 import Tax.Canada.Province.ON.ON428.Types (ON428 (ON428))
 import Tax.Canada.Province.ON.ON428.Types qualified as ON.Page1 (Page1(..))
@@ -88,6 +94,32 @@ fixBritishColumbiaReturns =
                               BC.page3 =
                               page3{BC.partC = partC{BC.line66_copy = t1.page7.partC_NetFederalTax.line40427},
                                     BC.line74_copy = t1.page4.line_23600_NetIncome}})
+
+fixManitobaReturns :: HasCallStack => (T1 Maybe, MB428 Maybe) -> (T1 Maybe, MB428 Maybe)
+fixManitobaReturns =
+  fixEq $ \(t1@T1{page7 = page7@Page7{step6_RefundOrBalanceOwing},
+                  page8 = page8@Page8{step6_RefundOrBalanceOwing = page8step6}},
+            mb428@MB428{page1 = page1@MB.Page1{partA, partB = partB1@MB.Page1PartB{spouseAmount}},
+                        page2 = page2@MB.Page2{MB.partB = partB2@MB.Page2PartB{MB.medicalExpenses}},
+                        page3 = page3@MB.Page3{MB.partC}})
+          -> (fixT1 t1{page7 =
+                       page7{step6_RefundOrBalanceOwing =
+                             step6_RefundOrBalanceOwing{T1.line_42800_ProvTerrTax = mb428.page3.partC.line82_tax}}},
+              fixMB428 mb428{MB.page1 =
+                             page1{MB.Page1.income = t1.page5.step4_TaxableIncome.line_26000_TaxableIncome,
+                                   MB.Page1.partB = partB1{MB.spouseAmount = spouseAmount{baseAmount = t1.page1.spouse.line23600},
+                                                           MB.line19_cppQpp = t1.page6.line30800,
+                                                           MB.line20_cppQpp = t1.page6.line31000,
+                                                           MB.line21_employmentInsurance = t1.page6.line31200,
+                                                           MB.line22_employmentInsurance = t1.page6.line31217}},
+                             MB.page2 =
+                             page2{MB.Page2.partB = partB2{MB.line37_interest = t1.page6.line31900,
+                                                           MB.medicalExpenses =
+                                                           medicalExpenses{
+                                                              expenses = t1.page6.medical_expenses.familyExpenses,
+                                                              netIncome = t1.page4.line_23600_NetIncome}}},
+                             MB.page3 =
+                             page3{MB.partC = partC{MB.line63_copy = t1.page7.partC_NetFederalTax.line40427}}})
 
 fixOntarioReturns :: HasCallStack => (T1 Maybe, ON428 Maybe) -> (T1 Maybe, ON428 Maybe)
 fixOntarioReturns =

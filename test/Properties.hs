@@ -6,7 +6,7 @@
 
 module Main where
 
-import Tax.Canada (fixAlbertaReturns, fixBritishColumbiaReturns, fixOntarioReturns)
+import Tax.Canada (fixAlbertaReturns, fixBritishColumbiaReturns, fixManitobaReturns, fixOntarioReturns)
 import Tax.Canada.T1.FieldNames.ON qualified as ON (t1Fields)
 import Tax.Canada.T1.FieldNames.AB qualified as AB (t1Fields)
 import Tax.Canada.T1.FieldNames.BC qualified as BC (t1Fields)
@@ -19,9 +19,11 @@ import Tax.Canada.T1.FieldNames.YT qualified as YT (t1Fields)
 import Tax.Canada.T1.Fix (T1, fixT1)
 import Tax.Canada.Province.AB.AB428.FieldNames (ab428Fields)
 import Tax.Canada.Province.BC.BC428.FieldNames (bc428Fields)
+import Tax.Canada.Province.MB.MB428.FieldNames (mb428Fields)
 import Tax.Canada.Province.ON.ON428.FieldNames (on428Fields)
 import Tax.Canada.Province.AB.AB428.Fix (AB428, fixAB428)
 import Tax.Canada.Province.BC.BC428.Fix (BC428, fixBC428)
+import Tax.Canada.Province.MB.MB428.Fix (MB428, fixMB428)
 import Tax.Canada.Province.ON.ON428.Fix (ON428, fixON428)
 import Tax.FDF as FDF
 import Paths_canadian_income_tax (getDataDir)
@@ -70,6 +72,10 @@ properties fdfT1Map fdf428Map =
         testProperty "T1" (checkFormIdempotent BC.t1Fields fixT1),
         testProperty "BC428" (checkFormIdempotent bc428Fields fixBC428),
         testProperty "T1+BC428" (checkFormPairIdempotent BC.t1Fields bc428Fields fixBritishColumbiaReturns)],
+      testGroup "Manitoba" [
+        testProperty "T1" (checkFormIdempotent AB.t1Fields fixT1),
+        testProperty "MB428" (checkFormIdempotent mb428Fields fixMB428),
+        testProperty "T1+MB428" (checkFormPairIdempotent AB.t1Fields mb428Fields fixManitobaReturns)],
       testGroup "Ontario" [
         testProperty "T1" (checkFormIdempotent ON.t1Fields fixT1),
         testProperty "ON428" (checkFormIdempotent on428Fields fixON428),
@@ -97,8 +103,9 @@ properties fdfT1Map fdf428Map =
                        ("Yukon", "5011", YT.t1Fields),
                        ("Nunavut", "5014", NU.t1Fields),
                        ("Alberta, Manitoba, Nova Scotia, and Saskatchewan", "5015", AB.t1Fields)]
-        provinces428 = [("Ontario", "5006", checkFormFields on428Fields),
-                        ("Alberta", "5009", checkFormFields ab428Fields),
+        provinces428 = [("Ontario",  "5006", checkFormFields on428Fields),
+                        ("Manitoba", "5007", checkFormFields mb428Fields),
+                        ("Alberta",  "5009", checkFormFields ab428Fields),
                         ("British Columbia", "5010", checkFormFields bc428Fields)]
 
 checkFormPairIdempotent :: (Eq (g Maybe), Show (g Maybe), Eq (h Maybe), Show (h Maybe),
