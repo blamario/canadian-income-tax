@@ -18,13 +18,15 @@ import Tax.Canada.T1.FieldNames.QC qualified as QC (t1Fields)
 import Tax.Canada.T1.FieldNames.YT qualified as YT (t1Fields)
 import Tax.Canada.T1.Fix (T1, fixT1)
 import Tax.Canada.Province.AB.AB428.FieldNames (ab428Fields)
-import Tax.Canada.Province.BC.BC428.FieldNames (bc428Fields)
-import Tax.Canada.Province.MB.MB428.FieldNames (mb428Fields)
-import Tax.Canada.Province.ON.ON428.FieldNames (on428Fields)
 import Tax.Canada.Province.AB.AB428.Fix (AB428, fixAB428)
+import Tax.Canada.Province.BC.BC428.FieldNames (bc428Fields)
 import Tax.Canada.Province.BC.BC428.Fix (BC428, fixBC428)
+import Tax.Canada.Province.MB.MB428.FieldNames (mb428Fields)
 import Tax.Canada.Province.MB.MB428.Fix (MB428, fixMB428)
+import Tax.Canada.Province.ON.ON428.FieldNames (on428Fields)
 import Tax.Canada.Province.ON.ON428.Fix (ON428, fixON428)
+import Tax.Canada.Province.ON.ON479.FieldNames (on479Fields)
+import Tax.Canada.Province.ON.ON479.Fix (ON479, fixON479)
 import Tax.FDF as FDF
 import Paths_canadian_income_tax (getDataDir)
 
@@ -36,7 +38,7 @@ import Data.Functor.Const (Const (Const, getConst))
 import Data.List qualified as List
 import Data.Maybe (fromMaybe)
 import Data.Semigroup (All (All, getAll))
-import Data.Text (isInfixOf, isSuffixOf, stripSuffix)
+import Data.Text (Text, isInfixOf, isSuffixOf, stripSuffix)
 import Rank2 qualified
 import System.Directory (listDirectory)
 import System.Exit (die)
@@ -52,16 +54,17 @@ import Test.Tasty.Hedgehog
 
 main = do
   dataDir <- getDataDir
-  fdfT1FileNames <- listDirectory (combine dataDir "T1/fdf")
-  fdf428FileNames <- filter (".fdf" `isExtensionOf`) <$> listDirectory (combine dataDir "428")
-  fdfT1Bytes <- traverse (ByteString.readFile . combine dataDir . combine "T1/fdf") fdfT1FileNames
-  fdf428Bytes <- traverse (ByteString.readFile . combine dataDir . combine "428") fdf428FileNames
-  case (,) <$> traverse parse fdfT1Bytes <*> traverse parse fdf428Bytes of
-    Left err -> die err
-    Right (fdfsT1, fdfs428) -> defaultMain $ properties (zip fdfT1FileNames fdfsT1) (zip fdf428FileNames fdfs428)
+  fdfMaps <- traverse (readFDFs . combine dataDir) ["T1/fdf", "428", "479"]
+  either die (defaultMain . properties) $ sequenceA fdfMaps
+  where
+    readFDFs :: FilePath -> IO (Either String [(FilePath, FDF)])
+    readFDFs dir = do
+      fdfFileNames <- listDirectory dir
+      fdfBytes <- traverse (ByteString.readFile . combine dir) fdfFileNames
+      pure $ traverse (traverse parse) $ zip fdfFileNames fdfBytes
 
-properties :: [(FilePath, FDF)] -> [(FilePath, FDF)] -> TestTree
-properties fdfT1Map fdf428Map =
+properties :: [[(FilePath, FDF)]] -> TestTree
+properties [fdfT1Map, fdf428Map, fdf479Map] =
   testGroup "Properties" [
     testGroup "Idempotence" [
       testGroup "Alberta" [
@@ -79,6 +82,7 @@ properties fdfT1Map fdf428Map =
       testGroup "Ontario" [
         testProperty "T1" (checkFormIdempotent ON.t1Fields fixT1),
         testProperty "ON428" (checkFormIdempotent on428Fields fixON428),
+        testProperty "ON479" (checkFormIdempotent on479Fields fixON479),
         testProperty "T1+ON428" (checkFormPairIdempotent ON.t1Fields on428Fields fixOntarioReturns)]],
     testGroup "Roundtrip" [
       testGroup "T1" [
@@ -86,7 +90,10 @@ properties fdfT1Map fdf428Map =
         | (name, prefix, fields) <- provincesT1],
       testGroup "428" [
         testProperty ("Form 428 for " <> name) (checkFields $ List.lookup (prefix <> "-c-fill-22e.fdf") fdf428Map)
-        | (name, prefix, checkFields) <- provinces428]],
+        | (name, prefix, checkFields) <- provinces428],
+      testGroup "479" [
+        testProperty ("Form 479 for " <> name) (checkFields $ List.lookup (prefix <> "-tc-fill-22e.fdf") fdf479Map)
+        | (name, prefix, checkFields) <- provinces479]],
     testGroup "Load mismatch" [
       testProperty ("Load T1 for " <> p1name <> " from FDF for " <> p2name) $ property $ assert
         $ any (isLeft  . FDF.load p1fields) $ List.lookup (p2fdfPrefix <> "-r-fill-22e.fdf") fdfT1Map
@@ -107,6 +114,8 @@ properties fdfT1Map fdf428Map =
                         ("Manitoba", "5007", checkFormFields mb428Fields),
                         ("Alberta",  "5009", checkFormFields ab428Fields),
                         ("British Columbia", "5010", checkFormFields bc428Fields)]
+        provinces479 = [("Ontario",  "5006", checkFormFields on479Fields)]
+properties maps = error ("Unexpected data directory contents: " <> show maps)
 
 checkFormPairIdempotent :: (Eq (g Maybe), Show (g Maybe), Eq (h Maybe), Show (h Maybe),
                             Rank2.Applicative g, Shallow.Traversable Transformations.Gen g,
@@ -133,7 +142,8 @@ checkFormFields fields (Just fdf) = property $ do
       fdfKeys = Text.FDF.foldMapWithKey (const . (:[]) . map dropIndex) fdf
       dropIndex t = fromMaybe t (stripSuffix "[0]" t)
       keyHeads = List.nub $ take 2 <$> formKeys
-      noCheckbox = filter $ not . any (liftA2 (||) (isSuffixOf "Checkbox") $ liftA2 (||) (isInfixOf "CheckBox") (== "QuestionA"))
+      noCheckbox :: [[Text]] -> [[Text]]
+      noCheckbox = filter $ not . or . ([isSuffixOf "Checkbox", isInfixOf "CheckBox", (== "QuestionA"), (== "Note1")] <*>)
   -- annotateShow fdf'
   FDF.load fields fdf' === Right form
   List.sort (noCheckbox formKeys) === List.sort (noCheckbox $ filter (\x-> any (`List.isPrefixOf` x) keyHeads) fdfKeys)
