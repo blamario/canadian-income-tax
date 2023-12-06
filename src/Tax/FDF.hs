@@ -41,7 +41,7 @@ data Entry a where
   Amount :: Entry Centi
   Percent :: Entry Rational
   Checkbox :: Entry Bool
-  RadioButton :: (Bounded a, Enum a, Eq a, Show a) => [a] -> Entry a
+  RadioButton :: (Eq a, Show a) => [a] -> Entry a
   RadioButtons :: (Bounded a, Enum a, Eq a, Show a) => Int -> Int -> Text -> [a] -> Entry a
   Switch :: Text -> Text -> Text -> Entry Bool
   Switch' :: Text -> Entry Bool
@@ -106,7 +106,9 @@ update fields = mapWithKey
         fromEntry Date v = Text.pack $ formatTime defaultTimeLocale "%Y%m%d" v
         fromEntry Checkbox True = "Yes"
         fromEntry Checkbox False = "No"
-        fromEntry (RadioButton values) v = Text.pack $ show $ fromEnum v + 1
+        fromEntry e@(RadioButton values) v = case elemIndex v values
+                                             of Just i -> Text.pack $ show $ i+1
+                                                Nothing -> error (show e <> " doesn't allow value " <> show v)
         fromEntry Amount v = Text.pack (show v)
         fromEntry Percent v = dropInsignificantZeros (Text.pack $ show (fromRational $ v * 100 :: Centi)) <> "%"
           where dropInsignificantZeros = Text.dropWhileEnd (== '.') . Text.dropWhileEnd (== '0')
