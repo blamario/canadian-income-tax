@@ -28,7 +28,10 @@ source-repository head
 library
     exposed-modules:
         Tax.FDF
-        Tax.Canada
+        Tax.Canada.Province.AB
+        Tax.Canada.Province.BC
+        Tax.Canada.Province.MB
+        Tax.Canada.Province.ON
         Tax.Canada.Shared
         Tax.Canada.T1.Types
         Tax.Canada.T1.FieldNames
@@ -42,30 +45,25 @@ library
         Tax.Canada.T1.FieldNames.QC
         Tax.Canada.T1.FieldNames.YT
         Tax.Canada.T1.Fix
-        Tax.Canada.Province.AB
+        Tax.PDFtk
+        Tax.Util
+
+    other-modules:
         Tax.Canada.Province.AB.AB428.Types
         Tax.Canada.Province.AB.AB428.FieldNames
         Tax.Canada.Province.AB.AB428.Fix
-        Tax.Canada.Province.BC
         Tax.Canada.Province.BC.BC428.Types
         Tax.Canada.Province.BC.BC428.FieldNames
         Tax.Canada.Province.BC.BC428.Fix
-        Tax.Canada.Province.MB
         Tax.Canada.Province.MB.MB428.Types
         Tax.Canada.Province.MB.MB428.FieldNames
         Tax.Canada.Province.MB.MB428.Fix
-        Tax.Canada.Province.ON
         Tax.Canada.Province.ON.ON428.Types
         Tax.Canada.Province.ON.ON428.FieldNames
         Tax.Canada.Province.ON.ON428.Fix
         Tax.Canada.Province.ON.ON479.Types
         Tax.Canada.Province.ON.ON479.FieldNames
         Tax.Canada.Province.ON.ON479.Fix
-        Tax.PDFtk
-        Tax.Util
-
-    -- Modules included in this library but not exported.
-    -- other-modules:
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
