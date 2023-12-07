@@ -6,10 +6,10 @@
 
 module Main where
 
-import Tax.Canada (fixAlbertaReturns, fixBritishColumbiaReturns, fixManitobaReturns, fixOntarioReturns)
-import Tax.Canada.T1.FieldNames.ON qualified as ON (t1Fields)
-import Tax.Canada.T1.FieldNames.AB qualified as AB (t1Fields)
-import Tax.Canada.T1.FieldNames.BC qualified as BC (t1Fields)
+import Tax.Canada.Province.AB qualified as AB
+import Tax.Canada.Province.BC qualified as BC
+import Tax.Canada.Province.MB qualified as MB
+import Tax.Canada.Province.ON qualified as ON
 import Tax.Canada.T1.FieldNames.NB qualified as NB (t1Fields)
 import Tax.Canada.T1.FieldNames.NL qualified as NL (t1Fields)
 import Tax.Canada.T1.FieldNames.NT qualified as NT (t1Fields)
@@ -17,16 +17,6 @@ import Tax.Canada.T1.FieldNames.NU qualified as NU (t1Fields)
 import Tax.Canada.T1.FieldNames.QC qualified as QC (t1Fields)
 import Tax.Canada.T1.FieldNames.YT qualified as YT (t1Fields)
 import Tax.Canada.T1.Fix (T1, fixT1)
-import Tax.Canada.Province.AB.AB428.FieldNames (ab428Fields)
-import Tax.Canada.Province.AB.AB428.Fix (AB428, fixAB428)
-import Tax.Canada.Province.BC.BC428.FieldNames (bc428Fields)
-import Tax.Canada.Province.BC.BC428.Fix (BC428, fixBC428)
-import Tax.Canada.Province.MB.MB428.FieldNames (mb428Fields)
-import Tax.Canada.Province.MB.MB428.Fix (MB428, fixMB428)
-import Tax.Canada.Province.ON.ON428.FieldNames (on428Fields)
-import Tax.Canada.Province.ON.ON428.Fix (ON428, fixON428)
-import Tax.Canada.Province.ON.ON479.FieldNames (on479Fields)
-import Tax.Canada.Province.ON.ON479.Fix (ON479, fixON479)
 import Tax.FDF as FDF
 import Paths_canadian_income_tax (getDataDir)
 
@@ -69,21 +59,21 @@ properties [fdfT1Map, fdf428Map, fdf479Map] =
     testGroup "Idempotence" [
       testGroup "Alberta" [
         testProperty "T1" (checkFormIdempotent AB.t1Fields fixT1),
-        testProperty "AB428" (checkFormIdempotent ab428Fields fixAB428),
-        testProperty "T1+AB428" (checkFormPairIdempotent AB.t1Fields ab428Fields fixAlbertaReturns)],
+        testProperty "AB428" (checkFormIdempotent AB.ab428Fields AB.fixAB428),
+        testProperty "T1+AB428" (checkFormPairIdempotent AB.t1Fields AB.ab428Fields AB.fixReturns)],
       testGroup "British Columbia" [
         testProperty "T1" (checkFormIdempotent BC.t1Fields fixT1),
-        testProperty "BC428" (checkFormIdempotent bc428Fields fixBC428),
-        testProperty "T1+BC428" (checkFormPairIdempotent BC.t1Fields bc428Fields fixBritishColumbiaReturns)],
+        testProperty "BC428" (checkFormIdempotent BC.bc428Fields BC.fixBC428),
+        testProperty "T1+BC428" (checkFormPairIdempotent BC.t1Fields BC.bc428Fields BC.fixReturns)],
       testGroup "Manitoba" [
-        testProperty "T1" (checkFormIdempotent AB.t1Fields fixT1),
-        testProperty "MB428" (checkFormIdempotent mb428Fields fixMB428),
-        testProperty "T1+MB428" (checkFormPairIdempotent AB.t1Fields mb428Fields fixManitobaReturns)],
+        testProperty "T1" (checkFormIdempotent MB.t1Fields fixT1),
+        testProperty "MB428" (checkFormIdempotent MB.mb428Fields MB.fixMB428),
+        testProperty "T1+MB428" (checkFormPairIdempotent AB.t1Fields MB.mb428Fields MB.fixReturns)],
       testGroup "Ontario" [
         testProperty "T1" (checkFormIdempotent ON.t1Fields fixT1),
-        testProperty "ON428" (checkFormIdempotent on428Fields fixON428),
-        testProperty "ON479" (checkFormIdempotent on479Fields fixON479),
-        testProperty "T1+ON428" (checkFormPairIdempotent ON.t1Fields on428Fields fixOntarioReturns)]],
+        testProperty "ON428" (checkFormIdempotent ON.on428Fields ON.fixON428),
+        testProperty "ON479" (checkFormIdempotent ON.on479Fields ON.fixON479),
+        testProperty "T1+ON428" (checkFormPairIdempotent ON.t1Fields ON.on428Fields ON.fixReturns)]],
     testGroup "Roundtrip" [
       testGroup "T1" [
         testProperty ("T1 for " <> name) (checkFormFields fields $ List.lookup (prefix <> "-r-fill-22e.fdf") fdfT1Map)
@@ -110,11 +100,11 @@ properties [fdfT1Map, fdf428Map, fdf479Map] =
                        ("Yukon", "5011", YT.t1Fields),
                        ("Nunavut", "5014", NU.t1Fields),
                        ("Alberta, Manitoba, Nova Scotia, and Saskatchewan", "5015", AB.t1Fields)]
-        provinces428 = [("Ontario",  "5006", checkFormFields on428Fields),
-                        ("Manitoba", "5007", checkFormFields mb428Fields),
-                        ("Alberta",  "5009", checkFormFields ab428Fields),
-                        ("British Columbia", "5010", checkFormFields bc428Fields)]
-        provinces479 = [("Ontario",  "5006", checkFormFields on479Fields)]
+        provinces428 = [("Ontario",  "5006", checkFormFields ON.on428Fields),
+                        ("Manitoba", "5007", checkFormFields MB.mb428Fields),
+                        ("Alberta",  "5009", checkFormFields AB.ab428Fields),
+                        ("British Columbia", "5010", checkFormFields BC.bc428Fields)]
+        provinces479 = [("Ontario",  "5006", checkFormFields ON.on479Fields)]
 properties maps = error ("Unexpected data directory contents: " <> show maps)
 
 checkFormPairIdempotent :: (Eq (g Maybe), Show (g Maybe), Eq (h Maybe), Show (h Maybe),

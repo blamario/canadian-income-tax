@@ -22,8 +22,8 @@ import Text.Read (readMaybe)
 import Web.Scotty
 
 import Paths_canadian_income_tax (getDataDir)
-import Tax.Canada (fixOntarioReturns, fixT1)
 import Tax.Canada.T1.FieldNames (formPrefixForProvince, t1FieldsForProvince)
+import Tax.Canada.T1.Fix (fixT1)
 import Tax.FDF qualified as FDF
 import Tax.PDFtk (fdf2pdf, pdf2fdf)
 

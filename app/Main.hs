@@ -26,14 +26,13 @@ import System.FilePath (replaceDirectory, takeFileName)
 import System.IO (hPutStrLn, stderr)
 import Text.FDF (FDF, parse, serialize)
 
-import Tax.Canada (T1, fixAlbertaReturns, fixBritishColumbiaReturns, fixOntarioReturns, fixT1)
 import Tax.Canada.T1.FieldNames (t1FieldsForProvince)
-import Tax.Canada.Province.AB.AB428.Fix (fixAB428)
-import Tax.Canada.Province.AB.AB428.FieldNames (ab428Fields)
-import Tax.Canada.Province.BC.BC428.Fix (fixBC428)
-import Tax.Canada.Province.BC.BC428.FieldNames (bc428Fields)
-import Tax.Canada.Province.ON.ON428.Fix (fixON428)
-import Tax.Canada.Province.ON.ON428.FieldNames (on428Fields)
+import Tax.Canada.T1.Fix (fixT1)
+import Tax.Canada.T1.Types (T1)
+import Tax.Canada.Province.AB qualified as AB
+import Tax.Canada.Province.BC qualified as BC
+import Tax.Canada.Province.MB qualified as MB
+import Tax.Canada.Province.ON qualified as ON
 import Tax.FDF qualified as FDF
 import Tax.PDFtk (fdf2pdf, pdf2fdf)
 
@@ -87,14 +86,16 @@ readMaybeFDF baseName path = traverse (\p-> addPath p . fmap Lazy.toStrict <$> r
          addPath p (isPDF, content) = (p, isPDF, content)
 
 fix428fdf :: Province.Code -> FDF -> Either String FDF
-fix428fdf Province.AB = FDF.mapForm ab428Fields fixAB428
-fix428fdf Province.BC = FDF.mapForm bc428Fields fixBC428
-fix428fdf Province.ON = FDF.mapForm on428Fields fixON428
+fix428fdf Province.AB = FDF.mapForm AB.ab428Fields AB.fixAB428
+fix428fdf Province.BC = FDF.mapForm BC.bc428Fields BC.fixBC428
+fix428fdf Province.MB = FDF.mapForm MB.mb428Fields MB.fixMB428
+fix428fdf Province.ON = FDF.mapForm ON.on428Fields ON.fixON428
 
 fix428t1fdfs :: Province.Code -> T1 FDF.FieldConst -> (FDF, FDF) -> Either String (FDF, FDF)
-fix428t1fdfs Province.AB t1Fields = FDF.mapForm2 (t1Fields, ab428Fields) fixAlbertaReturns
-fix428t1fdfs Province.BC t1Fields = FDF.mapForm2 (t1Fields, bc428Fields) fixBritishColumbiaReturns
-fix428t1fdfs Province.ON t1Fields = FDF.mapForm2 (t1Fields, on428Fields) fixOntarioReturns
+fix428t1fdfs Province.AB t1Fields = FDF.mapForm2 (t1Fields, AB.ab428Fields) AB.fixReturns
+fix428t1fdfs Province.BC t1Fields = FDF.mapForm2 (t1Fields, BC.bc428Fields) BC.fixReturns
+fix428t1fdfs Province.MB t1Fields = FDF.mapForm2 (t1Fields, MB.mb428Fields) MB.fixReturns
+fix428t1fdfs Province.ON t1Fields = FDF.mapForm2 (t1Fields, ON.on428Fields) ON.fixReturns
 
 process :: Options -> IO ()
 process Options{province, t1InputPath, p428InputPath, outputPath, verbose} = do
