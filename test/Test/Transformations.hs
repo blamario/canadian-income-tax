@@ -31,7 +31,7 @@ import Transformation.Shallow qualified as Shallow
 import Transformation.Shallow.TH qualified as Shallow.TH
 
 import Tax.FDF (FieldConst (Field, NoField), Entry (Constant))
-import Tax.Canada.T1.Types (LanguageOfCorrespondence, MaritalStatus)
+import Tax.Canada.T1 (LanguageOfCorrespondence, MaritalStatus)
 import Data.Fixed (Centi, Fixed (MkFixed))
 
 data Gen = Gen

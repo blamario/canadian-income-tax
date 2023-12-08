@@ -27,7 +27,6 @@ source-repository head
 
 library
     exposed-modules:
-        Tax.FDF
         Tax.Canada.Province.AB
         Tax.Canada.Province.BC
         Tax.Canada.Province.MB
@@ -39,13 +38,13 @@ library
         Tax.Canada.Territory.NU
         Tax.Canada.Territory.YT
         Tax.Canada.Shared
-        Tax.Canada.T1.Types
-        Tax.Canada.T1.FieldNames
-        Tax.Canada.T1.Fix
+        Tax.Canada.T1
+        Tax.FDF
         Tax.PDFtk
         Tax.Util
 
     other-modules:
+        Tax.Canada.T1.Types
         Tax.Canada.T1.FieldNames.AB
         Tax.Canada.T1.FieldNames.BC
         Tax.Canada.T1.FieldNames.NB
@@ -55,6 +54,7 @@ library
         Tax.Canada.T1.FieldNames.ON
         Tax.Canada.T1.FieldNames.QC
         Tax.Canada.T1.FieldNames.YT
+        Tax.Canada.T1.Fix
         Tax.Canada.Province.AB.AB428.Types
         Tax.Canada.Province.AB.AB428.FieldNames
         Tax.Canada.Province.AB.AB428.Fix

@@ -9,7 +9,7 @@ module Main where
 import Tax.Canada.Province.ON qualified as ON (t1Fields)
 import Tax.Canada.Province.AB qualified as AB (t1Fields)
 import Tax.Canada.Province.BC qualified as BC (t1Fields)
-import Tax.Canada.T1.Fix (T1, fixT1)
+import Tax.Canada.T1 (T1, fixT1)
 import Tax.FDF as FDF
 
 import Data.ByteString qualified as ByteString

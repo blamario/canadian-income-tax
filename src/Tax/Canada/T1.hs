@@ -1,13 +1,14 @@
 {-# LANGUAGE ImportQualifiedPost #-}
 {-# LANGUAGE LambdaCase #-}
 
-module Tax.Canada.T1.FieldNames where
+module Tax.Canada.T1 (fixT1, formPrefixForProvince, t1FieldsForProvince, module Tax.Canada.T1.Types) where
 
 import Data.CAProvinceCodes qualified as Province
 import Data.Enum.Memo (memoize)
 
 import Tax.FDF (FieldConst)
-import Tax.Canada.T1.Types (T1)
+import Tax.Canada.T1.Types
+import Tax.Canada.T1.Fix (fixT1)
 import Tax.Canada.T1.FieldNames.AB qualified as AB
 import Tax.Canada.T1.FieldNames.BC qualified as BC
 import Tax.Canada.T1.FieldNames.NB qualified as NB

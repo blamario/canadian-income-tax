@@ -26,9 +26,7 @@ import System.FilePath (replaceDirectory, takeFileName)
 import System.IO (hPutStrLn, stderr)
 import Text.FDF (FDF, parse, serialize)
 
-import Tax.Canada.T1.FieldNames (t1FieldsForProvince)
-import Tax.Canada.T1.Fix (fixT1)
-import Tax.Canada.T1.Types (T1)
+import Tax.Canada.T1 (T1, fixT1, t1FieldsForProvince)
 import Tax.Canada.Province.AB qualified as AB
 import Tax.Canada.Province.BC qualified as BC
 import Tax.Canada.Province.MB qualified as MB
