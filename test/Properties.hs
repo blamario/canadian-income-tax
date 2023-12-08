@@ -9,13 +9,13 @@ module Main where
 import Tax.Canada.Province.AB qualified as AB
 import Tax.Canada.Province.BC qualified as BC
 import Tax.Canada.Province.MB qualified as MB
+import Tax.Canada.Province.NB qualified as NB
+import Tax.Canada.Province.NL qualified as NL
 import Tax.Canada.Province.ON qualified as ON
-import Tax.Canada.T1.FieldNames.NB qualified as NB (t1Fields)
-import Tax.Canada.T1.FieldNames.NL qualified as NL (t1Fields)
-import Tax.Canada.T1.FieldNames.NT qualified as NT (t1Fields)
-import Tax.Canada.T1.FieldNames.NU qualified as NU (t1Fields)
-import Tax.Canada.T1.FieldNames.QC qualified as QC (t1Fields)
-import Tax.Canada.T1.FieldNames.YT qualified as YT (t1Fields)
+import Tax.Canada.Province.QC qualified as QC
+import Tax.Canada.Territory.NT qualified as NT
+import Tax.Canada.Territory.NU qualified as NU
+import Tax.Canada.Territory.YT qualified as YT
 import Tax.Canada.T1.Fix (T1, fixT1)
 import Tax.FDF as FDF
 import Paths_canadian_income_tax (getDataDir)

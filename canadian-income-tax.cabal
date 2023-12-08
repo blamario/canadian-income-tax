@@ -31,10 +31,21 @@ library
         Tax.Canada.Province.AB
         Tax.Canada.Province.BC
         Tax.Canada.Province.MB
+        Tax.Canada.Province.NB
+        Tax.Canada.Province.NL
         Tax.Canada.Province.ON
+        Tax.Canada.Province.QC
+        Tax.Canada.Territory.NT
+        Tax.Canada.Territory.NU
+        Tax.Canada.Territory.YT
         Tax.Canada.Shared
         Tax.Canada.T1.Types
         Tax.Canada.T1.FieldNames
+        Tax.Canada.T1.Fix
+        Tax.PDFtk
+        Tax.Util
+
+    other-modules:
         Tax.Canada.T1.FieldNames.AB
         Tax.Canada.T1.FieldNames.BC
         Tax.Canada.T1.FieldNames.NB
@@ -44,11 +55,6 @@ library
         Tax.Canada.T1.FieldNames.ON
         Tax.Canada.T1.FieldNames.QC
         Tax.Canada.T1.FieldNames.YT
-        Tax.Canada.T1.Fix
-        Tax.PDFtk
-        Tax.Util
-
-    other-modules:
         Tax.Canada.Province.AB.AB428.Types
         Tax.Canada.Province.AB.AB428.FieldNames
         Tax.Canada.Province.AB.AB428.Fix

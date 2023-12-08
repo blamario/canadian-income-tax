@@ -6,10 +6,9 @@
 
 module Main where
 
-import Tax.Canada.T1.FieldNames.ON qualified as ON (t1Fields)
-import Tax.Canada.T1.FieldNames.AB qualified as AB (t1Fields)
-import Tax.Canada.T1.FieldNames.BC qualified as BC (t1Fields)
-import Tax.Canada.T1.FieldNames.QC qualified as QC (t1Fields)
+import Tax.Canada.Province.ON qualified as ON (t1Fields)
+import Tax.Canada.Province.AB qualified as AB (t1Fields)
+import Tax.Canada.Province.BC qualified as BC (t1Fields)
 import Tax.Canada.T1.Fix (T1, fixT1)
 import Tax.FDF as FDF
 
