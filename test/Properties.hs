@@ -1,8 +1,10 @@
 {-# LANGUAGE Haskell2010 #-}
 {-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE ImportQualifiedPost #-}
+{-# LANGUAGE NoFieldSelectors #-}
+{-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Main where
 
@@ -70,10 +72,10 @@ properties [fdfT1Map, fdf428Map, fdf479Map] =
         testProperty "MB428" (checkFormIdempotent MB.mb428Fields MB.fixMB428),
         testProperty "T1+MB428" (checkFormPairIdempotent AB.t1Fields MB.mb428Fields MB.fixReturns)],
       testGroup "Ontario" [
-        testProperty "T1" (checkFormIdempotent ON.t1Fields fixT1),
-        testProperty "ON428" (checkFormIdempotent ON.on428Fields ON.fixON428),
-        testProperty "ON479" (checkFormIdempotent ON.on479Fields ON.fixON479),
-        testProperty "T1+ON428" (checkFormPairIdempotent ON.t1Fields ON.on428Fields ON.fixReturns)]],
+        testProperty "T1" (checkFormIdempotent ON.returnFields.t1 fixT1),
+        testProperty "ON428" (checkFormIdempotent ON.returnFields.on428 ON.fixON428),
+        testProperty "ON479" (checkFormIdempotent ON.returnFields.on479 ON.fixON479),
+        testProperty "T1+ON428" (checkFormIdempotent ON.returnFields ON.fixReturns)]],
     testGroup "Roundtrip" [
       testGroup "T1" [
         testProperty ("T1 for " <> name) (checkFormFields fields $ List.lookup (prefix <> "-r-fill-22e.fdf") fdfT1Map)
@@ -94,17 +96,17 @@ properties [fdfT1Map, fdf428Map, fdf479Map] =
   where provincesT1 = [("New Brunswick & PEI", "5000", NB.t1Fields),
                        ("Newfoundland and Labrador", "5001", NL.t1Fields),
                        ("Quebec", "5005", QC.t1Fields),
-                       ("Ontario", "5006", ON.t1Fields),
+                       ("Ontario", "5006", ON.returnFields.t1),
                        ("British Columbia", "5010", BC.t1Fields),
                        ("Northwest Territories", "5012", NT.t1Fields),
                        ("Yukon", "5011", YT.t1Fields),
                        ("Nunavut", "5014", NU.t1Fields),
                        ("Alberta, Manitoba, Nova Scotia, and Saskatchewan", "5015", AB.t1Fields)]
-        provinces428 = [("Ontario",  "5006", checkFormFields ON.on428Fields),
+        provinces428 = [("Ontario",  "5006", checkFormFields ON.returnFields.on428),
                         ("Manitoba", "5007", checkFormFields MB.mb428Fields),
                         ("Alberta",  "5009", checkFormFields AB.ab428Fields),
                         ("British Columbia", "5010", checkFormFields BC.bc428Fields)]
-        provinces479 = [("Ontario",  "5006", checkFormFields ON.on479Fields)]
+        provinces479 = [("Ontario",  "5006", checkFormFields ON.returnFields.on479)]
 properties maps = error ("Unexpected data directory contents: " <> show maps)
 
 checkFormPairIdempotent :: (Eq (g Maybe), Show (g Maybe), Eq (h Maybe), Show (h Maybe),

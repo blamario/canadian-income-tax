@@ -1,12 +1,14 @@
 {-# LANGUAGE Haskell2010 #-}
 {-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE ImportQualifiedPost #-}
+{-# LANGUAGE NoFieldSelectors #-}
+{-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Main where
 
-import Tax.Canada.Province.ON qualified as ON (t1Fields)
+import Tax.Canada.Province.ON qualified as ON
 import Tax.Canada.Province.AB qualified as AB (t1Fields)
 import Tax.Canada.Province.BC qualified as BC (t1Fields)
 import Tax.Canada.T1 (T1, fixT1)
@@ -48,5 +50,5 @@ golden fdfMap =
       goldenVsString
          path
          (combine referenceDir path)
-         (pure $ fromStrict $ serialize $ FDF.update ON.t1Fields (fixT1 $ either error id $ FDF.load ON.t1Fields fdf) fdf)
+         (pure $ fromStrict $ serialize $ either error id $ FDF.mapForm ON.returnFields.t1 fixT1 fdf)
       | (path, fdf) <- fdfMap]

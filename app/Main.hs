@@ -1,5 +1,8 @@
+{-# LANGUAGE Haskell2010 #-}
 {-# LANGUAGE ImportQualifiedPost #-}
 {-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE NoFieldSelectors #-}
+{-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Main where
@@ -7,6 +10,7 @@ module Main where
 import Codec.Archive.Tar qualified as Tar
 import Codec.Archive.Tar.Entry (fileEntry, toTarPath)
 import Control.Applicative ((<**>), optional)
+import Control.Arrow ((&&&))
 import Control.Monad (unless, when)
 import Data.ByteString (ByteString)
 import Data.ByteString qualified as ByteString
@@ -21,6 +25,7 @@ import Data.Semigroup.Cancellative (isPrefixOf, isSuffixOf)
 import Data.Text (Text)
 import Options.Applicative (Parser, ReadM, long, metavar, short)
 import Options.Applicative qualified as OptsAp
+import Rank2 qualified
 import System.Directory (createDirectoryIfMissing, doesDirectoryExist, doesFileExist)
 import System.FilePath (replaceDirectory, takeFileName)
 import System.IO (hPutStrLn, stderr)
@@ -87,13 +92,15 @@ fix428fdf :: Province.Code -> FDF -> Either String FDF
 fix428fdf Province.AB = FDF.mapForm AB.ab428Fields AB.fixAB428
 fix428fdf Province.BC = FDF.mapForm BC.bc428Fields BC.fixBC428
 fix428fdf Province.MB = FDF.mapForm MB.mb428Fields MB.fixMB428
-fix428fdf Province.ON = FDF.mapForm ON.on428Fields ON.fixON428
+fix428fdf Province.ON = FDF.mapForm ON.returnFields.on428 ON.fixON428
 
 fix428t1fdfs :: Province.Code -> T1 FDF.FieldConst -> (FDF, FDF) -> Either String (FDF, FDF)
 fix428t1fdfs Province.AB t1Fields = FDF.mapForm2 (t1Fields, AB.ab428Fields) AB.fixReturns
 fix428t1fdfs Province.BC t1Fields = FDF.mapForm2 (t1Fields, BC.bc428Fields) BC.fixReturns
 fix428t1fdfs Province.MB t1Fields = FDF.mapForm2 (t1Fields, MB.mb428Fields) MB.fixReturns
-fix428t1fdfs Province.ON t1Fields = FDF.mapForm2 (t1Fields, ON.on428Fields) ON.fixReturns
+fix428t1fdfs Province.ON _ = FDF.mapForm2 (ON.returnFields.t1, ON.returnFields.on428) fix2
+  where fix2 (t1, on428) = ((.t1) &&& (.on428)) $
+                           ON.fixReturns ON.Returns{ON.t1, ON.on428, ON.on479 = Rank2.pure Nothing}
 
 process :: Options -> IO ()
 process Options{province, t1InputPath, p428InputPath, outputPath, verbose} = do
