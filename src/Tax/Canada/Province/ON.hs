@@ -28,7 +28,7 @@ import Tax.Canada.Province.ON.ON428.Types qualified as ON.Page2 (Page2(..))
 import Tax.Canada.Province.ON.ON428.Types (ON428 (ON428))
 import Tax.Canada.Province.ON.ON428.Fix (fixON428)
 import Tax.Canada.Province.ON.ON428.FieldNames (on428Fields)
-import Tax.Canada.Province.ON.ON479.Types (ON479 (ON479))
+import Tax.Canada.Province.ON.ON479.Types (ON479 (ON479, page2), Page2(line23_credits))
 import Tax.Canada.Province.ON.ON479.Fix (fixON479)
 import Tax.Canada.Province.ON.ON479.FieldNames (on479Fields)
 
@@ -48,14 +48,18 @@ Transformation.Shallow.TH.deriveAll ''Returns
 
 fixReturns :: Returns Maybe -> Returns Maybe
 fixReturns =
-  fixEq $ \Returns{t1 = t1@T1{page7 = page7@Page7{step6_RefundOrBalanceOwing}},
+  fixEq $ \Returns{t1 = t1@T1{page7 = page7@Page7{step6_RefundOrBalanceOwing},
+                              page8 = page8@Page8{step6_RefundOrBalanceOwing = page8step6}},
                    on428 = on428@ON428{page1 = page1@ON.Page1{partB = partB1@ON.Page1PartB{spouseAmount}},
                                        page2 = page2@ON.Page2{ON.partB = partB2@ON.Page2PartB{ON.medicalExpenses},
                                                               ON.partC}},
                    on479}
           -> Returns{t1 = fixT1 t1{page7 =
                                    page7{step6_RefundOrBalanceOwing =
-                                         step6_RefundOrBalanceOwing{T1.line_42800_ProvTerrTax = on428.page4.line90}}},
+                                         step6_RefundOrBalanceOwing{T1.line_42800_ProvTerrTax = on428.page4.line90}},
+                                   page8 =
+                                   page8{step6_RefundOrBalanceOwing =
+                                         page8step6{T1.line_47900_ProvTerrCredits = on479.page2.line23_credits}}},
                      on428 = fixON428 on428{
                         ON.page1 =
                             page1{ON.line1 = t1.page5.step4_TaxableIncome.line_26000_TaxableIncome,
