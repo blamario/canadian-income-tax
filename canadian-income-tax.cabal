@@ -44,6 +44,7 @@ library
         Tax.Util
 
     other-modules:
+        Tax.Canada
         Tax.Canada.T1.Types
         Tax.Canada.T1.FieldNames.AB
         Tax.Canada.T1.FieldNames.BC
