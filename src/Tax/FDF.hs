@@ -26,7 +26,7 @@ import Data.Text qualified as Text
 import Data.Time (Day, defaultTimeLocale, formatTime, parseTimeM)
 import Data.Void (Void)
 import Rank2 qualified
-import Text.FDF (FDF, foldMapWithKey, mapWithKey, parse, serialize)
+import Text.FDF (FDF (FDF, body), Field, foldMapWithKey, foldMapFieldWithKey, mapFieldWithKey, parse, serialize)
 import Text.Read (readEither)
 
 data FieldConst a = Field {path :: [Text], entry :: Entry a}
@@ -74,14 +74,20 @@ mapForm2 fields f fdfs = biliftA3 store store fields fdfs . f <$> bisequence (bi
 load :: (Rank2.Apply form, Rank2.Traversable form) => form FieldConst -> FDF -> Either String (form Maybe)
 load fields = fromFieldMap fields . foldMapWithKey Map.singleton
 
+loadFields :: (Rank2.Apply form, Rank2.Traversable form) => form FieldConst -> Field -> Either String (form Maybe)
+loadFields fields = fromFieldMap fields . foldMapFieldWithKey Map.singleton
+
 store :: (Rank2.Apply form, Rank2.Foldable form) => form FieldConst -> FDF -> form Maybe -> FDF
 store fields = flip (update fields)
 
 update :: (Rank2.Apply form, Rank2.Foldable form) => form FieldConst -> form Maybe -> FDF -> FDF
-update fields = mapWithKey
-                . updateKey
-                . Rank2.foldMap (foldMap (uncurry Map.singleton) . getConst)
-                . Rank2.liftA2 pairKey fields
+update formFields values fdf@FDF{body = fields} = fdf{body = updateFields formFields values fields}
+
+updateFields :: (Rank2.Apply form, Rank2.Foldable form) => form FieldConst -> form Maybe -> Field -> Field
+updateFields fields = mapFieldWithKey
+                      . updateKey
+                      . Rank2.foldMap (foldMap (uncurry Map.singleton) . getConst)
+                      . Rank2.liftA2 pairKey fields
   where pairKey :: FieldConst a -> Maybe a -> Const (Maybe ([Text], Text)) a
         pairKey Field {path, entry = RadioButtons start step leaf values} (Just v)
           | Just i <- elemIndex v values

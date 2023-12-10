@@ -36,7 +36,7 @@ import System.Directory (listDirectory)
 import System.Exit (die)
 import System.FilePath.Posix (combine, isExtensionOf)
 import Transformation.Shallow qualified as Shallow
-import Text.FDF (FDF, parse)
+import Text.FDF (FDF (body), Field, parse)
 import Text.FDF qualified
 
 import Hedgehog (Gen, Property, (===), annotateShow, assert, forAll, property)
@@ -49,13 +49,13 @@ main = do
   fdfMaps <- traverse (readFDFs . combine dataDir) ["T1/fdf", "428", "479"]
   either die (defaultMain . properties) $ sequenceA fdfMaps
   where
-    readFDFs :: FilePath -> IO (Either String [(FilePath, FDF)])
+    readFDFs :: FilePath -> IO (Either String [(FilePath, Field)])
     readFDFs dir = do
       fdfFileNames <- listDirectory dir
       fdfBytes <- traverse (ByteString.readFile . combine dir) fdfFileNames
-      pure $ traverse (traverse parse) $ zip fdfFileNames fdfBytes
+      pure $ traverse (traverse (fmap (.body) . parse)) $ zip fdfFileNames fdfBytes
 
-properties :: [[(FilePath, FDF)]] -> TestTree
+properties :: [[(FilePath, Field)]] -> TestTree
 properties [fdfT1Map, fdf428Map, fdf479Map] =
   testGroup "Properties" [
     testGroup "Idempotence" [
@@ -88,7 +88,7 @@ properties [fdfT1Map, fdf428Map, fdf479Map] =
         | (name, prefix, checkFields) <- provinces479]],
     testGroup "Load mismatch" [
       testProperty ("Load T1 for " <> p1name <> " from FDF for " <> p2name) $ property $ assert
-        $ any (isLeft  . FDF.load p1fields) $ List.lookup (p2fdfPrefix <> "-r-fill-22e.fdf") fdfT1Map
+        $ any (isLeft  . FDF.loadFields p1fields) $ List.lookup (p2fdfPrefix <> "-r-fill-22e.fdf") fdfT1Map
       | (p1name, _, p1fields) <- provincesT1,
         (p2name, p2fdfPrefix, _) <- provincesT1,
         p1name /= p2name,
@@ -123,21 +123,21 @@ checkFormIdempotent fields f = checkIdempotent (generateForm fields) f
 
 checkFormFields :: (Eq (g Maybe), Show (g Maybe),
                     Rank2.Applicative g, Shallow.Traversable Transformations.Gen g)
-                => g FieldConst -> Maybe FDF -> Property
+                => g FieldConst -> Maybe Field -> Property
 checkFormFields _ Nothing = error "Missing FDF template"
 checkFormFields fields (Just fdf) = property $ do
-  annotateShow $ FDF.load fields fdf
-  assert $ isRight $ FDF.load fields fdf
+  annotateShow $ FDF.loadFields fields fdf
+  assert $ isRight $ FDF.loadFields fields fdf
   form <- forAll (generateForm fields)
-  let fdf' = FDF.update fields form fdf
+  let fdf' = FDF.updateFields fields form fdf
       formKeys = FDF.formKeys fields
-      fdfKeys = Text.FDF.foldMapWithKey (const . (:[]) . map dropIndex) fdf
+      fdfKeys = Text.FDF.foldMapFieldWithKey (const . (:[]) . map dropIndex) fdf
       dropIndex t = fromMaybe t (stripSuffix "[0]" t)
       keyHeads = List.nub $ take 2 <$> formKeys
       noCheckbox :: [[Text]] -> [[Text]]
       noCheckbox = filter $ not . or . ([isSuffixOf "Checkbox", isInfixOf "CheckBox", (== "QuestionA"), (== "Note1")] <*>)
   -- annotateShow fdf'
-  FDF.load fields fdf' === Right form
+  FDF.loadFields fields fdf' === Right form
   List.sort (noCheckbox formKeys) === List.sort (noCheckbox $ filter (\x-> any (`List.isPrefixOf` x) keyHeads) fdfKeys)
 
 generateForm :: (Rank2.Applicative g, Shallow.Traversable Transformations.Gen g) => g FieldConst -> Gen (g Maybe)
