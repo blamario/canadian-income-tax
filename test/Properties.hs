@@ -49,13 +49,13 @@ main = do
   fdfMaps <- traverse (readFDFs . combine dataDir) ["T1/fdf", "428", "479"]
   either die (defaultMain . properties) $ sequenceA fdfMaps
   where
-    readFDFs :: FilePath -> IO (Either String [(FilePath, Field)])
+    readFDFs :: FilePath -> IO (Either String [(FilePath, FDF)])
     readFDFs dir = do
       fdfFileNames <- listDirectory dir
       fdfBytes <- traverse (ByteString.readFile . combine dir) fdfFileNames
-      pure $ traverse (traverse (fmap (.body) . parse)) $ zip fdfFileNames fdfBytes
+      pure $ traverse (traverse parse) $ zip fdfFileNames fdfBytes
 
-properties :: [[(FilePath, Field)]] -> TestTree
+properties :: [[(FilePath, FDF)]] -> TestTree
 properties [fdfT1Map, fdf428Map, fdf479Map] =
   testGroup "Properties" [
     testGroup "Idempotence" [
@@ -88,7 +88,7 @@ properties [fdfT1Map, fdf428Map, fdf479Map] =
         | (name, prefix, checkFields) <- provinces479]],
     testGroup "Load mismatch" [
       testProperty ("Load T1 for " <> p1name <> " from FDF for " <> p2name) $ property $ assert
-        $ any (isLeft  . FDF.loadFields p1fields) $ List.lookup (p2fdfPrefix <> "-r-fill-22e.fdf") fdfT1Map
+        $ any (isLeft  . FDF.load p1fields) $ List.lookup (p2fdfPrefix <> "-r-fill-22e.fdf") fdfT1Map
       | (p1name, _, p1fields) <- provincesT1,
         (p2name, p2fdfPrefix, _) <- provincesT1,
         p1name /= p2name,
@@ -96,17 +96,17 @@ properties [fdfT1Map, fdf428Map, fdf479Map] =
   where provincesT1 = [("New Brunswick & PEI", "5000", NB.t1Fields),
                        ("Newfoundland and Labrador", "5001", NL.t1Fields),
                        ("Quebec", "5005", QC.t1Fields),
-                       ("Ontario", "5006", ON.returnFields.t1),
+                       ("Ontario", "5006", ON.t1Fields),
                        ("British Columbia", "5010", BC.t1Fields),
                        ("Northwest Territories", "5012", NT.t1Fields),
                        ("Yukon", "5011", YT.t1Fields),
                        ("Nunavut", "5014", NU.t1Fields),
                        ("Alberta, Manitoba, Nova Scotia, and Saskatchewan", "5015", AB.t1Fields)]
-        provinces428 = [("Ontario",  "5006", checkFormFields ON.returnFields.on428),
+        provinces428 = [("Ontario",  "5006", checkFormFields ON.on428Fields),
                         ("Manitoba", "5007", checkFormFields MB.mb428Fields),
                         ("Alberta",  "5009", checkFormFields AB.ab428Fields),
                         ("British Columbia", "5010", checkFormFields BC.bc428Fields)]
-        provinces479 = [("Ontario",  "5006", checkFormFields ON.returnFields.on479)]
+        provinces479 = [("Ontario",  "5006", checkFormFields ON.on479Fields)]
 properties maps = error ("Unexpected data directory contents: " <> show maps)
 
 checkFormPairIdempotent :: (Eq (g Maybe), Show (g Maybe), Eq (h Maybe), Show (h Maybe),
@@ -123,21 +123,21 @@ checkFormIdempotent fields f = checkIdempotent (generateForm fields) f
 
 checkFormFields :: (Eq (g Maybe), Show (g Maybe),
                     Rank2.Applicative g, Shallow.Traversable Transformations.Gen g)
-                => g FieldConst -> Maybe Field -> Property
+                => g FieldConst -> Maybe FDF -> Property
 checkFormFields _ Nothing = error "Missing FDF template"
 checkFormFields fields (Just fdf) = property $ do
-  annotateShow $ FDF.loadFields fields fdf
-  assert $ isRight $ FDF.loadFields fields fdf
+  annotateShow $ FDF.load fields fdf
+  assert $ isRight $ FDF.load fields fdf
   form <- forAll (generateForm fields)
-  let fdf' = FDF.updateFields fields form fdf
+  let fdf' = FDF.update fields form fdf
       formKeys = FDF.formKeys fields
-      fdfKeys = Text.FDF.foldMapFieldWithKey (const . (:[]) . map dropIndex) fdf
+      fdfKeys = Text.FDF.foldMapWithKey (const . (:[]) . map dropIndex) fdf
       dropIndex t = fromMaybe t (stripSuffix "[0]" t)
       keyHeads = List.nub $ take 2 <$> formKeys
       noCheckbox :: [[Text]] -> [[Text]]
       noCheckbox = filter $ not . or . ([isSuffixOf "Checkbox", isInfixOf "CheckBox", (== "QuestionA"), (== "Note1")] <*>)
   -- annotateShow fdf'
-  FDF.loadFields fields fdf' === Right form
+  FDF.load fields fdf' === Right form
   List.sort (noCheckbox formKeys) === List.sort (noCheckbox $ filter (\x-> any (`List.isPrefixOf` x) keyHeads) fdfKeys)
 
 generateForm :: (Rank2.Applicative g, Shallow.Traversable Transformations.Gen g) => g FieldConst -> Gen (g Maybe)

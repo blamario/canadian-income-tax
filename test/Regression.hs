@@ -50,5 +50,5 @@ golden fdfMap =
       goldenVsString
          path
          (combine referenceDir path)
-         (pure $ fromStrict $ serialize $ either error id $ FDF.mapForm ON.returnFields.t1 fixT1 fdf)
+         (pure $ fromStrict $ serialize $ either error id $ FDF.mapForm ON.t1Fields fixT1 fdf)
       | (path, fdf) <- fdfMap]

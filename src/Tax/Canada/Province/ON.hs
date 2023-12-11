@@ -7,12 +7,15 @@
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE NoFieldSelectors #-}
 {-# LANGUAGE OverloadedRecordDot #-}
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE StandaloneDeriving #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE UndecidableInstances #-}
 
-module Tax.Canada.Province.ON (Returns(..), ON428, ON479, fixON428, fixON479, fixReturns, returnFields) where
+module Tax.Canada.Province.ON (Returns(..), ON428, ON479, fixON428, fixON479, fixReturns,
+                               returnFields, t1Fields, on428Fields, on479Fields) where
 
+import Rank2 qualified
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
@@ -33,7 +36,7 @@ import Tax.Canada.Province.ON.ON479.Fix (fixON479)
 import Tax.Canada.Province.ON.ON479.FieldNames (on479Fields)
 
 import Tax.Canada.Shared(MedicalExpenses(..), BaseCredit(..))
-import Tax.FDF (FieldConst)
+import Tax.FDF (FieldConst, within)
 import Tax.Util (fixEq)
 
 data Returns line = Returns {
