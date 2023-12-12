@@ -33,7 +33,7 @@ fixReturns =
                              step6_RefundOrBalanceOwing{T1.line_42800_ProvTerrTax = bc428.page3.line91_tax}}},
               fixBC428 bc428{BC.page1 =
                              page1{BC.Page1.partA = partA{BC.income = t1.page5.step4_TaxableIncome.line_26000_TaxableIncome},
-                                   BC.Page1.partB = partB1{BC.spouseAmount = spouseAmount{baseAmount = t1.page1.spouse.line23600}}
+                                   BC.Page1.partB = partB1{BC.spouseAmount = spouseAmount{reduction = t1.page1.spouse.line23600}}
                                   },
                              BC.page2 =
                              page2{BC.Page2.partB = partB2{BC.line27_cppQpp = t1.page6.line30800,

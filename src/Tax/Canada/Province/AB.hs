@@ -37,7 +37,7 @@ fixReturns =
                              page8step6{T1.line_47900_ProvTerrCredits = ab428.page3.partD.line69_credits}}},
               fixAB428 ab428{AB.page1 =
                              page1{AB.Page1.income = t1.page5.step4_TaxableIncome.line_26000_TaxableIncome,
-                                   AB.Page1.partB = partB1{AB.spouseAmount = spouseAmount{baseAmount = t1.page1.spouse.line23600},
+                                   AB.Page1.partB = partB1{AB.spouseAmount = spouseAmount{reduction = t1.page1.spouse.line23600},
                                                            AB.line19_cppQpp = t1.page6.line30800,
                                                            AB.line20_cppQpp = t1.page6.line31000,
                                                            AB.line21_employmentInsurance = t1.page6.line31200,

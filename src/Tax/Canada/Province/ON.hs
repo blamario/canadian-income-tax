@@ -66,7 +66,7 @@ fixReturns =
                      on428 = fixON428 on428{
                         ON.page1 =
                             page1{ON.line1 = t1.page5.step4_TaxableIncome.line_26000_TaxableIncome,
-                                  ON.Page1.partB = partB1{ON.spouseAmount = spouseAmount{baseAmount = t1.page1.spouse.line23600},
+                                  ON.Page1.partB = partB1{ON.spouseAmount = spouseAmount{reduction = t1.page1.spouse.line23600},
                                                           ON.line19_cppQpp = t1.page6.line30800,
                                                           ON.line20_cppQpp = t1.page6.line31000,
                                                           ON.line21_employmentInsurance = t1.page6.line31200,
