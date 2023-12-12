@@ -26,7 +26,7 @@ import Data.Text qualified as Text
 import Data.Time (Day, defaultTimeLocale, formatTime, parseTimeM)
 import Data.Void (Void)
 import Rank2 qualified
-import Text.FDF (FDF (FDF, body), Field, foldMapWithKey, foldMapFieldWithKey, mapFieldWithKey, parse, serialize, traverseWithKey)
+import Text.FDF (FDF (FDF, body), Field, foldMapWithKey, mapWithKey, parse, serialize, traverseWithKey)
 import Text.Read (readEither)
 
 data FieldConst a = Field {path :: [Text], entry :: Entry a}
@@ -96,17 +96,26 @@ store :: (Rank2.Apply form, Rank2.Foldable form) => form FieldConst -> FDF -> fo
 store fields = flip (update fields)
 
 updateAll :: (Rank2.Apply form, Rank2.Foldable form) => form FieldConst -> form Maybe -> FDFs -> Either String FDFs
-updateAll formFields values = Map.traverseWithKey (\k-> traverseWithKey (fieldUpdate formFields values . (k <> "[0]" :)))
+updateAll formFields formValues = case toFieldMap formFields formValues of
+  Left err -> const (Left err)
+  Right m -> Right . Map.mapWithKey (\k-> mapWithKey (updateKeyFrom m . (k <> "[0]" :)))
 
 update :: (Rank2.Apply form, Rank2.Foldable form) => form FieldConst -> form Maybe -> FDF -> Either String FDF
-update formFields = traverseWithKey . fieldUpdate formFields
+update formFields formValues = case toFieldMap formFields formValues of
+  Left err -> const (Left err)
+  Right m -> Right . mapWithKey (updateKeyFrom m)
 
-fieldUpdate :: (Rank2.Apply form, Rank2.Foldable form)
-            => form FieldConst -> form Maybe -> [Text] -> Text -> Either String Text
-fieldUpdate fields = updateKey
-                     . (sequenceA :: Map [Text] (Either String Text) -> Either String (Map [Text] Text))
-                     . Rank2.foldMap (foldMap (uncurry Map.singleton) . getConst)
-                     . Rank2.liftA2 pairKey fields
+updateKeyFrom :: Map [Text] Text -> [Text] -> Text -> Text
+updateKeyFrom m k v = Map.findWithDefault v k m
+
+toFieldMap :: (Rank2.Apply form, Rank2.Foldable form) => form FieldConst -> form Maybe -> Either String (Map [Text] Text)
+toFieldMap fields = sequenceA
+                    . Rank2.foldMap (foldMap (uncurry Map.singleton) . getConst)
+                    . textualFields fields
+
+textualFields :: (Rank2.Apply form, Rank2.Foldable form)
+              => form FieldConst -> form Maybe -> form (Const (Maybe ([Text], Either String Text)))
+textualFields = Rank2.liftA2 pairKey
   where pairKey :: FieldConst a -> Maybe a -> Const (Maybe ([Text], Either String Text)) a
         pairKey Field {path, entry = RadioButtons start step leaf values} (Just v)
           | Just i <- elemIndex v values
@@ -123,8 +132,6 @@ fieldUpdate fields = updateKey
           | otherwise = Const $ Just (path, Left ("Trying to replace constant field " ++ show (path, c) ++ " with " ++ show v))
         pairKey Field {path, entry} v = Const $ Just (addIndex <$> path, maybe (Right "") (fromEntry entry) v)
         pairKey NoField _ = Const Nothing
-        updateKey :: Either String (Map [Text] Text) -> [Text] -> Text -> Either String Text
-        updateKey m k v = Map.findWithDefault v k <$> m
         fromEntry :: Entry a -> a -> Either String Text
         fromEntry (Constant c e) _ = fromEntry e c
         fromEntry Textual v = Right v
