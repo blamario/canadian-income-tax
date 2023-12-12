@@ -19,6 +19,7 @@ import Data.ByteString.Lazy qualified as ByteString.Lazy
 import Data.CAProvinceCodes qualified as Province
 import Data.Char (toUpper)
 import Data.List (intercalate)
+import Data.Map.Lazy qualified as Map
 import Data.Maybe (fromMaybe)
 import Data.Semigroup (Any (Any))
 import Data.Semigroup.Cancellative (isPrefixOf, isSuffixOf)
@@ -98,9 +99,9 @@ fix428t1fdfs :: Province.Code -> T1 FDF.FieldConst -> (FDF, FDF) -> Either Strin
 fix428t1fdfs Province.AB t1Fields = FDF.mapForm2 (t1Fields, AB.ab428Fields) AB.fixReturns
 fix428t1fdfs Province.BC t1Fields = FDF.mapForm2 (t1Fields, BC.bc428Fields) BC.fixReturns
 fix428t1fdfs Province.MB t1Fields = FDF.mapForm2 (t1Fields, MB.mb428Fields) MB.fixReturns
-fix428t1fdfs Province.ON _ = FDF.mapForm2 (ON.returnFields.t1, ON.returnFields.on428) fix2
-  where fix2 (t1, on428) = ((.t1) &&& (.on428)) $
-                           ON.fixReturns ON.Returns{ON.t1, ON.on428, ON.on479 = Rank2.pure Nothing}
+fix428t1fdfs Province.ON _ = fmap ((Map.! "T1") &&& (Map.! "ON428"))
+                             . FDF.mapForms ON.returnFields ON.fixReturns
+                             . \pair-> Map.fromList [("T1", fst pair), ("ON428", snd pair)]
 
 process :: Options -> IO ()
 process Options{province, t1InputPath, p428InputPath, outputPath, verbose} = do

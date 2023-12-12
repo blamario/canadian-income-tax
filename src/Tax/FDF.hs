@@ -66,6 +66,10 @@ mapForm :: (Rank2.Apply form, Rank2.Traversable form)
         => form FieldConst -> (form Maybe -> form Maybe) -> FDF -> Either String FDF
 mapForm fields f fdf = load fields fdf >>= store fields fdf . f
 
+mapForms :: (Rank2.Apply form, Rank2.Traversable form)
+         => form FieldConst -> (form Maybe -> form Maybe) -> FDFs -> Either String FDFs
+mapForms fields f fdfs = loadAll fields fdfs >>= storeAll fields fdfs . f
+
 mapForm2 :: (Rank2.Apply form1, Rank2.Apply form2, Rank2.Traversable form1, Rank2.Traversable form2)
          => (form1 FieldConst, form2 FieldConst)
          -> ((form1 Maybe, form2 Maybe) -> (form1 Maybe, form2 Maybe))
@@ -73,8 +77,14 @@ mapForm2 :: (Rank2.Apply form1, Rank2.Apply form2, Rank2.Traversable form1, Rank
          -> Either String (FDF, FDF)
 mapForm2 fields f fdfs = bisequence (biliftA2 load load fields fdfs) >>= bisequence . biliftA3 store store fields fdfs . f
 
-loadAll :: (Rank2.Apply form, Rank2.Traversable form) => form FieldConst -> FDFs -> Either String (form Maybe)
-loadAll fields = fromFieldMap fields . Map.foldMapWithKey (\k-> foldMapWithKey (Map.singleton . (k:)))
+loadAll :: forall form. (Rank2.Apply form, Rank2.Traversable form) => form FieldConst -> FDFs -> Either String (form Maybe)
+loadAll fields fdfs = fromPresentFieldMap $ Map.foldMapWithKey (\k-> foldMapWithKey (Map.singleton . (k <> "[0]" :))) fdfs
+  where fromPresentFieldMap :: Map [Text] Text -> Either String (form Maybe)
+        fillPresent :: Map [Text] Text -> FieldConst a -> Either String (Maybe a)
+        fromPresentFieldMap m = Rank2.traverse (fillPresent m) fields
+        fillPresent m f@Field {path = root : _}
+          | Map.member root fdfs = fill m f
+        fillPresent _ _ = Right Nothing
 
 load :: (Rank2.Apply form, Rank2.Traversable form) => form FieldConst -> FDF -> Either String (form Maybe)
 load fields = fromFieldMap fields . foldMapWithKey Map.singleton
@@ -86,7 +96,7 @@ store :: (Rank2.Apply form, Rank2.Foldable form) => form FieldConst -> FDF -> fo
 store fields = flip (update fields)
 
 updateAll :: (Rank2.Apply form, Rank2.Foldable form) => form FieldConst -> form Maybe -> FDFs -> Either String FDFs
-updateAll formFields values = Map.traverseWithKey (\k-> traverseWithKey (fieldUpdate formFields values . (k:)))
+updateAll formFields values = Map.traverseWithKey (\k-> traverseWithKey (fieldUpdate formFields values . (k <> "[0]" :)))
 
 update :: (Rank2.Apply form, Rank2.Foldable form) => form FieldConst -> form Maybe -> FDF -> Either String FDF
 update formFields = traverseWithKey . fieldUpdate formFields

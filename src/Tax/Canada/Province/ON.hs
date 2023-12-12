@@ -81,6 +81,6 @@ fixReturns =
 
 returnFields :: Returns FieldConst
 returnFields = Returns{
-  t1 = t1Fields,
-  on428 = on428Fields,
-  on479 = on479Fields}
+  t1 = within "T1" Rank2.<$> t1Fields,
+  on428 = within "ON428" Rank2.<$> on428Fields,
+  on479 = within "ON479" Rank2.<$> on479Fields}
