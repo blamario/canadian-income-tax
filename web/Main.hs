@@ -6,11 +6,13 @@
 module Main where
 
 import Control.Category ((>>>))
+import Control.Monad (join)
 import Control.Monad.IO.Class (liftIO)
 import Data.ByteString (ByteString)
 import Data.ByteString qualified as ByteString
 import Data.ByteString.Lazy qualified as Lazy
 import Data.ByteString.Lazy qualified as ByteString.Lazy
+import Data.Function ((&))
 import Data.String (fromString)
 import Data.Text.Lazy qualified as Text.Lazy
 import Network.HTTP.Types.Status (ok200, internalServerError500, notFound404, unsupportedMediaType415)
@@ -44,10 +46,11 @@ main = scotty 3000 $ do
       case fdfBytes >>= (Lazy.toStrict >>> parse) >>= \fdf-> (,) fdf <$> FDF.load t1Fields fdf of
         Left err -> status unsupportedMediaType415 >> text (fromString err)
         Right (fdf, form) -> do
-          let fdf' = FDF.update t1Fields form' fdf
-              form' = fixT1 form
           dataDir <- liftIO getDataDir
-          liftIO (fdf2pdf (combine dataDir $ combine "T1/pdf" t1FormFile) (Lazy.fromStrict $ serialize fdf')) >>= \case
+          let pdfPath = combine dataDir $ combine "T1/pdf" t1FormFile
+              form' = fixT1 form
+          fdfBytes' <- liftIO (traverse (fdf2pdf pdfPath . Lazy.fromStrict . serialize) $ FDF.update t1Fields form' fdf)
+          case join fdfBytes' of
             Left err -> do
               status internalServerError500
               text (fromString err)

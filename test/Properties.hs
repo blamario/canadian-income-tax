@@ -129,7 +129,7 @@ checkFormFields fields (Just fdf) = property $ do
   annotateShow $ FDF.load fields fdf
   assert $ isRight $ FDF.load fields fdf
   form <- forAll (generateForm fields)
-  let fdf' = FDF.update fields form fdf
+  let Right fdf' = FDF.update fields form fdf
       formKeys = FDF.formKeys fields
       fdfKeys = Text.FDF.foldMapWithKey (const . (:[]) . map dropIndex) fdf
       dropIndex t = fromMaybe t (stripSuffix "[0]" t)

@@ -26,7 +26,7 @@ import Data.Text qualified as Text
 import Data.Time (Day, defaultTimeLocale, formatTime, parseTimeM)
 import Data.Void (Void)
 import Rank2 qualified
-import Text.FDF (FDF (FDF, body), Field, foldMapWithKey, foldMapFieldWithKey, mapFieldWithKey, mapWithKey, parse, serialize)
+import Text.FDF (FDF (FDF, body), Field, foldMapWithKey, foldMapFieldWithKey, mapFieldWithKey, parse, serialize, traverseWithKey)
 import Text.Read (readEither)
 
 data FieldConst a = Field {path :: [Text], entry :: Entry a}
@@ -64,14 +64,14 @@ formKeys = flip appEndo [] . Rank2.foldMap addEntry
 
 mapForm :: (Rank2.Apply form, Rank2.Traversable form)
         => form FieldConst -> (form Maybe -> form Maybe) -> FDF -> Either String FDF
-mapForm fields f fdf = store fields fdf . f <$> load fields fdf
+mapForm fields f fdf = load fields fdf >>= store fields fdf . f
 
 mapForm2 :: (Rank2.Apply form1, Rank2.Apply form2, Rank2.Traversable form1, Rank2.Traversable form2)
          => (form1 FieldConst, form2 FieldConst)
          -> ((form1 Maybe, form2 Maybe) -> (form1 Maybe, form2 Maybe))
          -> (FDF, FDF)
          -> Either String (FDF, FDF)
-mapForm2 fields f fdfs = biliftA3 store store fields fdfs . f <$> bisequence (biliftA2 load load fields fdfs)
+mapForm2 fields f fdfs = bisequence (biliftA2 load load fields fdfs) >>= bisequence . biliftA3 store store fields fdfs . f
 
 loadAll :: (Rank2.Apply form, Rank2.Traversable form) => form FieldConst -> FDFs -> Either String (form Maybe)
 loadAll fields = fromFieldMap fields . Map.foldMapWithKey (\k-> foldMapWithKey (Map.singleton . (k:)))
@@ -79,54 +79,56 @@ loadAll fields = fromFieldMap fields . Map.foldMapWithKey (\k-> foldMapWithKey (
 load :: (Rank2.Apply form, Rank2.Traversable form) => form FieldConst -> FDF -> Either String (form Maybe)
 load fields = fromFieldMap fields . foldMapWithKey Map.singleton
 
-storeAll :: (Rank2.Apply form, Rank2.Foldable form) => form FieldConst -> FDFs -> form Maybe -> FDFs
+storeAll :: (Rank2.Apply form, Rank2.Foldable form) => form FieldConst -> FDFs -> form Maybe -> Either String FDFs
 storeAll fields = flip (updateAll fields)
 
-store :: (Rank2.Apply form, Rank2.Foldable form) => form FieldConst -> FDF -> form Maybe -> FDF
+store :: (Rank2.Apply form, Rank2.Foldable form) => form FieldConst -> FDF -> form Maybe -> Either String FDF
 store fields = flip (update fields)
 
-updateAll :: (Rank2.Apply form, Rank2.Foldable form) => form FieldConst -> form Maybe -> FDFs -> FDFs
-updateAll formFields values = Map.mapWithKey (\k-> mapWithKey (fieldUpdate formFields values . (k:)))
+updateAll :: (Rank2.Apply form, Rank2.Foldable form) => form FieldConst -> form Maybe -> FDFs -> Either String FDFs
+updateAll formFields values = Map.traverseWithKey (\k-> traverseWithKey (fieldUpdate formFields values . (k:)))
 
-update :: (Rank2.Apply form, Rank2.Foldable form) => form FieldConst -> form Maybe -> FDF -> FDF
-update formFields = mapWithKey . fieldUpdate formFields
+update :: (Rank2.Apply form, Rank2.Foldable form) => form FieldConst -> form Maybe -> FDF -> Either String FDF
+update formFields = traverseWithKey . fieldUpdate formFields
 
-fieldUpdate :: (Rank2.Apply form, Rank2.Foldable form) => form FieldConst -> form Maybe -> [Text] -> Text -> Text
+fieldUpdate :: (Rank2.Apply form, Rank2.Foldable form)
+            => form FieldConst -> form Maybe -> [Text] -> Text -> Either String Text
 fieldUpdate fields = updateKey
+                     . (sequenceA :: Map [Text] (Either String Text) -> Either String (Map [Text] Text))
                      . Rank2.foldMap (foldMap (uncurry Map.singleton) . getConst)
                      . Rank2.liftA2 pairKey fields
-  where pairKey :: FieldConst a -> Maybe a -> Const (Maybe ([Text], Text)) a
+  where pairKey :: FieldConst a -> Maybe a -> Const (Maybe ([Text], Either String Text)) a
         pairKey Field {path, entry = RadioButtons start step leaf values} (Just v)
           | Just i <- elemIndex v values
           = Const $ Just (map addIndex path ++ [leaf <> "[" <> Text.pack (show $ start + i*step) <> "]"],
-                          Text.pack $ show $ succ i)
-          | otherwise = error ("Missing enum value " <> show v)
+                          Right $ Text.pack $ show $ succ i)
+          | otherwise = Const $ Just (path, Left ("Missing enum value " <> show v))
         pairKey Field {path, entry = Switch yes no leaf} (Just v) =
-          Const $ Just (addIndex <$> (path ++ [if v then yes else no, leaf]), if v then "1" else "2")
-        pairKey Field {path, entry = Switch' leaf} (Just True) = Const $ Just (addIndex <$> (path ++ [leaf]), "1")
+          Const $ Just (addIndex <$> (path ++ [if v then yes else no, leaf]), Right $ if v then "1" else "2")
+        pairKey Field {path, entry = Switch' leaf} (Just True) = Const $ Just (addIndex <$> (path ++ [leaf]), Right "1")
         pairKey Field {path, entry = Switch' leaf} (Just False) =
-          Const $ Just (map addIndex path ++ [leaf <> "[1]"], "1")
+          Const $ Just (map addIndex path ++ [leaf <> "[1]"], Right "1")
         pairKey Field {path, entry = Constant c e} (Just v)
           | c == v = Const Nothing
-          | otherwise = error ("Trying to replace constant field " ++ show (path, c) ++ " with " ++ show v)
-        pairKey Field {path, entry} v = Const $ Just (addIndex <$> path, foldMap (fromEntry entry) v)
+          | otherwise = Const $ Just (path, Left ("Trying to replace constant field " ++ show (path, c) ++ " with " ++ show v))
+        pairKey Field {path, entry} v = Const $ Just (addIndex <$> path, maybe (Right "") (fromEntry entry) v)
         pairKey NoField _ = Const Nothing
-        updateKey :: Map [Text] Text -> [Text] -> Text -> Text
-        updateKey m k v = Map.findWithDefault v k m
-        fromEntry :: Entry a -> a -> Text
+        updateKey :: Either String (Map [Text] Text) -> [Text] -> Text -> Either String Text
+        updateKey m k v = Map.findWithDefault v k <$> m
+        fromEntry :: Entry a -> a -> Either String Text
         fromEntry (Constant c e) _ = fromEntry e c
-        fromEntry Textual v = v
-        fromEntry Date v = Text.pack $ formatTime defaultTimeLocale "%Y%m%d" v
-        fromEntry Checkbox True = "Yes"
-        fromEntry Checkbox False = "No"
+        fromEntry Textual v = Right v
+        fromEntry Date v = Right $ Text.pack $ formatTime defaultTimeLocale "%Y%m%d" v
+        fromEntry Checkbox True = Right "Yes"
+        fromEntry Checkbox False = Right "No"
         fromEntry e@(RadioButton values) v = case elemIndex v values
-                                             of Just i -> Text.pack $ show $ i+1
-                                                Nothing -> error (show e <> " doesn't allow value " <> show v)
-        fromEntry Amount v = Text.pack (show v)
-        fromEntry Percent v = dropInsignificantZeros (Text.pack $ show (fromRational $ v * 100 :: Centi)) <> "%"
+                                             of Just i -> Right $ Text.pack $ show $ i+1
+                                                Nothing -> Left (show e <> " doesn't allow value " <> show v)
+        fromEntry Amount v = Right $ Text.pack (show v)
+        fromEntry Percent v = Right $ dropInsignificantZeros (Text.pack $ show (fromRational $ v * 100 :: Centi)) <> "%"
           where dropInsignificantZeros = Text.dropWhileEnd (== '.') . Text.dropWhileEnd (== '0')
-        fromEntry Count v = Text.pack (show v)
-        fromEntry Province v = Text.pack (show v)
+        fromEntry Count v = Right $ Text.pack (show v)
+        fromEntry Province v = Right $ Text.pack (show v)
 
 fromFieldMap :: Rank2.Traversable form => form FieldConst -> Map [Text] Text -> Either String (form Maybe)
 fromFieldMap fieldForm fieldMap = Rank2.traverse (fill fieldMap) fieldForm

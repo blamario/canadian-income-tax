@@ -120,13 +120,9 @@ process Options{province, t1InputPath, p428InputPath, outputPath, verbose} = do
    case (t1, p428) of
       (Nothing, Nothing) -> error "You must specify a T1 form, provincial 428 form, or both."
       (Just (t1Path, Any t1isPDF, t1bytes), Nothing) -> do
-         case parse t1bytes >>= \x-> (,) x <$> FDF.load t1Fields x of
+         case parse t1bytes >>= FDF.mapForm t1Fields fixT1 of
             Left err -> error err
-            Right (fdf, form) -> do
-               let fdf' = FDF.update t1Fields form' fdf
-                   form' = fixT1 form
-               when verbose (hPutStrLn stderr $ show form')
-               writeFrom t1Path t1isPDF (serialize fdf')
+            Right fdf' -> writeFrom t1Path t1isPDF (serialize fdf')
       (Nothing, Just (p428Path, Any p428isPDF, bytes428)) -> do
          case parse bytes428 >>= fix428fdf province of
             Left err -> error err
