@@ -11,13 +11,14 @@ import Codec.Archive.Tar qualified as Tar
 import Codec.Archive.Tar.Entry (fileEntry, toTarPath)
 import Control.Applicative ((<**>), optional)
 import Control.Arrow ((&&&))
-import Control.Monad (unless, when)
+import Control.Monad (unless, void, when)
 import Data.ByteString (ByteString)
 import Data.ByteString qualified as ByteString
 import Data.ByteString.Lazy qualified as Lazy
 import Data.ByteString.Lazy qualified as ByteString.Lazy
 import Data.CAProvinceCodes qualified as Province
 import Data.Char (toUpper)
+import Data.Foldable (toList)
 import Data.List (intercalate)
 import Data.Map.Lazy qualified as Map
 import Data.Maybe (fromMaybe)
@@ -37,6 +38,7 @@ import Tax.Canada.Province.AB qualified as AB
 import Tax.Canada.Province.BC qualified as BC
 import Tax.Canada.Province.MB qualified as MB
 import Tax.Canada.Province.ON qualified as ON
+import Tax.FDF (FDFs)
 import Tax.FDF qualified as FDF
 import Tax.PDFtk (fdf2pdf, pdf2fdf)
 
@@ -95,13 +97,11 @@ fix428fdf Province.BC = FDF.mapForm BC.bc428Fields BC.fixBC428
 fix428fdf Province.MB = FDF.mapForm MB.mb428Fields MB.fixMB428
 fix428fdf Province.ON = FDF.mapForm ON.returnFields.on428 ON.fixON428
 
-fix428t1fdfs :: Province.Code -> T1 FDF.FieldConst -> (FDF, FDF) -> Either String (FDF, FDF)
-fix428t1fdfs Province.AB t1Fields = FDF.mapForm2 (t1Fields, AB.ab428Fields) AB.fixReturns
-fix428t1fdfs Province.BC t1Fields = FDF.mapForm2 (t1Fields, BC.bc428Fields) BC.fixReturns
-fix428t1fdfs Province.MB t1Fields = FDF.mapForm2 (t1Fields, MB.mb428Fields) MB.fixReturns
-fix428t1fdfs Province.ON _ = fmap ((Map.! "T1") &&& (Map.! "ON428"))
-                             . FDF.mapForms ON.returnFields ON.fixReturns
-                             . \pair-> Map.fromList [("T1", fst pair), ("ON428", snd pair)]
+fixReturns :: Province.Code -> FDFs -> Either String FDFs
+fixReturns Province.AB = FDF.mapForms AB.returnFields AB.fixReturns
+--fixReturns Province.BC = FDF.mapForms BC.returnFields BC.fixReturns
+--fixReturns Province.MB = FDF.mapForms MB.returnFields MB.fixReturns
+fixReturns Province.ON = FDF.mapForms ON.returnFields ON.fixReturns
 
 process :: Options -> IO ()
 process Options{province, t1InputPath, p428InputPath, outputPath, verbose} = do
@@ -129,21 +129,22 @@ process Options{province, t1InputPath, p428InputPath, outputPath, verbose} = do
             Left err -> error err
             Right fdf' -> writeFrom p428Path p428isPDF (serialize fdf')
       (Just (t1Path, Any t1isPDF, t1bytes), Just (p428path, Any p428isPDF, bytes428)) -> do
-        case (,) <$> parse t1bytes <*> parse bytes428 >>= fix428t1fdfs province t1Fields of
+        let bytesMap = Map.fromList [("T1", t1bytes), ("428", bytes428)]
+            paths = [fromMaybe "p428.fdf" p428InputPath,
+                     fromMaybe "t1.fdf" t1InputPath]
+            arePDFs = [p428isPDF, t1isPDF]
+        case traverse parse bytesMap >>= fixReturns province of
             Left err -> error err
-            Right (fdfT1, fdf428) -> do
-               let bytesT1' = serialize fdfT1
-                   bytes428' = serialize fdf428
+            Right fixedMap -> do
+               let byteses' = toList $ serialize <$> fixedMap
+                   tarEntries = sequenceA (zipWith fdfEntry paths byteses')
                    fdfEntry path content =
                       (`fileEntry` ByteString.Lazy.fromStrict content) <$> toTarPath False (takeFileName path)
-                   tarEntries = sequenceA [fdfEntry (fromMaybe "t1.fdf" t1InputPath) bytesT1',
-                                           fdfEntry (fromMaybe "p428.fdf" p428InputPath) bytes428']
                    tarFile = either (error . ("Can't tar: " <>)) (ByteString.Lazy.toStrict . Tar.write) tarEntries 
                -- when verbose (hPutStrLn stderr $ show (form'T1, form'ON))
                if outputPath == "-"
                   then ByteString.putStr tarFile
                   else do isDir <- doesDirectoryExist outputPath
                           if isDir
-                             then do writeFrom t1Path t1isPDF bytesT1'
-                                     writeFrom p428path p428isPDF bytes428'
+                             then void $ sequenceA (zipWith3 writeFrom paths arePDFs byteses')
                              else ByteString.writeFile outputPath tarFile

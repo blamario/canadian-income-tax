@@ -62,7 +62,7 @@ properties [fdfT1Map, fdf428Map, fdf479Map] =
       testGroup "Alberta" [
         testProperty "T1" (checkFormIdempotent AB.t1Fields fixT1),
         testProperty "AB428" (checkFormIdempotent AB.ab428Fields AB.fixAB428),
-        testProperty "T1+AB428" (checkFormPairIdempotent AB.t1Fields AB.ab428Fields AB.fixReturns)],
+        testProperty "T1+AB428" (checkFormIdempotent AB.returnFields AB.fixReturns)],
       testGroup "British Columbia" [
         testProperty "T1" (checkFormIdempotent BC.t1Fields fixT1),
         testProperty "BC428" (checkFormIdempotent BC.bc428Fields BC.fixBC428),

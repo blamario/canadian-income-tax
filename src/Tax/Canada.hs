@@ -34,8 +34,8 @@ class TaxCompletable (p :: Province.Code) where
    formFields :: Forms p FieldConst
 
 instance TaxCompletable 'Province.AB where
-   completeForms (Pair t1 ab428) = uncurry Pair $ AB.fixReturns (t1, ab428)
-   formFields = Pair (within "T1" Rank2.<$> AB.t1Fields) (within "AB428" Rank2.<$> AB.ab428Fields)
+   completeForms = AB.fixReturns
+   formFields = AB.returnFields
 
 instance TaxCompletable 'Province.ON where
    completeForms = ON.fixReturns

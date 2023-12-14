@@ -3,8 +3,11 @@
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE NoFieldSelectors #-}
 {-# LANGUAGE OverloadedRecordDot #-}
+{-# LANGUAGE OverloadedStrings #-}
 
-module Tax.Canada.Province.AB (AB428, ab428Fields, fixAB428, fixReturns, t1Fields) where
+module Tax.Canada.Province.AB (AB428, ab428Fields, fixAB428, fixReturns, returnFields, t1Fields) where
+
+import qualified Rank2
 
 import Tax.Canada.T1.Types qualified as T1
 import Tax.Canada.T1.Types (T1 (T1, page7, page8), Page7(Page7, step6_RefundOrBalanceOwing),
@@ -20,12 +23,16 @@ import Tax.Canada.Province.AB.AB428.Fix (fixAB428)
 import Tax.Canada.Province.AB.AB428.FieldNames (ab428Fields)
 
 import Tax.Canada.Shared(MedicalExpenses(..), BaseCredit(..))
+import Tax.FDF (FieldConst, within)
 import Tax.Util (fixEq)
 
-fixReturns :: (T1 Maybe, AB428 Maybe) -> (T1 Maybe, AB428 Maybe)
+type Returns = Rank2.Product T1 AB428
+
+fixReturns :: Returns Maybe -> Returns Maybe
 fixReturns =
-  fixEq $ \(t1@T1{page7 = page7@Page7{step6_RefundOrBalanceOwing},
-                  page8 = page8@Page8{step6_RefundOrBalanceOwing = page8step6}},
+  fixEq $ \(Rank2.Pair
+            t1@T1{page7 = page7@Page7{step6_RefundOrBalanceOwing},
+                  page8 = page8@Page8{step6_RefundOrBalanceOwing = page8step6}}
             ab428@AB428{page1 = page1@AB.Page1{partA, partB = partB1@AB.Page1PartB{spouseAmount}},
                         page2 = page2@AB.Page2{AB.partB = partB2@AB.Page2PartB{AB.medicalExpenses}},
                         page3 = page3@AB.Page3{AB.partC}})
@@ -34,7 +41,8 @@ fixReturns =
                              step6_RefundOrBalanceOwing{T1.line_42800_ProvTerrTax = ab428.page3.partC.line66_tax}},
                        page8 =
                        page8{step6_RefundOrBalanceOwing =
-                             page8step6{T1.line_47900_ProvTerrCredits = ab428.page3.partD.line69_credits}}},
+                             page8step6{T1.line_47900_ProvTerrCredits = ab428.page3.partD.line69_credits}}}
+              `Rank2.Pair`
               fixAB428 ab428{AB.page1 =
                              page1{AB.Page1.income = t1.page5.step4_TaxableIncome.line_26000_TaxableIncome,
                                    AB.Page1.partB = partB1{AB.spouseAmount = spouseAmount{reduction = t1.page1.spouse.line23600},
@@ -50,3 +58,6 @@ fixReturns =
                                                               netIncome = t1.page4.line_23600_NetIncome}}},
                              AB.page3 =
                              page3{AB.partC = partC{AB.line57_copy = t1.page7.partC_NetFederalTax.line40427}}})
+
+returnFields :: Returns FieldConst
+returnFields = Rank2.Pair (within "T1" Rank2.<$> t1Fields) (within "428" Rank2.<$> ab428Fields)
