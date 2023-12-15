@@ -106,7 +106,8 @@ properties [fdfT1Map, fdf428Map, fdf479Map] =
                         ("Manitoba", "5007", checkFormFields MB.mb428Fields),
                         ("Alberta",  "5009", checkFormFields AB.ab428Fields),
                         ("British Columbia", "5010", checkFormFields BC.bc428Fields)]
-        provinces479 = [("Ontario",  "5006", checkFormFields ON.on479Fields)]
+        provinces479 = [("Ontario",  "5006", checkFormFields ON.on479Fields),
+                        ("British Columbia", "5010", checkFormFields BC.bc479Fields)]
 properties maps = error ("Unexpected data directory contents: " <> show maps)
 
 checkFormPairIdempotent :: (Eq (g Maybe), Show (g Maybe), Eq (h Maybe), Show (h Maybe),
