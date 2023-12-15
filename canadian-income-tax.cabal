@@ -62,6 +62,9 @@ library
         Tax.Canada.Province.BC.BC428.Types
         Tax.Canada.Province.BC.BC428.FieldNames
         Tax.Canada.Province.BC.BC428.Fix
+        Tax.Canada.Province.BC.BC479.Types
+        Tax.Canada.Province.BC.BC479.FieldNames
+        Tax.Canada.Province.BC.BC479.Fix
         Tax.Canada.Province.MB.MB428.Types
         Tax.Canada.Province.MB.MB428.FieldNames
         Tax.Canada.Province.MB.MB428.Fix
