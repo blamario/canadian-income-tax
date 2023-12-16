@@ -66,16 +66,16 @@ properties [fdfT1Map, fdf428Map, fdf479Map] =
       testGroup "British Columbia" [
         testProperty "T1" (checkFormIdempotent BC.t1Fields fixT1),
         testProperty "BC428" (checkFormIdempotent BC.bc428Fields BC.fixBC428),
-        testProperty "T1+BC428" (checkFormIdempotent BC.returnFields BC.fixReturns)],
+        testProperty "T1+BC428+BC479" (checkFormIdempotent BC.returnFields BC.fixReturns)],
       testGroup "Manitoba" [
         testProperty "T1" (checkFormIdempotent MB.t1Fields fixT1),
         testProperty "MB428" (checkFormIdempotent MB.mb428Fields MB.fixMB428),
-        testProperty "T1+MB428" (checkFormPairIdempotent AB.t1Fields MB.mb428Fields MB.fixReturns)],
+        testProperty "T1+MB428" (checkFormIdempotent MB.returnFields MB.fixReturns)],
       testGroup "Ontario" [
         testProperty "T1" (checkFormIdempotent ON.returnFields.t1 fixT1),
         testProperty "ON428" (checkFormIdempotent ON.returnFields.on428 ON.fixON428),
         testProperty "ON479" (checkFormIdempotent ON.returnFields.on479 ON.fixON479),
-        testProperty "T1+ON428" (checkFormIdempotent ON.returnFields ON.fixReturns)]],
+        testProperty "T1+ON428+ON479" (checkFormIdempotent ON.returnFields ON.fixReturns)]],
     testGroup "Roundtrip" [
       testGroup "T1" [
         testProperty ("T1 for " <> name) (checkFormFields fields $ List.lookup (prefix <> "-r-fill-22e.fdf") fdfT1Map)
@@ -109,13 +109,6 @@ properties [fdfT1Map, fdf428Map, fdf479Map] =
         provinces479 = [("Ontario",  "5006", checkFormFields ON.on479Fields),
                         ("British Columbia", "5010", checkFormFields BC.bc479Fields)]
 properties maps = error ("Unexpected data directory contents: " <> show maps)
-
-checkFormPairIdempotent :: (Eq (g Maybe), Show (g Maybe), Eq (h Maybe), Show (h Maybe),
-                            Rank2.Applicative g, Shallow.Traversable Transformations.Gen g,
-                            Rank2.Applicative h, Shallow.Traversable Transformations.Gen h)
-                        => g FieldConst -> h FieldConst -> ((g Maybe, h Maybe) -> (g Maybe, h Maybe)) -> Property
-checkFormPairIdempotent fields1 fields2 f =
-   checkFormIdempotent (Rank2.Pair fields1 fields2) (\(Rank2.Pair x y)-> uncurry Rank2.Pair $ curry f x y)
 
 checkFormIdempotent :: (Eq (g Maybe), Show (g Maybe),
                         Rank2.Applicative g, Shallow.Traversable Transformations.Gen g)

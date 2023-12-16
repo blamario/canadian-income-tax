@@ -99,8 +99,8 @@ fix428fdf Province.ON = FDF.mapForm ON.returnFields.on428 ON.fixON428
 
 fixReturns :: Province.Code -> FDFs -> Either String FDFs
 fixReturns Province.AB = FDF.mapForms AB.returnFields AB.fixReturns
---fixReturns Province.BC = FDF.mapForms BC.returnFields BC.fixReturns
---fixReturns Province.MB = FDF.mapForms MB.returnFields MB.fixReturns
+fixReturns Province.BC = FDF.mapForms BC.returnFields BC.fixReturns
+fixReturns Province.MB = FDF.mapForms MB.returnFields MB.fixReturns
 fixReturns Province.ON = FDF.mapForms ON.returnFields ON.fixReturns
 
 process :: Options -> IO ()

@@ -26,11 +26,13 @@ import Tax.Canada.Shared(MedicalExpenses(..), BaseCredit(..))
 import Tax.FDF (FieldConst, within)
 import Tax.Util (fixEq)
 
-type Returns = Rank2.Product T1 AB428
+import Data.Functor.Product (Product(Pair))
+
+type Returns = Product T1 AB428
 
 fixReturns :: Returns Maybe -> Returns Maybe
 fixReturns =
-  fixEq $ \(Rank2.Pair
+  fixEq $ \(Pair
             t1@T1{page7 = page7@Page7{step6_RefundOrBalanceOwing},
                   page8 = page8@Page8{step6_RefundOrBalanceOwing = page8step6}}
             ab428@AB428{page1 = page1@AB.Page1{partA, partB = partB1@AB.Page1PartB{spouseAmount}},
@@ -42,7 +44,7 @@ fixReturns =
                        page8 =
                        page8{step6_RefundOrBalanceOwing =
                              page8step6{T1.line_47900_ProvTerrCredits = ab428.page3.partD.line69_credits}}}
-              `Rank2.Pair`
+              `Pair`
               fixAB428 ab428{AB.page1 =
                              page1{AB.Page1.income = t1.page5.step4_TaxableIncome.line_26000_TaxableIncome,
                                    AB.Page1.partB = partB1{AB.spouseAmount = spouseAmount{reduction = t1.page1.spouse.line23600},
@@ -60,4 +62,4 @@ fixReturns =
                              page3{AB.partC = partC{AB.line57_copy = t1.page7.partC_NetFederalTax.line40427}}})
 
 returnFields :: Returns FieldConst
-returnFields = Rank2.Pair (within "T1" Rank2.<$> t1Fields) (within "428" Rank2.<$> ab428Fields)
+returnFields = Pair (within "T1" Rank2.<$> t1Fields) (within "428" Rank2.<$> ab428Fields)
