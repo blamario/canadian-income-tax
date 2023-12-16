@@ -33,6 +33,7 @@ import System.FilePath (replaceDirectory, takeFileName)
 import System.IO (hPutStrLn, stderr)
 import Text.FDF (FDF, parse, serialize)
 
+import Tax.Canada (completeForms)
 import Tax.Canada.T1 (T1, fixT1, t1FieldsForProvince)
 import Tax.Canada.Province.AB qualified as AB
 import Tax.Canada.Province.BC qualified as BC
@@ -97,12 +98,6 @@ fix428fdf Province.BC = FDF.mapForm BC.bc428Fields BC.fixBC428
 fix428fdf Province.MB = FDF.mapForm MB.mb428Fields MB.fixMB428
 fix428fdf Province.ON = FDF.mapForm ON.returnFields.on428 ON.fixON428
 
-fixReturns :: Province.Code -> FDFs -> Either String FDFs
-fixReturns Province.AB = FDF.mapForms AB.returnFields AB.fixReturns
-fixReturns Province.BC = FDF.mapForms BC.returnFields BC.fixReturns
-fixReturns Province.MB = FDF.mapForms MB.returnFields MB.fixReturns
-fixReturns Province.ON = FDF.mapForms ON.returnFields ON.fixReturns
-
 process :: Options -> IO ()
 process Options{province, t1InputPath, p428InputPath, outputPath, verbose} = do
    [t1, p428] <- traverse (uncurry readMaybeFDF) [("t1", t1InputPath), ("428", p428InputPath)]
@@ -133,7 +128,7 @@ process Options{province, t1InputPath, p428InputPath, outputPath, verbose} = do
             paths = [fromMaybe "p428.fdf" p428InputPath,
                      fromMaybe "t1.fdf" t1InputPath]
             arePDFs = [p428isPDF, t1isPDF]
-        case traverse parse bytesMap >>= fixReturns province of
+        case traverse parse bytesMap >>= completeForms province of
             Left err -> error err
             Right fixedMap -> do
                let byteses' = toList $ serialize <$> fixedMap

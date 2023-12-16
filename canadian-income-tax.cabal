@@ -27,6 +27,7 @@ source-repository head
 
 library
     exposed-modules:
+        Tax.Canada
         Tax.Canada.Province.AB
         Tax.Canada.Province.BC
         Tax.Canada.Province.MB
@@ -44,7 +45,6 @@ library
         Tax.Util
 
     other-modules:
-        Tax.Canada
         Tax.Canada.T1.Types
         Tax.Canada.T1.FieldNames.AB
         Tax.Canada.T1.FieldNames.BC
