@@ -21,7 +21,7 @@ import Data.Char (toUpper)
 import Data.Foldable (toList)
 import Data.List (intercalate)
 import Data.Map.Lazy qualified as Map
-import Data.Maybe (fromMaybe)
+import Data.Maybe (catMaybes)
 import Data.Semigroup (Any (Any))
 import Data.Semigroup.Cancellative (isPrefixOf, isSuffixOf)
 import Data.Text (Text)
@@ -50,8 +50,9 @@ main = OptsAp.execParser (OptsAp.info optionsParser
 
 data Options = Options {
    province :: Province.Code,
-   t1InputPath :: Maybe FilePath,
+   t1InputPath :: FilePath,
    p428InputPath :: Maybe FilePath,
+   p479InputPath :: Maybe FilePath,
    outputPath :: FilePath,
    verbose :: Bool}
 
@@ -59,8 +60,9 @@ optionsParser :: Parser Options
 optionsParser =
    Options
    <$> OptsAp.argument readProvince (metavar "<two-letter province code>")
-   <*> optional (OptsAp.strOption (long "t1" <> metavar "<input T1 form file>"))
+   <*> OptsAp.strOption (long "t1" <> metavar "<input T1 form file>")
    <*> optional (OptsAp.strOption (long "428" <> metavar "<input 428 form file>"))
+   <*> optional (OptsAp.strOption (long "479" <> metavar "<input 479 form file>"))
    <*> OptsAp.strOption (short 'o' <> long "output" <> OptsAp.value "-" <> metavar "<output file or directory>")
    <*> OptsAp.switch (short 'v' <> long "verbose")
    <**> OptsAp.helper
@@ -75,33 +77,23 @@ readProvince = OptsAp.eitherReader (tryRead . map toUpper)
          onLast f (x:xs) = x : onLast f xs
          onLast _ [] = []
 
-readFDF :: FilePath -> IO (Any, Lazy.ByteString)
+readFDF :: FilePath -> IO (Bool, Lazy.ByteString)
 readFDF inputPath = do
    exists <- doesFileExist inputPath
    unless (inputPath == "-" || exists) (error $ "Input file " <> show inputPath <> " doesn't exist.")
    content <- if inputPath == "-" then ByteString.Lazy.getContents else ByteString.Lazy.readFile inputPath
    if "%FDF-1." `isPrefixOf` content
-      then pure (Any False, content)
+      then pure (False, content)
       else if "%PDF-1." `isPrefixOf` content
-           then either error ((,) (Any True)) <$> pdf2fdf content
+           then either error ((,) True) <$> pdf2fdf content
            else error "Expecting an FDF or PDF file"
 
-readMaybeFDF :: FilePath -> Maybe FilePath -> IO (Maybe (FilePath, Any, ByteString))
-readMaybeFDF baseName path = traverse (\p-> addPath p . fmap Lazy.toStrict <$> readFDF p) path
-   where addPath "-" (isPDF@(Any True), content) = (baseName <> ".pdf", isPDF, content)
-         addPath "-" (isPDF@(Any False), content) = (baseName <> ".fdf", isPDF, content)
-         addPath p (isPDF, content) = (p, isPDF, content)
-
-fix428fdf :: Province.Code -> FDF -> Either String FDF
-fix428fdf Province.AB = FDF.mapForm AB.ab428Fields AB.fixAB428
-fix428fdf Province.BC = FDF.mapForm BC.bc428Fields BC.fixBC428
-fix428fdf Province.MB = FDF.mapForm MB.mb428Fields MB.fixMB428
-fix428fdf Province.ON = FDF.mapForm ON.returnFields.on428 ON.fixON428
-
 process :: Options -> IO ()
-process Options{province, t1InputPath, p428InputPath, outputPath, verbose} = do
-   [t1, p428] <- traverse (uncurry readMaybeFDF) [("t1", t1InputPath), ("428", p428InputPath)]
-   when ("/" `isSuffixOf` outputPath) (createDirectoryIfMissing True outputPath)
+process Options{province, t1InputPath, p428InputPath, p479InputPath, outputPath, verbose} = do
+   let inputFiles = catMaybes [(,) "T1"  <$> Just t1InputPath,
+                               (,) "428" <$> p428InputPath,
+                               (,) "479" <$> p479InputPath]
+   inputs <- traverse (traverse readFDF) inputFiles :: IO [(Text, (Bool, Lazy.ByteString))]
    let writeFrom :: FilePath -> Bool -> ByteString.ByteString -> IO ()
        writeFrom inputPath asPDF content = do
           content' <- (if asPDF then (either error Lazy.toStrict <$>) . fdf2pdf inputPath . Lazy.fromStrict else pure) content
@@ -113,33 +105,23 @@ process Options{province, t1InputPath, p428InputPath, outputPath, verbose} = do
                    then ByteString.writeFile (replaceDirectory inputPath outputPath) content'
                    else ByteString.writeFile outputPath content'
        t1Fields = t1FieldsForProvince province
-   case (t1, p428) of
-      (Nothing, Nothing) -> error "You must specify a T1 form, provincial 428 form, or both."
-      (Just (t1Path, Any t1isPDF, t1bytes), Nothing) -> do
-         case parse t1bytes >>= FDF.mapForm t1Fields fixT1 of
-            Left err -> error err
-            Right fdf' -> writeFrom t1Path t1isPDF (serialize fdf')
-      (Nothing, Just (p428Path, Any p428isPDF, bytes428)) -> do
-         case parse bytes428 >>= fix428fdf province of
-            Left err -> error err
-            Right fdf' -> writeFrom p428Path p428isPDF (serialize fdf')
-      (Just (t1Path, Any t1isPDF, t1bytes), Just (p428path, Any p428isPDF, bytes428)) -> do
-        let bytesMap = Map.fromList [("T1", t1bytes), ("428", bytes428)]
-            paths = [fromMaybe "p428.fdf" p428InputPath,
-                     fromMaybe "t1.fdf" t1InputPath]
-            arePDFs = [p428isPDF, t1isPDF]
-        case traverse parse bytesMap >>= completeForms province of
-            Left err -> error err
-            Right fixedMap -> do
-               let byteses' = toList $ serialize <$> fixedMap
-                   tarEntries = sequenceA (zipWith fdfEntry paths byteses')
-                   fdfEntry path content =
-                      (`fileEntry` ByteString.Lazy.fromStrict content) <$> toTarPath False (takeFileName path)
-                   tarFile = either (error . ("Can't tar: " <>)) (ByteString.Lazy.toStrict . Tar.write) tarEntries 
-               -- when verbose (hPutStrLn stderr $ show (form'T1, form'ON))
-               if outputPath == "-"
-                  then ByteString.putStr tarFile
-                  else do isDir <- doesDirectoryExist outputPath
-                          if isDir
-                             then void $ sequenceA (zipWith3 writeFrom paths arePDFs byteses')
-                             else ByteString.writeFile outputPath tarFile
+       paths = snd <$> inputFiles :: [FilePath]
+       arePDFs = fst . snd <$> inputs
+       bytesMap = Lazy.toStrict . snd <$> Map.fromList inputs
+   case traverse parse bytesMap >>= completeForms province of
+      Left err -> error err
+      Right fixedFDFs -> do
+         let bytesMap' = serialize <$> fixedFDFs
+             byteses' = toList bytesMap'
+             tarEntries = sequenceA (zipWith fdfEntry paths byteses')
+             fdfEntry path content =
+                (`fileEntry` ByteString.Lazy.fromStrict content) <$> toTarPath False (takeFileName path)
+             tarFile = either (error . ("Can't tar: " <>)) (ByteString.Lazy.toStrict . Tar.write) tarEntries
+         -- when verbose (hPutStrLn stderr $ show (form'T1, form'ON))
+         when ("/" `isSuffixOf` outputPath) (createDirectoryIfMissing True outputPath)
+         if outputPath == "-"
+            then ByteString.putStr tarFile
+            else do isDir <- doesDirectoryExist outputPath
+                    if isDir
+                       then void $ sequenceA (zipWith3 writeFrom paths arePDFs byteses')
+                       else ByteString.writeFile outputPath tarFile
