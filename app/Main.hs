@@ -34,11 +34,6 @@ import System.IO (hPutStrLn, stderr)
 import Text.FDF (FDF, parse, serialize)
 
 import Tax.Canada (completeForms)
-import Tax.Canada.T1 (T1, fixT1, t1FieldsForProvince)
-import Tax.Canada.Province.AB qualified as AB
-import Tax.Canada.Province.BC qualified as BC
-import Tax.Canada.Province.MB qualified as MB
-import Tax.Canada.Province.ON qualified as ON
 import Tax.FDF (FDFs)
 import Tax.FDF qualified as FDF
 import Tax.PDFtk (fdf2pdf, pdf2fdf)
@@ -104,7 +99,6 @@ process Options{province, t1InputPath, p428InputPath, p479InputPath, outputPath,
                 if isDir
                    then ByteString.writeFile (replaceDirectory inputPath outputPath) content'
                    else ByteString.writeFile outputPath content'
-       t1Fields = t1FieldsForProvince province
        paths = snd <$> inputFiles :: [FilePath]
        arePDFs = fst . snd <$> inputs
        bytesMap = Lazy.toStrict . snd <$> Map.fromList inputs
