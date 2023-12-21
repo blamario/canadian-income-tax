@@ -10,6 +10,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE StandaloneDeriving #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE UndecidableInstances #-}
 
 module Tax.Canada.Province.BC (BC428, bc428Fields, bc479Fields, fixBC428, fixBC479, fixReturns, returnFields, t1Fields) where

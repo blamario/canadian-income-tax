@@ -10,6 +10,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE StandaloneDeriving #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE UndecidableInstances #-}
 
 module Tax.Canada.Province.ON (Returns(..), ON428, ON479, fixON428, fixON479, fixReturns,
