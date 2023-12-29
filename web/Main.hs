@@ -29,6 +29,7 @@ import Network.HTTP.Types.Status (ok200, internalServerError500,
 import Network.Wai.Middleware.RequestLogger
 import Network.Wai.Middleware.Static
 import Network.Wai.Parse (FileInfo (..))
+import System.Directory (removeDirectoryRecursive)
 import System.FilePath.Posix ((</>))
 import System.Posix.Temp (mkdtemp)
 import Text.FDF (parse, serialize)
@@ -82,6 +83,7 @@ main = scotty 3000 $ do
                 status ok200
                 setHeader "Content-Type" "application/zip"
                 raw (fromArchive pdfArchive)
+      liftIO $ removeDirectoryRecursive dir
    middleware $ staticPolicy (noDots >-> addBase "web/client/build")
 
 fromUTF8 :: ByteString -> String
