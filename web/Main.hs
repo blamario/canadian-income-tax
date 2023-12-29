@@ -10,7 +10,6 @@ import Control.Category ((>>>))
 import Control.Monad (forM, join)
 import Control.Monad.IO.Class (liftIO)
 import Control.Exception (assert)
-import Data.Bifunctor (first)
 import Data.ByteString (ByteString)
 import Data.ByteString qualified as ByteString
 import Data.ByteString.Lazy qualified as Lazy
@@ -50,9 +49,11 @@ main = scotty 3000 $ do
    post "/t1/PDF/:province" $ do
       provinceCode <- captureParam "province"
       province <- case readMaybe (Text.Lazy.unpack provinceCode)
-                  of Nothing -> raiseStatus notFound404 ("No such province as " <> provinceCode)
+                  of Nothing -> status notFound404
+                                >> text ("No such province as " <> provinceCode)
+                                >> finish
                      Just p -> pure p
-      pdfFiles <- map (first Text.Lazy.toStrict) <$> files
+      pdfFiles <- files
       dir <- liftIO $ mkdtemp "tax"
       fdfBytes <- liftIO $ fmap sequenceA $ forM pdfFiles $ \(key, FileInfo name _ content)-> do
         let path = dir </> fromUTF8 name
