@@ -30,7 +30,3 @@ nonNegativeDifference a b = Just (max 0 $ fromMaybe 0 a - fromMaybe 0 b)
 fractionOf :: Maybe Rational -> Maybe Centi -> Maybe Centi
 fractionOf (Just x) (Just amt) = Just $ fromRational (x * toRational amt)
 fractionOf _ _ = Nothing
-
--- | The minimum of all amounts, 'Nothing' ignored.
-leastOf :: [Maybe Centi] -> Maybe Centi
-leastOf = fmap minimum . nonEmpty . mapMaybe id
