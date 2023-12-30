@@ -4,13 +4,8 @@
 
 module Tax.Canada.Province.BC.BC479.Fix (BC479, fixBC479) where
 
-import Control.Applicative (liftA2)
-import Control.Monad (guard, mfilter)
-import Data.Fixed (Centi)
-import Rank2 qualified
-
 import Tax.Canada.Province.BC.BC479.Types
-import Tax.Util (fixEq, fractionOf, nonNegativeDifference, totalOf)
+import Tax.Util (fixEq, nonNegativeDifference, totalOf)
 
 fixBC479 :: BC479 Maybe -> BC479 Maybe
 fixBC479 = fixEq $ \bc479@BC479{..}-> BC479{page1 = fixPage1 page1,
