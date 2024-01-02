@@ -19,6 +19,7 @@ import Tax.Canada.Territory.NT qualified as NT
 import Tax.Canada.Territory.NU qualified as NU
 import Tax.Canada.Territory.YT qualified as YT
 import Tax.Canada.T1 (T1, fixT1)
+import Tax.Canada.Schedule9 (schedule9FieldNames)
 import Tax.FDF as FDF
 import Paths_canadian_income_tax (getDataDir)
 
@@ -29,8 +30,9 @@ import Data.Either (isLeft, isRight)
 import Data.Functor.Const (Const (Const, getConst))
 import Data.List qualified as List
 import Data.Maybe (fromMaybe)
+import Data.Semigroup.Cancellative (isSuffixOf)
 import Data.Semigroup (All (All, getAll))
-import Data.Text (Text, isInfixOf, isSuffixOf, stripSuffix)
+import Data.Text (Text, isInfixOf, stripSuffix)
 import Rank2 qualified
 import System.Directory (listDirectory)
 import System.Exit (die)
@@ -46,17 +48,17 @@ import Test.Tasty.Hedgehog
 
 main = do
   dataDir <- getDataDir
-  fdfMaps <- traverse (readFDFs . combine dataDir) ["T1/fdf", "428", "479"]
+  fdfMaps <- traverse (readFDFs . combine dataDir) [".", "T1/fdf", "428", "479"]
   either die (defaultMain . properties) $ sequenceA fdfMaps
   where
     readFDFs :: FilePath -> IO (Either String [(FilePath, FDF)])
     readFDFs dir = do
-      fdfFileNames <- listDirectory dir
+      fdfFileNames <- filter (".fdf" `isSuffixOf`) <$> listDirectory dir
       fdfBytes <- traverse (ByteString.readFile . combine dir) fdfFileNames
       pure $ traverse (traverse parse) $ zip fdfFileNames fdfBytes
 
 properties :: [[(FilePath, FDF)]] -> TestTree
-properties [fdfT1Map, fdf428Map, fdf479Map] =
+properties [dataRootMap, fdfT1Map, fdf428Map, fdf479Map] =
   testGroup "Properties" [
     testGroup "Idempotence" [
       testGroup "Alberta" [
@@ -80,6 +82,7 @@ properties [fdfT1Map, fdf428Map, fdf479Map] =
       testGroup "T1" [
         testProperty ("T1 for " <> name) (checkFormFields fields $ List.lookup (prefix <> "-r-fill-22e.fdf") fdfT1Map)
         | (name, prefix, fields) <- provincesT1],
+      testProperty "Schedule 9" (checkFormFields schedule9FieldNames $ List.lookup "5000-s9-fill-22e.fdf" dataRootMap),
       testGroup "428" [
         testProperty ("Form 428 for " <> name) (checkFields $ List.lookup (prefix <> "-c-fill-22e.fdf") fdf428Map)
         | (name, prefix, checkFields) <- provinces428],

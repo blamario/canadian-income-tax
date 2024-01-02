@@ -40,6 +40,7 @@ library
         Tax.Canada.Territory.YT
         Tax.Canada.Shared
         Tax.Canada.T1
+        Tax.Canada.Schedule9
         Tax.FDF
         Tax.PDFtk
         Tax.Util
@@ -128,9 +129,8 @@ test-suite             properties
     type:                exitcode-stdio-1.0
     build-depends:       base >= 4.7 && < 5, bytestring,
                          directory ^>= 1.3, filepath ^>= 1.4,
-                         forms-data-format,
-                         rank2classes, deep-transformations,
-                         text, time, ca-province-codes,
+                         forms-data-format, monoid-subclasses, rank2classes, deep-transformations,
+                         text, time >= 1.9.1 && < 1.13, ca-province-codes,
                          tasty >= 0.7, tasty-hedgehog ^>= 1.4, hedgehog ^>= 1.4,
                          canadian-income-tax
     hs-source-dirs:      test
@@ -145,7 +145,7 @@ test-suite             regression
                          directory ^>= 1.3, filepath ^>= 1.4,
                          forms-data-format,
                          rank2classes, deep-transformations,
-                         text, time, ca-province-codes,
+                         text, time >= 1.9.1 && < 1.13, ca-province-codes,
                          tasty >= 0.7, tasty-golden ^>=2.3,
                          canadian-income-tax
     hs-source-dirs:      test
