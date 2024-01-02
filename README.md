@@ -1,15 +1,17 @@
 Canadian Income Tax
 ===================
 
-## Manual ##
+This Haskell package consists of a library and a couple of executables to complete the Canadian T1 tax form.
 
-This Haskell package consists of a library and executable to complete the Canadian T1 tax form. The way to use it is
-as follows:
+## Command line ##
+
+There's a command-line executable named `complete-canadian-taxes`. The way to use it is as follows:
 
 1. Download the fillable PDF forms from [the canada.ca Web
 site](https://www.canada.ca/en/revenue-agency/services/forms-publications/tax-packages-years/general-income-tax-benefit-package.html).
 
-2. Fill in the downloaded T1 form.
+2. Fill in the downloaded forms:
+* T1 is supported and mandatory for all provinces and territories.
 * If you're a resident of British Columbia or Ontario, you can also fill in the 428 and 479 forms for the province.
 * If you're a resident of Alberta or Manitoba, you can also fill in the 428 form for the province.
 * For all the other provinces only the T1 form is getting completed at this time.
@@ -20,6 +22,7 @@ part will be performed automatically.
 3. Save the filled-in PDF form(s).
 
 4. Run
+
        complete-canadian-taxes <province code> --t1 50??-r-fill-22e.pdf -o completed/
 
 where `<province code>` is the two-letter code of the province or territory (AB, BC, QC, etc), `50??-r-fill-22e.pdf`
@@ -57,18 +60,24 @@ Either way, at this point my job is done. The rest is all in your hands:
 
 5. Carefully examine the completed PDF forms. The executable comes with no warranty and has not been verified by
 CRA. The responsibility for the correctness of the tax return is still yours. If you notice any problem in the way the
-forms were completed please report the issue. If the completion was correct but you want to change some field values,
-you can repeat steps 2-5 to re-complete the forms with the modified values.
+forms were completed please [report](https://github.com/blamario/canadian-income-tax/issues) the issue. If the
+completion was correct but you want to change some field values, you can repeat steps 2-5 to re-complete the forms
+with the modifications.
 
 6. Once you're satisfied with the forms: print and sign the tax return, then send it to CRA by mail along with your
 other documents. At some point they'll hopefully leave the 19th century and let us digitally file the same information
 they accept on paper, but their NETFILE protocol is so far not open to the public.
 
+## Web service ##
+
+There's also an interactive Web server executable named `serve-canadian-taxes`. Launch the executable, visit
+http://localhost:3000 in your browser, and follow the instructions.
+
 ## Installation ##
 
-As you can see from the above instructions, you'll need to install the free `pdftk` executable to deal with
-PDF <-> FDF conversion. See [their instructions](https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/). On
-Ubuntu you can simply run
+As you can deduce from the above instructions, you'll need to install the free `pdftk` executable to deal with PDF <->
+FDF conversion. See [their instructions](https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/). On Ubuntu you can
+simply run
 
     sudo apt install pdftk
 
