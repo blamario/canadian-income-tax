@@ -29,6 +29,7 @@ library
     exposed-modules:
         Tax.Canada
         Tax.Canada.Federal
+        Tax.Canada.Federal.Schedule9
         Tax.Canada.Province.AB
         Tax.Canada.Province.BC
         Tax.Canada.Province.MB
@@ -41,7 +42,6 @@ library
         Tax.Canada.Territory.YT
         Tax.Canada.Shared
         Tax.Canada.T1
-        Tax.Canada.Schedule9
         Tax.FDF
         Tax.PDFtk
         Tax.Util

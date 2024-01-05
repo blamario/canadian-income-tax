@@ -19,7 +19,7 @@ import Tax.Canada.Territory.NT qualified as NT
 import Tax.Canada.Territory.NU qualified as NU
 import Tax.Canada.Territory.YT qualified as YT
 import Tax.Canada.T1 (T1, fixT1)
-import Tax.Canada.Schedule9 (schedule9FieldNames)
+import Tax.Canada.Federal.Schedule9 (schedule9FieldNames)
 import Tax.FDF as FDF
 import Paths_canadian_income_tax (getDataDir)
 

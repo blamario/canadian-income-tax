@@ -22,9 +22,9 @@ import Rank2 qualified
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
+import Tax.Canada.Federal.Schedule9 (Schedule9(line23_sum), fixSchedule9, schedule9FieldNames)
 import Tax.Canada.T1 (fixT1, t1FieldsForProvince)
 import Tax.Canada.T1.Types (T1(page6), Page6(line34900), LanguageOfCorrespondence, MaritalStatus)
-import Tax.Canada.Schedule9 (Schedule9(line23_sum), fixSchedule9, schedule9FieldNames)
 import Tax.FDF (Entry (Amount), FieldConst (Field), within)
 import Tax.Util (fixEq)
 

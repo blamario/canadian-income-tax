@@ -10,9 +10,10 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE StandaloneDeriving #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE UndecidableInstances #-}
 
-module Tax.Canada.Schedule9 where
+module Tax.Canada.Federal.Schedule9 where
 
 import Data.Fixed (Centi)
 import Data.Text (Text)
