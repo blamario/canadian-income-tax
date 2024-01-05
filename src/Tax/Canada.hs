@@ -7,6 +7,8 @@ import Data.Functor.Const (Const)
 import Data.Functor.Product (Product (Pair))
 import Data.Kind (Type)
 
+import Tax.Canada.Federal qualified as Federal
+import Tax.Canada.Federal (fixFederalForms)
 import Tax.Canada.Province.AB qualified as AB
 import Tax.Canada.Province.BC qualified as BC
 import Tax.Canada.Province.MB qualified as MB
@@ -20,4 +22,4 @@ completeForms Province.AB = FDF.mapForms AB.returnFields AB.fixReturns
 completeForms Province.BC = FDF.mapForms BC.returnFields BC.fixReturns
 completeForms Province.MB = FDF.mapForms MB.returnFields MB.fixReturns
 completeForms Province.ON = FDF.mapForms ON.returnFields ON.fixReturns
-completeForms p = traverse (FDF.mapForm (t1FieldsForProvince p) fixT1)
+completeForms p = traverse (FDF.mapForm (Federal.formFieldsForProvince p) fixFederalForms)

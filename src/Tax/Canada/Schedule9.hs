@@ -1,4 +1,3 @@
-{-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE ImportQualifiedPost #-}
@@ -11,14 +10,12 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE StandaloneDeriving #-}
 {-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE UndecidableInstances #-}
 
 module Tax.Canada.Schedule9 where
 
 import Data.Fixed (Centi)
 import Data.Text (Text)
-import Language.Haskell.TH qualified as TH
 import Rank2 qualified
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified

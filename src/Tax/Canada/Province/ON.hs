@@ -16,15 +16,17 @@
 module Tax.Canada.Province.ON (Returns(..), ON428, ON479, fixON428, fixON479, fixReturns,
                                returnFields, t1Fields, on428Fields, on479Fields) where
 
+import Data.CAProvinceCodes (Code(ON))
 import Rank2 qualified
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
+import Tax.Canada.Federal qualified as Federal
+import Tax.Canada.Federal (Forms(t1), fixFederalForms)
 import Tax.Canada.T1.Types qualified as T1
 import Tax.Canada.T1.Types (T1 (T1, page7, page8), Page7(Page7, step6_RefundOrBalanceOwing),
                             Page8(Page8, step6_RefundOrBalanceOwing))
 import Tax.Canada.T1.FieldNames.ON (t1Fields)
-import Tax.Canada.T1.Fix (fixT1)
 
 import Tax.Canada.Province.ON.ON428.Types qualified as ON
 import Tax.Canada.Province.ON.ON428.Types qualified as ON.Page1 (Page1(..))
@@ -41,29 +43,32 @@ import Tax.FDF (FieldConst, within)
 import Tax.Util (fixEq)
 
 data Returns line = Returns {
-  t1 :: T1 line,
+  federal :: Federal.Forms line,
   on428 :: ON428 line,
   on479 :: ON479 line}
 
-deriving instance (Show (T1 line), Show (ON428 line), Show (ON479 line)) => Show (Returns line)
-deriving instance (Eq (T1 line), Eq (ON428 line), Eq (ON479 line)) => Eq (Returns line)
+deriving instance (Show (Federal.Forms line), Show (ON428 line), Show (ON479 line)) => Show (Returns line)
+deriving instance (Eq (Federal.Forms line), Eq (ON428 line), Eq (ON479 line)) => Eq (Returns line)
 Rank2.TH.deriveAll ''Returns
 Transformation.Shallow.TH.deriveAll ''Returns
 
 fixReturns :: Returns Maybe -> Returns Maybe
 fixReturns =
-  fixEq $ \Returns{t1 = t1@T1{page7 = page7@Page7{step6_RefundOrBalanceOwing},
-                              page8 = page8@Page8{step6_RefundOrBalanceOwing = page8step6}},
+  fixEq $ \Returns{federal = ff@Federal.Forms{t1 = t1@T1{page7 = page7@Page7{step6_RefundOrBalanceOwing},
+                                                         page8 = page8@Page8{step6_RefundOrBalanceOwing = page8step6}}},
                    on428 = on428@ON428{page1 = page1@ON.Page1{partB = partB1@ON.Page1PartB{spouseAmount}},
                                        page2 = page2@ON.Page2{ON.partB = partB2@ON.Page2PartB{ON.medicalExpenses},
                                                               ON.partC}},
                    on479}
-          -> Returns{t1 = fixT1 t1{page7 =
-                                   page7{step6_RefundOrBalanceOwing =
-                                         step6_RefundOrBalanceOwing{T1.line_42800_ProvTerrTax = on428.page4.line90}},
-                                   page8 =
-                                   page8{step6_RefundOrBalanceOwing =
-                                         page8step6{T1.line_47900_ProvTerrCredits = on479.page2.line23_credits}}},
+          -> Returns{federal = fixFederalForms ff{t1 =
+                                                  t1{page7 =
+                                                     page7{step6_RefundOrBalanceOwing =
+                                                           step6_RefundOrBalanceOwing{T1.line_42800_ProvTerrTax=
+                                                                                      on428.page4.line90}},
+                                                     page8 =
+                                                     page8{step6_RefundOrBalanceOwing =
+                                                           page8step6{T1.line_47900_ProvTerrCredits =
+                                                                      on479.page2.line23_credits}}}},
                      on428 = fixON428 on428{
                         ON.page1 =
                             page1{ON.line1 = t1.page5.step4_TaxableIncome.line_26000_TaxableIncome,
@@ -82,6 +87,6 @@ fixReturns =
 
 returnFields :: Returns FieldConst
 returnFields = Returns{
-  t1 = within "T1" Rank2.<$> t1Fields,
+  federal = Federal.formFieldsForProvince ON,
   on428 = within "428" Rank2.<$> on428Fields,
   on479 = within "479" Rank2.<$> on479Fields}
