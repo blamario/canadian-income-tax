@@ -109,8 +109,8 @@ fixSchedule11 t1 = fixEq $ \Schedule11{page1 = page1@Page1{..}, page2 = page2@Pa
    where taxableIncome = t1.page5.step4_TaxableIncome.line_26000_TaxableIncome
          taxableIncomeUnderThreshold = taxableIncome <= Just 50_197
 
-schedule9Fields :: Schedule11 FieldConst
-schedule9Fields = within "form1" Rank2.<$> Schedule11 {
+schedule11Fields :: Schedule11 FieldConst
+schedule11Fields = within "form1" Rank2.<$> Schedule11 {
    page1 = page1Fields,
    page2 = page2Fields}
 
@@ -131,7 +131,7 @@ page1Fields = within "Page1" Rank2.<$> Page1 {
    line11_copy = Field ["Line11", "Line11", "Amount11"] Amount,
    line11_numerator = Field ["Line11", "Amount11"] Amount,
    line12_copy = Field ["Line12", "Amount12"] Amount,
-   line13_difference = Field ["Line12", "Amount12"] Amount,
+   line13_difference = Field ["Line13", "Amount13"] Amount,
    line14_minUnused = Field ["Line14", "Amount1"] Amount,
    line14_cont = Field ["Line14", "Amount14"] Amount,
    line15_difference = Field ["Line15", "Amount15"] Amount,

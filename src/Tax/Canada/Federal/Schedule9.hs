@@ -90,8 +90,8 @@ fixSchedule9 t1 = fixEq $ \form@Schedule9{..} -> form{
    line22_fraction = (0.15 *) <$> line22_copy,
    line23_sum = totalOf [line20_fraction, line21_fraction, line22_fraction]}
 
-schedule9FieldNames :: Schedule9 FieldConst
-schedule9FieldNames = within "form1" . within "Page1" Rank2.<$> Schedule9 {
+schedule9Fields :: Schedule9 FieldConst
+schedule9Fields = within "form1" . within "Page1" Rank2.<$> Schedule9 {
    line1_charities = Field ["Line1", "Amount"] Amount,
    line_32900_government = Field ["Line2", "Amount"] Amount,
    line_33300_universities = Field ["Line3", "Amount"] Amount,

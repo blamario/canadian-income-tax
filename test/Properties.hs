@@ -19,7 +19,8 @@ import Tax.Canada.Territory.NT qualified as NT
 import Tax.Canada.Territory.NU qualified as NU
 import Tax.Canada.Territory.YT qualified as YT
 import Tax.Canada.T1 (T1, fixT1)
-import Tax.Canada.Federal.Schedule9 (schedule9FieldNames)
+import Tax.Canada.Federal.Schedule9 (schedule9Fields)
+import Tax.Canada.Federal.Schedule11 (schedule11Fields)
 import Tax.FDF as FDF
 import Paths_canadian_income_tax (getDataDir)
 
@@ -82,7 +83,8 @@ properties [dataRootMap, fdfT1Map, fdf428Map, fdf479Map] =
       testGroup "T1" [
         testProperty ("T1 for " <> name) (checkFormFields fields $ List.lookup (prefix <> "-r-fill-22e.fdf") fdfT1Map)
         | (name, prefix, fields) <- provincesT1],
-      testProperty "Schedule 9" (checkFormFields schedule9FieldNames $ List.lookup "5000-s9-fill-22e.fdf" dataRootMap),
+      testProperty "Schedule 9" (checkFormFields schedule9Fields $ List.lookup "5000-s9-fill-22e.fdf" dataRootMap),
+      testProperty "Schedule 11" (checkFormFields schedule11Fields $ List.lookup "5000-s11-fill-22e.fdf" dataRootMap),
       testGroup "428" [
         testProperty ("Form 428 for " <> name) (checkFields $ List.lookup (prefix <> "-c-fill-22e.fdf") fdf428Map)
         | (name, prefix, checkFields) <- provinces428],
