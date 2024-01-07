@@ -19,7 +19,7 @@ import Data.ByteString.Lazy qualified as ByteString.Lazy
 import Data.CAProvinceCodes qualified as Province
 import Data.Char (toUpper)
 import Data.Foldable (toList)
-import Data.List (intercalate)
+import Data.List (intercalate, sortOn)
 import Data.Map.Lazy qualified as Map
 import Data.Maybe (catMaybes)
 import Data.Semigroup (Any (Any))
@@ -48,6 +48,8 @@ data Options = Options {
    t1InputPath :: FilePath,
    p428InputPath :: Maybe FilePath,
    p479InputPath :: Maybe FilePath,
+   schedule9InputPath :: Maybe FilePath,
+   schedule11InputPath :: Maybe FilePath,
    outputPath :: FilePath,
    verbose :: Bool}
 
@@ -58,6 +60,8 @@ optionsParser =
    <*> OptsAp.strOption (long "t1" <> metavar "<input T1 form file>")
    <*> optional (OptsAp.strOption (long "428" <> metavar "<input 428 form file>"))
    <*> optional (OptsAp.strOption (long "479" <> metavar "<input 479 form file>"))
+   <*> optional (OptsAp.strOption (long "s9" <> metavar "<input Schedule 9 form file>"))
+   <*> optional (OptsAp.strOption (long "s11" <> metavar "<input Schedule 11 form file>"))
    <*> OptsAp.strOption (short 'o' <> long "output" <> OptsAp.value "-" <> metavar "<output file or directory>")
    <*> OptsAp.switch (short 'v' <> long "verbose")
    <**> OptsAp.helper
@@ -84,10 +88,16 @@ readFDF inputPath = do
            else error "Expecting an FDF or PDF file"
 
 process :: Options -> IO ()
-process Options{province, t1InputPath, p428InputPath, p479InputPath, outputPath, verbose} = do
-   let inputFiles = catMaybes [(,) "T1"  <$> Just t1InputPath,
+process Options{province, t1InputPath, p428InputPath, p479InputPath,
+                schedule9InputPath, schedule11InputPath,
+                outputPath, verbose} = do
+   let inputFiles :: [(Text, FilePath)]
+       inputFiles = sortOn fst $
+                    catMaybes [(,) "T1"  <$> Just t1InputPath,
                                (,) "428" <$> p428InputPath,
-                               (,) "479" <$> p479InputPath]
+                               (,) "479" <$> p479InputPath,
+                               (,) "Schedule9" <$> schedule9InputPath,
+                               (,) "Schedule11" <$> schedule11InputPath]
    inputs <- traverse (traverse readFDF) inputFiles :: IO [(Text, (Bool, Lazy.ByteString))]
    let writeFrom :: FilePath -> Bool -> ByteString.ByteString -> IO ()
        writeFrom inputPath asPDF content = do
@@ -101,7 +111,7 @@ process Options{province, t1InputPath, p428InputPath, p479InputPath, outputPath,
                    else ByteString.writeFile outputPath content'
        paths = snd <$> inputFiles :: [FilePath]
        arePDFs = fst . snd <$> inputs
-       bytesMap = Lazy.toStrict . snd <$> Map.fromList inputs
+       bytesMap = Lazy.toStrict . snd <$> Map.fromAscList inputs
    case traverse parse bytesMap >>= completeForms province of
       Left err -> error err
       Right fixedFDFs -> do
