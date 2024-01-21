@@ -14,7 +14,7 @@ site](https://www.canada.ca/en/revenue-agency/services/forms-publications/tax-pa
    * T1 is supported and mandatory for all provinces and territories.
    * If you're a resident of British Columbia or Ontario, you can also fill in the 428 and 479 forms for the province.
    * If you're a resident of Alberta or Manitoba, you can also fill in the 428 form for the province.
-   * For all the other provinces only the T1 form is getting completed at this time.
+   * For all the other provinces only the T1 form and several federal schedules are getting completed at this time.
 
    In any case, don't bother filling in any fields that are calculated from other fields in the supported forms, that
    part will be performed automatically. You also don't need to fill any fields that don't matter for the rest of the
@@ -35,7 +35,9 @@ site](https://www.canada.ca/en/revenue-agency/services/forms-publications/tax-pa
 
        complete-canadian-taxes ON --t1 5006-r-fill-22e.pdf --428 5006-c-fill-22e.pdf --479 5006-tc-fill-22e.pdf -o completed/
 
-   At this point my job is done. The rest is all in your hands:
+   The usual `--help` option will give you the full list of all supported forms.
+
+At this point my job is done. The rest is all in your hands:
 
 5. Carefully examine the completed PDF forms. The executable comes with no warranty and has not been verified by
 CRA. The responsibility for the correctness of the tax return is still yours. If you notice any problem in the way the
