@@ -86,12 +86,19 @@ export default function Uploads() {
           <dd><input type="file" name="428 PDF" onChange={handleUpload("428")}/></dd>
           </>
           : ""}
+         </dl>
+         <h4>You can also optionally upload the following forms, if they apply:</h4>
+         <dl>
          {province.value.has479
           ? <>
-          <dt>You can also optionally upload the {province.value.code}479 tax credits form:</dt>
+          <dt>{province.value.code}479 tax credits form:</dt>
           <dd><input type="file" name="479 PDF" onChange={handleUpload("479")}/></dd>
           </>
           : ""}
+         <dt>Schedule 9</dt>
+         <dd><input type="file" name="Schedule 9 PDF" onChange={handleUpload("Schedule9")}/></dd>
+         <dt>Schedule 11</dt>
+         <dd><input type="file" name="Schedule 11 PDF" onChange={handleUpload("Schedule11")}/></dd>
          </dl>
          <h3>Step 5. <button name="Calculate" disabled={submitted !== false} onClick={handleSubmit}>Calculate</button></h3>
          {output && <>
