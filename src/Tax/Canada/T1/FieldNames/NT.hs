@@ -33,7 +33,7 @@ t1Fields = within "form1" Rank2.<$> T1 {
 
 page3Fields = ON.page3Fields{
    line_12000_TaxableDividends = Field ["Line_9", "Line_12000_Amount"] Amount,
-   line_13010_Taxablescholarship = Field ["Line_13010_Taxablescholarship", "Line_13010_Amount"] Amount,
+   line_13010_TaxableScholarship = Field ["Line_13010_Taxablescholarship", "Line_13010_Amount"] Amount,
    line_19 = Field ["Line_19", "Amount"] Amount,
    selfEmployment = within "SelfEmploymentIncome" Rank2.<$> BC.selfEmploymentFields,
    line_25_sum = Field ["Line_25", "Amount1"] Amount,

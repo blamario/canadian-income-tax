@@ -1,0 +1,678 @@
+%FDF-1.2
+%‚„œ”
+1 0 obj
+
+<<
+/FDF 
+<<
+/Fields [
+<<
+/T (form1[0])
+/Kids [
+<<
+/T (Page2[0])
+/Kids [
+<<
+/T (PartA_sub[0])
+/Kids [
+<<
+/T (Line5_Sub[0])
+/Kids [
+<<
+/T (Line5_Amount2_Sub[0])
+/Kids [
+<<
+/T (Line5Amount2[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line5_Amount1_Sub[0])
+/Kids [
+<<
+/T (Line5Amount1[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line1_Sub[0])
+/Kids [
+<<
+/T (Line1_Amount2_Sub[0])
+/Kids [
+<<
+/T (Line1Amount2[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line1_Amount1_Sub[0])
+/Kids [
+<<
+/T (Line1Amount1[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (line4_Sub[0])
+/Kids [
+<<
+/T (Note1[0])
+/V /
+>> 
+<<
+/T (Line4_Amount1_Sub[0])
+/Kids [
+<<
+/T (Line4Amount1[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line4_Amount2_Sub[0])
+/Kids [
+<<
+/T (Line4Amount2[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line6_Sub[0])
+/Kids [
+<<
+/T (Line6Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line3_Sub[0])
+/Kids [
+<<
+/T (Note2[0])
+/V /
+>> 
+<<
+/T (Line3_Amount1_Sub[0])
+/Kids [
+<<
+/T (Line3Amount1[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line3_Amount_Sub[0])
+/Kids [
+<<
+/T (Line3Amount2[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line2_Sub[0])
+/Kids [
+<<
+/T (Line2_Amount2_Sub[0])
+/Kids [
+<<
+/T (Line2Amount2[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line2_Amount1_Sub[0])
+/Kids [
+<<
+/T (Line2Amount1[0])
+/V ()
+>>]
+>>]
+>>]
+>> 
+<<
+/T (Questions[0])
+/Kids [
+<<
+/T (Line38105_Sub[0])
+/Kids [
+<<
+/T (Note1[0])
+/V /
+>> 
+<<
+/T (Line38105_CheckBox_EN[1])
+/V /
+>> 
+<<
+/T (Line38105_CheckBox_EN[0])
+/V /
+>>]
+>> 
+<<
+/T (Line38103_Sub[0])
+/Kids [
+<<
+/T (Line38103_CheckBoxGroup[0])
+/Kids [
+<<
+/T (Line38103_CheckBox_EN[1])
+/V /
+>> 
+<<
+/T (Line38103_CheckBox_EN[0])
+/V /
+>>]
+>>]
+>> 
+<<
+/T (Line38102_Sub[0])
+/Kids [
+<<
+/T (Line38102_CheckBoxGroup[0])
+/Kids [
+<<
+/T (Line38102_CheckBox_EN[1])
+/V /
+>> 
+<<
+/T (Line38102_CheckBox_EN[0])
+/V /
+>>]
+>>]
+>> 
+<<
+/T (Line38104_Sub[0])
+/Kids [
+<<
+/T (Line38104_CheckBoxGroup[0])
+/Kids [
+<<
+/T (Line38104_CheckBox_EN[1])
+/V /
+>> 
+<<
+/T (Line38104_CheckBox_EN[0])
+/V /
+>>]
+>>]
+>> 
+<<
+/T (Line38100_Sub[0])
+/Kids [
+<<
+/T (Line38100_CheckBoxGroup[0])
+/Kids [
+<<
+/T (Line38100_CheckBox_EN[1])
+/V /
+>> 
+<<
+/T (Line38100_CheckBox_EN[0])
+/V /
+>>]
+>>]
+>> 
+<<
+/T (Line38101_Sub[0])
+/Kids [
+<<
+/T (Line38101_CheckBoxGroup[0])
+/Kids [
+<<
+/T (Line38101_CheckBox_EN[1])
+/V /
+>> 
+<<
+/T (Line38101_CheckBox_EN[0])
+/V /
+>>]
+>>]
+>>]
+>>]
+>> 
+<<
+/T (Page3[0])
+/Kids [
+<<
+/T (PartB[0])
+/Kids [
+<<
+/T (Line12_Sub[0])
+/Kids [
+<<
+/T (Line12_Amount1_Sub[0])
+/Kids [
+<<
+/T (Line12_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line12_Amount2_Sub[0])
+/Kids [
+<<
+/T (Line12_Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line13_Sub[0])
+/Kids [
+<<
+/T (Line13_Amount_Sub[0])
+/Kids [
+<<
+/T (Line12_Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line10_Sub[0])
+/Kids [
+<<
+/T (Line10_Amount2_Sub[0])
+/Kids [
+<<
+/T (Line10_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (LIne10_Amount1_Sub[0])
+/Kids [
+<<
+/T (Line10_Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line11_Sub[0])
+/Kids [
+<<
+/T (Line11_Amount1_Sub[0])
+/Kids [
+<<
+/T (Line11_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line11_Amount2_Sub[0])
+/Kids [
+<<
+/T (Line11_Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line8_Sub[0])
+/Kids [
+<<
+/T (Line8_AmountSub[0])
+/Kids [
+<<
+/T (Line8_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line8_Amount_Sub[0])
+/Kids [
+<<
+/T (Line8_Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line14_Sub[0])
+/Kids [
+<<
+/T (LIne14_Amount_Sub[0])
+/Kids [
+<<
+/T (Line14_Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (LIne15_Sub[0])
+/Kids [
+<<
+/T (Line15_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line7_Sub[0])
+/Kids [
+<<
+/T (Line7_Amount1_Sub[0])
+/Kids [
+<<
+/T (Line7_Amount1[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line7_Amount2_Sub[0])
+/Kids [
+<<
+/T (Line7_Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line9_Sub[0])
+/Kids [
+<<
+/T (Line9_Amount1_Sub[0])
+/Kids [
+<<
+/T (Line9_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line9_Amount2_Sub[0])
+/Kids [
+<<
+/T (Line9_Amount[0])
+/V ()
+>>]
+>>]
+>>]
+>>]
+>> 
+<<
+/T (#pageSet[0])
+/Kids [
+<<
+/T (Page1[2])
+/Kids [
+<<
+/T (ClearData_EN[0])
+/V /
+>>]
+>> 
+<<
+/T (Page1[1])
+/Kids [
+<<
+/T (ClearData_EN[0])
+/V /
+>>]
+>> 
+<<
+/T (Page1[0])
+/Kids [
+<<
+/T (ClearData_EN[0])
+/V /
+>>]
+>> 
+<<
+/T (Page1[3])
+/Kids [
+<<
+/T (ClearData_EN[0])
+/V /
+>>]
+>>]
+>> 
+<<
+/T (Page4[0])
+/Kids [
+<<
+/T (Step3[0])
+/Kids [
+<<
+/T (Line36_Sub[0])
+/Kids [
+<<
+/T (Line36Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line33_Sub[0])
+/Kids [
+<<
+/T (Line33Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line35_Sub[0])
+/Kids [
+<<
+/T (Line35Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line34_Sub[0])
+/Kids [
+<<
+/T (Line34Amount2[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line41_Sub[0])
+/Kids [
+<<
+/T (Line41Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line42_Sub[0])
+/Kids [
+<<
+/T (Line42Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line40_Sub[0])
+/Kids [
+<<
+/T (Line40Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line31_Sub[0])
+/Kids [
+<<
+/T (Line31Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line32_Sub[0])
+/Kids [
+<<
+/T (Line32Rate[0])
+/V (27%)
+>>]
+>> 
+<<
+/T (Line30_Sub[0])
+/Kids [
+<<
+/T (Line30Amount[0])
+/V ( 1,150.00)
+>>]
+>> 
+<<
+/T (Line39_Sub[0])
+/Kids [
+<<
+/T (Line39Amount2[0])
+/V ()
+>> 
+<<
+/T (Line39Amount1[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line37_Sub[0])
+/Kids [
+<<
+/T (Line37Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line38_Sub[0])
+/Kids [
+<<
+/T (Line38Rate[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line29_Sub[0])
+/Kids [
+<<
+/T (Line29Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Step2[0])
+/Kids [
+<<
+/T (Line26_Sub[0])
+/Kids [
+<<
+/T (Line26Rate[0])
+/V (15%)
+>>]
+>> 
+<<
+/T (Line18_Sub[0])
+/Kids [
+<<
+/T (Line18Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line16_Sub[0])
+/Kids [
+<<
+/T (Line16Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line19_Sub[0])
+/Kids [
+<<
+/T (Line19Rate[0])
+/V (27%)
+>>]
+>> 
+<<
+/T (Line17_Sub[0])
+/Kids [
+<<
+/T (Line17Amount[0])
+/V ( 3,000.00)
+>>]
+>> 
+<<
+/T (Line22_sub[0])
+/Kids [
+<<
+/T (Line22Amount2[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line25_sub[0])
+/Kids [
+<<
+/T (Line25Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line23_Sub[0])
+/Kids [
+<<
+/T (Line23Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line28_Sub[0])
+/Kids [
+<<
+/T (Line28Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line20_Sub[0])
+/Kids [
+<<
+/T (Line20Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line21_Sub[0])
+/Kids [
+<<
+/T (Line21Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line24_Sub[0])
+/Kids [
+<<
+/T (Line24Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line27_Sub[0])
+/Kids [
+<<
+/T (Line27Amount2[0])
+/V ()
+>> 
+<<
+/T (Line27Amount1[0])
+/V ()
+>>]
+>>]
+>>]
+>>]
+>>]
+>>
+>>
+endobj
+
+trailer
+
+<<
+/Root 1 0 R
+>>
+%%EOF

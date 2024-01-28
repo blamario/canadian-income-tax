@@ -33,7 +33,7 @@ page2Fields = ON.page2Fields {
 
 page3Fields = ON.page3Fields{
    line_12000_TaxableDividends = Field ["Line_12000_TaxableDividends", "Line_12000_Amount"] Amount,
-   line_13010_Taxablescholarship = Field ["Line_13010", "Amount"] Amount,
+   line_13010_TaxableScholarship = Field ["Line_13010", "Amount"] Amount,
    line_19 = Field ["Line19", "Amount"] Amount,
    line_25_sum = Field ["Line25", "Amount1"] Amount,
    line_25_cont = Field ["Line25", "Amount2"] Amount,

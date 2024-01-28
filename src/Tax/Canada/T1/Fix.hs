@@ -18,7 +18,7 @@ import Rank2 qualified
 
 import Tax.Canada.T1.Types
 import Tax.Canada.Shared (fixTaxIncomeBracket, TaxIncomeBracket (equalsTax))
-import Tax.Util (difference, fixEq, nonNegativeDifference, totalOf)
+import Tax.Util (difference, fixEq, fractionOf, nonNegativeDifference, totalOf)
 
 fixT1 :: HasCallStack => T1 Maybe -> T1 Maybe
 fixT1 = fixEq $ \t1@T1{..}-> T1{page1 = fixPage1 page1,
@@ -55,7 +55,7 @@ fixPage3 = fixEq $ \page@Page3{selfEmployment=SelfEmploymentIncome{..}, ..}-> pa
                       line_12800_Amount,
                       line_12900_RRSPIncome,
                       line_13000_OtherIncome,
-                      line_13010_Taxablescholarship],
+                      line_13010_TaxableScholarship],
    line_25_sum = totalOf [line_13500_Amount,
                           line_13700_Amount,
                           line_13900_Amount,
@@ -128,8 +128,7 @@ fixPage6 t1 = fixEq $ \page@Page6{..}-> page{
    line33200_sum = totalOf [medical_expenses.difference, medical_expenses.otherDependants],
    line33200_cont = line33200_sum,
    line33500 = totalOf [line104, line33200_cont],
-   line112 = line112,
-   line33800 = (* 0.15) <$> line33500,
+   line33800 = line112 `fractionOf` line33500,
    line35000 = totalOf [line33800, line34900]}
 
 fixPage7 :: T1 Maybe -> Page7 Maybe -> Page7 Maybe

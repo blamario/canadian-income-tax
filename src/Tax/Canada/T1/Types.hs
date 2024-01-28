@@ -118,7 +118,7 @@ data Page3 line = Page3 {
    line_12900_RRSPIncome :: line Centi,
    line_13000_OtherIncome :: line Centi,
    line_13000_OtherIncomeSource :: line Text,
-   line_13010_Taxablescholarship :: line Centi,
+   line_13010_TaxableScholarship :: line Centi,
    line_19 :: line Centi,
    selfEmployment :: SelfEmploymentIncome line,
    line_25_sum :: line Centi,
