@@ -36,7 +36,9 @@ data Schedule6 line = Schedule6{
 
 data Page2 line = Page2{
    questions :: Questions line,
-   partA :: PartA line}
+   partA_self :: PartAColumn line,
+   partA_spouse :: PartAColumn line,
+   line6_sum :: line Centi}
 
 data Questions line = Questions{
    line_38100 :: line Bool,
@@ -46,24 +48,27 @@ data Questions line = Questions{
    line_38104 :: line Bool,
    line_38105 :: line Bool}
 
-data PartA line = PartA{
-   line1_employmentIncome_copy :: CoupleAmounts line,
-   line_38106_grants_copy :: CoupleAmounts line,
-   line3_selfEmploymentIncome_sum :: CoupleAmounts line,
-   line_38107_exemptIncome :: CoupleAmounts line,
-   line_38108_sums :: CoupleAmounts line,
-   line6_sum :: line Centi}
+data PartAColumn line = PartAColumn{
+   line1_employmentIncome_copy :: line Centi,
+   line_38106_grants_copy :: line Centi,
+   line3_selfEmploymentIncome_sum :: line Centi,
+   line_38107_exemptIncome :: line Centi,
+   line_38108_sum :: line Centi}
 
 data Page3 line = Page3{
-   line7_netIncome_copy :: CoupleAmounts line,
-   line_38109_exempt :: CoupleAmounts line,
-   line9_uccbRdspRepayments :: CoupleAmounts line,
-   line10_sums :: CoupleAmounts line,
-   line11_uccbRdspIncome :: CoupleAmounts line,
-   line_38110_differences :: CoupleAmounts line,
+   partB_self :: PartBColumn line,
+   partB_spouse :: PartBColumn line,
    line13_sum :: line Centi,
    line14_least :: line Centi,
    line15_difference :: line Centi}
+
+data PartBColumn line = PartBColumn{
+   line7_netIncome_copy :: line Centi,
+   line_38109_exempt :: line Centi,
+   line9_uccbRdspRepayments :: line Centi,
+   line10_sum :: line Centi,
+   line11_uccbRdspIncome :: line Centi,
+   line_38110_difference :: line Centi}
 
 data Page4 line = Page4{
    step2 :: Step2 line,
@@ -102,10 +107,6 @@ data Step3 line = Step3{
    line41_copy :: line Centi,
    line42_sum :: line Centi}
 
-data CoupleAmounts line = CoupleAmounts{
-   self :: line Centi,
-   spouse :: line Centi}
-
 $(foldMap
    (\t-> concat <$> sequenceA [
        [d|
@@ -114,51 +115,27 @@ $(foldMap
        |],
        Rank2.TH.deriveAll t,
        Transformation.Shallow.TH.deriveAll t])
-   [''Schedule6, ''Page2, ''Page3, ''Page4, ''Questions, ''PartA, ''Step2, ''Step3, ''CoupleAmounts])
+   [''Schedule6, ''Page2, ''Page3, ''Page4, ''Questions, ''PartAColumn, ''PartBColumn, ''Step2, ''Step3])
 
-fixSchedule6 :: T1 Maybe -> Schedule6 Maybe -> Schedule6 Maybe
-fixSchedule6 t1 = fixEq $ \Schedule6{page2 = Page2{questions, partA}, page3, page4=Page4{step2, step3}} -> Schedule6{
+fixSchedule6 :: T1 Maybe -> T1 Maybe -> Schedule6 Maybe -> Schedule6 Maybe
+fixSchedule6 t1 t1spouse = fixEq $
+                           \Schedule6{page2, page3, page4=Page4{step2, step3}} -> Schedule6{
    page2 = Page2{
-      questions = questions,
-      partA = let PartA{..} = partA in PartA{
-         line1_employmentIncome_copy = line1_employmentIncome_copy{
-            self = totalOf [t1.page3.line_10100_EmploymentIncome, t1.page3.line_10400_OtherEmploymentIncome]},
-         line_38106_grants_copy = line_38106_grants_copy{self = t1.page3.line_13010_TaxableScholarship},
-         line3_selfEmploymentIncome_sum =
-            let T1.SelfEmploymentIncome{..} = t1.page3.selfEmployment
-            in line3_selfEmploymentIncome_sum{
-                  self = totalOf [line_13500_Amount, line_13700_Amount,
-                                  line_13900_Amount, line_14100_Amount, line_14300_Amount]},
-         line_38107_exemptIncome = line_38107_exemptIncome,
-         line_38108_sums = CoupleAmounts{
-            self = totalOf [line1_employmentIncome_copy.self, line_38106_grants_copy.self,
-                            line3_selfEmploymentIncome_sum.self, line_38107_exemptIncome.self],
-            spouse = totalOf [line1_employmentIncome_copy.spouse, line_38106_grants_copy.spouse,
-                              line3_selfEmploymentIncome_sum.spouse, line_38107_exemptIncome.spouse]},
-         line6_sum = totalOf [line_38108_sums.self, line_38108_sums.spouse]}},
-   page3 = let Page3{..} = page3 in page3{
-      line7_netIncome_copy = CoupleAmounts{
-         self = t1.page4.line_23600_NetIncome,
-         spouse = t1.page1.spouse.line23600},
---      line9_uccbRdspRepayments = line9_uccbRdspRepayments{
---          self = totalOf [t1.page4.line_21300_UCCBRepayment, t1.page4.line_23200]}
-      line10_sums = CoupleAmounts{
-         self = totalOf [line7_netIncome_copy.self, line_38109_exempt.self, line9_uccbRdspRepayments.self],
-         spouse = totalOf [line7_netIncome_copy.spouse, line_38109_exempt.spouse, line9_uccbRdspRepayments.spouse]},
-      line11_uccbRdspIncome = line11_uccbRdspIncome{
-         self = totalOf [t1.page3.line_11700_UCCB, t1.page3.line_12500_RDSP]},
-      line_38110_differences = CoupleAmounts{
-          self = nonNegativeDifference line10_sums.self line11_uccbRdspIncome.self,
-          spouse = nonNegativeDifference line10_sums.spouse line11_uccbRdspIncome.spouse},
-      line13_sum = totalOf [line_38110_differences.self, line_38110_differences.spouse],
+      questions = page2.questions,
+      partA_self = fixPartAColumn t1 page2.partA_self,
+      partA_spouse = fixPartAColumn t1spouse page2.partA_spouse},
+   page3 = let Page3{..} = page3 in Page3{
+      partB_self = fixPartBColumn t1 partB_self,
+      partB_spouse = fixPartBColumn t1spouse partB_spouse,
+      line13_sum = totalOf [partB_self.line_38110_difference, partB_spouse.line_38110_difference],
       line14_least = max 14_336 <$>
-                     if or ((<) <$> partA.line_38108_sums.self <*> partA.line_38108_sums.spouse)
-                     then min partA.line_38108_sums.self line_38110_differences.self
-                     else min partA.line_38108_sums.spouse line_38110_differences.spouse,
+                     if or ((<) <$> page2.partA_self.line_38108_sum <*> page2.partA_spouse.line_38108_sum)
+                     then min page2.partA_self.line_38108_sum partB_self.line_38110_difference
+                     else min page2.partA_spouse.line_38108_sum partB_spouse.line_38110_difference,
       line15_difference = difference line13_sum line14_least},
    page4 = Page4{
       step2 = let Step2{..} = step2 in step2{
-         line16_copy = partA.line6_sum,
+         line16_copy = page2.line6_sum,
          line18_difference = nonNegativeDifference line16_copy line17_threshold,
          line20_fraction = line19_rate `fractionOf` line18_difference,
          line22_least = max line20_fraction line21_ceiling,
@@ -169,7 +146,7 @@ fixSchedule6 t1 = fixEq $ \Schedule6{page2 = Page2{questions, partA}, page3, pag
          line27_cont = line27_fraction,
          line28_difference = nonNegativeDifference line22_least line27_fraction},
       step3 = let Step3{..} = step3 in step3{
-         line29_copy = partA.line_38108_sums.self,
+         line29_copy = page2.partA_self.line_38108_sum,
          line31_difference = nonNegativeDifference line29_copy line30_threshold,
          line33_fraction = line32_rate `fractionOf` line31_difference,
          line34_capped = min 737 <$> line33_fraction,
@@ -183,6 +160,26 @@ fixSchedule6 t1 = fixEq $ \Schedule6{page2 = Page2{questions, partA}, page3, pag
          line41_copy = if undefined then step2.line28_difference else Just 0,
          line42_sum = totalOf [line40_difference, line41_copy]}}}
 
+fixPartAColumn :: T1 Maybe -> PartAColumn Maybe -> PartAColumn Maybe
+fixPartAColumn t1 PartAColumn{..} = PartAColumn{
+   line1_employmentIncome_copy =
+      totalOf [t1.page3.line_10100_EmploymentIncome, t1.page3.line_10400_OtherEmploymentIncome],
+   line_38106_grants_copy = t1.page3.line_13010_TaxableScholarship,
+   line3_selfEmploymentIncome_sum =
+      let T1.SelfEmploymentIncome{..} = t1.page3.selfEmployment
+      in totalOf [line_13500_Amount, line_13700_Amount, line_13900_Amount, line_14100_Amount, line_14300_Amount],
+   line_38107_exemptIncome = line_38107_exemptIncome,
+   line_38108_sum = totalOf [line1_employmentIncome_copy, line_38106_grants_copy,
+                              line3_selfEmploymentIncome_sum, line_38107_exemptIncome]}
+
+fixPartBColumn :: T1 Maybe -> PartBColumn Maybe -> PartBColumn Maybe
+fixPartBColumn t1 column@PartBColumn{..} = column{
+      line7_netIncome_copy = t1.page4.line_23600_NetIncome,
+--      line9_uccbRdspRepayments = totalOf [t1.page4.line_21300_UCCBRepayment, t1.page4.line_23200],
+      line10_sum = totalOf [line7_netIncome_copy, line_38109_exempt, line9_uccbRdspRepayments],
+      line11_uccbRdspIncome = totalOf [t1.page3.line_11700_UCCB, t1.page3.line_12500_RDSP],
+      line_38110_difference = nonNegativeDifference line10_sum line11_uccbRdspIncome}
+
 schedule6Fields :: Schedule6 FieldConst
 schedule6Fields = within "form1" Rank2.<$> Schedule6{
    page2 = within "Page2" Rank2.<$> Page2{
@@ -193,42 +190,34 @@ schedule6Fields = within "form1" Rank2.<$> Schedule6{
          line_38103 = Field ["Line38103_Sub", "Line38103_CheckBoxGroup"] $ Switch' "Line38103_CheckBox_EN",
          line_38104 = Field ["Line38104_Sub", "Line38104_CheckBoxGroup"] $ Switch' "Line38104_CheckBox_EN",
          line_38105 = Field ["Line38105_Sub"] $ Switch' "Line38105_CheckBox_EN"},
-      partA = within "PartA_sub" Rank2.<$> PartA{
-         line1_employmentIncome_copy = within "Line1_Sub" Rank2.<$> CoupleAmounts{
-            self = Field ["Line1_Amount1_Sub", "Line1Amount1"] Amount,
-            spouse = Field ["Line1_Amount2_Sub", "Line1Amount2"] Amount},
-         line_38106_grants_copy = within "Line2_Sub" Rank2.<$> CoupleAmounts{
-            self = Field ["Line2_Amount1_Sub", "Line2Amount1"] Amount,
-            spouse = Field ["Line2_Amount2_Sub", "Line2Amount2"] Amount},
-         line3_selfEmploymentIncome_sum = within "Line3_Sub" Rank2.<$> CoupleAmounts{
-            self = Field ["Line3_Amount1_Sub", "Line3Amount1"] Amount,
-            spouse = Field ["Line3_Amount_Sub", "Line3Amount2"] Amount},
-         line_38107_exemptIncome = within "line4_Sub" Rank2.<$> CoupleAmounts{
-            self = Field ["Line4_Amount1_Sub", "Line4Amount1"] Amount,
-            spouse = Field ["Line4_Amount2_Sub", "Line4Amount2"] Amount},
-         line_38108_sums = within "Line5_Sub" Rank2.<$> CoupleAmounts{
-            self = Field ["Line5_Amount1_Sub", "Line5Amount1"] Amount,
-            spouse = Field ["Line5_Amount2_Sub", "Line5Amount2"] Amount},
-         line6_sum = Field ["Line6_Sub", "Line6Amount"] Amount}},
+      partA_self = within "PartA_sub" Rank2.<$> PartAColumn{
+         line1_employmentIncome_copy = Field ["Line1_Sub", "Line1_Amount1_Sub", "Line1Amount1"] Amount,
+         line_38106_grants_copy = Field ["Line2_Sub", "Line2_Amount1_Sub", "Line2Amount1"] Amount,
+         line3_selfEmploymentIncome_sum = Field ["Line3_Sub", "Line3_Amount1_Sub", "Line3Amount1"] Amount,
+         line_38107_exemptIncome = Field ["line4_Sub", "Line4_Amount1_Sub", "Line4Amount1"] Amount,
+         line_38108_sum = Field ["Line5_Sub", "Line5_Amount1_Sub", "Line5Amount1"] Amount},
+      partA_spouse = within "PartA_sub" Rank2.<$> PartAColumn{
+         line1_employmentIncome_copy = Field ["Line1_Sub", "Line1_Amount2_Sub", "Line1Amount2"] Amount,
+         line_38106_grants_copy = Field ["Line2_Sub", "Line2_Amount2_Sub", "Line2Amount2"] Amount,
+         line3_selfEmploymentIncome_sum = Field ["Line3_Sub", "Line3_Amount_Sub", "Line3Amount2"] Amount,
+         line_38107_exemptIncome = Field ["line4_Sub", "Line4_Amount2_Sub", "Line4Amount2"] Amount,
+         line_38108_sum = Field ["Line5_Sub", "Line5_Amount2_Sub", "Line5Amount2"] Amount},
+      line6_sum = Field ["PartA_sub", "Line6_Sub", "Line6Amount"] Amount},
    page3 = within "Page3" . within "PartB" Rank2.<$> Page3{
-      line7_netIncome_copy = within "Line7_Sub" Rank2.<$> CoupleAmounts{
-            self = Field ["Line7_Amount1_Sub", "Line7_Amount1"] Amount,
-            spouse = Field ["Line7_Amount2_Sub", "Line7_Amount"] Amount},
-      line_38109_exempt = within "Line8_Sub" Rank2.<$> CoupleAmounts{
-            self = Field ["Line8_Amount_Sub", "Line8_Amount"] Amount,
-            spouse = Field ["Line8_AmountSub", "Line8_Amount"] Amount},
-      line9_uccbRdspRepayments = within "Line9_Sub" Rank2.<$> CoupleAmounts{
-            self = Field ["Line9_Amount1_Sub", "Line9_Amount"] Amount,
-            spouse = Field ["Line9_Amount2_Sub", "Line9_Amount"] Amount},
-      line10_sums = within "Line10_Sub" Rank2.<$> CoupleAmounts{
-            self = Field ["LIne10_Amount1_Sub", "Line10_Amount"] Amount,
-            spouse = Field ["Line10_Amount2_Sub", "Line10_Amount"] Amount},
-      line11_uccbRdspIncome = within "Line11_Sub" Rank2.<$> CoupleAmounts{
-            self = Field ["Line11_Amount1_Sub", "Line11_Amount"] Amount,
-            spouse = Field ["Line11_Amount2_Sub", "Line11_Amount"] Amount},
-      line_38110_differences = within "Line12_Sub" Rank2.<$> CoupleAmounts{
-            self = Field ["Line12_Amount1_Sub", "Line12_Amount"] Amount,
-            spouse = Field ["Line12_Amount2_Sub", "Line12_Amount"] Amount},
+      partB_self = PartBColumn{
+         line7_netIncome_copy = Field ["Line7_Sub", "Line7_Amount1_Sub", "Line7_Amount1"] Amount,
+         line_38109_exempt = Field ["Line8_Sub", "Line8_Amount_Sub", "Line8_Amount"] Amount,
+         line9_uccbRdspRepayments = Field ["Line9_Sub", "Line9_Amount1_Sub", "Line9_Amount"] Amount,
+         line10_sum = Field ["Line10_Sub", "LIne10_Amount1_Sub", "Line10_Amount"] Amount,
+         line11_uccbRdspIncome = Field ["Line11_Sub", "Line11_Amount1_Sub", "Line11_Amount"] Amount,
+         line_38110_difference = Field ["Line12_Sub", "Line12_Amount1_Sub", "Line12_Amount"] Amount},
+      partB_spouse = PartBColumn{
+         line7_netIncome_copy = Field ["Line7_Sub", "Line7_Amount2_Sub", "Line7_Amount"] Amount,
+         line_38109_exempt = Field ["Line8_Sub", "Line8_AmountSub", "Line8_Amount"] Amount,
+         line9_uccbRdspRepayments = Field ["Line9_Sub", "Line9_Amount2_Sub", "Line9_Amount"] Amount,
+         line10_sum = Field ["Line10_Sub", "Line10_Amount2_Sub", "Line10_Amount"] Amount,
+         line11_uccbRdspIncome = Field ["Line11_Sub", "Line11_Amount2_Sub", "Line11_Amount"] Amount,
+         line_38110_difference = Field ["Line12_Sub", "Line12_Amount2_Sub", "Line12_Amount"] Amount},
       line13_sum = Field ["Line13_Sub", "Line13_Amount_Sub", "Line12_Amount"] Amount,
       line14_least = Field ["Line14_Sub", "LIne14_Amount_Sub", "Line14_Amount"] Amount,
       line15_difference = Field ["LIne15_Sub", "Line15_Amount"] Amount},
