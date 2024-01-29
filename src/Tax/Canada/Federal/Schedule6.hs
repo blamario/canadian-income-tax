@@ -118,8 +118,9 @@ $(foldMap
    [''Schedule6, ''Page2, ''Page3, ''Page4, ''Questions, ''PartAColumn, ''PartBColumn, ''Step2, ''Step3])
 
 fixSchedule6 :: T1 Maybe -> T1 Maybe -> Schedule6 Maybe -> Schedule6 Maybe
-fixSchedule6 t1 t1spouse = fixEq $
-                           \Schedule6{page2, page3, page4=Page4{step2, step3}} -> Schedule6{
+fixSchedule6 t1 t1spouse =
+   fixEq $ \Schedule6{page2, page3, page4=Page4{step2, step3}} ->
+            let eitherEligible = or page2.questions.line_38100 || or page2.questions.line_38101 in Schedule6{
    page2 = Page2{
       questions = page2.questions,
       partA_self = fixPartAColumn t1 page2.partA_self,
@@ -134,30 +135,31 @@ fixSchedule6 t1 t1spouse = fixEq $
                      else min page2.partA_spouse.line_38108_sum partB_spouse.line_38110_difference,
       line15_difference = difference line13_sum line14_least},
    page4 = Page4{
-      step2 = let Step2{..} = step2 in step2{
+      step2 = if all not page2.questions.line_38102 then Rank2.pure Nothing else let Step2{..} = step2 in step2{
          line16_copy = page2.line6_sum,
          line18_difference = nonNegativeDifference line16_copy line17_threshold,
          line20_fraction = line19_rate `fractionOf` line18_difference,
+         line21_ceiling = if eitherEligible then Just 2_461 else Just 1_428,
          line22_least = max line20_fraction line21_ceiling,
          line23_copy = page3.line15_difference,
-         line24_threshold = undefined,
+         line24_threshold = if eitherEligible then Just 26_805 else Just 23_495,
          line25_difference = nonNegativeDifference line23_copy line24_threshold,
          line27_fraction = line26_rate `fractionOf` line25_difference,
          line27_cont = line27_fraction,
          line28_difference = nonNegativeDifference line22_least line27_fraction},
-      step3 = let Step3{..} = step3 in step3{
+      step3 = if all not page2.questions.line_38103 then Rank2.pure Nothing else let Step3{..} = step3 in step3{
          line29_copy = page2.partA_self.line_38108_sum,
          line31_difference = nonNegativeDifference line29_copy line30_threshold,
          line33_fraction = line32_rate `fractionOf` line31_difference,
          line34_capped = min 737 <$> line33_fraction,
          line35_copy = page3.line15_difference,
-         line36_threshold = undefined,
+         line36_threshold = if eitherEligible then Just 43_210 else Just 33_018,
          line37_difference = nonNegativeDifference line35_copy line36_threshold,
-         line38_rate = if undefined then Just 0.075 else Just 0.15,
+         line38_rate = if or page2.questions.line_38104 then Just 0.075 else Just 0.15,
          line39_fraction = line38_rate `fractionOf` line37_difference,
          line39_cont = line39_fraction,
          line40_difference = nonNegativeDifference line34_capped line39_cont,
-         line41_copy = if undefined then step2.line28_difference else Just 0,
+         line41_copy = if or page2.questions.line_38102 then step2.line28_difference else Just 0,
          line42_sum = totalOf [line40_difference, line41_copy]}}}
 
 fixPartAColumn :: T1 Maybe -> PartAColumn Maybe -> PartAColumn Maybe
