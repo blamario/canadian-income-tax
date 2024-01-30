@@ -117,17 +117,17 @@ $(foldMap
        Transformation.Shallow.TH.deriveAll t])
    [''Schedule6, ''Page2, ''Page3, ''Page4, ''Questions, ''PartAColumn, ''PartBColumn, ''Step2, ''Step3])
 
-fixSchedule6 :: T1 Maybe -> T1 Maybe -> Schedule6 Maybe -> Schedule6 Maybe
-fixSchedule6 t1 t1spouse =
+fixSchedule6 :: Maybe (T1 Maybe) -> T1 Maybe -> Schedule6 Maybe -> Schedule6 Maybe
+fixSchedule6 t1spouse t1  =
    fixEq $ \Schedule6{page2, page3, page4=Page4{step2, step3}} ->
             let eitherEligible = or page2.questions.line_38100 || or page2.questions.line_38101 in Schedule6{
    page2 = Page2{
       questions = page2.questions,
       partA_self = fixPartAColumn t1 page2.partA_self,
-      partA_spouse = fixPartAColumn t1spouse page2.partA_spouse},
+      partA_spouse = maybe id fixPartAColumn t1spouse page2.partA_spouse},
    page3 = let Page3{..} = page3 in Page3{
       partB_self = fixPartBColumn t1 partB_self,
-      partB_spouse = fixPartBColumn t1spouse partB_spouse,
+      partB_spouse = maybe id fixPartBColumn t1spouse partB_spouse,
       line13_sum = totalOf [partB_self.line_38110_difference, partB_spouse.line_38110_difference],
       line14_least = max 14_336 <$>
                      if or ((<) <$> page2.partA_self.line_38108_sum <*> page2.partA_spouse.line_38108_sum)
