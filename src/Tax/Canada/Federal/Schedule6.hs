@@ -124,7 +124,8 @@ fixSchedule6 t1spouse t1  =
    page2 = Page2{
       questions = page2.questions,
       partA_self = fixPartAColumn t1 page2.partA_self,
-      partA_spouse = maybe id fixPartAColumn t1spouse page2.partA_spouse},
+      partA_spouse = maybe id fixPartAColumn t1spouse page2.partA_spouse,
+      line6_sum = totalOf [page2.partA_self.line_38108_sum, page2.partA_spouse.line_38108_sum]},
    page3 = let Page3{..} = page3 in Page3{
       partB_self = fixPartBColumn t1 partB_self,
       partB_spouse = maybe id fixPartBColumn t1spouse partB_spouse,
