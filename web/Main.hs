@@ -46,6 +46,8 @@ main = scotty 3000 $ do
    get "/" $ do
       setHeader "Content-Type" "text/html; charset=utf-8"
       file "web/client/build/index.html"
+   get "/about.html" $ do
+      file "web/static/about.html"
    post "/t1/PDF/:province" $ do
       provinceCode <- captureParam "province"
       province <- case readMaybe (Text.Lazy.unpack provinceCode)
