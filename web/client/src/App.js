@@ -64,15 +64,16 @@ export default function Uploads() {
     const download = province?.value.prefix428
           ? {name: "tax-forms.zip", type: 'application/zip'}
           : {name: "T1.pdf", type: 'application/PDF'};
-    
+
     return (
       <>
-        <h2>T1 form completion</h2>
+        <h2>Tax form completion</h2>
 
         <h3>Step 1. <Dropdown className='provinceRoot' menuClassName='provinceMenu' options={provinces} default={province} onChange={setProvince} placeholder="Select your province"/></h3>
 
         {province && <>
-         <h3>Step 2. Download the <em>fillable</em> PDF {province.value.prefix428 ? <>T1 and 428 forms, <tt>{province.value.prefixT1}-r-fill-22e.pdf</tt> and <tt>{province.value.prefix428}-c-fill-22e.pdf</tt>,</> : <>form <tt>{province.value.prefixT1}-r-fill-22e.pdf</tt></>} from <a href="https://canada.ca">canada.ca</a></h3>
+         <h3>Step 2. Download the <em>fillable</em> PDF forms from <a href="https://canada.ca">canada.ca</a></h3>
+         <p>You will need at least the {province.value.prefix428 ? <>T1 and {province.value.code}428 forms, <tt>{province.value.prefixT1}-r-fill-22e.pdf</tt> and <tt>{province.value.prefix428}-c-fill-22e.pdf</tt></> : <>form <tt>{province.value.prefixT1}-r-fill-22e.pdf</tt></>}</p>
          <h3>Step 3. Fill in the downloaded {forms}</h3>
          <p>Don't bother with any fields that are calculated from other fields in the same {formsAgain}, that part will be done for you automatically.</p>
          <p>You can leave out your name, SIN, and other private data, since they're not affecting any numbers.</p>
@@ -91,10 +92,12 @@ export default function Uploads() {
          <dl>
          {province.value.has479
           ? <>
-          <dt>{province.value.code}479 tax credits form:</dt>
+          <dt>{province.value.code}479 tax credits form</dt>
           <dd><input type="file" name="479 PDF" onChange={handleUpload("479")}/></dd>
           </>
           : ""}
+         <dt>Schedule 6</dt>
+         <dd><input type="file" name="Schedule 6 PDF" onChange={handleUpload("Schedule6")}/></dd>
          <dt>Schedule 9</dt>
          <dd><input type="file" name="Schedule 9 PDF" onChange={handleUpload("Schedule9")}/></dd>
          <dt>Schedule 11</dt>
