@@ -13,7 +13,7 @@ import Data.Text.Lazy (toStrict)
 import Data.Text.Lazy.Builder (toLazyText)
 import Data.Text.Lazy.Builder.Int (decimal)
 import Tax.FDF (FieldConst (Field, NoField), Entry (..), within)
-import Tax.Canada.Shared (SubCalculation (SubCalculation, calculation, result), TaxIncomeBracket (..))
+import Tax.Canada.Shared (TaxIncomeBracket (..), subCalculationFields)
 import Tax.Canada.T1.Types
 
 t1Fields :: T1 FieldConst
@@ -106,8 +106,7 @@ page3Fields = Page3 {
    line_13010_TaxableScholarship = Field ["Line_13010_Taxablescholarship", "Amount"] Amount,
    line_19 = Field ["Line_19", "Amount"] Amount,
    selfEmployment = selfEmploymentFields,
-   line_25_sum = SubCalculation{calculation = Field ["Line_25", "Amount1"] Amount,
-                                result = Field ["Line_25", "Amount2"] Amount},
+   line_25_sum = subCalculationFields "Line_25" ["Amount1"] ["Amount2"],
    line_26 = Field ["Line_26", "Amount1"] Amount,
    line_14400_WorkersCompBen = Field ["Line_14400_WorkersCompBen", "Line_14400_Amount"] Amount,
    line_14500_SocialAssistPay = Field ["Line_14500_SocialAssistPay", "Line_14500_Amount"] Amount,
@@ -154,8 +153,7 @@ page4Fields = Page4 {
    line_23200_OtherDeductions = Field ["Line_23200_OtherDeductions", "Line_23200_Amount"] Amount,
    line_23200_Specify = Field ["Line_23200_OtherDeductions", "Line_23200_Specify"] Textual,
    line_23210 = Field ["Line23210", "Amount"] Amount,
-   line_23300_sum = SubCalculation{calculation = Field ["Line_23300_AddLines", "Line_23300_Amount1"] Amount,
-                                   result = Field ["Line_23300_AddLines", "Line_23300_Amount2"] Amount},
+   line_23300_sum = subCalculationFields "Line_23300_AddLines" ["Line_23300_Amount1"] ["Line_23300_Amount2"],
    line_23400_NetBeforeAdjust = Field ["Line_23400_NetBeforeAdjust", "Line_23400_Amount"] Amount,
    line_23500_SocialBenefits = Field ["Line_23500_SocialBenefits", "Line_23500_Amount"] Amount,
    line_23600_NetIncome = Field ["Line_23600_NetIncome", "Line_23600_Amount"] Amount}
@@ -177,8 +175,7 @@ step4Fields = Step4 {
    line_25500_NorthernDeductions = Field ["Line_25500_NorthernDeductions", "Line_25500_Amount"] Amount,
    line_25600_AdditionalDeductions_Amount = Field ["Line_25600_AdditionalDeductions", "Line_25600_Amount"] Amount,
    line_25600_AdditionalDeductions_Specify = Field ["Line_25600_AdditionalDeductions", "Line_25600_Specify"] Textual,
-   line_25700_AddLines_sum = SubCalculation{calculation = Field ["Line_25700_AddLines", "Line_25700_Amount1"] Amount,
-                                            result = Field ["Line_25700_AddLines", "Line_25700_Amount2"] Amount},
+   line_25700_AddLines_sum = subCalculationFields "Line_25700_AddLines" ["Line_25700_Amount1"] ["Line_25700_Amount2"],
    line_26000_TaxableIncome = Field ["Line_26000_TaxableIncome", "Line_26000_Amount"] Amount}
 
 partAFields :: Text -> Int -> Page5PartA FieldConst
@@ -227,8 +224,7 @@ page6Fields = Page6 {
    line31285 = Field ["Line31285_sub", "Line16_Amount"] Amount,
    line31300 = Field ["Line31300_Sub", "Line17_Amount"] Amount,
    line31350 = Field ["Line31350_Sub", "Amount"] Amount,
-   line94_sum = SubCalculation{calculation = Field ["Line93", "Amount1"] Amount,
-                               result = Field ["Line93", "Amount2"] Amount},
+   line94_sum = subCalculationFields "Line93" ["Amount1"] ["Amount2"],
    line31400 = Field ["Line31400_Sub", "Line18_Amount"] Amount,
    line96 = Field ["Line95", "Amount1"] Amount,
    line31600 = Field ["Line31600_Sub", "Line19_Amount"] Amount,
@@ -240,8 +236,7 @@ page6Fields = Page6 {
    line32600 = Field ["Line32600_Sub", "Line24_Amount"] Amount,
    line104 = Field ["Line103", "Amount1"] Amount,
    medical_expenses = within "Medical_expenses" Rank2.<$> page6MedicalExpensesFields,
-   line33200_sum = SubCalculation{calculation = Field ["Line33200_Sub", "Line29_Amount1"] Amount,
-                                  result = Field ["Line33200_Sub", "Line29_Amount2"] Amount},
+   line33200_sum = subCalculationFields "Line33200_Sub" ["Line29_Amount1"] ["Line29_Amount2"],
    line33500 = Field ["Line33500_Sub", "Line30_Amount"] Amount,
    line112 = Field ["Line31_Sub", "Line31_Rate"] $ Constant 0.15 Percent,
    line33800 = Field ["Line33800_Sub", "Line32_Amount"] Amount,
@@ -267,8 +262,7 @@ partCFields = Page7PartC {
    line119 = Field ["Line35000_sub", "Line46Amount"] Amount,
    line40425 = Field ["Line40425_Sub", "Line47Amount"] Amount,
    line40427 = Field ["Line40427_Sub", "Line48Amount"] Amount,
-   line122_sum = SubCalculation{calculation = Field ["Line114_sub", "Line49Amount1"] Amount,
-                                result = Field ["Line114_sub", "Line49Amount2"] Amount},
+   line122_sum = subCalculationFields "Line114_sub" ["Line49Amount1"] ["Line49Amount2"],
    line42900 = Field ["Line122", "Amount"] Amount,
    line124 = Field ["Line123", "Amount"] Amount,
    line125 = Field ["Line124", "Amount"] Amount,
@@ -283,8 +277,7 @@ partCFields = Page7PartC {
    line41200 = Field ["Line41200_sub", "Line55Amount"] Amount,
    line41300 = Field ["Line41400_sub", "Line56Amount1"] Amount,
    line41400 = Field ["Line41400_sub", "Line56Amount2"] Amount,
-   line41600_sum = SubCalculation{calculation = Field ["Line41600_sub", "Line57Amount1"] Amount,
-                                  result = Field ["Line41600_sub", "Line57Amount2"] Amount},
+   line41600_sum = subCalculationFields "Line41600_sub" ["Line57Amount1"] ["Line57Amount2"],
    line41700 = Field ["Line41700_sub", "Line58Amount"] Amount,
    line41500 = Field ["Line41500_sub", "Line59Amount"] Amount,
    line41800 = Field ["Line41800_sub", "Line61Amount"] Amount,
@@ -335,8 +328,7 @@ page8step6Fields = Page8Step6 {
    line_47557 = Field ["Line160", "Amount"] Amount,
    line_47600_TaxPaid = Field ["Line_47600_TaxPaid", "Line_47600_Amount"] Amount,
    line_47900_ProvTerrCredits = Field ["Line_47900_ProvTerrCredits", "Line_47900_Amount"] Amount,
-   line_48200_sum = SubCalculation{calculation = Field ["Line_48200_AddLines", "Line_48200_Amount1"] Amount,
-                                   result = Field ["Line_48200_AddLines", "Line_48200_Amount2"] Amount},
+   line_48200_sum = subCalculationFields "Line_48200_AddLines" ["Line_48200_Amount1"] ["Line_48200_Amount2"],
    line164_Refund_or_BalanceOwing = Field ["Line_162", "Refund_or_BalanceOwing_Amount"] Amount}
 
 taxPreparerFields = TaxPreparer {

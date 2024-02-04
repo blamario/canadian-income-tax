@@ -8,7 +8,7 @@ module Tax.Canada.T1.FieldNames.BC where
 import Rank2 qualified
 
 import Tax.FDF (FieldConst (Field, NoField), Entry (..), within)
-import Tax.Canada.Shared (SubCalculation (SubCalculation, calculation, result))
+import Tax.Canada.Shared (subCalculationFields)
 import Tax.Canada.T1.Types
 import Tax.Canada.T1.FieldNames.ON
   hiding (t1Fields,
@@ -36,8 +36,7 @@ page3Fields = ON.page3Fields{
    line_12000_TaxableDividends = Field ["Line_12000_TaxableDividends", "Line_12000_Amount"] Amount,
    line_13010_TaxableScholarship = Field ["Line_13010", "Amount"] Amount,
    line_19 = Field ["Line19", "Amount"] Amount,
-   line_25_sum = SubCalculation{calculation = Field ["Line25", "Amount1"] Amount,
-                                result = Field ["Line25", "Amount2"] Amount},
+   line_25_sum = subCalculationFields "Line25" ["Amount1"] ["Amount2"],
    line_26 = Field ["Line26", "Amount"] Amount,
    selfEmployment = selfEmploymentFields,
    line_14700_EqualsAmount = Field ["Line_14700", "Amount1"] Amount,
@@ -78,8 +77,7 @@ page6Fields = ON.page6Fields{
    line82 = Field ["Line_82", "Line43Amount"] Amount,
    line31217 = Field ["EIPremiums_Sub", "Line31217_Sub", "Line11_Amount"] Amount,
    line31350 = Field ["Line31350_Sub", "Line24_Amount"] Amount,
-   line94_sum = SubCalculation{calculation = Field ["Line94", "Amount1"] Amount,
-                               result = Field ["Line94", "Amount2"] Amount},
+   line94_sum = subCalculationFields "Line94" ["Amount1"] ["Amount2"],
    line96 = Field ["Line96", "Amount"] Amount,
    line99 = Field ["Line99", "Amount"] Amount,
    line104 = Field ["Line104", "Amount"] Amount,
@@ -102,8 +100,7 @@ partCFields = ON.partCFields {
    line116 = Field ["Line116", "Line43Amount"] Amount,
    line40400 = Field ["Line40400_Sub", "Line45Amount2"] Amount,
    line119 = Field ["Line119", "Line46Amount"] Amount,
-   line122_sum = SubCalculation{calculation = Field ["Line122", "Line49Amount1"] Amount,
-                                result = Field ["Line122", "Line49Amount2"] Amount},
+   line122_sum = subCalculationFields "Line122" ["Line49Amount1"] ["Line49Amount2"],
    line42900 = Field ["Line123", "Amount"] Amount,
    line124 = Field ["Line124", "Amount"] Amount,
    line125 = Field ["Line42900_Sub", "Amount"] Amount,

@@ -8,7 +8,7 @@ module Tax.Canada.T1.FieldNames.NB (t1Fields, page2Fields) where
 import Rank2 qualified
 
 import Tax.FDF (FieldConst (Field, NoField), Entry (..), within)
-import Tax.Canada.Shared (SubCalculation (SubCalculation, calculation, result))
+import Tax.Canada.Shared (subCalculationFields)
 import Tax.Canada.T1.Types
 import Tax.Canada.T1.Types qualified as Page8 (Page8(..))
 import Tax.Canada.T1.FieldNames.AB qualified as AB
@@ -27,6 +27,5 @@ page8Fields = AB.page8Fields {
 page8step6Fields = AB.page8step6Fields {
    line_47600_TaxPaid = Field ["Line161", "Line_47600_Amount"] Amount,
    line_47900_ProvTerrCredits = Field ["Line162", "Line_47900_Amount"] Amount,
-   line_48200_sum = SubCalculation{calculation = Field ["Line163", "Line_48200_Amount1"] Amount,
-                                   result = Field ["Line163", "Line_48200_Amount2"] Amount},
+   line_48200_sum = subCalculationFields "Line163" ["Line_48200_Amount1"] ["Line_48200_Amount2"],
    line164_Refund_or_BalanceOwing = Field ["Line164", "Amount"] Amount}

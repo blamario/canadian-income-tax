@@ -10,7 +10,7 @@ import Data.Fixed (Centi)
 import Rank2 qualified
 
 import Tax.Canada.Province.BC.BC428.Types
-import Tax.Canada.Shared (BaseCredit(..), MedicalExpenses(..), SubCalculation (..), TaxIncomeBracket (..))
+import Tax.Canada.Shared (BaseCredit(..), MedicalExpenses(..), TaxIncomeBracket (..), subCalculationFields)
 import Tax.FDF (Entry (Count, Constant, Amount, Percent), FieldConst (Field, NoField), within)
 
 bc428Fields = within "form1" Rank2.<$> BC428 {
@@ -80,8 +80,7 @@ page2PartBFields = Page2PartB {
    line30_employmentInsurance = Field ["Line30", "Amount"] Amount,
    line31_firefighters = Field ["Line31", "Amount"] Amount,
    line32_rescue = Field ["Line32", "Amount"] Amount,
-   line33_sum = SubCalculation{calculation = Field ["Line33", "I1", "Amount"] Amount,
-                               result = Field ["Line33", "I2", "Amount"] Amount},
+   line33_sum = subCalculationFields "Line33" ["I1", "Amount"] ["I2", "Amount"],
    line34_adoption = Field ["Line34", "Amount"] Amount,
    line35 = Field ["Line35", "Amount"] Amount,
    line36_pension = Field ["Line36", "Amount"] Amount,
@@ -96,8 +95,7 @@ page2PartBFields = Page2PartB {
    line45 = Field ["Line45", "Amount"] Amount,
    medicalExpenses = within "MedicalExp" Rank2.<$> medicalExpensesFields,
    line52 = Field ["Line52", "Amount"] Amount,
-   line53_sum = SubCalculation{calculation = Field ["Line53", "Amount1"] Amount,
-                               result = Field ["Line53", "Amount2"] Amount},
+   line53_sum = subCalculationFields "Line53" ["Amount1"] ["Amount2"],
    line54 = Field ["Line54", "Amount"] Amount,
    line55_rate = Field ["Line55", "PercentAmount_ReadOnly"] $ Constant 0.0506 Percent,
    line56_fraction = Field ["Line56", "Amount"] Amount,
@@ -123,8 +121,7 @@ partCFields = PartC {
    line65_dividendCredits = Field ["Line65", "Amount"] Amount,
    line66_copy = Field ["Line66", "Line40427", "Amount"] Amount,
    line66_fraction = Field ["Line66", "Amount"] Amount,
-   line67_sum = SubCalculation{calculation = Field ["Line67", "Amount1"] Amount,
-                               result = Field ["Line67", "Amount2"] Amount},
+   line67_sum = subCalculationFields "Line67" ["Amount1"] ["Amount2"],
    line68 = Field ["Line68", "Amount"] Amount,
    line69_copy = Field ["Line69", "Line120", "Amount"] Amount,
    line69_fraction = Field ["Line69", "Amount"] Amount,
@@ -139,10 +136,8 @@ page3Fields = Page3 {
    line75_base = Field ["Line75", "Amount_ReadOnly"] $ Constant 21_867 Amount,
    line76_difference = Field ["Line76", "Amount"] Amount,
    line77_rate = Field ["Line77", "PercentAmount_ReadOnly"] $ Constant 0.0356 Percent,
-   line78_fraction = SubCalculation{calculation = Field ["Line78", "Amount1"] Amount,
-                                    result = Field ["Line78", "Amount2"] Amount},
-   line79_difference = SubCalculation{calculation = Field ["Line79", "Amount1"] Amount,
-                                      result = Field ["Line79", "Amount2"] Amount},
+   line78_fraction = subCalculationFields "Line78" ["Amount1"] ["Amount2"],
+   line79_difference = subCalculationFields "Line79" ["Amount1"] ["Amount2"],
    line80_difference = Field ["Line80", "Amount"] Amount,
    line81_logging = Field ["Line81", "Amount"] Amount,
    line82_difference = Field ["Line82", "Amount"] Amount,
@@ -151,8 +146,7 @@ page3Fields = Page3 {
    line85_difference = Field ["Line85", "Amount"] Amount,
    line86_esop20 = Field ["Line86", "Amount"] Amount,
    line87_evcc30 = Field ["Line87", "Amount"] Amount,
-   line88_sum = SubCalculation{calculation = Field ["Line88", "Amount1"] Amount,
-                               result = Field ["Line88", "Amount2"] Amount},
+   line88_sum = subCalculationFields "Line88" ["Amount1"] ["Amount2"],
    line89_difference = Field ["Line89", "Amount"] Amount,
    line90_mining = Field ["Line90", "Amount"] Amount,
    line91_tax = Field ["Line91", "Amount"] Amount}

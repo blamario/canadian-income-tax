@@ -18,10 +18,12 @@ module Tax.Canada.Shared where
 
 import Control.Monad (guard, mfilter)
 import Data.Fixed (Centi)
+import Data.Text (Text)
 import Language.Haskell.TH qualified as TH
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
+import Tax.FDF (FieldConst(Field), Entry(Amount))
 import Tax.Util (fixEq, fractionOf, nonNegativeDifference)
 
 data TaxIncomeBracket line = TaxIncomeBracket {
@@ -89,3 +91,8 @@ fixSubCalculation :: Maybe Centi -> SubCalculation Maybe
 fixSubCalculation result = SubCalculation{
    calculation = result,
    result = result}
+
+subCalculationFields :: Text -> [Text] -> [Text] -> SubCalculation FieldConst
+subCalculationFields parent calculationPath resultPath = SubCalculation{
+   calculation = Field (parent : calculationPath) Amount,
+   result = Field (parent : resultPath) Amount}

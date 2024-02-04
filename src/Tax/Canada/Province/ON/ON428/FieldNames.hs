@@ -11,7 +11,7 @@ import Rank2 qualified
 
 import Tax.Canada.Province.ON.ON428.Types
 import Tax.Canada.Province.ON.ON428.Types qualified as HealthPremiumBracket (HealthPremiumBracket(..))
-import Tax.Canada.Shared (BaseCredit(..), MedicalExpenses(..), SubCalculation (..), TaxIncomeBracket (..))
+import Tax.Canada.Shared (BaseCredit(..), MedicalExpenses(..), TaxIncomeBracket (..), subCalculationFields)
 import Tax.FDF (Entry (Count, Constant, Amount, Percent), FieldConst (Field, NoField), within)
 
 on428Fields = within "form1" Rank2.<$> ON428 {
@@ -63,8 +63,7 @@ page1PartBFields = Page1PartB {
    line21_employmentInsurance = Field ["Employment-Insurance", "Line21", "Amount"] Amount,
    line22_employmentInsurance = Field ["Employment-Insurance", "Line22", "Amount"] Amount,
    line23_adoption = Field ["Line23", "Amount"] Amount,
-   line24_sum = SubCalculation{calculation = Field ["Line24", "Amount1"] Amount,
-                               result = Field ["Line24", "Amount2"] Amount},
+   line24_sum = subCalculationFields "Line24" ["Amount1"] ["Amount2"],
    line25 = Field ["Line25", "Amount"] Amount}
 
 page2Fields = Page2 {
@@ -84,8 +83,7 @@ page2PartBFields = Page2PartB {
    line35 = Field ["Line35", "Amount"] Amount,
    medicalExpenses = within "Medical-Expenses" Rank2.<$> medicalExpensesFields,
    line42 = Field ["Line42", "Amount"] Amount,
-   line43_sum = SubCalculation{calculation = Field ["Line43", "Amount1"] Amount,
-                               result = Field ["Line43", "Amount2"] Amount},
+   line43_sum = subCalculationFields "Line43" ["Amount1"] ["Amount2"],
    line44 = Field ["Line44", "Amount"] Amount,
    line45_rate = Field ["Line45", "Percent_ReadOnly"] $ Constant 0.0505 Percent,
    line46_fraction = Field ["Line46", "Amount"] Amount,
@@ -105,8 +103,7 @@ donationsFields = Donations {
    line47_fraction = Field ["Line47", "Amount2"] Amount,
    line48_base = Field ["Line48", "Amount1"] Amount,
    line48_fraction = Field ["Line48", "Amount2"] Amount,
-   line49_sum = SubCalculation{calculation = Field ["Line49", "Amount1"] Amount,
-                               result = Field ["Line49", "Amount2"] Amount}}
+   line49_sum = subCalculationFields "Line49" ["Amount1"] ["Amount2"]}
 
 page2PartCFields = Page2PartC {
    line51_tax = Field ["Line51", "Amount"] Amount,
@@ -131,8 +128,7 @@ page3Fields = Page3 {
    line66_surtax = Field ["Line66", "Amount2"] Amount,
    line67_copy = Field ["Line67", "Amount1"] Amount,
    line67_surtax = Field ["Line67", "Amount2"] Amount,
-   line68_sum = SubCalculation{calculation = Field ["Line68", "Amount1"] Amount,
-                               result = Field ["Line68", "Amount2"] Amount},
+   line68_sum = subCalculationFields "Line68" ["Amount1"] ["Amount2"],
    line69 = Field ["Line69", "Amount2"] Amount,
    line70 = Field ["Line70", "Amount"] Amount,
    line71 = Field ["Line71", "Amount"] Amount,
@@ -147,8 +143,7 @@ page3Fields = Page3 {
    line78_copy = Field ["Line78", "Amount1"] Amount,
    line78_product = Field ["Line78", "Amount2"] Amount,
    line79 = Field ["Line79", "Amount"] Amount,
-   line80_difference = SubCalculation{calculation = Field ["Line80", "Amount1"] Amount,
-                                      result = Field ["Line80", "Amount2"] Amount},
+   line80_difference = subCalculationFields "Line80" ["Amount1"] ["Amount2"],
    line81 = Field ["Line81", "Amount"] Amount,
    line82 = Field ["Line82", "Amount"] Amount,
    line83 = Field ["Line83", "Amount"] Amount}

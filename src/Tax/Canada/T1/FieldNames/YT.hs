@@ -8,7 +8,7 @@ module Tax.Canada.T1.FieldNames.YT (t1Fields) where
 import Rank2 qualified
 
 import Tax.FDF (FieldConst (Field, NoField), Entry (..), within)
-import Tax.Canada.Shared (SubCalculation (SubCalculation, calculation, result))
+import Tax.Canada.Shared (subCalculationFields)
 import Tax.Canada.T1.Types
 import Tax.Canada.T1.Types qualified as Page8 (Page8(..))
 import Tax.Canada.T1.FieldNames.BC qualified as BC
@@ -34,8 +34,7 @@ partBFields = NT.partBFields {
 
 page6Fields = NT.page6Fields {
    line82 = Field ["Line_79", "Line43Amount"] Amount,
-   line94_sum = SubCalculation{calculation = Field ["Line93", "Line30_Amount1"] Amount,
-                               result = Field ["Line93", "Line30_Amount2"] Amount},
+   line94_sum = subCalculationFields "Line93" ["Line30_Amount1"] ["Line30_Amount2"],
    line96 = Field ["Line95", "Line30_Amount"] Amount,
    line104 = Field ["Line103", "Line30_Amount"] Amount,
    medical_expenses = page6MedicalExpensesFields,

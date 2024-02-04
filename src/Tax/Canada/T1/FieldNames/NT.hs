@@ -9,7 +9,7 @@ module Tax.Canada.T1.FieldNames.NT (module Tax.Canada.T1.FieldNames.NT, page1Fie
 import Rank2 qualified
 
 import Tax.FDF (FieldConst (Field, NoField), Entry (..), within)
-import Tax.Canada.Shared (SubCalculation (SubCalculation, calculation, result))
+import Tax.Canada.Shared (subCalculationFields)
 import Tax.Canada.T1.Types
 import Tax.Canada.T1.Types qualified as Page8 (Page8(..))
 import Tax.Canada.T1.FieldNames.ON
@@ -37,8 +37,7 @@ page3Fields = ON.page3Fields{
    line_13010_TaxableScholarship = Field ["Line_13010_Taxablescholarship", "Line_13010_Amount"] Amount,
    line_19 = Field ["Line_19", "Amount"] Amount,
    selfEmployment = within "SelfEmploymentIncome" Rank2.<$> BC.selfEmploymentFields,
-   line_25_sum = SubCalculation{calculation = Field ["Line_25", "Amount1"] Amount,
-                                result = Field ["Line_25", "Amount2"] Amount},
+   line_25_sum = subCalculationFields "Line_25" ["Amount1"] ["Amount2"],
    line_26 = Field ["Line_26", "Amount"] Amount}
 
 page4Fields = BC.page4Fields{
@@ -68,8 +67,7 @@ page6Fields = ON.page6Fields {
    line31000 = Field ["Line31000_Sub", "Line9_Amount"] Amount,
    line31200 = Field ["Line31200_Sub", "Line10_Amount"] Amount,
    line31350 = Field ["Line31350_Sub", "Line24_Amount"] Amount,
-   line94_sum = SubCalculation{calculation = Field ["Line94", "Line30_Amoun1"] Amount,
-                               result = Field ["Line94", "Line30_Amount2"] Amount},
+   line94_sum = subCalculationFields "Line94" ["Line30_Amoun1"] ["Line30_Amount2"],
    line96 = Field ["Line96", "Line30_Amount"] Amount,
    line99 = Field ["Line99", "Line30_Amount"] Amount,
    line104 = Field ["Line104", "Line30_Amount"] Amount,

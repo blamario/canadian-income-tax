@@ -24,7 +24,7 @@ import Rank2 qualified
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
-import Tax.Canada.Shared (SubCalculation(SubCalculation, calculation, result), fixSubCalculation)
+import Tax.Canada.Shared (SubCalculation(SubCalculation, calculation, result), fixSubCalculation, subCalculationFields)
 import Tax.Canada.T1.Types (T1)
 import Tax.Canada.T1.Types qualified as T1
 import Tax.FDF (Entry (Amount, Constant, Percent, Switch'), FieldConst (Field), within)
@@ -234,8 +234,7 @@ schedule6Fields = within "form1" Rank2.<$> Schedule6{
          line24_threshold = Field ["Line24_Sub", "Line24Amount"] Amount,
          line25_difference = Field ["Line25_sub", "Line25Amount"] Amount,
          line26_rate = Field ["Line26_Sub", "Line26Rate"] $ Constant 0.15 Percent,
-         line27_fraction = SubCalculation{calculation = Field ["Line27_Sub", "Line27Amount1"] Amount,
-                                          result = Field ["Line27_Sub", "Line27Amount2"] Amount},
+         line27_fraction = subCalculationFields "Line27_Sub" ["Line27Amount1"] ["Line27Amount2"],
          line28_difference = Field ["Line28_Sub", "Line28Amount"] Amount},
       step3 = within "Step3" Rank2.<$> Step3{
          line29_copy = Field ["Line29_Sub", "Line29Amount"] Amount,
@@ -248,8 +247,7 @@ schedule6Fields = within "form1" Rank2.<$> Schedule6{
          line36_threshold = Field ["Line36_Sub", "Line36Amount"] Amount,
          line37_difference = Field ["Line37_Sub", "Line37Amount"] Amount,
          line38_rate = Field ["Line38_Sub", "Line38Rate"] Percent,
-         line39_fraction = SubCalculation{calculation = Field ["Line39_Sub", "Line39Amount1"] Amount,
-                                          result = Field ["Line39_Sub", "Line39Amount2"] Amount},
+         line39_fraction = subCalculationFields "Line39_Sub" ["Line39Amount1"] ["Line39Amount2"],
          line40_difference = Field ["Line40_Sub", "Line40Amount"] Amount,
          line41_copy = Field ["Line41_Sub", "Line41Amount"] Amount,
          line42_sum = Field ["Line42_Sub", "Line42Amount"] Amount}}}

@@ -7,7 +7,7 @@ import Data.Fixed (Centi)
 import Rank2 qualified
 
 import Tax.Canada.Province.BC.BC479.Types
-import Tax.Canada.Shared (SubCalculation (SubCalculation, calculation, result))
+import Tax.Canada.Shared (subCalculationFields)
 import Tax.FDF (Entry (Amount, Checkbox, Textual), FieldConst (Field), within)
 
 bc479Fields = within "form1" Rank2.<$> BC479 {
@@ -46,13 +46,11 @@ page2Fields = Page2 {
    line_60491_certificate = Field ["BCVCTC", "Line19", "Account_Number_Comb_EN", "Account_Number"] Textual,
    line_60495_shares = Field ["BCVCTC", "Line20", "Amount"] Amount,
    line_60496_certificate = Field ["BCVCTC", "Line21", "Account_Number"] Textual,
-   line22_sum = SubCalculation{calculation = Field ["BCVCTC", "Line22", "I1", "Amount1"] Amount,
-                               result = Field ["BCVCTC", "Line22", "I2", "Amount2"] Amount},
+   line22_sum = subCalculationFields "BCVCTC" ["Line22", "I1", "Amount1"] ["Line22", "I2", "Amount2"],
    line_60510_fromT88 = Field ["BCMETC", "Line23", "Amount"] Amount,
    line_60530_fromT88 = Field ["BCMETC", "Line24", "Amount"] Amount,
    line_60550_training = Field ["BCTTC", "Line25", "Amount"] Amount,
    line_60560_training = Field ["BCTTC", "Line26", "Amount"] Amount,
    line_60570_ships = Field ["BCTTC", "Line27", "Amount"] Amount,
-   line28_sum = SubCalculation{calculation = Field ["BCTTC", "Line28", "I1", "Amount1"] Amount,
-                               result = Field ["BCTTC", "Line28", "I2", "Amount2"] Amount},
+   line28_sum = subCalculationFields "BCTTC" ["Line28", "I1", "Amount1"] ["Line28", "I2", "Amount2"],
    line29_credits = Field ["BCTTC", "Line29", "Amount"] Amount}

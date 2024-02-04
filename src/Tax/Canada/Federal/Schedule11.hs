@@ -24,7 +24,7 @@ import Rank2 qualified
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
-import Tax.Canada.Shared (SubCalculation(SubCalculation, calculation, result), fixSubCalculation)
+import Tax.Canada.Shared (SubCalculation(result), fixSubCalculation, subCalculationFields)
 import Tax.Canada.T1.Types (T1)
 import Tax.Canada.T1.Types qualified
 import Tax.FDF (Entry (Amount, Checkbox, Count), FieldConst (Field), within)
@@ -124,15 +124,13 @@ page1Fields = within "Page1" Rank2.<$> Page1 {
    line6_trainingClaim = Field ["Line6", "Amount6"] Amount,
    line7_difference = Field ["Line7", "Amount7"] Amount,
    line_32001_eligible = Field ["Line8", "Amount8"] Amount,
-   line9_sum = SubCalculation{calculation = Field ["Line9", "Amount1"] Amount,
-                              result = Field ["Line9", "Amount9"] Amount},
+   line9_sum = subCalculationFields "Line9" ["Amount1"] ["Amount9"],
    line10_sum = Field ["Line10", "Amount10"] Amount,
    line11_copy = Field ["Line11", "Line11", "Amount11"] Amount,
    line11_numerator = Field ["Line11", "Amount11"] Amount,
    line12_copy = Field ["Line12", "Amount12"] Amount,
    line13_difference = Field ["Line13", "Amount13"] Amount,
-   line14_minUnused = SubCalculation{calculation = Field ["Line14", "Amount1"] Amount,
-                                     result = Field ["Line14", "Amount14"] Amount},
+   line14_minUnused = subCalculationFields "Line14" ["Amount1"] ["Amount14"],
    line15_difference = Field ["Line15", "Amount15"] Amount,
    line16_min = Field ["Line16", "Amount16"] Amount,
    line17_sum = Field ["Line17", "Amount17"] Amount}
