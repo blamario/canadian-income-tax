@@ -14,8 +14,9 @@ import Data.Fixed (Centi)
 import Rank2 qualified
 
 import Tax.Canada.Province.BC.BC428.Types
-import Tax.Canada.Shared (fixBaseCredit, fixMedicalExpenses, fixTaxIncomeBracket,
-                          BaseCredit(cont), MedicalExpenses (difference), TaxIncomeBracket (equalsTax))
+import Tax.Canada.Shared (fixBaseCredit, fixMedicalExpenses, fixSubCalculation, fixTaxIncomeBracket,
+                          BaseCredit(cont), MedicalExpenses (difference),
+                          SubCalculation (result), TaxIncomeBracket (equalsTax))
 import Tax.Util (fixEq, fractionOf, nonNegativeDifference, totalOf)
 
 fixBC428 :: BC428 Maybe -> BC428 Maybe
@@ -53,21 +54,20 @@ fixPage2 bc428 = fixEq $ \Page2{..}-> Page2{
 fixPage2PartB :: BC428 Maybe -> Page2PartB Maybe -> Page2PartB Maybe
 fixPage2PartB bc428 = fixEq $ \part@Page2PartB{..}-> part{
    line26 = bc428.page1.partB.line25,
-   line33_sum = totalOf [line27_cppQpp,
+   line33_sum = fixSubCalculation $
+                totalOf [line27_cppQpp,
                          line28_cppQpp,
                          line29_employmentInsurance,
                          line30_employmentInsurance,
                          line31_firefighters,
                          line32_rescue],
-   line33_cont = line33_sum,
-   line35 = totalOf [line26, line33_cont, line34_adoption],
+   line35 = totalOf [line26, line33_sum.result, line34_adoption],
    line37 = totalOf [line35, line36_pension],
    line40 = totalOf [line37, line38_disability, line39],
    line45 = totalOf [line40, line41_interest, line42_education, line43_transferredChild, line44_transferredSpouse],
    medicalExpenses = fixMedicalExpenses 2350 medicalExpenses,
-   line53_sum = totalOf [medicalExpenses.difference, line52],
-   line53_cont = line53_sum,
-   line54 = totalOf [line45, line53_cont],
+   line53_sum = fixSubCalculation $ totalOf [medicalExpenses.difference, line52],
+   line54 = totalOf [line45, line53_sum.result],
    line56_fraction = line55_rate `fractionOf` line54,
    line58 = totalOf [line56_fraction, line57_donations],
    line59_fraction = Just 0.25 `fractionOf` line59_food,
@@ -85,9 +85,8 @@ fixPartC bc428 = fixEq $ \part@PartC{..}-> part{
    line63 = totalOf [line61_tax, line62_splitIncomeTax],
    line64_copy = bc428.page2.partB.line60,
    line66_fraction = Just 0.337 `fractionOf` line66_copy,
-   line67_sum = totalOf [line64_copy, line65_dividendCredits, line66_fraction],
-   line67_cont = line67_sum,
-   line68 = nonNegativeDifference line63 line67_cont,
+   line67_sum = fixSubCalculation $ totalOf [line64_copy, line65_dividendCredits, line66_fraction],
+   line68 = nonNegativeDifference line63 line67_sum.result,
    line69_fraction = Just 0.337 `fractionOf` line69_copy,
    line70 = totalOf [line68, line69_fraction],
    line72 = nonNegativeDifference line70 line71_foreignCredit}
@@ -97,14 +96,11 @@ fixPage3 bc428 = fixEq $ \page@Page3{..}-> page{
    partC = fixPartC bc428 partC,
    line73_basicReduction = Just 491,
    line76_difference = nonNegativeDifference line74_copy line75_base,
-   line78_fraction = line77_rate `fractionOf` line76_difference,
-   line78_cont = line78_fraction,
-   line79_difference = nonNegativeDifference line73_basicReduction line78_cont,
-   line79_cont = line79_difference,
-   line80_difference = nonNegativeDifference partC.line72 line79_cont,
+   line78_fraction = fixSubCalculation $ line77_rate `fractionOf` line76_difference,
+   line79_difference = fixSubCalculation $ nonNegativeDifference line73_basicReduction line78_fraction.result,
+   line80_difference = nonNegativeDifference partC.line72 line79_difference.result,
    line82_difference = nonNegativeDifference line80_difference line81_logging,
    line85_difference = nonNegativeDifference line82_difference line84_political,
-   line88_sum = min 2000 <$> totalOf [line86_esop20, line87_evcc30],
-   line88_cont = line88_sum,
-   line89_difference = nonNegativeDifference line85_difference line88_cont,
+   line88_sum = fixSubCalculation $ min 2000 <$> totalOf [line86_esop20, line87_evcc30],
+   line89_difference = nonNegativeDifference line85_difference line88_sum.result,
    line91_tax = nonNegativeDifference line89_difference line90_mining}

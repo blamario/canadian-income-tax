@@ -17,7 +17,7 @@ import GHC.Stack (HasCallStack)
 import Rank2 qualified
 
 import Tax.Canada.T1.Types
-import Tax.Canada.Shared (fixTaxIncomeBracket, TaxIncomeBracket (equalsTax))
+import Tax.Canada.Shared (fixSubCalculation, fixTaxIncomeBracket, SubCalculation(result), TaxIncomeBracket (equalsTax))
 import Tax.Util (difference, fixEq, fractionOf, nonNegativeDifference, totalOf)
 
 fixT1 :: HasCallStack => T1 Maybe -> T1 Maybe
@@ -56,13 +56,13 @@ fixPage3 = fixEq $ \page@Page3{selfEmployment=SelfEmploymentIncome{..}, ..}-> pa
                       line_12900_RRSPIncome,
                       line_13000_OtherIncome,
                       line_13010_TaxableScholarship],
-   line_25_sum = totalOf [line_13500_Amount,
+   line_25_sum = fixSubCalculation $
+                 totalOf [line_13500_Amount,
                           line_13700_Amount,
                           line_13900_Amount,
                           line_14100_Amount,
                           line_14300_Amount],
-   line_25_cont = line_25_sum,
-   line_26 = totalOf [line_19, line_25_cont],
+   line_26 = totalOf [line_19, line_25_sum.result],
    line_14700_EqualsAmount = totalOf [line_14400_WorkersCompBen,
                                       line_14500_SocialAssistPay,
                                       line_14600_NetFedSupplements],
@@ -72,7 +72,8 @@ fixPage3 = fixEq $ \page@Page3{selfEmployment=SelfEmploymentIncome{..}, ..}-> pa
 fixPage4 :: T1 Maybe -> Page4 Maybe -> Page4 Maybe
 fixPage4 t1 = fixEq $ \page@Page4{..}-> page{
    line_15000_TotalIncome_2 = t1.page3.line_15000_TotalIncome,
-   line_23300_sum = totalOf [line_20700_RPPDeduction,
+   line_23300_sum = fixSubCalculation $
+                    totalOf [line_20700_RPPDeduction,
                              line_20800_RRSPDeduction,
                              line_21000_SplitPensionDeduction,
                              line_21200_Dues,
@@ -91,8 +92,7 @@ fixPage4 t1 = fixEq $ \page@Page4{..}-> page{
                              line_23100_ClergyResDeduction,
                              line_23200_OtherDeductions,
                              line_23210],
-   line_23300_cont = line_23300_sum,
-   line_23400_NetBeforeAdjust = nonNegativeDifference line_15000_TotalIncome_2 line_23300_cont,
+   line_23400_NetBeforeAdjust = nonNegativeDifference line_15000_TotalIncome_2 line_23300_sum.result,
    line_23600_NetIncome = nonNegativeDifference line_23400_NetBeforeAdjust line_23500_SocialBenefits}
 
 fixPage5 :: HasCallStack => T1 Maybe -> Page5 Maybe -> Page5 Maybe
@@ -106,7 +106,8 @@ fixPage6 t1 = fixEq $ \page@Page6{..}-> page{
    line82 = t1.page5.partB_FederalTaxCredits.line_81,
    line31260 = minimum [Just 1287,
                         totalOf [t1.page3.line_10100_EmploymentIncome, t1.page3.line_10400_OtherEmploymentIncome]],
-   line94_sum = totalOf [line30800,
+   line94_sum = fixSubCalculation $
+                totalOf [line30800,
                          line31000,
                          line31200,
                          line31205,
@@ -120,14 +121,12 @@ fixPage6 t1 = fixEq $ \page@Page6{..}-> page{
                          line31285,
                          line31300,
                          line31350],
-   line94_cont = line94_sum,
-   line96 = totalOf [line82, line94_cont, line31400],
+   line96 = totalOf [line82, line94_sum.result, line31400],
    line99 = totalOf [line96, line31600, line31800],
    line104 = totalOf [line99, line31900, line32300, line32400, line32600],
    medical_expenses = fixMedicalExpenses t1 medical_expenses,
-   line33200_sum = totalOf [medical_expenses.difference, medical_expenses.otherDependants],
-   line33200_cont = line33200_sum,
-   line33500 = totalOf [line104, line33200_cont],
+   line33200_sum = fixSubCalculation $ totalOf [medical_expenses.difference, medical_expenses.otherDependants],
+   line33500 = totalOf [line104, line33200_sum.result],
    line33800 = line112 `fractionOf` line33500,
    line35000 = totalOf [line33800, line34900]}
 
@@ -149,7 +148,8 @@ fixPage8 t1 = fixEq $ \page@Page8{..}-> Page8{
 fixStep4 :: T1 Maybe -> Step4 Maybe -> Step4 Maybe
 fixStep4 t1 = fixEq $ \step@Step4{..}-> step{
    line_23600_NetIncome_2 = t1.page4.line_23600_NetIncome,
-   line_25700_AddLines_sum = totalOf [line_24400_MilitaryPoliceDeduction,
+   line_25700_AddLines_sum = fixSubCalculation $
+                             totalOf [line_24400_MilitaryPoliceDeduction,
                                       line_24900_SecurityDeductions,
                                       line_25000_OtherPayDeductions,
                                       line_25100_PartnershipLosses,
@@ -158,8 +158,7 @@ fixStep4 t1 = fixEq $ \step@Step4{..}-> step{
                                       line_25400_CapitalGainsDeduction,
                                       line_25500_NorthernDeductions,
                                       line_25600_AdditionalDeductions_Amount],
-   line_25700_AddLines_cont = line_25700_AddLines_sum,
-   line_26000_TaxableIncome = nonNegativeDifference line_23600_NetIncome_2 line_25700_AddLines_cont}
+   line_26000_TaxableIncome = nonNegativeDifference line_23600_NetIncome_2 line_25700_AddLines_sum.result}
 
 fixPage5PartA :: HasCallStack => T1 Maybe -> Page5PartA Maybe -> Page5PartA Maybe
 fixPage5PartA t1 = fixEq $ \part@Page5PartA{..}-> part{
@@ -208,9 +207,8 @@ fixPage7PartC t1 = fixEq $ \part@Page7PartC{..}-> part{
    line119 = t1.page6.line35000,
    line40425,
    line40427,
-   line122_sum = totalOf [line119, line40425, line40427],
-   line122_cont = line122_sum,
-   line42900 = nonNegativeDifference line40400 line122_cont,
+   line122_sum = fixSubCalculation $ totalOf [line119, line40425, line40427],
+   line42900 = nonNegativeDifference line40400 line122_sum.result,
    line125 = totalOf [line42900, line124],
    line127 = difference line125 line40500,
    line129 = totalOf [line127, line128],
@@ -221,9 +219,8 @@ fixPage7PartC t1 = fixEq $ \part@Page7PartC{..}-> part{
                     | x <= 750 -> Just ((x - 400) * 0.5 + 300)
                     | otherwise-> Just ((x - 750) * 0.3333 + 475)
                   Nothing -> Nothing,
-   line41600_sum = totalOf [line41000, line41200, line41400],
-   line41600_cont = line41600_sum,
-   line41700 = nonNegativeDifference line40600 line41600_cont,
+   line41600_sum = fixSubCalculation $ totalOf [line41000, line41200, line41400],
+   line41700 = nonNegativeDifference line40600 line41600_sum.result,
    line42000 = totalOf [line41700, line41500, line41800]}
 
 fixPage7Step6 :: T1 Maybe -> Page7Step6 Maybe -> Page7Step6 Maybe
@@ -236,14 +233,13 @@ fixPage8Step6 :: T1 Maybe -> Page8Step6 Maybe -> Page8Step6 Maybe
 fixPage8Step6 t1 = fixEq $ \step@Page8Step6{..}-> step{
    line_43500_totalpayable = t1.page7.step6_RefundOrBalanceOwing.line_43500_TotalPayable,
    line_46900 = (* 0.25) <$> line_46800,
-   line_43850_diff = difference line_43700_Total_income_tax_ded line_43800_TaxTransferQC,
-   line_43850_cont = line_43850_diff,
+   line_43850_diff = fixSubCalculation $ difference line_43700_Total_income_tax_ded line_43800_TaxTransferQC,
    line_31210_copy = t1.page6.line31210,
-   line_45100_diff = difference line_45000_EIOverpayment line_31210_copy,
-   line_45100_cont = line_45100_diff,
-   line_48200_sum = totalOf [line_43850_cont,
+   line_45100_diff = fixSubCalculation $ difference line_45000_EIOverpayment line_31210_copy,
+   line_48200_sum = fixSubCalculation $
+                    totalOf [line_43850_diff.result,
                              line_44000,
-                             line_45100_cont,
+                             line_45100_diff.result,
                              line_44800_CPPOverpayment,
                              line_45000_EIOverpayment,
                              line_45200_MedicalExpense,
@@ -258,5 +254,4 @@ fixPage8Step6 t1 = fixEq $ \step@Page8Step6{..}-> step{
                              line_47557,
                              line_47600_TaxPaid,
                              line_47900_ProvTerrCredits],
-   line_48200_cont = line_48200_sum,
-   line164_Refund_or_BalanceOwing = difference line_43500_totalpayable line_48200_sum}
+   line164_Refund_or_BalanceOwing = difference line_43500_totalpayable line_48200_sum.result}

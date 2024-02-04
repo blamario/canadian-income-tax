@@ -5,6 +5,7 @@
 module Tax.Canada.Province.BC.BC479.Fix (BC479, fixBC479) where
 
 import Tax.Canada.Province.BC.BC479.Types
+import Tax.Canada.Shared (fixSubCalculation, SubCalculation(result))
 import Tax.Util (fixEq, nonNegativeDifference, totalOf)
 
 fixBC479 :: BC479 Maybe -> BC479 Maybe
@@ -30,8 +31,6 @@ fixPage1 = fixEq $ \page@Page1{..}-> page{
 fixPage2 :: BC479 Maybe -> Page2 Maybe -> Page2 Maybe
 fixPage2 bc479 = fixEq $ \page2@Page2{..}-> page2{
    line16_copy = bc479.page1.line15_sum,
-   line22_sum = totalOf [line17_venture, line_60490_shares, line_60495_shares],
-   line22_cont = line22_sum,
-   line28_sum = totalOf [line_60550_training, line_60560_training, line_60570_ships],
-   line28_cont = line28_sum,
-   line29_credits = totalOf [line16_copy, line22_cont, line_60510_fromT88, line28_cont]}
+   line22_sum = fixSubCalculation $ totalOf [line17_venture, line_60490_shares, line_60495_shares],
+   line28_sum = fixSubCalculation $ totalOf [line_60550_training, line_60560_training, line_60570_ships],
+   line29_credits = totalOf [line16_copy, line22_sum.result, line_60510_fromT88, line28_sum.result]}

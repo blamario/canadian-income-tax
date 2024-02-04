@@ -24,6 +24,7 @@ import Rank2 qualified
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
+import Tax.Canada.Shared (SubCalculation(SubCalculation, calculation, result), fixSubCalculation)
 import Tax.Canada.T1.Types (T1)
 import Tax.Canada.T1.Types qualified
 import Tax.FDF (Entry (Amount, Checkbox, Count), FieldConst (Field), within)
@@ -43,15 +44,13 @@ data Page1 line = Page1{
    line6_trainingClaim :: line Centi,
    line7_difference :: line Centi,
    line_32001_eligible :: line Centi,
-   line9_sum :: line Centi,
-   line9_cont :: line Centi,
+   line9_sum :: SubCalculation line,
    line10_sum :: line Centi,
    line11_copy :: line Centi,
    line11_numerator :: line Centi,
    line12_copy :: line Centi,
    line13_difference :: line Centi,
-   line14_minUnused :: line Centi,
-   line14_cont :: line Centi,
+   line14_minUnused :: SubCalculation line,
    line15_difference :: line Centi,
    line16_min :: line Centi,
    line17_sum :: line Centi}
@@ -72,8 +71,10 @@ data Page2 line = Page2{
 $(foldMap
    (\t-> concat <$> sequenceA [
        [d|
-           deriving instance (Show (line Bool), Show (line Centi), Show (line Word)) => Show ($(TH.conT t) line)
-           deriving instance (Eq (line Bool), Eq (line Centi), Eq (line Word)) => Eq ($(TH.conT t) line)
+           deriving instance (Show (line Bool), Show (line Centi),
+                              Show (line Rational), Show (line Word)) => Show ($(TH.conT t) line)
+           deriving instance (Eq (line Bool), Eq (line Centi),
+                              Eq (line Rational), Eq (line Word)) => Eq ($(TH.conT t) line)
        |],
        Rank2.TH.deriveAll t,
        Transformation.Shallow.TH.deriveAll t])
@@ -86,23 +87,21 @@ fixSchedule11 t1 = fixEq $ \Schedule11{page1 = page1@Page1{..}, page2 = page2@Pa
       line3_fraction = (0.5 *) <$> line3_copy,
       line5_min = minimum [line3_fraction, line4_limit],
       line7_difference = difference line_32000_tuition line6_trainingClaim,
-      line9_sum = totalOf [line7_difference, line_32001_eligible],
-      line9_cont = line9_sum,
-      line10_sum = totalOf [line1_pastUnused, line9_cont],
+      line9_sum = fixSubCalculation $ totalOf [line7_difference, line_32001_eligible],
+      line10_sum = totalOf [line1_pastUnused, line9_sum.result],
       line11_copy = if taxableIncomeUnderThreshold then Nothing else t1.page7.partC_NetFederalTax.line116,
       line11_numerator = if taxableIncomeUnderThreshold then taxableIncome else (/ 0.15) <$> line11_copy,
       line12_copy = t1.page6.line99,
       line13_difference = nonNegativeDifference line11_numerator line12_copy,
-      line14_minUnused = minimum [line1_pastUnused, line13_difference],
-      line14_cont = line14_minUnused,
-      line15_difference = difference line13_difference line14_minUnused,
-      line16_min = minimum [line9_cont, line15_difference],
-      line17_sum = totalOf [line14_cont, line16_min]},
+      line14_minUnused = fixSubCalculation $ minimum [line1_pastUnused, line13_difference],
+      line15_difference = difference line13_difference line14_minUnused.result,
+      line16_min = minimum [line9_sum.result, line15_difference],
+      line17_sum = totalOf [line14_minUnused.result, line16_min]},
    page2 = page2{
       line18_copy = line10_sum,
       line19_copy = line17_sum,
       line20_difference = difference line18_copy line19_copy,
-      line21_copy = line9_cont,
+      line21_copy = line9_sum.result,
       line22_copy = line16_min,
       line23_difference = nonNegativeDifference line21_copy line22_copy,
       line25_difference = nonNegativeDifference line20_difference line24_transferred}}
@@ -125,15 +124,15 @@ page1Fields = within "Page1" Rank2.<$> Page1 {
    line6_trainingClaim = Field ["Line6", "Amount6"] Amount,
    line7_difference = Field ["Line7", "Amount7"] Amount,
    line_32001_eligible = Field ["Line8", "Amount8"] Amount,
-   line9_sum = Field ["Line9", "Amount1"] Amount,
-   line9_cont = Field ["Line9", "Amount9"] Amount,
+   line9_sum = SubCalculation{calculation = Field ["Line9", "Amount1"] Amount,
+                              result = Field ["Line9", "Amount9"] Amount},
    line10_sum = Field ["Line10", "Amount10"] Amount,
    line11_copy = Field ["Line11", "Line11", "Amount11"] Amount,
    line11_numerator = Field ["Line11", "Amount11"] Amount,
    line12_copy = Field ["Line12", "Amount12"] Amount,
    line13_difference = Field ["Line13", "Amount13"] Amount,
-   line14_minUnused = Field ["Line14", "Amount1"] Amount,
-   line14_cont = Field ["Line14", "Amount14"] Amount,
+   line14_minUnused = SubCalculation{calculation = Field ["Line14", "Amount1"] Amount,
+                                     result = Field ["Line14", "Amount14"] Amount},
    line15_difference = Field ["Line15", "Amount15"] Amount,
    line16_min = Field ["Line16", "Amount16"] Amount,
    line17_sum = Field ["Line17", "Amount17"] Amount}

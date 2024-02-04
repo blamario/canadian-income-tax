@@ -14,8 +14,9 @@ import Data.Fixed (Centi)
 import Rank2 qualified
 
 import Tax.Canada.Province.AB.AB428.Types
-import Tax.Canada.Shared (fixBaseCredit, fixMedicalExpenses, fixTaxIncomeBracket,
-                          BaseCredit(cont), MedicalExpenses (difference), TaxIncomeBracket (equalsTax))
+import Tax.Canada.Shared (fixBaseCredit, fixMedicalExpenses, fixSubCalculation, fixTaxIncomeBracket,
+                          BaseCredit(cont), MedicalExpenses (difference),
+                          SubCalculation (result), TaxIncomeBracket (equalsTax))
 import Tax.Util (fixEq, fractionOf, nonNegativeDifference, totalOf)
 
 fixAB428 :: AB428 Maybe -> AB428 Maybe
@@ -43,13 +44,13 @@ fixPage1PartB = fixEq $ \part@Page1PartB{..}-> part{
    spouseAmount = fixBaseCredit spouseAmount,
    dependantAmount = fixBaseCredit dependantAmount,
    line18 = totalOf [line9_basic, line10_age, spouseAmount.cont, dependantAmount.cont, line17_infirm],
-   line24_sum = totalOf [line19_cppQpp,
+   line24_sum = fixSubCalculation $
+                totalOf [line19_cppQpp,
                          line20_cppQpp,
                          line21_employmentInsurance,
                          line22_employmentInsurance,
                          line23_adoption],
-   line24_cont = line24_sum,
-   line25 = totalOf [line18, line24_cont]}
+   line25 = totalOf [line18, line24_sum.result]}
 
 fixPage2 :: AB428 Maybe -> Page2 Maybe -> Page2 Maybe
 fixPage2 ab428 = fixEq $ \Page2{..}-> Page2{
@@ -62,14 +63,12 @@ fixPage2PartB ab428 = fixEq $ \part@Page2PartB{..}-> part{
    line32 = totalOf [line29, line30_disability, line31],
    line36 = totalOf [line32, line33_interest, line34_education, line35_transferredSpouse],
    medicalExpenses = fixMedicalExpenses 2350 medicalExpenses,
-   line44_sum = totalOf [medicalExpenses.difference, line43],
-   line44_cont = line44_sum,
-   line45 = totalOf [line36, line44_cont],
+   line44_sum = fixSubCalculation $ totalOf [medicalExpenses.difference, line43],
+   line45 = totalOf [line36, line44_sum.result],
    line47_fraction = line46_rate `fractionOf` line45,
    donations = fixDonations donations,
-   line50_sum = totalOf [donations.line48_fraction, donations.line49_fraction],
-   line50_cont = line50_sum,
-   line51 = totalOf [line47_fraction, line50_cont]}
+   line50_sum = fixSubCalculation $ totalOf [donations.line48_fraction, donations.line49_fraction],
+   line51 = totalOf [line47_fraction, line50_sum.result]}
 
 fixDonations :: Donations Maybe -> Donations Maybe
 fixDonations = fixEq $ \part@Donations{..} -> part{
@@ -91,9 +90,8 @@ fixPartC ab428 = fixEq $ \part@PartC{..}-> part{
    line54 = totalOf [line52_tax, line53_splitIncomeTax],
    line55_copy = ab428.page2.partB.line51,
    line57_fraction = Just 0.35 `fractionOf` line57_copy,
-   line58_sum = totalOf [line55_copy, line56_dividendCredits, line57_fraction],
-   line58_cont = line58_sum,
-   line59_difference = nonNegativeDifference line54 line58_cont,
+   line58_sum = fixSubCalculation $ totalOf [line55_copy, line56_dividendCredits, line57_fraction],
+   line59_difference = nonNegativeDifference line54 line58_sum.result,
    line60_fraction = Just 0.35 `fractionOf` line60_fromT691,
    line61 = totalOf [line59_difference, line60_fraction],
    line63_difference = nonNegativeDifference line61 line62_foreignCredit,

@@ -10,7 +10,7 @@ import Data.Fixed (Centi)
 import Rank2 qualified
 
 import Tax.Canada.Province.MB.MB428.Types
-import Tax.Canada.Shared (BaseCredit(..), MedicalExpenses(..), TaxIncomeBracket (..))
+import Tax.Canada.Shared (BaseCredit(..), MedicalExpenses(..), SubCalculation (..), TaxIncomeBracket (..))
 import Tax.FDF (Entry (Count, Constant, Amount, Percent), FieldConst (Field, NoField), within)
 
 mb428Fields = within "form1" Rank2.<$> MB428 {
@@ -63,8 +63,8 @@ page1PartBFields = Page1PartB {
    line25_fitness = Field ["Line25", "Amount"] Amount,
    line26_arts = Field ["Line26", "Amount"] Amount,
    line27_adoption = Field ["Line27", "Amount"] Amount,
-   line28_sum = Field ["Line28", "Amount1"] Amount,
-   line28_cont = Field ["Line28", "Amount2"] Amount,
+   line28_sum = SubCalculation{calculation = Field ["Line28", "Amount1"] Amount,
+                               result = Field ["Line28", "Amount2"] Amount},
    line29 = Field ["Line29", "Amount"] Amount}
 
 page2Fields = Page2 {
@@ -86,14 +86,14 @@ page2PartBFields = Page2PartB {
    line42_sum = Field ["Line42", "Amount"] Amount,
    medicalExpenses = within "MedicalExpenses" Rank2.<$> medicalExpensesFields,
    line49 = Field ["Line49", "Amount"] Amount,
-   line50_sum = Field ["Line50", "Amount1"] Amount,
-   line50_cont = Field ["Line50", "Amount2"] Amount,
+   line50_sum = SubCalculation{calculation = Field ["Line50", "Amount1"] Amount,
+                               result = Field ["Line50", "Amount2"] Amount},
    line51 = Field ["Line51", "Amount"] Amount,
    line52_rate = Field ["Line52", "Percent_ReadOnly"] $ Constant 0.108 Percent,
    line53_fraction = Field ["Line53", "Amount"] Amount,
    donations = donationFields,
-   line56_sum = Field ["Line56", "Amount1"] Amount,
-   line56_cont = Field ["Line56", "Amount2"] Amount,
+   line56_sum = SubCalculation{calculation = Field ["Line56", "Amount1"] Amount,
+                               result = Field ["Line56", "Amount2"] Amount},
    line57 = Field ["Line57", "Amount"] Amount}
 
 medicalExpensesFields = MedicalExpenses {
@@ -121,8 +121,8 @@ partCFields = PartC {
    line62_dividendCredits = Field ["Line62", "Amount"] Amount,
    line63_copy = Field ["Line63", "Amount1"] Amount,
    line63_fraction = Field ["Line63", "Amount2"] Amount,
-   line64_sum = Field ["Line64", "Amount1"] Amount,
-   line64_cont = Field ["Line64", "Amount2"] Amount,
+   line64_sum = SubCalculation{calculation = Field ["Line64", "Amount1"] Amount,
+                               result = Field ["Line64", "Amount2"] Amount},
    line65_difference = Field ["Line65", "Amount"] Amount,
    line66_fromT691 = Field ["Line66", "Amount1"] Amount,
    line66_fraction = Field ["Line66", "Amount2"] Amount,

@@ -10,6 +10,7 @@ import Data.Fixed (Centi)
 import Rank2 qualified
 
 import Tax.Canada.Province.ON.ON479.Types
+import Tax.Canada.Shared (SubCalculation (SubCalculation, calculation, result))
 import Tax.FDF (Entry (Count, Constant, Amount, Percent, RadioButton, Textual), FieldConst (Field), within)
 
 on479Fields = within "form1" Rank2.<$> ON479 {
@@ -33,10 +34,10 @@ page1Fields = Page1 {
    line10_base = Field ["Line10", "Amount"] Amount,
    line11_difference = Field ["Line11", "Amount"] Amount,
    line12_rate = Field ["Line12", "Percent_ReadOnly"] $ Constant 0.05 Percent,
-   line13_fraction = Field ["Line13", "Amount1"] Amount,
-   line13_cont = Field ["Line13", "Amount2"] Amount,
-   line_63095_difference = Field ["Line63095_Line14", "Amount1"] Amount,
-   line_63095_cont = Field ["Line63095_Line14", "Amount2"] Amount,
+   line13_fraction = SubCalculation{calculation = Field ["Line13", "Amount1"] Amount,
+                                    result = Field ["Line13", "Amount2"] Amount},
+   line_63095_difference = SubCalculation{calculation = Field ["Line63095_Line14", "Amount1"] Amount,
+                                          result = Field ["Line63095_Line14", "Amount2"] Amount},
    line_63100_transit = Field ["Line15", "Line63100", "Amount1"] Amount,
    line_63100_fraction = Field ["Line15", "Amount2"] Amount,
    line16_sum = Field ["Line17", "Amount"] Amount}

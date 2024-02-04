@@ -14,8 +14,9 @@ import Data.Fixed (Centi)
 import Rank2 qualified
 
 import Tax.Canada.Province.ON.ON428.Types
-import Tax.Canada.Shared (fixBaseCredit, fixMedicalExpenses, fixTaxIncomeBracket,
-                          BaseCredit(cont), MedicalExpenses (difference), TaxIncomeBracket (equalsTax))
+import Tax.Canada.Shared (fixBaseCredit, fixMedicalExpenses, fixSubCalculation, fixTaxIncomeBracket,
+                          BaseCredit(cont), MedicalExpenses (difference),
+                          SubCalculation (result), TaxIncomeBracket (equalsTax))
 import Tax.Util (fixEq, fractionOf, nonNegativeDifference, totalOf)
 
 fixON428 :: ON428 Maybe -> ON428 Maybe
@@ -44,13 +45,13 @@ fixPage1PartB = fixEq $ \part@Page1PartB{..}-> part{
    spouseAmount = fixBaseCredit spouseAmount,
    dependantAmount = fixBaseCredit dependantAmount,
    line18 = totalOf [line9_basic, line10_age, spouseAmount.cont, dependantAmount.cont, line17_caregiver],
-   line24_sum = totalOf [line19_cppQpp,
+   line24_sum = fixSubCalculation $
+                totalOf [line19_cppQpp,
                          line20_cppQpp,
                          line21_employmentInsurance,
                          line22_employmentInsurance,
                          line23_adoption],
-   line24_cont = line24_sum,
-   line25 = totalOf [line18, line24_cont]}
+   line25 = totalOf [line18, line24_sum.result]}
 
 fixPage2 :: ON428 Maybe -> Page2 Maybe -> Page2 Maybe
 fixPage2 on428 = fixEq $ \Page2{..}-> Page2{
@@ -64,12 +65,11 @@ fixPage2PartB on428 = fixEq $ \part@Page2PartB{..}-> part{
    line31 = totalOf [line28, line29_disability, line30],
    line35 = totalOf [line31, line32_interest, line33_education, line34_transferred],
    medicalExpenses = fixMedicalExpenses 2522 medicalExpenses,
-   line43_sum = totalOf [medicalExpenses.difference, line42],
-   line43_cont = line43_sum,
-   line44 = totalOf [line35, line43_cont],
+   line43_sum = fixSubCalculation $ totalOf [medicalExpenses.difference, line42],
+   line44 = totalOf [line35, line43_sum.result],
    line46_fraction = line45_rate `fractionOf` line44,
    donations = fixDonations donations,
-   line50 = totalOf [line46_fraction, donations.line49_cont]}
+   line50 = totalOf [line46_fraction, donations.line49_sum.result]}
 
 fixPage2PartC :: ON428 Maybe -> Page2PartC Maybe -> Page2PartC Maybe
 fixPage2PartC on428 = fixEq $ \part@Page2PartC{..}-> part{
@@ -91,8 +91,7 @@ fixDonations :: Donations Maybe -> Donations Maybe
 fixDonations = fixEq $ \part@Donations{..} -> part{
    line47_fraction = Just 0.0505 `fractionOf` line47_base,
    line48_fraction = Just 0.1116 `fractionOf` line48_base,
-   line49_sum = totalOf [line47_fraction, line48_fraction],
-   line49_cont = line49_sum}
+   line49_sum = fixSubCalculation $ totalOf [line47_fraction, line48_fraction]}
 
 fixPage3 :: ON428 Maybe -> Page3 Maybe -> Page3 Maybe
 fixPage3 on428 = fixEq $ \page@Page3{..}-> page{
@@ -104,9 +103,8 @@ fixPage3 on428 = fixEq $ \page@Page3{..}-> page{
    line66_surtax = Just 0.2 `fractionOf` nonNegativeDifference line66_copy (Just 4991),
    line67_copy = line65,
    line67_surtax = Just 0.36 `fractionOf` nonNegativeDifference line67_copy (Just 6387),
-   line68_sum = totalOf [line66_surtax, line67_surtax],
-   line68_cont = line68_sum,
-   line69 = totalOf [line62, line68_cont],
+   line68_sum = fixSubCalculation $ totalOf [line66_surtax, line67_surtax],
+   line69 = totalOf [line62, line68_sum.result],
    line70 = on428.page2.partC.line57,
    line71 = nonNegativeDifference line69 line70,
    line73 = totalOf [line71, line72],
@@ -116,9 +114,8 @@ fixPage3 on428 = fixEq $ \page@Page3{..}-> page{
    line78_copy = line77,
    line78_product = (2 *) <$> line78_copy,
    line79 = line73,
-   line80_difference = nonNegativeDifference line78_product line79,
-   line80_cont = line80_difference,
-   line81 = nonNegativeDifference line73 line80_cont,
+   line80_difference = fixSubCalculation $ nonNegativeDifference line78_product line79,
+   line81 = nonNegativeDifference line73 line80_difference.result,
    line83 = nonNegativeDifference line81 line82}
 
 fixPage4 :: ON428 Maybe -> Page4 Maybe -> Page4 Maybe

@@ -19,7 +19,7 @@ import Language.Haskell.TH qualified as TH
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
-import Tax.Canada.Shared (BaseCredit, MedicalExpenses, TaxIncomeBracket)
+import Tax.Canada.Shared (BaseCredit, MedicalExpenses, SubCalculation, TaxIncomeBracket)
 
 data BC428 line = BC428 {
    page1 :: Page1 line,
@@ -59,8 +59,7 @@ data Page2PartB line = Page2PartB {
    line30_employmentInsurance :: line Centi,
    line31_firefighters :: line Centi,
    line32_rescue :: line Centi,
-   line33_sum :: line Centi,
-   line33_cont :: line Centi,
+   line33_sum :: SubCalculation line,
    line34_adoption :: line Centi,
    line35 :: line Centi,
    line36_pension :: line Centi,
@@ -75,8 +74,7 @@ data Page2PartB line = Page2PartB {
    line45 :: line Centi,
    medicalExpenses :: MedicalExpenses line,
    line52 :: line Centi,
-   line53_sum :: line Centi,
-   line53_cont :: line Centi,
+   line53_sum :: SubCalculation line,
    line54 :: line Centi,
    line55_rate :: line Rational,
    line56_fraction :: line Centi,
@@ -94,8 +92,7 @@ data PartC line = PartC {
    line65_dividendCredits :: line Centi,
    line66_copy :: line Centi,
    line66_fraction :: line Centi,
-   line67_sum :: line Centi,
-   line67_cont :: line Centi,
+   line67_sum :: SubCalculation line,
    line68 :: line Centi,
    line69_copy :: line Centi,
    line69_fraction :: line Centi,
@@ -110,10 +107,8 @@ data Page3 line = Page3 {
    line75_base :: line Centi,
    line76_difference :: line Centi,
    line77_rate :: line Rational,
-   line78_fraction :: line Centi,
-   line78_cont :: line Centi,
-   line79_difference :: line Centi,
-   line79_cont :: line Centi,
+   line78_fraction :: SubCalculation line,
+   line79_difference :: SubCalculation line,
    line80_difference :: line Centi,
    line81_logging :: line Centi,
    line82_difference :: line Centi,
@@ -122,8 +117,7 @@ data Page3 line = Page3 {
    line85_difference :: line Centi,
    line86_esop20 :: line Centi,
    line87_evcc30 :: line Centi,
-   line88_sum :: line Centi,
-   line88_cont :: line Centi,
+   line88_sum :: SubCalculation line,
    line89_difference :: line Centi,
    line90_mining :: line Centi,
    line91_tax :: line Centi}

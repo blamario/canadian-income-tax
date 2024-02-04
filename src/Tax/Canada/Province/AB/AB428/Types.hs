@@ -19,7 +19,7 @@ import Language.Haskell.TH qualified as TH
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
-import Tax.Canada.Shared (BaseCredit, MedicalExpenses, TaxIncomeBracket)
+import Tax.Canada.Shared (BaseCredit, MedicalExpenses, SubCalculation, TaxIncomeBracket)
 
 data AB428 line = AB428 {
    page1 :: Page1 line,
@@ -50,8 +50,7 @@ data Page1PartB line = Page1PartB {
    line21_employmentInsurance :: line Centi,
    line22_employmentInsurance :: line Centi,
    line23_adoption :: line Centi,
-   line24_sum :: line Centi,
-   line24_cont :: line Centi,
+   line24_sum :: SubCalculation line,
    line25 :: line Centi}
 
 data Page2 line = Page2 {
@@ -71,14 +70,12 @@ data Page2PartB line = Page2PartB {
    line36 :: line Centi,
    medicalExpenses :: MedicalExpenses line,
    line43 :: line Centi,
-   line44_sum :: line Centi,
-   line44_cont :: line Centi,
+   line44_sum :: SubCalculation line,
    line45 :: line Centi,
    line46_rate :: line Rational,
    line47_fraction :: line Centi,
    donations :: Donations line,
-   line50_sum :: line Centi,
-   line50_cont :: line Centi,
+   line50_sum :: SubCalculation line,
    line51 :: line Centi}
 
 data Donations line = Donations {
@@ -99,8 +96,7 @@ data PartC line = PartC {
    line56_dividendCredits :: line Centi,
    line57_copy :: line Centi,
    line57_fraction :: line Centi,
-   line58_sum :: line Centi,
-   line58_cont :: line Centi,
+   line58_sum :: SubCalculation line,
    line59_difference :: line Centi,
    line60_fromT691 :: line Centi,
    line60_fraction :: line Centi,

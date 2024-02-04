@@ -20,6 +20,8 @@ import Language.Haskell.TH qualified as TH
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
+import Tax.Canada.Shared (SubCalculation)
+
 data BC479 line = BC479 {
    page1 :: Page1 line,
    page2 :: Page2 line}
@@ -56,22 +58,22 @@ data Page2 line = Page2 {
    line_60491_certificate :: line Text,
    line_60495_shares :: line Centi,
    line_60496_certificate :: line Text,
-   line22_sum :: line Centi,
-   line22_cont :: line Centi,
+   line22_sum :: SubCalculation line,
    line_60510_fromT88 :: line Centi,
    line_60530_fromT88 :: line Centi,
    line_60550_training :: line Centi,
    line_60560_training :: line Centi,
    line_60570_ships :: line Centi,
-   line28_sum :: line Centi,
-   line28_cont :: line Centi,
+   line28_sum :: SubCalculation line,
    line29_credits :: line Centi}
 
 $(foldMap
    (\t-> concat <$> sequenceA [
        [d|
-           deriving instance (Show (line Bool), Show (line Centi), Show (line Text)) => Show ($(TH.conT t) line)
-           deriving instance (Eq (line Bool), Eq (line Centi), Eq (line Text)) => Eq ($(TH.conT t) line)
+           deriving instance (Show (line Bool), Show (line Centi),
+                              Show (line Rational), Show (line Text)) => Show ($(TH.conT t) line)
+           deriving instance (Eq (line Bool), Eq (line Centi),
+                              Eq (line Rational), Eq (line Text)) => Eq ($(TH.conT t) line)
        |],
        Rank2.TH.deriveAll t,
        Transformation.Shallow.TH.deriveAll t])

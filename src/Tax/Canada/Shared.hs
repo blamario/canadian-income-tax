@@ -47,17 +47,21 @@ data BaseCredit line = BaseCredit {
    difference :: line Centi,
    cont :: line Centi}
 
+data SubCalculation line = SubCalculation {
+   calculation :: line Centi,
+   result :: line Centi}
+
 $(foldMap
    (\t-> concat <$> sequenceA [
        [d|
-           deriving instance (Show (line Centi), Show (line Rational), Show (line Word))
+           deriving instance (Show (line Centi), Show (line Rational))
                           => Show ($(TH.conT t) line)
-           deriving instance (Eq (line Centi), Eq (line Rational), Eq (line Word))
+           deriving instance (Eq (line Centi), Eq (line Rational))
                           => Eq ($(TH.conT t) line)
        |],
        Rank2.TH.deriveAll t,
        Transformation.Shallow.TH.deriveAll t])
-   [''BaseCredit, ''MedicalExpenses, ''TaxIncomeBracket])
+   [''BaseCredit, ''MedicalExpenses, ''SubCalculation, ''TaxIncomeBracket])
 
 fixTaxIncomeBracket :: Maybe Centi -> Maybe (TaxIncomeBracket Maybe) -> TaxIncomeBracket Maybe -> TaxIncomeBracket Maybe
 fixTaxIncomeBracket theIncome nextBracket = fixEq $ \bracket@TaxIncomeBracket{..} -> bracket{
@@ -80,3 +84,8 @@ fixMedicalExpenses ceiling = fixEq $ \part@MedicalExpenses{..} -> part{
    fraction = incomeRate `fractionOf` netIncome,
    lesser = min ceiling <$> fraction,
    difference = nonNegativeDifference expenses lesser}
+
+fixSubCalculation :: Maybe Centi -> SubCalculation Maybe
+fixSubCalculation result = SubCalculation{
+   calculation = result,
+   result = result}

@@ -25,6 +25,7 @@ import Language.Haskell.TH qualified as TH
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
+import Tax.Canada.Shared (SubCalculation)
 import Tax.Canada.Shared (TaxIncomeBracket)
 
 data T1 line = T1 {
@@ -121,8 +122,7 @@ data Page3 line = Page3 {
    line_13010_TaxableScholarship :: line Centi,
    line_19 :: line Centi,
    selfEmployment :: SelfEmploymentIncome line,
-   line_25_sum :: line Centi,
-   line_25_cont :: line Centi,
+   line_25_sum :: SubCalculation line,
    line_26 :: line Centi,
    line_14400_WorkersCompBen :: line Centi,
    line_14500_SocialAssistPay :: line Centi,
@@ -169,8 +169,7 @@ data Page4 line = Page4 {
    line_23200_OtherDeductions :: line Centi,
    line_23200_Specify :: line Text,
    line_23210 :: line Centi,
-   line_23300_cont :: line Centi,
-   line_23300_sum :: line Centi,
+   line_23300_sum :: SubCalculation line,
    line_23400_NetBeforeAdjust :: line Centi,
    line_23500_SocialBenefits :: line Centi,
    line_23600_NetIncome :: line Centi}
@@ -192,8 +191,7 @@ data Step4 line = Step4 {
    line_25500_NorthernDeductions :: line Centi,
    line_25600_AdditionalDeductions_Amount :: line Centi,
    line_25600_AdditionalDeductions_Specify :: line Text,
-   line_25700_AddLines_cont :: line Centi,
-   line_25700_AddLines_sum :: line Centi,
+   line_25700_AddLines_sum :: SubCalculation line,
    line_26000_TaxableIncome :: line Centi}
 
 data Page5PartA line = Page5PartA {
@@ -232,8 +230,7 @@ data Page6 line = Page6 {
    line31285 :: line Centi,
    line31300 :: line Centi,
    line31350 :: line Centi,
-   line94_sum :: line Centi,
-   line94_cont :: line Centi,
+   line94_sum :: SubCalculation line,
    line31400 :: line Centi,
    line96 :: line Centi,
    line31600 :: line Centi,
@@ -245,8 +242,7 @@ data Page6 line = Page6 {
    line32600 :: line Centi,
    line104 :: line Centi,
    medical_expenses :: MedicalExpenses line,
-   line33200_sum :: line Centi,
-   line33200_cont :: line Centi,
+   line33200_sum :: SubCalculation line,
    line33500 :: line Centi,
    line112 :: line Rational,
    line33800 :: line Centi,
@@ -272,8 +268,7 @@ data Page7PartC line = Page7PartC {
    line119 :: line Centi,
    line40425 :: line Centi,
    line40427 :: line Centi,
-   line122_sum :: line Centi,
-   line122_cont :: line Centi,
+   line122_sum :: SubCalculation line,
    line42900 :: line Centi,
    line124 :: line Centi,
    line125 :: line Centi,
@@ -288,8 +283,7 @@ data Page7PartC line = Page7PartC {
    line41200 :: line Centi,
    line41300 :: line Centi,
    line41400 :: line Centi,
-   line41600_sum :: line Centi,
-   line41600_cont :: line Centi,
+   line41600_sum :: SubCalculation line,
    line41700 :: line Centi,
    line41500 :: line Centi,
    line41800 :: line Centi,
@@ -319,16 +313,14 @@ data Page8Step6 line = Page8Step6 {
    line_43500_totalpayable :: line Centi,
    line_43700_Total_income_tax_ded :: line Centi,
    line_43800_TaxTransferQC :: line Centi,
-   line_43850_diff :: line Centi,
-   line_43850_cont :: line Centi,
+   line_43850_diff :: SubCalculation line,
    line_42900_copy :: line Centi,
    line_44000 :: line Centi,
    line_44100 :: line Centi,
    line_44800_CPPOverpayment :: line Centi,
    line_45000_EIOverpayment :: line Centi,
    line_31210_copy :: line Centi,
-   line_45100_diff :: line Centi,
-   line_45100_cont :: line Centi,
+   line_45100_diff :: SubCalculation line,
    line_45200_MedicalExpense :: line Centi,
    line_45300_CWB :: line Centi,
    line_45350_CTC :: line Centi,
@@ -342,8 +334,7 @@ data Page8Step6 line = Page8Step6 {
    line_47557 :: line Centi,
    line_47600_TaxPaid :: line Centi,
    line_47900_ProvTerrCredits :: line Centi,
-   line_48200_sum :: line Centi,
-   line_48200_cont :: line Centi,
+   line_48200_sum :: SubCalculation line,
    line164_Refund_or_BalanceOwing :: line Centi}
 
 data TaxPreparer line = TaxPreparer {

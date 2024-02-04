@@ -14,6 +14,7 @@ import Data.Fixed (Centi)
 import Rank2 qualified
 
 import Tax.Canada.Province.ON.ON479.Types
+import Tax.Canada.Shared (fixSubCalculation, SubCalculation(result))
 import Tax.Util (fixEq, fractionOf, nonNegativeDifference, totalOf)
 
 fixON479 :: ON479 Maybe -> ON479 Maybe
@@ -27,12 +28,11 @@ fixPage1 = fixEq $ \page@Page1{..}-> page{
    line6_fraction = line5_allowable `fractionOf` line4_homecare_copy,
    line9_sum = totalOf [line7_netIncome_copy, line8_spouse_copy],
    line11_difference = nonNegativeDifference line9_sum line10_base,
-   line13_fraction = line12_rate `fractionOf` line11_difference,
-   line13_cont = line13_fraction,
-   line_63095_difference = nonNegativeDifference line6_fraction line13_cont,
-   line_63095_cont = line_63095_difference,
+   line13_fraction = fixSubCalculation $ line12_rate `fractionOf` line11_difference,
+   line_63095_difference = fixSubCalculation $ nonNegativeDifference line6_fraction line13_fraction.result,
    line_63100_fraction = (0.15 *) <$> line_63100_transit,
-   line16_sum = totalOf [line_63050_childcare, line_63052_fraction, line_63055_fraction, line_63095_cont, line_63100_fraction]}
+   line16_sum = totalOf [line_63050_childcare, line_63052_fraction, line_63055_fraction, line_63095_difference.result,
+                         line_63100_fraction]}
 
 fixPage2 :: ON479 Maybe -> Page2 Maybe -> Page2 Maybe
 fixPage2 on479 = fixEq $ \page2@Page2{..}-> page2{

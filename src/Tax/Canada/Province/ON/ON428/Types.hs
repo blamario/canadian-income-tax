@@ -19,7 +19,7 @@ import Language.Haskell.TH qualified as TH
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
-import Tax.Canada.Shared (BaseCredit, MedicalExpenses, TaxIncomeBracket)
+import Tax.Canada.Shared (BaseCredit, MedicalExpenses, SubCalculation, TaxIncomeBracket)
 
 data ON428 line = ON428 {
    page1 :: Page1 line,
@@ -51,8 +51,7 @@ data Page1PartB line = Page1PartB {
    line21_employmentInsurance :: line Centi,
    line22_employmentInsurance :: line Centi,
    line23_adoption :: line Centi,
-   line24_sum :: line Centi,
-   line24_cont :: line Centi,
+   line24_sum :: SubCalculation line,
    line25 :: line Centi}
 
 data Page2 line = Page2 {
@@ -72,8 +71,7 @@ data Page2PartB line = Page2PartB {
    line35 :: line Centi,
    medicalExpenses :: MedicalExpenses line,
    line42 :: line Centi,
-   line43_sum :: line Centi,
-   line43_cont :: line Centi,
+   line43_sum :: SubCalculation line,
    line44 :: line Centi,
    line45_rate :: line Rational,
    line46_fraction :: line Centi,
@@ -85,8 +83,7 @@ data Donations line = Donations {
    line47_fraction :: line Centi,
    line48_base :: line Centi,
    line48_fraction :: line Centi,
-   line49_sum :: line Centi,
-   line49_cont :: line Centi}
+   line49_sum :: SubCalculation line}
 
 data Page2PartC line = Page2PartC {
    line51_tax :: line Centi,
@@ -111,8 +108,7 @@ data Page3 line = Page3 {
    line66_surtax :: line Centi,
    line67_copy :: line Centi,
    line67_surtax :: line Centi,
-   line68_cont :: line Centi,
-   line68_sum :: line Centi,
+   line68_sum :: SubCalculation line,
    line69 :: line Centi,
    line70 :: line Centi,
    line71 :: line Centi,
@@ -127,8 +123,7 @@ data Page3 line = Page3 {
    line78_copy :: line Centi,
    line78_product :: line Centi,
    line79 :: line Centi,
-   line80_cont :: line Centi,
-   line80_difference :: line Centi,
+   line80_difference :: SubCalculation line,
    line81 :: line Centi,
    line82 :: line Centi,
    line83 :: line Centi}

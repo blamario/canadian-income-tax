@@ -20,6 +20,8 @@ import Language.Haskell.TH qualified as TH
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
+import Tax.Canada.Shared (SubCalculation)
+
 data ON479 line = ON479 {
    page1 :: Page1 line,
    page2 :: Page2 line}
@@ -40,10 +42,8 @@ data Page1 line = Page1 {
    line10_base :: line Centi,
    line11_difference :: line Centi,
    line12_rate :: line Rational,
-   line13_fraction :: line Centi,
-   line13_cont :: line Centi,
-   line_63095_difference :: line Centi,
-   line_63095_cont :: line Centi,
+   line13_fraction :: SubCalculation line,
+   line_63095_difference :: SubCalculation line,
    line_63100_transit :: line Centi,
    line_63100_fraction :: line Centi,
    line16_sum :: line Centi}

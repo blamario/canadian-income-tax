@@ -24,6 +24,7 @@ import Rank2 qualified
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
+import Tax.Canada.Shared (SubCalculation(SubCalculation, calculation, result), fixSubCalculation)
 import Tax.Canada.T1.Types (T1)
 import Tax.Canada.T1.Types qualified as T1
 import Tax.FDF (Entry (Amount, Constant, Percent, Switch'), FieldConst (Field), within)
@@ -86,8 +87,7 @@ data Step2 line = Step2{
    line24_threshold :: line Centi,
    line25_difference :: line Centi,
    line26_rate :: line Rational,
-   line27_fraction :: line Centi,
-   line27_cont :: line Centi,
+   line27_fraction :: SubCalculation line,
    line28_difference :: line Centi}
 
 data Step3 line = Step3{
@@ -101,8 +101,7 @@ data Step3 line = Step3{
    line36_threshold :: line Centi,
    line37_difference :: line Centi,
    line38_rate :: line Rational,
-   line39_fraction :: line Centi,
-   line39_cont :: line Centi,
+   line39_fraction :: SubCalculation line,
    line40_difference :: line Centi,
    line41_copy :: line Centi,
    line42_sum :: line Centi}
@@ -145,9 +144,8 @@ fixSchedule6 t1spouse t1  =
          line23_copy = page3.line15_difference,
          line24_threshold = if eitherEligible then Just 26_805 else Just 23_495,
          line25_difference = nonNegativeDifference line23_copy line24_threshold,
-         line27_fraction = line26_rate `fractionOf` line25_difference,
-         line27_cont = line27_fraction,
-         line28_difference = nonNegativeDifference line22_least line27_fraction},
+         line27_fraction = fixSubCalculation $ line26_rate `fractionOf` line25_difference,
+         line28_difference = nonNegativeDifference line22_least line27_fraction.result},
       step3 = if all not page2.questions.line_38103 then Rank2.pure Nothing else let Step3{..} = step3 in step3{
          line29_copy = page2.partA_self.line_38108_sum,
          line31_difference = nonNegativeDifference line29_copy line30_threshold,
@@ -157,9 +155,8 @@ fixSchedule6 t1spouse t1  =
          line36_threshold = if eitherEligible then Just 43_210 else Just 33_018,
          line37_difference = nonNegativeDifference line35_copy line36_threshold,
          line38_rate = if or page2.questions.line_38104 then Just 0.075 else Just 0.15,
-         line39_fraction = line38_rate `fractionOf` line37_difference,
-         line39_cont = line39_fraction,
-         line40_difference = nonNegativeDifference line34_capped line39_cont,
+         line39_fraction = fixSubCalculation $ line38_rate `fractionOf` line37_difference,
+         line40_difference = nonNegativeDifference line34_capped line39_fraction.result,
          line41_copy = if or page2.questions.line_38102 then step2.line28_difference else Just 0,
          line42_sum = totalOf [line40_difference, line41_copy]}}}
 
@@ -237,8 +234,8 @@ schedule6Fields = within "form1" Rank2.<$> Schedule6{
          line24_threshold = Field ["Line24_Sub", "Line24Amount"] Amount,
          line25_difference = Field ["Line25_sub", "Line25Amount"] Amount,
          line26_rate = Field ["Line26_Sub", "Line26Rate"] $ Constant 0.15 Percent,
-         line27_fraction = Field ["Line27_Sub", "Line27Amount1"] Amount,
-         line27_cont = Field ["Line27_Sub", "Line27Amount2"] Amount,
+         line27_fraction = SubCalculation{calculation = Field ["Line27_Sub", "Line27Amount1"] Amount,
+                                          result = Field ["Line27_Sub", "Line27Amount2"] Amount},
          line28_difference = Field ["Line28_Sub", "Line28Amount"] Amount},
       step3 = within "Step3" Rank2.<$> Step3{
          line29_copy = Field ["Line29_Sub", "Line29Amount"] Amount,
@@ -251,8 +248,8 @@ schedule6Fields = within "form1" Rank2.<$> Schedule6{
          line36_threshold = Field ["Line36_Sub", "Line36Amount"] Amount,
          line37_difference = Field ["Line37_Sub", "Line37Amount"] Amount,
          line38_rate = Field ["Line38_Sub", "Line38Rate"] Percent,
-         line39_fraction = Field ["Line39_Sub", "Line39Amount1"] Amount,
-         line39_cont = Field ["Line39_Sub", "Line39Amount2"] Amount,
+         line39_fraction = SubCalculation{calculation = Field ["Line39_Sub", "Line39Amount1"] Amount,
+                                          result = Field ["Line39_Sub", "Line39Amount2"] Amount},
          line40_difference = Field ["Line40_Sub", "Line40Amount"] Amount,
          line41_copy = Field ["Line41_Sub", "Line41Amount"] Amount,
          line42_sum = Field ["Line42_Sub", "Line42Amount"] Amount}}}

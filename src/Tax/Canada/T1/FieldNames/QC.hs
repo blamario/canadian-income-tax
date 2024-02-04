@@ -8,6 +8,7 @@ module Tax.Canada.T1.FieldNames.QC (t1Fields) where
 import Rank2 qualified
 
 import Tax.FDF (FieldConst (Field, NoField), Entry (..), within)
+import Tax.Canada.Shared (SubCalculation (SubCalculation, calculation, result))
 import Tax.Canada.T1.Types
 import Tax.Canada.T1.Types qualified as Page8 (Page8(..))
 import Tax.Canada.T1.FieldNames.ON
@@ -71,8 +72,8 @@ page3Fields = ON.page3Fields{
    line_13010_TaxableScholarship = Field ["Line_18", "Amount"] Amount,
    line_19 = Field ["Line_19", "Amount"] Amount,
    selfEmployment = within "Self_Employment_Group" Rank2.<$> selfEmploymentFields,
-   line_25_sum = Field ["Line_25", "Amount1"] Amount,
-   line_25_cont = Field ["Line_25", "Amount2"] Amount,
+   line_25_sum = SubCalculation{calculation = Field ["Line_25", "Amount1"] Amount,
+                                result = Field ["Line_25", "Amount2"] Amount},
    line_26 = Field ["Line_26", "Amount"] Amount,
    line_14400_WorkersCompBen = Field ["Line_27", "Line_14400_Amount"] Amount,
    line_14500_SocialAssistPay = Field ["Line_28", "Line_14500_Amount"] Amount,
@@ -119,8 +120,8 @@ page4Fields = ON.page4Fields{
    line_23200_OtherDeductions = Field ["Line_50", "Line_23200_Amount"] Amount,
    line_23200_Specify = Field ["Line_50", "Line_23200_Specify"] Textual,
    line_23210 = Field ["Line_51", "Amount"] Amount,
-   line_23300_sum = Field ["Line_52", "Line_23300_Amount1"] Amount,
-   line_23300_cont = Field ["Line_52", "Line_23300_Amount2"] Amount,
+   line_23300_sum = SubCalculation{calculation = Field ["Line_52", "Line_23300_Amount1"] Amount,
+                                   result = Field ["Line_52", "Line_23300_Amount2"] Amount},
    line_23400_NetBeforeAdjust = Field ["Line_53", "Line_23400_Amount"] Amount,
    line_23500_SocialBenefits = Field ["Line_54", "Line_23500_Amount"] Amount,
    line_23600_NetIncome = Field ["Line_55", "Line_23600_Amount"] Amount}
@@ -142,8 +143,8 @@ step4Fields = Step4{
    line_25500_NorthernDeductions = Field ["Line_64", "Line_25500_Amount"] Amount,
    line_25600_AdditionalDeductions_Amount = Field ["Line_65", "Line_25600_Amount"] Amount,
    line_25600_AdditionalDeductions_Specify = Field ["Line_65", "Line_25600_Specify"] Textual,
-   line_25700_AddLines_sum = Field ["Line_66", "Line_25700_Amount1"] Amount,
-   line_25700_AddLines_cont = Field ["Line_66", "Line_25700_Amount2"] Amount,
+   line_25700_AddLines_sum = SubCalculation{calculation = Field ["Line_66", "Line_25700_Amount1"] Amount,
+                                            result = Field ["Line_66", "Line_25700_Amount2"] Amount},
    line_26000_TaxableIncome = Field ["Line_67", "Line_26000_Amount"] Amount}
 
 partBFields = Page5PartB {
@@ -173,8 +174,8 @@ page6Fields = Page6 {
    line31285 = Field ["Line_95", "Amount"] Amount,
    line31300 = Field ["Line_96", "Line20Amount"] Amount,
    line31350 = Field ["Line_97", "Amount"] Amount,
-   line94_sum = Field ["Line_98", "Amount1"] Amount,
-   line94_cont = Field ["Line_98", "Amount2"] Amount,
+   line94_sum = SubCalculation{calculation = Field ["Line_98", "Amount1"] Amount,
+                               result = Field ["Line_98", "Amount2"] Amount},
    line31400 = Field ["Line_99", "Line21Amount"] Amount,
    line96 = Field ["Line_100", "Amount1"] Amount,
    line31600 = Field ["Line_101", "Line22Amount"] Amount,
@@ -186,8 +187,8 @@ page6Fields = Page6 {
    line32600 = Field ["Line_107", "Line27Amount"] Amount,
    line104 = Field ["Line_108", "Amount1"] Amount,
    medical_expenses = page6MedicalExpensesFields,
-   line33200_sum = Field ["Line_114", "Line32Amount1"] Amount,
-   line33200_cont = Field ["Line_114", "Line32Amount2"] Amount,
+   line33200_sum = SubCalculation{calculation = Field ["Line_114", "Line32Amount1"] Amount,
+                                  result = Field ["Line_114", "Line32Amount2"] Amount},
    line33500 = Field ["Line_115", "Line33Amount"] Amount,
    line112 = Field ["Line_116", "Line34Rate"] $ Constant 0.15 Percent,
    line33800 = Field ["Line_117", "Line35Amount"] Amount,
@@ -213,8 +214,8 @@ partCFields = Page7PartC {
    line119 = Field ["Line_123", "Line49Amount"] Amount,
    line40425 = Field ["Line_124", "Line50Amount"] Amount,
    line40427 = Field ["Line_125", "Line51Amount"] Amount,
-   line122_sum = Field ["Line_126", "Line52Amount1"] Amount,
-   line122_cont = Field ["Line_126", "Line52Amount2"] Amount,
+   line122_sum = SubCalculation{calculation = Field ["Line_126", "Line52Amount1"] Amount,
+                                result = Field ["Line_126", "Line52Amount2"] Amount},
    line42900 = Field ["Line_127", "Amount"] Amount,
    line124 = Field ["Line_128", "Amount"] Amount,
    line125 = Field ["Line_129", "Amount"] Amount,
@@ -229,8 +230,8 @@ partCFields = Page7PartC {
    line41200 = Field ["Line_137", "Line58Amount"] Amount,
    line41300 = Field ["Line_138", "Line41300", "Line59Amount1"] Amount,
    line41400 = Field ["Line_138", "Line59Amount2"] Amount,
-   line41600_sum = Field ["Line_139", "Fill1"] Amount,
-   line41600_cont = Field ["Line_139", "Fill2"] Amount,
+   line41600_sum = SubCalculation{calculation = Field ["Line_139", "Fill1"] Amount,
+                                  result = Field ["Line_139", "Fill2"] Amount},
    line41700 = Field ["Line_140", "Line61Amount"] Amount,
    line41500 = Field ["Line_141", "Line62Amount"] Amount,
    line41800 = Field ["Line_142", "Line63Amount"] Amount,
@@ -260,15 +261,15 @@ page8step6Fields = ON.page8step6Fields {
    line_43500_totalpayable = Field ["Line_149", "Line_42000_Amount"] Amount,
    line_43700_Total_income_tax_ded = Field ["Line_150", "Line_43700_Amount"] Amount,
    line_43800_TaxTransferQC = Field ["Line_151", "Line_43800_Amount"] Amount,
-   line_43850_diff = Field ["Line_152", "Line_43900_Amount1"] Amount,
-   line_43850_cont = Field ["Line_152", "Line_43900_Amount2"] Amount,
+   line_43850_diff = SubCalculation{calculation = Field ["Line_152", "Line_43900_Amount1"] Amount,
+                                    result = Field ["Line_152", "Line_43900_Amount2"] Amount},
    line_42900_copy = Field ["Line_153", "Line_43900_Amount2"] Amount,
    line_44000 = Field ["Line_153", "Line_44000_Amount"] Amount,
    line_44800_CPPOverpayment = NoField,
    line_45000_EIOverpayment = Field ["Line_45000_A_EIOverpayment", "Line_45000_Amount"] Amount,
    line_31210_copy = Field ["Line_B_Schedule1Amount", "Line_B_Amount"] Amount,
-   line_45100_diff = Field ["Line_156", "Line_45100_Amount1"] Amount,
-   line_45100_cont = Field ["Line_156", "Line_45100_Amount2"] Amount,
+   line_45100_diff = SubCalculation{calculation = Field ["Line_156", "Line_45100_Amount1"] Amount,
+                                    result = Field ["Line_156", "Line_45100_Amount2"] Amount},
    line_45200_MedicalExpense = Field ["Line_157", "Line_45200_Amount"] Amount,
    line_45300_CWB = Field ["Line_158", "Line_45300_Amount"] Amount,
    line_45350_CTC = Field ["Line_159", "Line_45300_Amount"] Amount,
@@ -282,8 +283,8 @@ page8step6Fields = ON.page8step6Fields {
    line_47557 = Field ["Line_166", "Amount"] Amount,
    line_47600_TaxPaid = Field ["Line_167", "Line_47600_Amount"] Amount,
    line_47900_ProvTerrCredits = NoField,
-   line_48200_sum = Field ["Line_168", "Line_48200_Amount1"] Amount,
-   line_48200_cont = Field ["Line_168", "Line_48200_Amount2"] Amount,
+   line_48200_sum = SubCalculation{calculation = Field ["Line_168", "Line_48200_Amount1"] Amount,
+                                   result = Field ["Line_168", "Line_48200_Amount2"] Amount},
    line164_Refund_or_BalanceOwing = Field ["Line_169", "Refund_or_BalanceOwing_Amount"] Amount}
 
 taxPreparerFields = ON.taxPreparerFields {
