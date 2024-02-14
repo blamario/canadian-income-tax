@@ -3,7 +3,7 @@
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Tax.Canada.T1.FieldNames.NB (t1Fields, page2Fields) where
+module Tax.Canada.T1.FieldNames.NB where
 
 import Rank2 qualified
 
@@ -12,20 +12,10 @@ import Tax.Canada.Shared (subCalculationFields)
 import Tax.Canada.T1.Types
 import Tax.Canada.T1.Types qualified as Page8 (Page8(..))
 import Tax.Canada.T1.FieldNames.AB qualified as AB
+import Tax.Canada.T1.FieldNames.BC qualified as BC
 
 t1Fields :: T1 FieldConst
 t1Fields = AB.t1Fields{
-   page2 = within "form1" . within "Page2" Rank2.<$> page2Fields,
-   page8 = within "form1" . within "Page8" Rank2.<$> page8Fields}
-
-page2Fields = AB.page2Fields {
-   cai = NoField}
-
-page8Fields = AB.page8Fields {
-   Page8.step6_RefundOrBalanceOwing = page8step6Fields}
-
-page8step6Fields = AB.page8step6Fields {
-   line_47600_TaxPaid = Field ["Line161", "Line_47600_Amount"] Amount,
-   line_47900_ProvTerrCredits = Field ["Line162", "Line_47900_Amount"] Amount,
-   line_48200_sum = subCalculationFields "Line163" ["Line_48200_Amount1"] ["Line_48200_Amount2"],
-   line164_Refund_or_BalanceOwing = Field ["Line164", "Amount"] Amount}
+   page2 = within "form1" . within "Page2" . within "Return-pg2" Rank2.<$> BC.page2Fields,
+   page3 = within "form1" . within "Page3" . within "Return-pg3" Rank2.<$> BC.page3Fields,
+   page8 = within "form1" . within "Page8" . within "Return-pg8" Rank2.<$> BC.page8Fields}

@@ -54,6 +54,8 @@ fixPage3 = fixEq $ \page@Page3{selfEmployment=SelfEmploymentIncome{..}, ..}-> pa
                       line_12700_TaxableCapitalGains,
                       line_12800_Amount,
                       line_12900_RRSPIncome,
+                      line_12905_FHSAIncome,
+                      line_12906_OtherFHSAIncome,
                       line_13000_OtherIncome,
                       line_13010_TaxableScholarship],
    line_25_sum = fixSubCalculation $
@@ -75,6 +77,7 @@ fixPage4 t1 = fixEq $ \page@Page4{..}-> page{
    line_23300_sum = fixSubCalculation $
                     totalOf [line_20700_RPPDeduction,
                              line_20800_RRSPDeduction,
+                             line_20805_FHSADeduction,
                              line_21000_SplitPensionDeduction,
                              line_21200_Dues,
                              line_21300_UCCBRepayment,
@@ -90,8 +93,7 @@ fixPage4 t1 = fixEq $ \page@Page4{..}-> page{
                              line_22400_XplorationDevExpenses,
                              line_22900_OtherEmployExpenses,
                              line_23100_ClergyResDeduction,
-                             line_23200_OtherDeductions,
-                             line_23210],
+                             line_23200_OtherDeductions],
    line_23400_NetBeforeAdjust = nonNegativeDifference line_15000_TotalIncome_2 line_23300_sum.result,
    line_23600_NetIncome = nonNegativeDifference line_23400_NetBeforeAdjust line_23500_SocialBenefits}
 
@@ -245,6 +247,7 @@ fixPage8Step6 t1 = fixEq $ \step@Page8Step6{..}-> step{
                              line_45200_MedicalExpense,
                              line_45300_CWB,
                              line_45350_CTC,
+                             line_45355_MHRTC,
                              line_45400_InvestmentTaxCredit,
                              line_45600_TrustTaxCredit,
                              line_45700_GST_HST_Rebate,

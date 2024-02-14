@@ -82,7 +82,7 @@ properties [dataRootMap, fdfT1Map, fdf428Map, fdf479Map] =
         testProperty "Federal+ON428+ON479" (checkFormIdempotent ON.returnFields ON.fixReturns)]],
     testGroup "Roundtrip" [
       testGroup "T1" [
-        testProperty ("T1 for " <> name) (checkFormFields fields $ List.lookup (prefix <> "-r-fill-22e.fdf") fdfT1Map)
+        testProperty ("T1 for " <> name) (checkFormFields fields $ List.lookup (prefix <> "-r-fill-23e.fdf") fdfT1Map)
         | (name, prefix, fields) <- provincesT1],
       testProperty "Schedule 6" (checkFormFields schedule6Fields $ List.lookup "5000-s6-fill-22e.fdf" dataRootMap),
       testProperty "Schedule 9" (checkFormFields schedule9Fields $ List.lookup "5000-s9-fill-22e.fdf" dataRootMap),
@@ -95,13 +95,13 @@ properties [dataRootMap, fdfT1Map, fdf428Map, fdf479Map] =
         | (name, prefix, checkFields) <- provinces479]],
     testGroup "Load mismatch" [
       testProperty ("Load T1 for " <> p1name <> " from FDF for " <> p2name) $ property $ assert
-        $ any (isLeft  . FDF.load p1fields) $ List.lookup (p2fdfPrefix <> "-r-fill-22e.fdf") fdfT1Map
+        $ any (isLeft  . FDF.load p1fields) $ List.lookup (p2fdfPrefix <> "-r-fill-23e.fdf") fdfT1Map
       | (p1name, _, p1fields) <- provincesT1,
         (p2name, p2fdfPrefix, _) <- provincesT1,
         p1name /= p2name,
         not (p1name == "New Brunswick & PEI" && p2name == "Nunavut")]]
-  where provincesT1 = [("New Brunswick & PEI", "5000", NB.t1Fields),
-                       ("Newfoundland and Labrador", "5001", NL.t1Fields),
+  where provincesT1 = [("Newfoundland and Labrador", "5001", NL.t1Fields),
+                       ("New Brunswick & PEI", "5002", NB.t1Fields),
                        ("Quebec", "5005", QC.t1Fields),
                        ("Ontario", "5006", ON.t1Fields),
                        ("British Columbia", "5010", BC.t1Fields),
