@@ -1,4 +1,5 @@
 {-# LANGUAGE ImportQualifiedPost #-}
+{-# LANGUAGE NumericUnderscores #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Tax.Canada.Province.BC.BC479.FieldNames (bc479Fields) where
@@ -8,11 +9,12 @@ import Rank2 qualified
 
 import Tax.Canada.Province.BC.BC479.Types
 import Tax.Canada.Shared (subCalculationFields)
-import Tax.FDF (Entry (Amount, Checkbox, Textual), FieldConst (Field), within)
+import Tax.FDF (Entry (Amount, Checkbox, Constant, Count, Percent, Textual), FieldConst (Field), within)
 
 bc479Fields = within "form1" Rank2.<$> BC479 {
    page1 = within "Page1" Rank2.<$> page1Fields,
-   page2 = within "Page2" Rank2.<$> page2Fields}
+   page2 = within "Page2" Rank2.<$> page2Fields,
+   page3 = within "Page3" Rank2.<$> page3Fields}
 
 page1Fields = Page1 {
    line1_netIncome_self = Field ["Chart", "Column1", "Line1", "Col1_Amount"] Amount,
@@ -49,8 +51,27 @@ page2Fields = Page2 {
    line22_sum = subCalculationFields "BCVCTC" ["Line22", "I1", "Amount1"] ["Line22", "I2", "Amount2"],
    line_60510_fromT88 = Field ["BCMETC", "Line23", "Amount"] Amount,
    line_60530_fromT88 = Field ["BCMETC", "Line24", "Amount"] Amount,
-   line_60550_training = Field ["BCTTC", "Line25", "Amount"] Amount,
-   line_60560_training = Field ["BCTTC", "Line26", "Amount"] Amount,
-   line_60570_ships = Field ["BCTTC", "Line27", "Amount"] Amount,
-   line28_sum = subCalculationFields "BCTTC" ["Line28", "I1", "Amount1"] ["Line28", "I2", "Amount2"],
-   line29_credits = Field ["BCTTC", "Line29", "Amount"] Amount}
+   line_60545_buildings = Field ["BCCBTC", "Line25", "I1", "Amount1"] Amount,
+   line_60546_partnership = Field ["BCCBTC", "Line26", "I1", "Amount1"] Amount,
+   line27_sum = subCalculationFields "BCCBTC" ["Line27", "I1", "Amount1"] ["Line27", "I2", "Amount2"],
+   line_60550_training = Field ["BCTTC", "Line28", "Amount"] Amount,
+   line_60560_training = Field ["BCTTC", "Line29", "Amount"] Amount,
+   line_60570_ships = Field ["BCTTC", "Line30", "Amount"] Amount,
+   line31_sum = subCalculationFields "BCTTC" ["Line31", "I1", "Amount1"] ["Line31", "I2", "Amount2"],
+   line32_credits = Field ["BCTTC", "Line32", "Amount"] Amount}
+
+page3Fields = Page3 {
+   line33_copy = Field ["Line33", "Amount"] Amount,
+   tenancy_months1 = Field ["Table", "Row1", "Numberofmonths"] Count,
+   tenancy_months2 = Field ["Table", "Row2", "Numberofmonths"] Count,
+   rent_paid1 = Field ["Table", "Row1", "RentPaid"] Amount,
+   rent_paid2 = Field ["Table", "Row2", "Rentpaid"] Amount,
+   line_60575_sum = Field ["Line34", "Amount"] Count,
+   line35_ceiling = Field ["Line35", "Amount_ReadOnly"] $ Constant 400 Amount,
+   line36_income_copy = Field ["Line36", "Amount"] Amount,
+   line37_threshold = Field ["Line37", "AmountRead_Only"] $ Constant 60_000 Amount,
+   line38_difference = Field ["Line38", "Amount"] Amount,
+   line39_rate = Field ["Line39", "PercentAmount_ReadOnly"] $ Constant 0.02 Percent,
+   line40_fraction = subCalculationFields "Line40" ["L1", "Amount"] ["L2", "Amount2"],
+   line_60576_difference = subCalculationFields "Line41" ["I1", "Amount1"] ["I2", "Amount2"],
+   line42_credits = Field ["Line42", "Amount"] Amount}

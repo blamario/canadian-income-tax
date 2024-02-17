@@ -68,7 +68,7 @@ fixReturns =
                                           page8 =
                                           page8{step6_RefundOrBalanceOwing =
                                                 page8step6{T1.line_47900_ProvTerrCredits =
-                                                           bc479.page2.line29_credits}}}},
+                                                           bc479.page3.line42_credits}}}},
                      bc428 = fixBC428
                              bc428{BC.page1 =
                                    page1{BC.Page1.partA =

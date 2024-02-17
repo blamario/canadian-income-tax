@@ -13,7 +13,7 @@ fixEq f a
    where a' = f a
 
 -- | Sum the list of arguments; return 'Nothing' iff all items are 'Nothing'.
-totalOf :: [Maybe Centi] -> Maybe Centi
+totalOf :: Num a => [Maybe a] -> Maybe a
 totalOf = fmap sum . nonEmpty . mapMaybe id
 
 -- | Subtraction under 'Maybe'

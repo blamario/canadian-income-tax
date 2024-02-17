@@ -24,7 +24,8 @@ import Tax.Canada.Shared (SubCalculation)
 
 data BC479 line = BC479 {
    page1 :: Page1 line,
-   page2 :: Page2 line}
+   page2 :: Page2 line,
+   page3 :: Page3 line}
 
 data Page1 line = Page1 {
    line1_netIncome_self :: line Centi,
@@ -61,20 +62,39 @@ data Page2 line = Page2 {
    line22_sum :: SubCalculation line,
    line_60510_fromT88 :: line Centi,
    line_60530_fromT88 :: line Centi,
+   line_60545_buildings :: line Centi,
+   line_60546_partnership :: line Centi,
+   line27_sum :: SubCalculation line,
    line_60550_training :: line Centi,
    line_60560_training :: line Centi,
    line_60570_ships :: line Centi,
-   line28_sum :: SubCalculation line,
-   line29_credits :: line Centi}
+   line31_sum :: SubCalculation line,
+   line32_credits :: line Centi}
+
+data Page3 line = Page3 {
+   line33_copy :: line Centi,
+   tenancy_months1 :: line Word,
+   tenancy_months2 :: line Word,
+   rent_paid1 :: line Centi,
+   rent_paid2 :: line Centi,
+   line_60575_sum :: line Word,
+   line35_ceiling :: line Centi,
+   line36_income_copy :: line Centi,
+   line37_threshold :: line Centi,
+   line38_difference :: line Centi,
+   line39_rate :: line Rational,
+   line40_fraction :: SubCalculation line,
+   line_60576_difference :: SubCalculation line,
+   line42_credits :: line Centi}
 
 $(foldMap
    (\t-> concat <$> sequenceA [
        [d|
-           deriving instance (Show (line Bool), Show (line Centi),
+           deriving instance (Show (line Bool), Show (line Centi), Show (line Word),
                               Show (line Rational), Show (line Text)) => Show ($(TH.conT t) line)
-           deriving instance (Eq (line Bool), Eq (line Centi),
+           deriving instance (Eq (line Bool), Eq (line Centi), Eq (line Word),
                               Eq (line Rational), Eq (line Text)) => Eq ($(TH.conT t) line)
        |],
        Rank2.TH.deriveAll t,
        Transformation.Shallow.TH.deriveAll t])
-   [''BC479, ''Page1, ''Page2])
+   [''BC479, ''Page1, ''Page2, ''Page3])

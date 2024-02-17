@@ -6,11 +6,12 @@ module Tax.Canada.Province.BC.BC479.Fix (BC479, fixBC479) where
 
 import Tax.Canada.Province.BC.BC479.Types
 import Tax.Canada.Shared (fixSubCalculation, SubCalculation(result))
-import Tax.Util (fixEq, nonNegativeDifference, totalOf)
+import Tax.Util (fixEq, fractionOf, nonNegativeDifference, totalOf)
 
 fixBC479 :: BC479 Maybe -> BC479 Maybe
 fixBC479 = fixEq $ \bc479@BC479{..}-> BC479{page1 = fixPage1 page1,
-                                            page2 = fixPage2 bc479 page2}
+                                            page2 = fixPage2 bc479 page2,
+                                            page3 = fixPage3 bc479 page3}
 
 fixPage1 :: Page1 Maybe -> Page1 Maybe
 fixPage1 = fixEq $ \page@Page1{..}-> page{
@@ -32,5 +33,16 @@ fixPage2 :: BC479 Maybe -> Page2 Maybe -> Page2 Maybe
 fixPage2 bc479 = fixEq $ \page2@Page2{..}-> page2{
    line16_copy = bc479.page1.line15_sum,
    line22_sum = fixSubCalculation $ totalOf [line17_venture, line_60490_shares, line_60495_shares],
-   line28_sum = fixSubCalculation $ totalOf [line_60550_training, line_60560_training, line_60570_ships],
-   line29_credits = totalOf [line16_copy, line22_sum.result, line_60510_fromT88, line28_sum.result]}
+   line27_sum = fixSubCalculation $ totalOf [line_60545_buildings, line_60546_partnership],
+   line31_sum = fixSubCalculation $ totalOf [line_60550_training, line_60560_training, line_60570_ships],
+   line32_credits = totalOf [line16_copy, line22_sum.result, line27_sum.result, line_60510_fromT88, line31_sum.result]}
+
+fixPage3 :: BC479 Maybe -> Page3 Maybe -> Page3 Maybe
+fixPage3 bc479 = fixEq $ \page3@Page3{..}-> page3{
+   line33_copy = bc479.page2.line32_credits,
+   line_60575_sum = totalOf [tenancy_months1, tenancy_months2],
+   line36_income_copy = bc479.page1.line6_sum,
+   line38_difference = nonNegativeDifference line36_income_copy line37_threshold,
+   line40_fraction = fixSubCalculation $ line39_rate `fractionOf` line38_difference,
+   line_60576_difference = fixSubCalculation $ nonNegativeDifference line35_ceiling line40_fraction.result,
+   line42_credits = totalOf [line33_copy, line_60576_difference.result]}

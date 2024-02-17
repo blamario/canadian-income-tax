@@ -28,11 +28,6 @@ data ON479 line = ON479 {
 
 data Page1 line = Page1 {
    line_63050_childcare :: line Centi,
-   line_63051_staycationBox :: line Bool,
-   line_63052_staycationCost :: line Centi,
-   line_63052_fraction :: line Centi,
-   line_63055_copy :: line Centi,
-   line_63055_fraction :: line Centi,
    line4_homecare_copy :: line Centi,
    line5_allowable :: line Rational,
    line6_fraction :: line Centi,
@@ -50,8 +45,6 @@ data Page1 line = Page1 {
 
 data Page2 line = Page2 {
    line17_copy :: line Centi,
-   line_63105_renovation :: line Centi,
-   line_63105_fraction :: line Centi,
    line_63110_contributions :: line Centi,
    line_63110_credit :: line Centi,
    line_63220_fromT1221 :: line Centi,

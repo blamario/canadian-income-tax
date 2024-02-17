@@ -91,7 +91,7 @@ properties [dataRootMap, fdfT1Map, fdf428Map, fdf479Map] =
         testProperty ("Form 428 for " <> name) (checkFields $ List.lookup (prefix <> "-c-fill-23e.fdf") fdf428Map)
         | (name, prefix, checkFields) <- provinces428],
       testGroup "479" [
-        testProperty ("Form 479 for " <> name) (checkFields $ List.lookup (prefix <> "-tc-fill-22e.fdf") fdf479Map)
+        testProperty ("Form 479 for " <> name) (checkFields $ List.lookup (prefix <> "-tc-fill-23e.fdf") fdf479Map)
         | (name, prefix, checkFields) <- provinces479]],
     testGroup "Load mismatch" [
       testProperty ("Load T1 for " <> p1name <> " from FDF for " <> p2name) $ property $ assert
@@ -137,6 +137,7 @@ checkFormFields fields (Just fdf) = property $ do
       keyHeads = List.nub $ take 2 <$> formKeys
       noCheckbox :: [[Text]] -> [[Text]]
       noCheckbox = filter $ not . or . ([isSuffixOf "Checkbox", isInfixOf "CheckBox",
+                                         isInfixOf "Footnote", isInfixOf "address", isInfixOf "Nameof",
                                          (== "QuestionA"), (== "Note1"), (== "Note2")] <*>)
   -- annotateShow fdf'
   FDF.load fields fdf' === Right form
