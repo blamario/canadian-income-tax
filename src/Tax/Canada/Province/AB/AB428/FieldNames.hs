@@ -26,10 +26,10 @@ page1Fields = Page1 {
 
 page1PartAFields = Page1PartA {
    column1 = within "Column1" Rank2.<$> taxIncomeBracketFields       0 0.10      0,
-   column2 = within "Column2" Rank2.<$> taxIncomeBracketFields 134_238 0.12 13_423.80,
-   column3 = within "Column3" Rank2.<$> (taxIncomeBracketFields 161_086 0.13 16_645.56){rate = Field ["LIne5", "Percent"] $ Constant 0.13 Percent},
-   column4 = within "Column4" Rank2.<$> taxIncomeBracketFields 214_781 0.14 23_625.91,
-   column5 = within "Column5" Rank2.<$> taxIncomeBracketFields 322_171 0.15 38_660.51}
+   column2 = within "Column2" Rank2.<$> taxIncomeBracketFields 142_292 0.12 14_229.20,
+   column3 = within "Column3" Rank2.<$> (taxIncomeBracketFields 170_751 0.13 17_644.28){rate = Field ["LIne5", "Percent"] $ Constant 0.13 Percent},
+   column4 = within "Column4" Rank2.<$> taxIncomeBracketFields 227_668 0.14 25_043.49,
+   column5 = within "Column5" Rank2.<$> taxIncomeBracketFields 341_502 0.15 40_980.25}
 
 taxIncomeBracketFields :: Centi -> Rational -> Centi -> TaxIncomeBracket FieldConst
 taxIncomeBracketFields threshold rate baseTax = TaxIncomeBracket {
@@ -45,12 +45,12 @@ page1PartBFields = Page1PartB {
    line9_basic = Field ["Line9", "Amount"] Amount,
    line10_age = Field ["Line10", "Amount"] Amount,
    spouseAmount = within "Line11to13" Rank2.<$> BaseCredit{
-       baseAmount = Field ["Line11", "Amount_Fixed"] $ Constant 19_814 Amount,
+       baseAmount = Field ["Line11", "Amount_Fixed"] $ Constant 21_003 Amount,
        reduction = Field ["Line12", "Amount"] Amount,
        difference = Field ["Line13", "Amount1"] Amount,
        cont = Field ["Line13", "Amount2"] Amount},
    dependantAmount = within "Line14to16" Rank2.<$> BaseCredit{
-       baseAmount = Field ["Line14", "Amount_Fixed"] $ Constant 19_814 Amount,
+       baseAmount = Field ["Line14", "Amount_Fixed"] $ Constant 21_003 Amount,
        reduction = Field ["Line15", "Amount"] Amount,
        difference = Field ["Line16", "Amount1"] Amount,
        cont = Field ["Line16", "Amount2"] Amount},
