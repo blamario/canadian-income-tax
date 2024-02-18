@@ -129,7 +129,7 @@ fixSchedule6 t1spouse t1  =
       partB_self = fixPartBColumn t1 partB_self,
       partB_spouse = maybe id fixPartBColumn t1spouse partB_spouse,
       line13_sum = totalOf [partB_self.line_38110_difference, partB_spouse.line_38110_difference],
-      line14_least = max 14_336 <$>
+      line14_least = min 15_239 <$>
                      if or ((<) <$> page2.partA_self.line_38108_sum <*> page2.partA_spouse.line_38108_sum)
                      then min page2.partA_self.line_38108_sum partB_self.line_38110_difference
                      else min page2.partA_spouse.line_38108_sum partB_spouse.line_38110_difference,
@@ -139,10 +139,10 @@ fixSchedule6 t1spouse t1  =
          line16_copy = page2.line6_sum,
          line18_difference = nonNegativeDifference line16_copy line17_threshold,
          line20_fraction = line19_rate `fractionOf` line18_difference,
-         line21_ceiling = if eitherEligible then Just 2_461 else Just 1_428,
-         line22_least = max line20_fraction line21_ceiling,
+         line21_ceiling = if eitherEligible then Just 2_616 else Just 1_518,
+         line22_least = min line20_fraction line21_ceiling,
          line23_copy = page3.line15_difference,
-         line24_threshold = if eitherEligible then Just 26_805 else Just 23_495,
+         line24_threshold = if eitherEligible then Just 28_494 else Just 24_975,
          line25_difference = nonNegativeDifference line23_copy line24_threshold,
          line27_fraction = fixSubCalculation $ line26_rate `fractionOf` line25_difference,
          line28_difference = nonNegativeDifference line22_least line27_fraction.result},
@@ -150,9 +150,9 @@ fixSchedule6 t1spouse t1  =
          line29_copy = page2.partA_self.line_38108_sum,
          line31_difference = nonNegativeDifference line29_copy line30_threshold,
          line33_fraction = line32_rate `fractionOf` line31_difference,
-         line34_capped = min 737 <$> line33_fraction,
+         line34_capped = min 784 <$> line33_fraction,
          line35_copy = page3.line15_difference,
-         line36_threshold = if eitherEligible then Just 43_210 else Just 33_018,
+         line36_threshold = if eitherEligible then Just 45_932 else Just 35_098,
          line37_difference = nonNegativeDifference line35_copy line36_threshold,
          line38_rate = if or page2.questions.line_38104 then Just 0.075 else Just 0.15,
          line39_fraction = fixSubCalculation $ line38_rate `fractionOf` line37_difference,
