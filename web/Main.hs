@@ -67,11 +67,12 @@ main = scotty 3000 $ do
         Right fdfs -> case completeForms province (Map.fromList fdfs) of
           Left err -> status unprocessableEntity422 >> text (fromString err)
           Right fdfs' -> do
-            let fdfBytes' = (Lazy.fromStrict . serialize <$>) <$> Map.toList fdfs'
-                replaceContent (key1, c) (key2, FileInfo name ty _) =
-                  assert (key1 == key2) $
-                  ((,) key1 . FileInfo name ty <$>) <$> fdf2pdf (dir </> fromUTF8 name) c
-            pdfFiles' <- liftIO $ sequenceA $ zipWith replaceContent fdfBytes' pdfFiles
+            let fdfBytes' = Lazy.fromStrict . serialize <$> fdfs'
+                replaceContent :: (Text, FileInfo Lazy.ByteString) -> IO (Either String (Text, FileInfo Lazy.ByteString))
+                replaceContent (key, FileInfo name ty _) = case Map.lookup key fdfBytes' of
+                  Just c -> ((,) key . FileInfo name ty <$>) <$> fdf2pdf (dir </> fromUTF8 name) c
+                  Nothing -> pure (Left $ "Unknown key " <> show key)
+            pdfFiles' <- liftIO $ traverse replaceContent pdfFiles
             case sequenceA pdfFiles' of
               Left err -> do
                 status internalServerError500 >> text (fromString err)
