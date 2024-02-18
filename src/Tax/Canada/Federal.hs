@@ -26,7 +26,7 @@ import Transformation.Shallow.TH qualified
 import Tax.Canada.Federal.Schedule6 qualified as Schedule6
 import Tax.Canada.Federal.Schedule6 (Schedule6, fixSchedule6, schedule6Fields)
 import Tax.Canada.Federal.Schedule9 (Schedule9(line23_sum), fixSchedule9, schedule9Fields)
-import Tax.Canada.Federal.Schedule11 (Schedule11(page1), Page1(line6_trainingClaim, line17_sum), fixSchedule11, schedule11Fields)
+import Tax.Canada.Federal.Schedule11 (Schedule11(page1), Page1(line5_trainingClaim, line17_sum), fixSchedule11, schedule11Fields)
 import Tax.Canada.T1 (fixT1, t1FieldsForProvince)
 import Tax.Canada.T1.Types (T1(page6, page8), Page6(line32300, line34900), Page8(step6_RefundOrBalanceOwing),
                             Page8Step6(line_45300_CWB, line_45350_CTC), LanguageOfCorrespondence, MaritalStatus)
@@ -57,7 +57,7 @@ fixFederalForms = fixEq  $ \Forms{t1, schedule6, schedule9, schedule11}-> Forms{
                  page8 = t1.page8{step6_RefundOrBalanceOwing =
                                   t1.page8.step6_RefundOrBalanceOwing{line_45300_CWB = schedule6.page4.step3.line42_sum <|>
                                                                                        schedule6.page4.step2.line28_difference,
-                                                                      line_45350_CTC = schedule11.page1.line6_trainingClaim}}},
+                                                                      line_45350_CTC = schedule11.page1.line5_trainingClaim}}},
    schedule6 = fixSchedule6 Nothing t1 schedule6,
    schedule9 = fixSchedule9 t1 schedule9,
    schedule11 = fixSchedule11 t1 schedule11}

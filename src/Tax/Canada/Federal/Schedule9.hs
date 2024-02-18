@@ -4,6 +4,7 @@
 {-# LANGUAGE InstanceSigs #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE NoFieldSelectors #-}
+{-# LANGUAGE NumericUnderscores #-}
 {-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
@@ -23,7 +24,7 @@ import Transformation.Shallow.TH qualified
 
 import Tax.Canada.T1.Types (T1)
 import Tax.Canada.T1.Types qualified
-import Tax.FDF (Entry (Amount), FieldConst (Field), within)
+import Tax.FDF (Entry (Amount, Constant), FieldConst (Field), within)
 import Tax.Util (fixEq, fractionOf, difference, nonNegativeDifference, totalOf)
 
 data Schedule9 line = Schedule9{
@@ -111,9 +112,9 @@ schedule9Fields = within "form1" . within "Page1" Rank2.<$> Schedule9 {
    line13_min = Field ["Line13", "Amount_Line13"] Amount,
    line14_difference = Field ["Line14", "Amount_Line14"] Amount,
    line_34210_ecological = Field ["Line15", "Amount"] Amount,
-   line16_difference = Field ["Line16", "Amount_Line16"] Amount,
+   line16_difference = Field ["Line16", "NumWithoutCurrency"] Amount,
    line17_copy = Field ["Line17", "Amount"] Amount,
-   line18_threshold = Field ["Line18", "Amount"] Amount,
+   line18_threshold = Field ["Line18", "Amount"] $ Constant 235_675 Amount,
    line19_difference = Field ["Line19", "Amount"] Amount,
    lineE_copy = Field ["AmountE", "Amount_Line14"] Amount,
    line20_min = Field ["Line20", "AmountF", "Amount"] Amount,

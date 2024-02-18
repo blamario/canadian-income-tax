@@ -112,7 +112,7 @@
 /T (Line16[0])
 /Kids [
 <<
-/T (Amount_Line16[0])
+/T (NumWithoutCurrency[0])
 /V ()
 >>]
 >> 
@@ -217,7 +217,7 @@
 /Kids [
 <<
 /T (Amount[0])
-/V ( 221,708.00)
+/V ( 235,675.00)
 >>]
 >> 
 <<
