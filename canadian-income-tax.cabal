@@ -38,6 +38,7 @@ library
         Tax.Canada.Province.NB
         Tax.Canada.Province.NL
         Tax.Canada.Province.ON
+        Tax.Canada.Province.PE
         Tax.Canada.Province.QC
         Tax.Canada.Territory.NT
         Tax.Canada.Territory.NU
@@ -57,6 +58,7 @@ library
         Tax.Canada.T1.FieldNames.NT
         Tax.Canada.T1.FieldNames.NU
         Tax.Canada.T1.FieldNames.ON
+        Tax.Canada.T1.FieldNames.PE
         Tax.Canada.T1.FieldNames.QC
         Tax.Canada.T1.FieldNames.YT
         Tax.Canada.T1.Fix

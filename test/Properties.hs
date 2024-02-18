@@ -14,6 +14,7 @@ import Tax.Canada.Province.MB qualified as MB
 import Tax.Canada.Province.NB qualified as NB
 import Tax.Canada.Province.NL qualified as NL
 import Tax.Canada.Province.ON qualified as ON
+import Tax.Canada.Province.PE qualified as PE
 import Tax.Canada.Province.QC qualified as QC
 import Tax.Canada.Territory.NT qualified as NT
 import Tax.Canada.Territory.NU qualified as NU
@@ -98,10 +99,10 @@ properties [dataRootMap, fdfT1Map, fdf428Map, fdf479Map] =
         $ any (isLeft  . FDF.load p1fields) $ List.lookup (p2fdfPrefix <> "-r-fill-23e.fdf") fdfT1Map
       | (p1name, _, p1fields) <- provincesT1,
         (p2name, p2fdfPrefix, _) <- provincesT1,
-        p1name /= p2name,
-        not (p1name == "New Brunswick & PEI" && p2name == "Nunavut")]]
+        p1name /= p2name]]
   where provincesT1 = [("Newfoundland and Labrador", "5001", NL.t1Fields),
-                       ("New Brunswick & PEI", "5002", NB.t1Fields),
+                       ("PEI", "5002", PE.t1Fields),
+                       ("New Brunswick", "5004", NB.t1Fields),
                        ("Quebec", "5005", QC.t1Fields),
                        ("Ontario", "5006", ON.t1Fields),
                        ("British Columbia", "5010", BC.t1Fields),
@@ -138,7 +139,7 @@ checkFormFields fields (Just fdf) = property $ do
       noCheckbox :: [[Text]] -> [[Text]]
       noCheckbox = filter $ not . or . ([isSuffixOf "Checkbox", isInfixOf "CheckBox",
                                          isInfixOf "Footnote", isInfixOf "address", isInfixOf "Nameof",
-                                         (== "QuestionA"), (== "Note1"), (== "Note2")] <*>)
+                                         (== "QuestionA"), (== "Note1"), (== "Note2"), (== "CAI-2023")] <*>)
   -- annotateShow fdf'
   FDF.load fields fdf' === Right form
   List.sort (noCheckbox formKeys) === List.sort (noCheckbox $ filter (\x-> any (`List.isPrefixOf` x) keyHeads) fdfKeys)

@@ -23,6 +23,7 @@ import Transformation.Shallow.TH qualified
 
 import Tax.Canada.Federal qualified as Federal
 import Tax.Canada.Federal (Forms(t1), fixFederalForms)
+import Tax.Canada.Federal.Schedule9 qualified as Schedule9
 import Tax.Canada.T1.Types qualified as T1
 import Tax.Canada.T1.Types (T1 (T1, page7, page8), Page7(Page7, step6_RefundOrBalanceOwing),
                             Page8(Page8, step6_RefundOrBalanceOwing))
@@ -55,7 +56,8 @@ Transformation.Shallow.TH.deriveAll ''Returns
 fixReturns :: Returns Maybe -> Returns Maybe
 fixReturns =
   fixEq $ \Returns{federal = ff@Federal.Forms{t1 = t1@T1{page7 = page7@Page7{step6_RefundOrBalanceOwing},
-                                                         page8 = page8@Page8{step6_RefundOrBalanceOwing = page8step6}}},
+                                                         page8 = page8@Page8{step6_RefundOrBalanceOwing = page8step6}},
+                                              schedule9},
                    on428 = on428@ON428{page1 = page1@ON.Page1{partB = partB1@ON.Page1PartB{spouseAmount}},
                                        page2 = page2@ON.Page2{ON.partB = partB2@ON.Page2PartB{ON.medicalExpenses},
                                                               ON.partC}},
@@ -81,7 +83,10 @@ fixReturns =
                             page2{ON.Page2.partB = partB2{ON.line32_interest = t1.page6.line31900,
                                                           ON.medicalExpenses =
                                                              medicalExpenses{
-                                                             netIncome = t1.page4.line_23600_NetIncome}},
+                                                             netIncome = t1.page4.line_23600_NetIncome},
+                                                          ON.donations = partB2.donations{
+                                                             ON.line47_base = schedule9.line13_min,
+                                                             ON.line48_base = schedule9.line14_difference}},
                                   ON.partC = partC{ON.line59_copy = t1.page7.partC_NetFederalTax.line40427}}},
                      on479}
 

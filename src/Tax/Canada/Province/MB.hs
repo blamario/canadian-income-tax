@@ -13,6 +13,7 @@ import Data.CAProvinceCodes (Code(MB))
 
 import Tax.Canada.Federal qualified as Federal
 import Tax.Canada.Federal (Forms(t1), fixFederalForms)
+import Tax.Canada.Federal.Schedule9 qualified as Schedule9
 import Tax.Canada.T1.Types qualified as T1
 import Tax.Canada.T1.Types (T1 (T1, page7, page8), Page7(Page7, step6_RefundOrBalanceOwing),
                             Page8(Page8, step6_RefundOrBalanceOwing))
@@ -37,7 +38,8 @@ type Returns = Product Federal.Forms MB428
 fixReturns :: Returns Maybe -> Returns Maybe
 fixReturns =
   fixEq $ \(Pair ff@Federal.Forms{t1 = t1@T1{page7 = page7@Page7{step6_RefundOrBalanceOwing},
-                                             page8 = page8@Page8{step6_RefundOrBalanceOwing = page8step6}}}
+                                             page8 = page8@Page8{step6_RefundOrBalanceOwing = page8step6}},
+                                  schedule9}
                  mb428@MB428{page1 = page1@MB.Page1{partA, partB = partB1@MB.Page1PartB{spouseAmount}},
                              page2 = page2@MB.Page2{MB.partB = partB2@MB.Page2PartB{MB.medicalExpenses}},
                              page3 = page3@MB.Page3{MB.partC}})
@@ -58,7 +60,10 @@ fixReturns =
                                                                 MB.medicalExpenses =
                                                                 medicalExpenses{
                                                                    expenses = t1.page6.medical_expenses.familyExpenses,
-                                                                   netIncome = t1.page4.line_23600_NetIncome}}},
+                                                                   netIncome = t1.page4.line_23600_NetIncome},
+                                                                MB.donations = partB2.donations{
+                                                                   MB.line54_base = schedule9.line13_min,
+                                                                   MB.line55_base = schedule9.line14_difference}}},
                                   MB.page3 =
                                   page3{MB.partC = partC{MB.line63_copy = t1.page7.partC_NetFederalTax.line40427}}})
 

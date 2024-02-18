@@ -1,21 +1,23 @@
 {-# LANGUAGE ImportQualifiedPost #-}
-{-# LANGUAGE DisambiguateRecordFields #-}
-{-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Tax.Canada.T1.FieldNames.NB where
 
 import Rank2 qualified
 
-import Tax.FDF (FieldConst (Field, NoField), Entry (..), within)
-import Tax.Canada.Shared (subCalculationFields)
+import Tax.FDF (FieldConst (Field), Entry (..), within)
 import Tax.Canada.T1.Types
-import Tax.Canada.T1.Types qualified as Page8 (Page8(..))
-import Tax.Canada.T1.FieldNames.AB qualified as AB
-import Tax.Canada.T1.FieldNames.BC qualified as BC
+import Tax.Canada.T1.FieldNames.PE qualified as PE
 
 t1Fields :: T1 FieldConst
-t1Fields = AB.t1Fields{
-   page2 = within "form1" . within "Page2" . within "Return-pg2" Rank2.<$> BC.page2Fields,
-   page3 = within "form1" . within "Page3" . within "Return-pg3" Rank2.<$> BC.page3Fields,
-   page8 = within "form1" . within "Page8" . within "Return-pg8" Rank2.<$> BC.page8Fields}
+t1Fields = PE.t1Fields{
+   page2 = within "form1" . within "Page2" Rank2.<$> page2Fields,
+   page8 = within "form1" . within "Page8" . within "Return-pg8" Rank2.<$> page8Fields}
+
+page2Fields = PE.page2Fields{
+   cai = Field ["CAI", "CAI_2024", "Tick_box"] Checkbox}
+
+page8Fields = PE.page8Fields {
+   line48400_Refund = Field ["Refund_or_Balance-Owing", "Line48400", "Line_48400_Amount"] Amount,
+   line48500_BalanceOwing = Field ["Refund_or_Balance-Owing", "Line48500", "Line_48500_Amount"] Amount}
