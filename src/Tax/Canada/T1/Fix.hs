@@ -2,6 +2,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE NumericUnderscores #-}
 {-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
@@ -106,7 +107,7 @@ fixPage5 t1 = fixEq $ \Page5{..}-> Page5{
 fixPage6 :: T1 Maybe -> Page6 Maybe -> Page6 Maybe
 fixPage6 t1 = fixEq $ \page@Page6{..}-> page{
    line82 = t1.page5.partB_FederalTaxCredits.line_81,
-   line31260 = minimum [Just 1287,
+   line31260 = minimum [Just 1368,
                         totalOf [t1.page3.line_10100_EmploymentIncome, t1.page3.line_10400_OtherEmploymentIncome]],
    line94_sum = fixSubCalculation $
                 totalOf [line30800,
@@ -174,13 +175,20 @@ fixPage5PartA t1 = fixEq $ \part@Page5PartA{..}-> part{
 fixPage5PartB :: T1 Maybe -> Page5PartB Maybe -> Page5PartB Maybe
 fixPage5PartB t1 = fixEq $ \part@Page5PartB{..}-> part{
    line30000 = let income = fromMaybe 0 t1.page4.line_23600_NetIncome
-               in if income <= 155625 then Just 14398
-                  else if income >= 221708 then Just 12719
-                       else Just $ 14398 - (14398 - 12719) * (income - 155625) / (221708 - 155625),
-   line30100 = if any ((<= (1957 :: Year)) . dayPeriod) t1.page1.identification.dateBirth
-               then Just 12719
+                   threshold = 165_430
+                   ceiling = 235_675
+               in if income <= threshold then Just 15_000
+                  else if income >= ceiling then Just 13_520
+                       else Just $ 15_000 - (15_000 - 13_250) * (income - threshold) / (ceiling - threshold),
+   line30100 = if any ((<= (1958 :: Year)) . dayPeriod) t1.page1.identification.dateBirth
+               then let income = fromMaybe 0 t1.page4.line_23600_NetIncome
+                        threshold = 42_335
+                        ceiling = 98_309
+                    in if income <= threshold then Just 8396
+                       else if income >= ceiling then Just 0
+                            else Just (8396 - (income - threshold) * 0.15)
                else Nothing,
-   line30500 =  ((* 2350) . fromIntegral) <$> line30499_ChildrenNum,
+   line30500 =  ((* 2499) . fromIntegral) <$> line30499_ChildrenNum,
    line_81 = totalOf [line30000,
                       line30100,
                       line30300,
