@@ -202,7 +202,7 @@ fixMedicalExpenses t1 = fixEq $ \expenses@MedicalExpenses{familyExpenses, taxabl
                                                           taxableIncomeFraction, threshold}-> expenses{
    taxableIncome = t1.page4.line_23600_NetIncome,
    taxableIncomeFraction = (* 0.03) <$> taxableIncome,
-   threshold = min 2479 <$> taxableIncomeFraction,
+   threshold = min 2635 <$> taxableIncomeFraction,
    difference = nonNegativeDifference familyExpenses threshold}
 
 fixPage7PartC :: T1 Maybe -> Page7PartC Maybe -> Page7PartC Maybe
@@ -225,9 +225,10 @@ fixPage7PartC t1 = fixEq $ \part@Page7PartC{..}-> part{
    line40600 = nonNegativeDifference line129 line130,
    line41000 = case line40900
                of Just x
-                    | x <= 400 -> Just (x * 0.75)
-                    | x <= 750 -> Just ((x - 400) * 0.5 + 300)
-                    | otherwise-> Just ((x - 750) * 0.3333 + 475)
+                    | x <=  400 -> Just (x * 0.75)
+                    | x <=  750 -> Just ((x - 400) * 0.5 + 300)
+                    | x <= 1275 -> Just ((x - 750) * 0.3333 + 475)
+                    | otherwise -> Just 650
                   Nothing -> Nothing,
    line41600_sum = fixSubCalculation $ totalOf [line41000, line41200, line41400],
    line41700 = nonNegativeDifference line40600 line41600_sum.result,
