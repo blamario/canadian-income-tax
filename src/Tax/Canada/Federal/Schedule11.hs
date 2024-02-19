@@ -101,7 +101,7 @@ fixSchedule11 t1 = fixEq $ \Schedule11{page1 = page1@Page1{..}, page2 = page2@Pa
       line18_copy = line10_sum,
       line19_copy = line17_sum,
       line20_difference = difference line18_copy line19_copy,
-      line21_copy = line8_sum,
+      line21_copy = min 5000 <$> line8_sum,
       line22_copy = line16_min,
       line23_difference = nonNegativeDifference line21_copy line22_copy,
       line25_difference = nonNegativeDifference line20_difference line24_transferred}}
