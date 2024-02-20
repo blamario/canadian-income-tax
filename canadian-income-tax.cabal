@@ -30,6 +30,7 @@ library
         Tax.Canada
         Tax.Canada.Federal
         Tax.Canada.Federal.Schedule6
+        Tax.Canada.Federal.Schedule7
         Tax.Canada.Federal.Schedule9
         Tax.Canada.Federal.Schedule11
         Tax.Canada.Province.AB
