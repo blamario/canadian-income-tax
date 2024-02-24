@@ -49,6 +49,7 @@ data Options = Options {
    p428InputPath :: Maybe FilePath,
    p479InputPath :: Maybe FilePath,
    schedule6InputPath :: Maybe FilePath,
+   schedule7InputPath :: Maybe FilePath,
    schedule9InputPath :: Maybe FilePath,
    schedule11InputPath :: Maybe FilePath,
    outputPath :: FilePath,
@@ -62,6 +63,7 @@ optionsParser =
    <*> optional (OptsAp.strOption (long "428" <> metavar "<input 428 form file>"))
    <*> optional (OptsAp.strOption (long "479" <> metavar "<input 479 form file>"))
    <*> optional (OptsAp.strOption (long "s6" <> metavar "<input Schedule 6 form file>"))
+   <*> optional (OptsAp.strOption (long "s7" <> metavar "<input Schedule 7 form file>"))
    <*> optional (OptsAp.strOption (long "s9" <> metavar "<input Schedule 9 form file>"))
    <*> optional (OptsAp.strOption (long "s11" <> metavar "<input Schedule 11 form file>"))
    <*> OptsAp.strOption (short 'o' <> long "output" <> OptsAp.value "-" <> metavar "<output file or directory>")
@@ -91,7 +93,7 @@ readFDF inputPath = do
 
 process :: Options -> IO ()
 process Options{province, t1InputPath, p428InputPath, p479InputPath,
-                schedule6InputPath, schedule9InputPath, schedule11InputPath,
+                schedule6InputPath, schedule7InputPath, schedule9InputPath, schedule11InputPath,
                 outputPath, verbose} = do
    let inputFiles :: [(Text, FilePath)]
        inputFiles = sortOn fst $
@@ -99,6 +101,7 @@ process Options{province, t1InputPath, p428InputPath, p479InputPath,
                                (,) "428" <$> p428InputPath,
                                (,) "479" <$> p479InputPath,
                                (,) "Schedule6" <$> schedule6InputPath,
+                               (,) "Schedule7" <$> schedule7InputPath,
                                (,) "Schedule9" <$> schedule9InputPath,
                                (,) "Schedule11" <$> schedule11InputPath]
    inputs <- traverse (traverse readFDF) inputFiles :: IO [(Text, (Bool, Lazy.ByteString))]

@@ -98,6 +98,8 @@ export default function Uploads() {
           : ""}
          <dt>Schedule 6</dt>
          <dd><input type="file" name="Schedule 6 PDF" onChange={handleUpload("Schedule6")}/></dd>
+         <dt>Schedule 7</dt>
+         <dd><input type="file" name="Schedule 7 PDF" onChange={handleUpload("Schedule7")}/></dd>
          <dt>Schedule 9</dt>
          <dd><input type="file" name="Schedule 9 PDF" onChange={handleUpload("Schedule9")}/></dd>
          <dt>Schedule 11</dt>
