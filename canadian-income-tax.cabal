@@ -1,6 +1,6 @@
 cabal-version:      2.4
 name:               canadian-income-tax
-version:            2022.2.1
+version:            2023.0
 
 synopsis: Canadian income tax calculation
 
@@ -147,7 +147,7 @@ test-suite             properties
 
 test-suite             regression
     type:                exitcode-stdio-1.0
-    build-depends:       base >= 4.7 && < 5, bytestring,
+    build-depends:       base >= 4.7 && < 5, bytestring, containers,
                          directory ^>= 1.3, filepath ^>= 1.4,
                          forms-data-format,
                          rank2classes, deep-transformations,

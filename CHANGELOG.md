@@ -1,5 +1,18 @@
 # Revision history for `canadian-income-tax`
 
+## 2023.0
+
+* Updated for the 2023 tax return forms
+* Extended the T1 form support to all provinces and territories
+* Accepting the 428 forms for AB, BC, and MB beside the earlier ON support
+* Accepting the 479 forms for BC and ON
+* Accepting the federal schedule forms 6, 7, 9, and 11
+* Streamlined the command-line options
+* Allowed working directly with PDFs on the command line, with PDFTk installed
+* A simple web server with interactive UI
+* Refactored most of the code
+* Added test suites
+
 ## 2022.2.1
 
 * Fixed a duplicate field name
@@ -11,7 +24,7 @@
 ## 2022.2
 
 * Expanded README and renamed the executable
-* Added the Ontario tax form
+* Added the Ontario 428 tax form
 * Added `leastOf` and calculated line 31260 of `T1`
 * Fixed the credits left out from page 4 of `T1`
 * Tightened module exports
