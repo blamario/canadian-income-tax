@@ -12,6 +12,8 @@
 {-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE UndecidableInstances #-}
 
+-- | The federal income tax forms
+
 module Tax.Canada.Federal (Forms(..), fixFederalForms, formFieldsForProvince) where
 
 import Control.Applicative ((<|>))
@@ -36,6 +38,7 @@ import Tax.Canada.T1.Types (T1(page4, page6, page8),
 import Tax.FDF (Entry (Amount), FieldConst (Field), within)
 import Tax.Util (fixEq)
 
+-- | All supported federal forms
 data Forms line = Forms{
    t1 :: T1 line,
    schedule6 :: Schedule6 line,
@@ -55,8 +58,9 @@ deriving instance (Eq (line Bool), Eq (line Centi), Eq (line Word), Eq (line Tex
 Rank2.TH.deriveAll ''Forms
 Transformation.Shallow.TH.deriveAll ''Forms
 
+-- | Complete all the federal forms, also handling the inter-form field references.
 fixFederalForms :: Forms Maybe -> Forms Maybe
-fixFederalForms = fixEq  $ \Forms{t1, schedule6, schedule7, schedule9, schedule11}-> Forms{
+fixFederalForms = fixEq $ \Forms{t1, schedule6, schedule7, schedule9, schedule11}-> Forms{
    t1 = fixT1 t1{page4 = t1.page4{line_20800_RRSPDeduction = schedule7.page3.partC.line20_deduction},
                  page6 = t1.page6{line32300 = schedule11.page1.line17_sum, line34900 = schedule9.line23_sum},
                  page8 = t1.page8{step6_RefundOrBalanceOwing =
@@ -68,6 +72,7 @@ fixFederalForms = fixEq  $ \Forms{t1, schedule6, schedule7, schedule9, schedule1
    schedule9 = fixSchedule9 t1 schedule9,
    schedule11 = fixSchedule11 t1 schedule11}
 
+-- | The paths of all the fields in all federal forms, with the form key added as the head of every field path.
 formFieldsForProvince :: Province.Code -> Forms FieldConst
 formFieldsForProvince p = Forms{
   t1 = within "T1" Rank2.<$> t1FieldsForProvince p,

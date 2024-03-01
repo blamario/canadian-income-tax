@@ -13,7 +13,7 @@
 {-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE UndecidableInstances #-}
 
--- | The T1 form type, currently verified only for Ontario. Hopefully it covers the other provinces' T1s as well.
+-- | Common types and functions shared by multiple Canadian tax forms
 module Tax.Canada.Shared where
 
 import Control.Monad (guard, mfilter)
@@ -43,12 +43,15 @@ data MedicalExpenses line = MedicalExpenses {
    lesser :: line Centi,
    difference :: line Centi}
 
+-- | Used in several provincial forms to calculate a fixed amount of tax credit reduced by income.
 data BaseCredit line = BaseCredit {
    baseAmount :: line Centi,
    reduction :: line Centi,
    difference :: line Centi,
    cont :: line Centi}
 
+-- | A pair of form fields appearing next to each other at the same line, the right field value always a copy of the
+-- left one.
 data SubCalculation line = SubCalculation {
    calculation :: line Centi,
    result :: line Centi}

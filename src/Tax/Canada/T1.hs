@@ -1,6 +1,9 @@
 {-# LANGUAGE ImportQualifiedPost #-}
 {-# LANGUAGE LambdaCase #-}
 
+-- | The T1 forms look similar, but there are subtle differences between different provinces and
+-- territories. Therefore they share the same 'T1' form type and the same 'fixT1' completion function, but field
+-- paths are separately provided by 't1FieldsForProvince'.
 module Tax.Canada.T1 (fixT1, formPrefixForProvince, t1FieldsForProvince, module Tax.Canada.T1.Types) where
 
 import Data.CAProvinceCodes qualified as Province
@@ -19,6 +22,7 @@ import Tax.Canada.T1.FieldNames.ON qualified as ON
 import Tax.Canada.T1.FieldNames.QC qualified as QC
 import Tax.Canada.T1.FieldNames.YT qualified as YT
 
+-- | The distinct provincial prefix of the T1 form PDF file, such as @5006@ in @5006-r-fill-23e.pdf@ for Ontario
 formPrefixForProvince :: Province.Code -> String
 formPrefixForProvince = memoize $ \case
    Province.AB -> "5015"
@@ -35,6 +39,7 @@ formPrefixForProvince = memoize $ \case
    Province.SK -> "5015"
    Province.YT -> "5011"
 
+-- | T1 field paths for the given province
 t1FieldsForProvince :: Province.Code -> T1 FieldConst
 t1FieldsForProvince = memoize $ \case
    Province.AB -> AB.t1Fields

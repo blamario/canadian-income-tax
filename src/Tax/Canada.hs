@@ -17,6 +17,8 @@ import Tax.Canada.T1 (T1, fixT1, t1FieldsForProvince)
 import Tax.FDF (FDFs)
 import Tax.FDF qualified as FDF
 
+-- | Complete all FDF forms in the given map, keyed by identifiers (@T1@, @428@, @Schedule9@, etc). The inter-form
+-- field references are resolved as well.
 completeForms :: Province.Code -> FDFs -> Either String FDFs
 completeForms Province.AB = FDF.mapForms AB.returnFields AB.fixReturns
 completeForms Province.BC = FDF.mapForms BC.returnFields BC.fixReturns
