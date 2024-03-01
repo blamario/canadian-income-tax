@@ -13,8 +13,10 @@ import Rank2 qualified
 
 import Tax.FDF (FieldConst (Field, NoField), Entry (..), within)
 import Tax.Canada.Shared (TaxIncomeBracket (..), subCalculationFields)
+import Tax.Canada.Shared qualified as TaxIncomeBracket (TaxIncomeBracket (..))
 import Tax.Canada.T1.Types
 import Tax.Canada.T1.Types qualified as Page8 (Page8(..))
+import Tax.Canada.T1.Types qualified as MedicalExpenses (MedicalExpenses(..))
 import Tax.Canada.T1.FieldNames.ON qualified as ON
 import Tax.Canada.T1.FieldNames.BC qualified as BC
 
@@ -47,8 +49,8 @@ page5Fields = Page5 {
    where partA1 = ON.partAFieldsWith fieldName1 "Column" 71
          partA2 = ON.partAFieldsWith fieldName2 "Column" 39
          column4 = partA2.column4{
-           income = partA1.column4.income,
-           threshold = partA1.column4.threshold}
+           TaxIncomeBracket.income = partA1.column4.income,
+           TaxIncomeBracket.threshold = partA1.column4.threshold}
          fieldName1 line _column True = "Percent_Line" <> toText (decimal line)
          fieldName1 line _column False = "Amount_Line" <> toText (decimal line)
          fieldName2 line column isRate =
@@ -80,7 +82,7 @@ page6Fields = ON.page6Fields {
 page6MedicalExpensesFields = ON.page6MedicalExpensesFields {
    taxableIncome = Field ["Line112", "Amount1"] Amount,
    taxableIncomeFraction = Field ["Line112", "Amount2"] Amount,
-   threshold = Field ["Line113", "Amount"] Amount,
+   MedicalExpenses.threshold = Field ["Line113", "Amount"] Amount,
    difference = Field ["Line114", "Amount"] Amount}
 
 page7Fields = Page7 {
@@ -103,7 +105,7 @@ page7step6Fields = ON.page7step6Fields {
    line_42100_CPPContributions = NoField}
 
 page8Fields = ON.page8Fields {
-   step6_RefundOrBalanceOwing = within "Step6-Continued" Rank2.<$> page8step6Fields,
+   Page8.step6_RefundOrBalanceOwing = within "Step6-Continued" Rank2.<$> page8step6Fields,
    line_1_ONOpportunitiesFund = NoField,
    line_46500 = NoField,
    line_46600 = NoField,

@@ -14,9 +14,8 @@ import Data.CAProvinceCodes (Code(MB))
 import Tax.Canada.Federal qualified as Federal
 import Tax.Canada.Federal (Forms(t1), fixFederalForms)
 import Tax.Canada.Federal.Schedule9 qualified as Schedule9
+import Tax.Canada.T1.Types (T1 (T1, page7, page8), Page7(Page7, step6_RefundOrBalanceOwing), Page8(Page8))
 import Tax.Canada.T1.Types qualified as T1
-import Tax.Canada.T1.Types (T1 (T1, page7, page8), Page7(Page7, step6_RefundOrBalanceOwing),
-                            Page8(Page8, step6_RefundOrBalanceOwing))
 import Tax.Canada.T1.FieldNames.AB (t1Fields)  -- same T1 form as Alberta
 import Tax.Canada.T1.Fix (fixT1)
 

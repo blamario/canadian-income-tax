@@ -24,9 +24,9 @@ import Transformation.Shallow.TH qualified
 import Tax.Canada.Federal qualified as Federal
 import Tax.Canada.Federal (Forms(t1), fixFederalForms)
 import Tax.Canada.Federal.Schedule9 qualified as Schedule9
+import Tax.Canada.T1.Types (T1 (T1, page7, page8), Page7(Page7, step6_RefundOrBalanceOwing), Page8(Page8))
 import Tax.Canada.T1.Types qualified as T1
-import Tax.Canada.T1.Types (T1 (T1, page7, page8), Page7(Page7, step6_RefundOrBalanceOwing),
-                            Page8(Page8, step6_RefundOrBalanceOwing))
+import Tax.Canada.T1.Types qualified as Page8 (Page8(..))
 import Tax.Canada.T1.FieldNames.ON (t1Fields)
 
 import Tax.Canada.Province.ON.ON428.Types qualified as ON
@@ -68,7 +68,7 @@ fixReturns =
                                                            step6_RefundOrBalanceOwing{T1.line_42800_ProvTerrTax=
                                                                                       on428.page4.line90}},
                                                      page8 =
-                                                     page8{step6_RefundOrBalanceOwing =
+                                                     page8{Page8.step6_RefundOrBalanceOwing =
                                                            page8step6{T1.line_47900_ProvTerrCredits =
                                                                       on479.page2.line23_credits}}}},
                      on428 = fixON428 on428{
