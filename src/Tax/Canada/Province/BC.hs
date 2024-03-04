@@ -74,25 +74,25 @@ fixReturns =
                                    page1{BC.Page1.partA =
                                          partA{BC.income = t1.page5.step4_TaxableIncome.line_26000_TaxableIncome},
                                          BC.Page1.partB =
-                                         partB1{BC.spouseAmount = spouseAmount{reduction = t1.page1.spouse.line23600}}
+                                         partB1{BC.spouseAmount = spouseAmount{reduction = t1.page1.spouse.line_23600}}
                                         },
                                    BC.page2 =
-                                   page2{BC.Page2.partB = partB2{BC.line27_cppQpp = t1.page6.line30800,
-                                                                 BC.line28_cppQpp = t1.page6.line31000,
-                                                                 BC.line29_employmentInsurance = t1.page6.line31200,
-                                                                 BC.line30_employmentInsurance = t1.page6.line31217,
-                                                                 BC.line41_interest = t1.page6.line31900,
+                                   page2{BC.Page2.partB = partB2{BC.line27_cppQpp = t1.page6.line_30800,
+                                                                 BC.line28_cppQpp = t1.page6.line_31000,
+                                                                 BC.line29_employmentInsurance = t1.page6.line_31200,
+                                                                 BC.line30_employmentInsurance = t1.page6.line_31217,
+                                                                 BC.line41_interest = t1.page6.line_31900,
                                                                  BC.medicalExpenses =
                                                                  medicalExpenses{
                                                                     expenses = t1.page6.medical_expenses.familyExpenses,
                                                                     netIncome = t1.page4.line_23600_NetIncome}}},
                                     BC.page3 =
-                                    page3{BC.partC = partC{BC.line66_copy = t1.page7.partC_NetFederalTax.line40427},
+                                    page3{BC.partC = partC{BC.line66_copy = t1.page7.partC_NetFederalTax.line_40427},
                                           BC.line74_copy = t1.page4.line_23600_NetIncome}},
                      bc479 = fixBC479
                              bc479{BCC.page1 =
                                    bc479.page1{BCC.line1_netIncome_self = t1.page4.line_23600_NetIncome,
-                                               BCC.line1_netIncome_spouse = t1.page1.spouse.line23600,
+                                               BCC.line1_netIncome_spouse = t1.page1.spouse.line_23600,
                                                BCC.line4_uccb_rdsp_income_self = totalOf [t1.page3.line_11700_UCCB,
                                                                                           t1.page3.line_12500_RDSP],
                                                BCC.line7_threshold = if t1.page1.identification.maritalStatus

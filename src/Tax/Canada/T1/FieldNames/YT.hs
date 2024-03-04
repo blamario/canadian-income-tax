@@ -26,8 +26,8 @@ page7Fields = Page7 {
    step6_RefundOrBalanceOwing = within "Step6" Rank2.<$> page7step6Fields}
 
 partCFields = ON.partCFields {
-   line40900 = Field ["Line4100", "Line40900", "Line_40900_Amount"] Amount,
-   line41000 = Field ["Line4100", "Line_41000_Amount"] Amount}
+   line_40900 = Field ["Line4100", "Line40900", "Line_40900_Amount"] Amount,
+   line_41000 = Field ["Line4100", "Line_41000_Amount"] Amount}
 
 page7step6Fields = ON.page7step6Fields {
    line142_copy = Field ["Line142", "Amount"] Amount,

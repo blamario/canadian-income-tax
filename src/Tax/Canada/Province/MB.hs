@@ -49,13 +49,13 @@ fixReturns =
                   (fixMB428 mb428{MB.page1 =
                                   page1{MB.Page1.income = t1.page5.step4_TaxableIncome.line_26000_TaxableIncome,
                                         MB.Page1.partB = partB1{MB.spouseAmount =
-                                                                   spouseAmount{reduction = t1.page1.spouse.line23600},
-                                                                MB.line19_cppQpp = t1.page6.line30800,
-                                                                MB.line20_cppQpp = t1.page6.line31000,
-                                                                MB.line21_employmentInsurance = t1.page6.line31200,
-                                                                MB.line22_employmentInsurance = t1.page6.line31217}},
+                                                                   spouseAmount{reduction = t1.page1.spouse.line_23600},
+                                                                MB.line19_cppQpp = t1.page6.line_30800,
+                                                                MB.line20_cppQpp = t1.page6.line_31000,
+                                                                MB.line21_employmentInsurance = t1.page6.line_31200,
+                                                                MB.line22_employmentInsurance = t1.page6.line_31217}},
                                   MB.page2 =
-                                  page2{MB.Page2.partB = partB2{MB.line37_interest = t1.page6.line31900,
+                                  page2{MB.Page2.partB = partB2{MB.line37_interest = t1.page6.line_31900,
                                                                 MB.medicalExpenses =
                                                                 medicalExpenses{
                                                                    expenses = t1.page6.medical_expenses.familyExpenses,
@@ -64,7 +64,7 @@ fixReturns =
                                                                    MB.line54_base = schedule9.line13_min,
                                                                    MB.line55_base = schedule9.line14_difference}}},
                                   MB.page3 =
-                                  page3{MB.partC = partC{MB.line63_copy = t1.page7.partC_NetFederalTax.line40427}}})
+                                  page3{MB.partC = partC{MB.line63_copy = t1.page7.partC_NetFederalTax.line_40427}}})
 
 returnFields :: Returns FieldConst
 returnFields = Pair (Federal.formFieldsForProvince MB) (within "428" Rank2.<$> mb428Fields)

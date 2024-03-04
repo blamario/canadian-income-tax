@@ -74,20 +74,20 @@ fixReturns =
                      on428 = fixON428 on428{
                         ON.page1 =
                             page1{ON.line1 = t1.page5.step4_TaxableIncome.line_26000_TaxableIncome,
-                                  ON.Page1.partB = partB1{ON.spouseAmount = spouseAmount{reduction = t1.page1.spouse.line23600},
-                                                          ON.line19_cppQpp = t1.page6.line30800,
-                                                          ON.line20_cppQpp = t1.page6.line31000,
-                                                          ON.line21_employmentInsurance = t1.page6.line31200,
-                                                          ON.line22_employmentInsurance = t1.page6.line31217}},
+                                  ON.Page1.partB = partB1{ON.spouseAmount = spouseAmount{reduction = t1.page1.spouse.line_23600},
+                                                          ON.line19_cppQpp = t1.page6.line_30800,
+                                                          ON.line20_cppQpp = t1.page6.line_31000,
+                                                          ON.line21_employmentInsurance = t1.page6.line_31200,
+                                                          ON.line22_employmentInsurance = t1.page6.line_31217}},
                         ON.page2 =
-                            page2{ON.Page2.partB = partB2{ON.line32_interest = t1.page6.line31900,
+                            page2{ON.Page2.partB = partB2{ON.line32_interest = t1.page6.line_31900,
                                                           ON.medicalExpenses =
                                                              medicalExpenses{
                                                              netIncome = t1.page4.line_23600_NetIncome},
                                                           ON.donations = partB2.donations{
                                                              ON.line47_base = schedule9.line13_min,
                                                              ON.line48_base = schedule9.line14_difference}},
-                                  ON.partC = partC{ON.line59_copy = t1.page7.partC_NetFederalTax.line40427}}},
+                                  ON.partC = partC{ON.line59_copy = t1.page7.partC_NetFederalTax.line_40427}}},
                      on479}
 
 returnFields :: Returns FieldConst

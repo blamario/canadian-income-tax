@@ -53,13 +53,13 @@ fixReturns =
               `Pair`
               fixAB428 ab428{AB.page1 =
                              page1{AB.Page1.income = t1.page5.step4_TaxableIncome.line_26000_TaxableIncome,
-                                   AB.Page1.partB = partB1{AB.spouseAmount = spouseAmount{reduction = t1.page1.spouse.line23600},
-                                                           AB.line19_cppQpp = t1.page6.line30800,
-                                                           AB.line20_cppQpp = t1.page6.line31000,
-                                                           AB.line21_employmentInsurance = t1.page6.line31200,
-                                                           AB.line22_employmentInsurance = t1.page6.line31217}},
+                                   AB.Page1.partB = partB1{AB.spouseAmount = spouseAmount{reduction = t1.page1.spouse.line_23600},
+                                                           AB.line19_cppQpp = t1.page6.line_30800,
+                                                           AB.line20_cppQpp = t1.page6.line_31000,
+                                                           AB.line21_employmentInsurance = t1.page6.line_31200,
+                                                           AB.line22_employmentInsurance = t1.page6.line_31217}},
                              AB.page2 =
-                             page2{AB.Page2.partB = partB2{AB.line33_interest = t1.page6.line31900,
+                             page2{AB.Page2.partB = partB2{AB.line33_interest = t1.page6.line_31900,
                                                            AB.medicalExpenses =
                                                            medicalExpenses{
                                                               expenses = t1.page6.medical_expenses.familyExpenses,
@@ -68,7 +68,7 @@ fixReturns =
                                                                    AB.line48_base = schedule9.line13_min,
                                                                    AB.line49_base = schedule9.line14_difference}}},
                              AB.page3 =
-                             page3{AB.partC = partC{AB.line57_copy = t1.page7.partC_NetFederalTax.line40427}}})
+                             page3{AB.partC = partC{AB.line57_copy = t1.page7.partC_NetFederalTax.line_40427}}})
 
 returnFields :: Returns FieldConst
 returnFields = Pair (Federal.formFieldsForProvince AB) (within "428" Rank2.<$> ab428Fields)

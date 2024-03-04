@@ -19,5 +19,5 @@ page2Fields = PE.page2Fields{
    cai = Field ["CAI", "CAI_2024", "Tick_box"] Checkbox}
 
 page8Fields = PE.page8Fields {
-   line48400_Refund = Field ["Refund_or_Balance-Owing", "Line48400", "Line_48400_Amount"] Amount,
-   line48500_BalanceOwing = Field ["Refund_or_Balance-Owing", "Line48500", "Line_48500_Amount"] Amount}
+   line_48400_Refund = Field ["Refund_or_Balance-Owing", "Line48400", "Line_48400_Amount"] Amount,
+   line_48500_BalanceOwing = Field ["Refund_or_Balance-Owing", "Line48500", "Line_48500_Amount"] Amount}

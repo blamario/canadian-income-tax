@@ -33,7 +33,7 @@ import Tax.Canada.Federal.Schedule9 (Schedule9(line23_sum), fixSchedule9, schedu
 import Tax.Canada.Federal.Schedule11 (Schedule11(page1), Page1(line5_trainingClaim, line17_sum), fixSchedule11, schedule11Fields)
 import Tax.Canada.T1 (fixT1, t1FieldsForProvince)
 import Tax.Canada.T1.Types (T1(page4, page6, page8),
-                            Page4(line_20800_RRSPDeduction), Page6(line32300, line34900), Page8(step6_RefundOrBalanceOwing),
+                            Page4(line_20800_RRSPDeduction), Page6(line_32300, line_34900), Page8(step6_RefundOrBalanceOwing),
                             Page8Step6(line_45300_CWB, line_45350_CTC), LanguageOfCorrespondence, MaritalStatus)
 import Tax.FDF (Entry (Amount), FieldConst (Field), within)
 import Tax.Util (fixEq)
@@ -62,7 +62,7 @@ Transformation.Shallow.TH.deriveAll ''Forms
 fixFederalForms :: Forms Maybe -> Forms Maybe
 fixFederalForms = fixEq $ \Forms{t1, schedule6, schedule7, schedule9, schedule11}-> Forms{
    t1 = fixT1 t1{page4 = t1.page4{line_20800_RRSPDeduction = schedule7.page3.partC.line20_deduction},
-                 page6 = t1.page6{line32300 = schedule11.page1.line17_sum, line34900 = schedule9.line23_sum},
+                 page6 = t1.page6{line_32300 = schedule11.page1.line17_sum, line_34900 = schedule9.line23_sum},
                  page8 = t1.page8{step6_RefundOrBalanceOwing =
                                   t1.page8.step6_RefundOrBalanceOwing{line_45300_CWB = schedule6.page4.step3.line42_sum <|>
                                                                                        schedule6.page4.step2.line28_difference,

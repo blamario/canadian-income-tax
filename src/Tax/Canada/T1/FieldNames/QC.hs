@@ -61,22 +61,22 @@ step4Fields = ON.step4Fields {
    line_23600_NetIncome_2 = Field ["Line58", "Amount"] Amount}
 
 partBFields = ON.partBFields {
-   line30499_ChildrenNum = Field ["Line30500", "Line30499", "Line_30499_Number"] Count,
-   line30500 = Field ["Line30500", "Line_30499_Amount"] Amount,
+   line_30499_ChildrenNum = Field ["Line30500", "Line30499", "Line_30499_Number"] Count,
+   line_30500 = Field ["Line30500", "Line_30499_Amount"] Amount,
    line83_sum = Field ["Line84", "Amount"] Amount}
 
 page6Fields = ON.page6Fields {
    line84_copy = Field ["Line85", "Amount"] Amount,
-   line31205 = Field ["Line31205", "Line_31205_Amount"] Amount,
-   line31210 = Field ["Line31210", "Line_31210_Amount"] Amount,
-   line31215 = Field ["Line31215", "Line_31215_Amount"] Amount,
-   line31600 = Field ["Line31600", "Line_31600_mount"] Amount,
+   line_31205 = Field ["Line31205", "Line_31205_Amount"] Amount,
+   line_31210 = Field ["Line31210", "Line_31210_Amount"] Amount,
+   line_31215 = Field ["Line31215", "Line_31215_Amount"] Amount,
+   line_31600 = Field ["Line31600", "Line_31600_mount"] Amount,
    line96_sum = subCalculationFields "Line100" ["Amount1"] ["Amount2"],
    line98_sum = Field ["Line102", "Amount"] Amount,
    line101_sum = Field ["Line105", "Amount"] Amount,
    line106_sum = Field ["Line110", "Amount"] Amount,
    medical_expenses = page6MedicalExpensesFields,
-   line33200_sum = subCalculationFields "Line33200" ["Line_33200_Amount1"] ["Line_33200_Line32Amount2"],
+   line_33200_sum = subCalculationFields "Line33200" ["Line_33200_Amount1"] ["Line_33200_Line32Amount2"],
    line114_taxCreditRate = Field ["Line118", "Percent"] $ Constant 0.15 Percent}
 
 page6MedicalExpensesFields = ON.page6MedicalExpensesFields {
@@ -109,8 +109,8 @@ page8Fields = ON.page8Fields {
    line1_ONOpportunitiesFund = NoField,
    line_46500 = NoField,
    line_46600 = NoField,
-   line48400_Refund = Field ["Refund_or_Balancing-owing", "Line48400", "Line_48400_Amount"] Amount,
-   line48500_BalanceOwing = Field ["Refund_or_Balancing-owing", "Line48500", "Line_48500_Amount"] Amount}
+   line_48400_Refund = Field ["Refund_or_Balancing-owing", "Line48400", "Line_48400_Amount"] Amount,
+   line_48500_BalanceOwing = Field ["Refund_or_Balancing-owing", "Line48500", "Line_48500_Amount"] Amount}
 
 page8step6Fields = ON.page8step6Fields {
    line_43500_totalpayable = Field ["Line151", "Amount"] Amount,

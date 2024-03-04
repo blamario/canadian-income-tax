@@ -40,4 +40,4 @@ page8step6Fields = ON.page8step6Fields {
 
 taxPreparerFields = ON.taxPreparerFields {
    eFileNumber = Field ["Line48900", "EFile"] Textual,
-   line49000_WasAFeeCharged = Field ["Line49000", "Line49000_CheckBoxGroup"] $ Switch' "Line49000_CheckBox_EN"}
+   line_49000_WasAFeeCharged = Field ["Line49000", "Line49000_CheckBoxGroup"] $ Switch' "Line49000_CheckBox_EN"}

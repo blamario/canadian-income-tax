@@ -72,11 +72,11 @@ data Residence line = Residence {
    date_Entry :: line Day}
 
 data Spouse line = Spouse {
-   line23600 :: line Centi,
+   line_23600 :: line Centi,
    self_employment :: line Bool,
    spouse_First_Name :: line Text,
-   line11700 :: line Centi,
-   line21300 :: line Centi,
+   line_11700 :: line Centi,
+   line_21300 :: line Centi,
    sin :: line Text}
 
 data Page2 line = Page2 {
@@ -204,52 +204,52 @@ data Page5PartA line = Page5PartA {
    column5 :: TaxIncomeBracket line}
 
 data Page5PartB line = Page5PartB {
-   line30000 :: line Centi,
-   line30100 :: line Centi,
-   line30300 :: line Centi,
-   line30400 :: line Centi,
-   line30425 :: line Centi,
-   line30450 :: line Centi,
-   line30499_ChildrenNum :: line Word,
-   line30500 :: line Centi,
+   line_30000 :: line Centi,
+   line_30100 :: line Centi,
+   line_30300 :: line Centi,
+   line_30400 :: line Centi,
+   line_30425 :: line Centi,
+   line_30450 :: line Centi,
+   line_30499_ChildrenNum :: line Word,
+   line_30500 :: line Centi,
    line83_sum :: line Centi}
 
 data Page6 line = Page6 {
    line84_copy :: line Centi,
    -- CPP_QPP
-   line30800 :: line Centi,
-   line31000 :: line Centi,
+   line_30800 :: line Centi,
+   line_31000 :: line Centi,
    -- EI
-   line31200 :: line Centi,
-   line31205 :: line Centi,
-   line31210 :: line Centi,
-   line31215 :: line Centi,
-   line31217 :: line Centi,
-   line31220 :: line Centi,
-   line31240 :: line Centi,
-   line31260 :: line Centi,
-   line31270 :: line Centi,
-   line31285 :: line Centi,
-   line31300 :: line Centi,
-   line31350 :: line Centi,
+   line_31200 :: line Centi,
+   line_31205 :: line Centi,
+   line_31210 :: line Centi,
+   line_31215 :: line Centi,
+   line_31217 :: line Centi,
+   line_31220 :: line Centi,
+   line_31240 :: line Centi,
+   line_31260 :: line Centi,
+   line_31270 :: line Centi,
+   line_31285 :: line Centi,
+   line_31300 :: line Centi,
+   line_31350 :: line Centi,
    line96_sum :: SubCalculation line,
-   line31400 :: line Centi,
+   line_31400 :: line Centi,
    line98_sum :: line Centi,
-   line31600 :: line Centi,
-   line31800 :: line Centi,
+   line_31600 :: line Centi,
+   line_31800 :: line Centi,
    line101_sum :: line Centi,
-   line31900 :: line Centi,
-   line32300 :: line Centi,
-   line32400 :: line Centi,
-   line32600 :: line Centi,
+   line_31900 :: line Centi,
+   line_32300 :: line Centi,
+   line_32400 :: line Centi,
+   line_32600 :: line Centi,
    line106_sum :: line Centi,
    medical_expenses :: MedicalExpenses line,
-   line33200_sum :: SubCalculation line,
-   line33500 :: line Centi,
+   line_33200_sum :: SubCalculation line,
+   line_33500 :: line Centi,
    line114_taxCreditRate :: line Rational,
-   line33800 :: line Centi,
-   line34900 :: line Centi,
-   line35000 :: line Centi}
+   line_33800 :: line Centi,
+   line_34900 :: line Centi,
+   line_35000 :: line Centi}
 
 data MedicalExpenses line = MedicalExpenses {
    familyExpenses :: line Centi,
@@ -265,31 +265,31 @@ data Page7 line = Page7 {
 
 data Page7PartC line = Page7PartC {
    line118_copy :: line Centi,
-   line40424 :: line Centi,
-   line40400 :: line Centi,
+   line_40424 :: line Centi,
+   line_40400 :: line Centi,
    line121_copy :: line Centi,
-   line40425 :: line Centi,
-   line40427 :: line Centi,
+   line_40425 :: line Centi,
+   line_40427 :: line Centi,
    line124_sum :: SubCalculation line,
-   line42900 :: line Centi,
+   line_42900 :: line Centi,
    line126_foreignSurtax :: line Centi,
    line127_sum :: line Centi,
-   line40500 :: line Centi,
+   line_40500 :: line Centi,
    line129_difference :: line Centi,
    line130_recapture :: line Centi,
    line131_sum :: line Centi,
    line132_logging :: line Centi,
-   line40600 :: line Centi,
-   line40900 :: line Centi,
-   line41000 :: line Centi,
-   line41200 :: line Centi,
-   line41300 :: line Centi,
-   line41400 :: line Centi,
-   line41600_sum :: SubCalculation line,
-   line41700 :: line Centi,
-   line41500 :: line Centi,
-   line41800 :: line Centi,
-   line42000 :: line Centi}
+   line_40600 :: line Centi,
+   line_40900 :: line Centi,
+   line_41000 :: line Centi,
+   line_41200 :: line Centi,
+   line_41300 :: line Centi,
+   line_41400 :: line Centi,
+   line_41600_sum :: SubCalculation line,
+   line_41700 :: line Centi,
+   line_41500 :: line Centi,
+   line_41800 :: line Centi,
+   line_42000 :: line Centi}
 
 data Page7Step6 line = Page7Step6 {
    line142_copy :: line Centi,
@@ -302,8 +302,8 @@ data Page7Step6 line = Page7Step6 {
 
 data Page8 line = Page8 {
    step6_RefundOrBalanceOwing :: Page8Step6 line,
-   line48400_Refund :: line Centi,
-   line48500_BalanceOwing :: line Centi,
+   line_48400_Refund :: line Centi,
+   line_48500_BalanceOwing :: line Centi,
    telephone :: line Centi,
    date :: line Centi,
    taxPreparer :: TaxPreparer line,
@@ -344,7 +344,7 @@ data TaxPreparer line = TaxPreparer {
    eFileNumber :: line Text,
    nameOfPreparer :: line Text,
    telephoneOfPreparer :: line Text,
-   line49000_WasAFeeCharged :: line Bool}
+   line_49000_WasAFeeCharged :: line Bool}
 
 $(foldMap
    (\t-> concat <$> sequenceA [
