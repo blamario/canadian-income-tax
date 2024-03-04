@@ -113,8 +113,7 @@ page3Fields = Page3 {
    line_14400_WorkersCompBen = Field ["Line14400", "Line_14400_Amount"] Amount,
    line_14500_SocialAssistPay = Field ["Line14500", "Line_14500_Amount"] Amount,
    line_14600_NetFedSupplements = Field ["Line14600", "Line_14600_Amount"] Amount,
-   line_14700_EqualsAmount = Field ["Line14700", "Line_14700_Amount1"] Amount,
-   line_14700_PlusAmount = Field ["Line14700", "Line_14700_Amount2"] Amount,
+   line_14700_sum = subCalculationFields "Line14700" ["Line_14700_Amount1"] ["Line_14700_Amount2"],
    line_15000_TotalIncome = Field ["Line15000", "Line_15000_Amount"] Amount}
 
 selfEmploymentFields = SelfEmploymentIncome {
@@ -177,7 +176,7 @@ step4Fields = Step4 {
    line_25500_NorthernDeductions = Field ["Line25500", "Line_25500_Amount"] Amount,
    line_25600_AdditionalDeductions_Amount = Field ["Line25600", "Line_25600_Amount"] Amount,
    line_25600_AdditionalDeductions_Specify = Field ["Line25600", "Line_25600_Specify"] Textual,
-   line_25700_AddLines_sum = subCalculationFields "Line25700" ["Line_25700_Amount1"] ["Line_25700_Amount2"],
+   line_25700_sum = subCalculationFields "Line25700" ["Line_25700_Amount1"] ["Line_25700_Amount2"],
    line_26000_TaxableIncome = Field ["Line26000", "Line_26000_Amount"] Amount}
 
 partAFields :: Text -> Int -> Page5PartA FieldConst

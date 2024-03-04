@@ -129,8 +129,7 @@ data Page3 line = Page3 {
    line_14400_WorkersCompBen :: line Centi,
    line_14500_SocialAssistPay :: line Centi,
    line_14600_NetFedSupplements :: line Centi,
-   line_14700_EqualsAmount :: line Centi,
-   line_14700_PlusAmount :: line Centi,
+   line_14700_sum :: SubCalculation line,
    line_15000_TotalIncome :: line Centi}
 
 data SelfEmploymentIncome line = SelfEmploymentIncome {
@@ -193,7 +192,7 @@ data Step4 line = Step4 {
    line_25500_NorthernDeductions :: line Centi,
    line_25600_AdditionalDeductions_Amount :: line Centi,
    line_25600_AdditionalDeductions_Specify :: line Text,
-   line_25700_AddLines_sum :: SubCalculation line,
+   line_25700_sum :: SubCalculation line,
    line_26000_TaxableIncome :: line Centi}
 
 data Page5PartA line = Page5PartA {

@@ -66,11 +66,11 @@ fixPage3 = fixEq $ \page@Page3{selfEmployment=SelfEmploymentIncome{..}, ..}-> pa
                          line_14100_Amount,
                          line_14300_Amount],
    line28_sum = totalOf [line21_sum, line27_sum.result],
-   line_14700_EqualsAmount = totalOf [line_14400_WorkersCompBen,
-                                      line_14500_SocialAssistPay,
-                                      line_14600_NetFedSupplements],
-   line_14700_PlusAmount = line_14700_EqualsAmount,
-   line_15000_TotalIncome = totalOf [line28_sum, line_14700_PlusAmount]}
+   line_14700_sum = fixSubCalculation $
+                    totalOf [line_14400_WorkersCompBen,
+                             line_14500_SocialAssistPay,
+                             line_14600_NetFedSupplements],
+   line_15000_TotalIncome = totalOf [line28_sum, line_14700_sum.result]}
 
 fixPage4 :: T1 Maybe -> Page4 Maybe -> Page4 Maybe
 fixPage4 t1 = fixEq $ \page@Page4{..}-> page{
@@ -151,17 +151,17 @@ fixPage8 t1 = fixEq $ \page@Page8{..}-> Page8{
 fixStep4 :: T1 Maybe -> Step4 Maybe -> Step4 Maybe
 fixStep4 t1 = fixEq $ \step@Step4{..}-> step{
    line_23600_NetIncome_2 = t1.page4.line_23600_NetIncome,
-   line_25700_AddLines_sum = fixSubCalculation $
-                             totalOf [line_24400_MilitaryPoliceDeduction,
-                                      line_24900_SecurityDeductions,
-                                      line_25000_OtherPayDeductions,
-                                      line_25100_PartnershipLosses,
-                                      line_25200_NoncapitalLosses,
-                                      line_25300_NetCapitalLosses,
-                                      line_25400_CapitalGainsDeduction,
-                                      line_25500_NorthernDeductions,
-                                      line_25600_AdditionalDeductions_Amount],
-   line_26000_TaxableIncome = nonNegativeDifference line_23600_NetIncome_2 line_25700_AddLines_sum.result}
+   line_25700_sum = fixSubCalculation $
+                    totalOf [line_24400_MilitaryPoliceDeduction,
+                             line_24900_SecurityDeductions,
+                             line_25000_OtherPayDeductions,
+                             line_25100_PartnershipLosses,
+                             line_25200_NoncapitalLosses,
+                             line_25300_NetCapitalLosses,
+                             line_25400_CapitalGainsDeduction,
+                             line_25500_NorthernDeductions,
+                             line_25600_AdditionalDeductions_Amount],
+   line_26000_TaxableIncome = nonNegativeDifference line_23600_NetIncome_2 line_25700_sum.result}
 
 fixPage5PartA :: HasCallStack => T1 Maybe -> Page5PartA Maybe -> Page5PartA Maybe
 fixPage5PartA t1 = fixEq $ \part@Page5PartA{..}-> part{
