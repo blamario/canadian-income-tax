@@ -30,7 +30,7 @@ partCFields = ON.partCFields {
    line41000 = Field ["Line4100", "Line_41000_Amount"] Amount}
 
 page7step6Fields = ON.page7step6Fields {
-   line140 = Field ["Line142", "Amount"] Amount,
+   line142_copy = Field ["Line142", "Amount"] Amount,
    line_43200_FirstNationsTax = Field ["Line43200", "Line_43200_Amount"] Amount}
 
 page8Fields = BC.page8Fields {

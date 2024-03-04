@@ -29,7 +29,7 @@ page3Fields = ON.page3Fields{
 page8Fields = ON.page8Fields {
    Page8.step6_RefundOrBalanceOwing = within "Step6-Continued" Rank2.<$> page8step6Fields,
    taxPreparer = within "Efile" Rank2.<$> taxPreparerFields,
-   line_1_ONOpportunitiesFund = NoField,
+   line1_ONOpportunitiesFund = NoField,
    line_46500 = NoField,
    line_46600 = NoField}
 

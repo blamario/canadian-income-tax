@@ -122,10 +122,10 @@ data Page3 line = Page3 {
    line_13000_OtherIncome :: line Centi,
    line_13000_OtherIncomeSource :: line Text,
    line_13010_TaxableScholarship :: line Centi,
-   line_19 :: line Centi,
+   line21_sum :: line Centi,
    selfEmployment :: SelfEmploymentIncome line,
-   line_25_sum :: SubCalculation line,
-   line_26 :: line Centi,
+   line27_sum :: SubCalculation line,
+   line28_sum :: line Centi,
    line_14400_WorkersCompBen :: line Centi,
    line_14500_SocialAssistPay :: line Centi,
    line_14600_NetFedSupplements :: line Centi,
@@ -212,10 +212,10 @@ data Page5PartB line = Page5PartB {
    line30450 :: line Centi,
    line30499_ChildrenNum :: line Word,
    line30500 :: line Centi,
-   line_81 :: line Centi}
+   line83_sum :: line Centi}
 
 data Page6 line = Page6 {
-   line82 :: line Centi,
+   line84_copy :: line Centi,
    -- CPP_QPP
    line30800 :: line Centi,
    line31000 :: line Centi,
@@ -232,21 +232,21 @@ data Page6 line = Page6 {
    line31285 :: line Centi,
    line31300 :: line Centi,
    line31350 :: line Centi,
-   line94_sum :: SubCalculation line,
+   line96_sum :: SubCalculation line,
    line31400 :: line Centi,
-   line96 :: line Centi,
+   line98_sum :: line Centi,
    line31600 :: line Centi,
    line31800 :: line Centi,
-   line99 :: line Centi,
+   line101_sum :: line Centi,
    line31900 :: line Centi,
    line32300 :: line Centi,
    line32400 :: line Centi,
    line32600 :: line Centi,
-   line104 :: line Centi,
+   line106_sum :: line Centi,
    medical_expenses :: MedicalExpenses line,
    line33200_sum :: SubCalculation line,
    line33500 :: line Centi,
-   line112 :: line Rational,
+   line114_taxCreditRate :: line Rational,
    line33800 :: line Centi,
    line34900 :: line Centi,
    line35000 :: line Centi}
@@ -264,21 +264,21 @@ data Page7 line = Page7 {
    step6_RefundOrBalanceOwing :: Page7Step6 line}
 
 data Page7PartC line = Page7PartC {
-   line116 :: line Centi,
+   line118_copy :: line Centi,
    line40424 :: line Centi,
    line40400 :: line Centi,
-   line119 :: line Centi,
+   line121_copy :: line Centi,
    line40425 :: line Centi,
    line40427 :: line Centi,
-   line122_sum :: SubCalculation line,
+   line124_sum :: SubCalculation line,
    line42900 :: line Centi,
-   line124 :: line Centi,
-   line125 :: line Centi,
+   line126_foreignSurtax :: line Centi,
+   line127_sum :: line Centi,
    line40500 :: line Centi,
-   line127 :: line Centi,
-   line128 :: line Centi,
-   line129 :: line Centi,
-   line130 :: line Centi,
+   line129_difference :: line Centi,
+   line130_recapture :: line Centi,
+   line131_sum :: line Centi,
+   line132_logging :: line Centi,
    line40600 :: line Centi,
    line40900 :: line Centi,
    line41000 :: line Centi,
@@ -292,7 +292,7 @@ data Page7PartC line = Page7PartC {
    line42000 :: line Centi}
 
 data Page7Step6 line = Page7Step6 {
-   line140 :: line Centi,
+   line142_copy :: line Centi,
    line_42100_CPPContributions :: line Centi,
    line_42120_EIPremiums :: line Centi,
    line_42200_SocialBenefits :: line Centi,
@@ -307,7 +307,7 @@ data Page8 line = Page8 {
    telephone :: line Centi,
    date :: line Centi,
    taxPreparer :: TaxPreparer line,
-   line_1_ONOpportunitiesFund :: line Centi,
+   line1_ONOpportunitiesFund :: line Centi,
    line_46500 :: line Centi,
    line_46600 :: line Centi}
 
