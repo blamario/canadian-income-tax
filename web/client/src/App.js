@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
+import '../../static/shared.css';
 import './App.css';
 
 const provinces = [
@@ -67,6 +68,8 @@ export default function Uploads() {
 
     return (
       <>
+        <a href="/" class="homelink">taxell.ca</a>
+        <hr/>
         <h2>Tax form completion</h2>
 
         <h3>Step 1. <Dropdown className='provinceRoot' menuClassName='provinceMenu' options={provinces} default={province} onChange={setProvince} placeholder="Select your province"/></h3>

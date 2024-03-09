@@ -48,6 +48,8 @@ main = scotty 3000 $ do
       file "web/client/build/index.html"
    get "/about.html" $ do
       file "web/static/about.html"
+   get "/shared.css" $ do
+      file "web/static/shared.css"
    post "/t1/PDF/:province" $ do
       provinceCode <- captureParam "province"
       province <- case readMaybe (Text.Lazy.unpack provinceCode)

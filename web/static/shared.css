@@ -1,0 +1,11 @@
+a.homelink {
+    background-color: #880000;
+    color: white;
+    font-weight: bold;
+    padding: 1ex 4em;
+    text-decoration: inherit;
+}
+
+footer a + a {
+    margin: 2em;
+}
