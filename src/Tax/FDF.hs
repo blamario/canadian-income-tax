@@ -13,6 +13,7 @@ module Tax.FDF (FDFs, FieldConst(..), Entry(..),
 
 import Control.Monad (join)
 import Data.Biapplicative (biliftA2, biliftA3)
+import Data.Bifunctor (bimap)
 import Data.Bitraversable (bisequence, bitraverse)
 import Data.CAProvinceCodes qualified as Province
 import Data.Char (isDigit, isSpace)
@@ -213,16 +214,17 @@ toEntry (Constant expected entry) v = do
   if e == Just expected
     then pure e
     else Left ("Expected " <> show expected <> ", got " <> show (v, e))
-toEntry Count v = Just <$> readEither v
-toEntry Date v = Just <$> parseTimeM False defaultTimeLocale "%Y%m%d" v
-toEntry Province v = Just <$> readEither v
+toEntry Count v = bimap (<> " for the count of " <> show v) Just $ readEither v
+toEntry Date v =  bimap (<> " for date " <> show v) Just $ parseTimeM False defaultTimeLocale "%Y%m%d" v
+toEntry Province v = bimap (<> " for province code " <> show v) Just $ readEither v
 toEntry Textual v = Right $ Just $ Text.pack v
-toEntry Amount v = Just <$> readEither (dropCommas v)
+toEntry Amount v = bimap (<> " for the amount of " <> show v) Just $ readEither (dropCommas v)
   where dropCommas num
           | (wholePart, pointyPart@('.' : decimals)) <- span (/= '.') num,
             length decimals == 2,
             all isDigit decimals
           = filter (/= ',') wholePart <> pointyPart
+          | (suffix, ',':_) <- span (/= ',') (reverse num), length suffix > 2 = filter (/= ',') num
           | otherwise = num
 toEntry Percent v
   | Just v' <- stripSuffix "%" v,
