@@ -6,6 +6,12 @@ a.homelink {
     text-decoration: inherit;
 }
 
+span.email-identifier {
+    font-stretch: expanded;
+    font-weight: 500;
+    margin: 0.1em;
+}
+
 footer a + a {
     margin: 2em;
 }
