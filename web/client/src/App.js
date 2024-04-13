@@ -42,7 +42,7 @@ export default function Uploads() {
 
     function handleUpload (formKey) {
         return (event) => {
-            let newInputs = Object.assign(inputs);
+            let newInputs = Object.assign({}, inputs);
             newInputs[formKey] = event.target.files[0];
             setInputs(newInputs);
             setSubmitted(false);
@@ -61,7 +61,7 @@ export default function Uploads() {
     }
 
     function handleSubmit (event) {
-        if (inputs && province) {
+        if (province && inputs) {
             const forms = new FormData();
 
             for (const key in inputs)
@@ -122,7 +122,11 @@ export default function Uploads() {
          <dt>Schedule 11</dt>
          <dd><input type="file" name="Schedule 11 PDF" onChange={handleUpload("Schedule11")}/></dd>
          </dl>
-         <h3>Step 5. <button name="Calculate" disabled={submitted !== false} onClick={handleSubmit}>Calculate</button></h3>
+         <h3>Step 5. <button name="Calculate"
+                             disabled={submitted !== false
+                                       || !province || !inputs || !inputs["T1"]
+                                       || province.value.prefix428 && !inputs["428"]}
+                             onClick={handleSubmit}>Calculate</button></h3>
          {output && <>
           <h3>Step 6. <a name="Download" download={download.name}
                        href={URL.createObjectURL(new File([output], download))}>Download</a>
