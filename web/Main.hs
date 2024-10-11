@@ -33,7 +33,7 @@ import System.FilePath.Posix ((</>))
 import System.Posix.Temp (mkdtemp)
 import Text.FDF (parse, serialize)
 import Text.Read (readMaybe)
-import Web.Scotty
+import Web.Scotty (captureParam, file, files, finish, get, post, middleware, raw, scotty, setHeader, status, text)
 
 import Paths_canadian_income_tax (getDataDir)
 import Tax.Canada (completeForms)
