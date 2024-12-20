@@ -42,6 +42,7 @@ data Entry a where
   Constant :: (Eq a, Show a) => a -> Entry a -> Entry a
   Count :: Entry Word
   Date :: Entry Day
+  Year :: Entry Int
   Province :: Entry Province.Code
   Textual :: Entry Text
   Amount :: Entry Centi
@@ -173,6 +174,7 @@ textualFields = Rank2.liftA2 pairKey
         fromEntry Percent v = Right $ dropInsignificantZeros (Text.pack $ show (fromRational $ v * 100 :: Centi)) <> "%"
           where dropInsignificantZeros = Text.dropWhileEnd (== '.') . Text.dropWhileEnd (== '0')
         fromEntry Count v = Right $ Text.pack (show v)
+        fromEntry Year v = Right $ Text.pack (show v)
         fromEntry Province v = Right $ Text.pack (show v)
 
 fromFieldMap :: Rank2.Traversable form => form FieldConst -> Map [Text] Text -> Either String (form Maybe)
@@ -215,6 +217,7 @@ toEntry (Constant expected entry) v = do
     then pure e
     else Left ("Expected " <> show expected <> ", got " <> show (v, e))
 toEntry Count v = bimap (<> " for the count of " <> show v) Just $ readEither v
+toEntry Year v = bimap (<> " for year " <> show v) Just $ readEither v
 toEntry Date v =  bimap (<> " for date " <> show v) Just $ parseTimeM False defaultTimeLocale "%Y%m%d" v
 toEntry Province v = bimap (<> " for province code " <> show v) Just $ readEither v
 toEntry Textual v = Right $ Just $ Text.pack v

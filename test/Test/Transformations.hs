@@ -59,6 +59,9 @@ instance Gen `At` Rational where
   _ $ Field _ (Constant c _) = Compose (pure $ Just c)
   _ $ _ = adjust $ ((/ 10_000) . toRational) <$> Gen.integral (Range.linear 0 10_000)
 
+instance Gen `At` Int where
+  _ $ _ = adjust $ Gen.int (Range.linear 1900 2030)
+
 instance Gen `At` Word where
   _ $ _ = adjust $ Gen.word (Range.linear 0 1_000)
 
