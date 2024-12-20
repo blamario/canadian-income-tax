@@ -46,6 +46,7 @@ library
         Tax.Canada.Territory.YT
         Tax.Canada.Shared
         Tax.Canada.T1
+        Tax.Canada.T4
         Tax.FDF
         Tax.PDFtk
         Tax.Util
@@ -63,7 +64,6 @@ library
         Tax.Canada.T1.FieldNames.QC
         Tax.Canada.T1.FieldNames.YT
         Tax.Canada.T1.Fix
-        Tax.Canada.T4
         Tax.Canada.Province.AB.AB428.Types
         Tax.Canada.Province.AB.AB428.FieldNames
         Tax.Canada.Province.AB.AB428.Fix
