@@ -13,8 +13,11 @@ fixEq f a
    where a' = f a
 
 -- | Sum the list of arguments; return 'Nothing' iff all items are 'Nothing'.
-totalOf :: Num a => [Maybe a] -> Maybe a
-totalOf = fmap sum . nonEmpty . mapMaybe id
+totalOf :: (Foldable f, Num a) => f (Maybe a) -> Maybe a
+totalOf = foldl' add Nothing
+  where add Nothing x = x
+        add x Nothing = x
+        add (Just x) (Just y) = Just $! x+y
 
 -- | Subtraction under 'Maybe'
 difference :: Maybe Centi -> Maybe Centi -> Maybe Centi
