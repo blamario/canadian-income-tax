@@ -49,7 +49,11 @@ data Returns line = Returns {
 
 deriving instance (Show (Federal.Forms line), Show (BC428 line), Show (BC479 line)) => Show (Returns line)
 deriving instance (Eq (Federal.Forms line), Eq (BC428 line), Eq (BC479 line)) => Eq (Returns line)
-Rank2.TH.deriveAll ''Returns
+Rank2.TH.deriveFunctor ''Returns
+Rank2.TH.deriveApply ''Returns
+Rank2.TH.deriveApplicative ''Returns
+Rank2.TH.deriveFoldable ''Returns
+Rank2.TH.deriveTraversable ''Returns
 Transformation.Shallow.TH.deriveAll ''Returns
 
 fixReturns :: Returns Maybe -> Returns Maybe
