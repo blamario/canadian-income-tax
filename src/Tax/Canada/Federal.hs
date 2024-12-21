@@ -20,6 +20,7 @@ import Control.Applicative ((<|>))
 import Data.CAProvinceCodes qualified as Province
 import Data.Fixed (Centi)
 import Data.List.NonEmpty (NonEmpty((:|)))
+import Data.Semigroup (Sum(Sum, getSum))
 import Data.Text (Text)
 import Data.Time (Day)
 import Rank2 qualified
@@ -33,9 +34,11 @@ import Tax.Canada.Federal.Schedule7 (Schedule7, fixSchedule7, schedule7Fields)
 import Tax.Canada.Federal.Schedule9 (Schedule9(line23_sum), fixSchedule9, schedule9Fields)
 import Tax.Canada.Federal.Schedule11 (Schedule11(page1), Page1(line5_trainingClaim, line17_sum), fixSchedule11, schedule11Fields)
 import Tax.Canada.T1 (fixT1, t1FieldsForProvince)
-import Tax.Canada.T1.Types (T1(page3, page4, page6, page8),
-                            Page3(line_10100_EmploymentIncome),
-                            Page4(line_20800_RRSPDeduction),
+import Tax.Canada.T1.Types (T1(page3, page4, page5, page6, page8),
+                            Page3(line_10100_EmploymentIncome, line_10120_Commissions),
+                            Page4(line_20800_RRSPDeduction, line_21200_Dues),
+                            Page5(step4_TaxableIncome),
+                            Step4(line_24400_MilitaryPoliceDeduction, line_24900_SecurityDeductions),
                             Page6(line_31200, line_32300, line_34900),
                             Page8(step6_RefundOrBalanceOwing),
                             Page8Step6(line_43700_Total_income_tax_ded, line_45300_CWB, line_45350_CTC),
@@ -74,8 +77,16 @@ Transformation.Shallow.TH.deriveAll ''Forms
 fixFederalForms :: Forms Maybe -> Forms Maybe
 fixFederalForms = fixEq $ \Forms{t1, t4, schedule6, schedule7, schedule9, schedule11}-> Forms{
    t1 = fixT1 t1{
-       page3 = fromT4s t4 (.slip1.box14_employmentIncome) (\amt pg-> pg{line_10100_EmploymentIncome = amt}) t1.page3,
-       page4 = t1.page4{line_20800_RRSPDeduction = schedule7.page3.partC.line20_deduction},
+       page3 = fromT4s t4 (.slip1.box14_employmentIncome) (\amt pg-> pg{line_10100_EmploymentIncome = amt}) $
+               fromT4s t4 (additionalT4 ["42"]) (\amt pg-> pg{line_10120_Commissions = amt}) $
+               t1.page3,
+       page4 = fromT4s t4 (.slip1.box44_unionDues) (\amt pg-> pg{line_21200_Dues = amt}) $
+               t1.page4{line_20800_RRSPDeduction = schedule7.page3.partC.line20_deduction},
+       page5 = t1.page5{
+          step4_TaxableIncome =
+             fromT4s t4 (additionalT4 ["39", "41"]) (\amt step-> step{line_24900_SecurityDeductions = amt}) $
+             fromT4s t4 (additionalT4 ["43"]) (\amt step-> step{line_24400_MilitaryPoliceDeduction = amt}) $
+             t1.page5.step4_TaxableIncome},
        page6 = (fromT4s t4 (.slip1.box18_employeeEI) (\amt pg-> pg{line_31200 = amt}) t1.page6)
                {line_32300 = schedule11.page1.line17_sum, line_34900 = schedule9.line23_sum},
        page8 = t1.page8{
@@ -104,3 +115,9 @@ formFieldsForProvince p = Forms{
 fromT4s :: Maybe (NonEmpty (T4 Maybe)) -> (T4 Maybe -> Maybe Centi) -> (Maybe Centi -> form -> form) -> form -> form
 fromT4s Nothing _ _ = id
 fromT4s (Just t4s) field set = set $ totalOf $ field <$> t4s
+
+additionalT4 :: [Text] -> T4 Maybe -> Maybe Centi
+additionalT4 codes t4 = getSum <$> foldMap findCode t4.slip1.otherInformation
+   where findCode (Rank2.Pair (Rank2.Only (Just code)) (Rank2.Only (Just amt)))
+           | elem code codes = Just (Sum amt)
+         findCode _ = Nothing

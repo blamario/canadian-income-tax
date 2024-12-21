@@ -11,7 +11,9 @@
 
 module Tax.Canada.T4 (T4(..), T4Slip(..), t4Fields) where
 
+import Control.Applicative (ZipList(ZipList))
 import Data.Fixed (Centi)
+import Data.Functor.Product (Product(Pair))
 import Data.CAProvinceCodes qualified as Province
 import Data.Text (Text)
 import Rank2 qualified
@@ -52,18 +54,7 @@ data T4Slip line = T4Slip{
    box54_employersAccount :: line Text,
    box55_premiumPPIP :: line Centi,
    box56_insurableEarningsPPIP :: line Centi,
-   box1_case :: line Text,
-   box1_amount :: line Centi,
-   box2_case :: line Text,
-   box2_amount :: line Centi,
-   box3_case :: line Text,
-   box3_amount :: line Centi,
-   box4_case :: line Text,
-   box4_amount :: line Centi,
-   box5_case :: line Text,
-   box5_amount :: line Centi,
-   box6_case :: line Text,
-   box6_amount :: line Centi}
+   otherInformation :: ZipList (Product (Rank2.Only Text) (Rank2.Only Centi) line)}
 
 deriving instance (Show (line Centi), Show (line Province.Code), Show (line Text), Show (line Int)) => Show (T4 line)
 deriving instance (Eq (line Centi), Eq (line Province.Code), Eq (line Text), Eq (line Int)) => Eq (T4 line)
@@ -71,8 +62,16 @@ deriving instance (Show (line Centi), Show (line Province.Code),
                    Show (line Text), Show (line Int)) => Show (T4Slip line)
 deriving instance (Eq (line Centi), Eq (line Province.Code), Eq (line Text), Eq (line Int)) => Eq (T4Slip line)
 
-Rank2.TH.deriveAll ''T4Slip
-Rank2.TH.deriveAll ''T4
+Rank2.TH.deriveFunctor ''T4Slip
+Rank2.TH.deriveApply ''T4Slip
+Rank2.TH.deriveApplicative ''T4Slip
+Rank2.TH.deriveFoldable ''T4Slip
+Rank2.TH.deriveTraversable ''T4Slip
+Rank2.TH.deriveFunctor ''T4
+Rank2.TH.deriveApply ''T4
+Rank2.TH.deriveApplicative ''T4
+Rank2.TH.deriveFoldable ''T4
+Rank2.TH.deriveTraversable ''T4
 Transformation.Shallow.TH.deriveAll ''T4Slip
 Transformation.Shallow.TH.deriveAll ''T4
 
@@ -110,15 +109,22 @@ t4SlipFields = T4Slip{
    box54_employersAccount = Field ["EmployersAccount", "Slip1Box54"] Textual,
    box55_premiumPPIP = Field ["Box55", "Slip1Box55"] Amount,
    box56_insurableEarningsPPIP = Field ["Box56", "Slip1Box56"] Amount,
-   box1_case = Field ["OtherInformation", "Box1", "Slip1Box1"] Textual,
-   box1_amount = Field ["OtherInformation", "Amount1", "Slip1Amount1"] Amount,
-   box2_case = Field ["OtherInformation", "Box2", "Slip1Box2"] Textual,
-   box2_amount = Field ["OtherInformation", "Amount2", "Slip1Amount2"] Amount,
-   box3_case = Field ["OtherInformation", "Box3", "Slip1Box3"] Textual,
-   box3_amount = Field ["OtherInformation", "Amount3", "Slip1Amount3"] Amount,
-   box4_case = Field ["OtherInformation", "Box4", "Slip1Box4"] Textual,
-   box4_amount = Field ["OtherInformation", "Amount4", "Slip1Amount4"] Amount,
-   box5_case = Field ["OtherInformation", "Box5", "Slip1Box5"] Textual,
-   box5_amount = Field ["OtherInformation", "Amount5", "Slip1Amount5"] Amount,
-   box6_case = Field ["OtherInformation", "Box6", "Slip1Box6"] Textual,
-   box6_amount = Field ["OtherInformation", "Amount6", "Slip1Amount6"] Amount}
+   otherInformation = (within "OtherInformation" Rank2.<$>) <$> ZipList [
+       Rank2.Only (Field ["Box1", "Slip1Box1"] Textual)
+       `Pair`
+       Rank2.Only (Field ["Amount1", "Slip1Amount1"] Amount),
+       Rank2.Only (Field ["Box2", "Slip1Box2"] Textual)
+       `Pair`
+       Rank2.Only (Field ["Amount2", "Slip1Amount2"] Amount),
+       Rank2.Only (Field ["Box3", "Slip1Box3"] Textual)
+       `Pair`
+       Rank2.Only (Field ["Amount3", "Slip1Amount3"] Amount),
+       Rank2.Only (Field ["Box4", "Slip1Box4"] Textual)
+       `Pair`
+       Rank2.Only (Field ["Amount4", "Slip1Amount4"] Amount),
+       Rank2.Only (Field ["Box5", "Slip1Box5"] Textual)
+       `Pair`
+       Rank2.Only (Field ["Amount5", "Slip1Amount5"] Amount),
+       Rank2.Only (Field ["Box6", "Slip1Box6"] Textual)
+       `Pair`
+       Rank2.Only (Field ["Amount6", "Slip1Amount6"] Amount)]}
