@@ -42,10 +42,11 @@ fixReturns =
                  mb428@MB428{page1 = page1@MB.Page1{partA, partB = partB1@MB.Page1PartB{spouseAmount}},
                              page2 = page2@MB.Page2{MB.partB = partB2@MB.Page2PartB{MB.medicalExpenses}},
                              page3 = page3@MB.Page3{MB.partC}})
-          -> Pair (fixFederalForms ff{t1 = t1{page7 =
-                                              page7{step6_RefundOrBalanceOwing =
-                                                    step6_RefundOrBalanceOwing{T1.line_42800_ProvTerrTax =
-                                                                               mb428.page3.partC.line82_tax}}}})
+          -> Pair (fixFederalForms MB $
+                   ff{t1 = t1{page7 =
+                              page7{step6_RefundOrBalanceOwing =
+                                    step6_RefundOrBalanceOwing{T1.line_42800_ProvTerrTax =
+                                                               mb428.page3.partC.line82_tax}}}})
                   (fixMB428 mb428{MB.page1 =
                                   page1{MB.Page1.income = t1.page5.step4_TaxableIncome.line_26000_TaxableIncome,
                                         MB.Page1.partB = partB1{MB.spouseAmount =

@@ -24,4 +24,4 @@ completeForms Province.AB = FDF.mapForms AB.returnFields AB.fixReturns
 completeForms Province.BC = FDF.mapForms BC.returnFields BC.fixReturns
 completeForms Province.MB = FDF.mapForms MB.returnFields MB.fixReturns
 completeForms Province.ON = FDF.mapForms ON.returnFields ON.fixReturns
-completeForms p = FDF.mapForms (Federal.formFieldsForProvince p) fixFederalForms
+completeForms p = FDF.mapForms (Federal.formFieldsForProvince p) (fixFederalForms p)

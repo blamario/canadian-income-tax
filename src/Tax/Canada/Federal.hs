@@ -36,10 +36,11 @@ import Tax.Canada.Federal.Schedule11 (Schedule11(page1), Page1(line5_trainingCla
 import Tax.Canada.T1 (fixT1, t1FieldsForProvince)
 import Tax.Canada.T1.Types (T1(page3, page4, page5, page6, page8),
                             Page3(line_10100_EmploymentIncome, line_10120_Commissions),
-                            Page4(line_20800_RRSPDeduction, line_21200_Dues),
+                            Page4(line_20600_PensionAdjustment, line_20700_RPPDeduction, line_20800_RRSPDeduction,
+                                  line_21200_Dues, line_22900_OtherEmployExpenses),
                             Page5(step4_TaxableIncome),
                             Step4(line_24400_MilitaryPoliceDeduction, line_24900_SecurityDeductions),
-                            Page6(line_31200, line_32300, line_34900),
+                            Page6(line_31200, line_31205, line_32300, line_34900),
                             Page8(step6_RefundOrBalanceOwing),
                             Page8Step6(line_43700_Total_income_tax_ded, line_45300_CWB, line_45350_CTC),
                             LanguageOfCorrespondence, MaritalStatus)
@@ -74,20 +75,29 @@ Rank2.TH.deriveTraversable ''Forms
 Transformation.Shallow.TH.deriveAll ''Forms
 
 -- | Complete all the federal forms, also handling the inter-form field references.
-fixFederalForms :: Forms Maybe -> Forms Maybe
-fixFederalForms = fixEq $ \Forms{t1, t4, schedule6, schedule7, schedule9, schedule11}-> Forms{
+fixFederalForms :: Province.Code -> Forms Maybe -> Forms Maybe
+fixFederalForms province = fixEq $ \Forms{t1, t4, schedule6, schedule7, schedule9, schedule11}-> Forms{
    t1 = fixT1 t1{
        page3 = fromT4s t4 (.slip1.box14_employmentIncome) (\amt pg-> pg{line_10100_EmploymentIncome = amt}) $
                fromT4s t4 (additionalT4 ["42"]) (\amt pg-> pg{line_10120_Commissions = amt}) $
                t1.page3,
-       page4 = fromT4s t4 (.slip1.box44_unionDues) (\amt pg-> pg{line_21200_Dues = amt}) $
+       page4 = fromT4s t4 (.slip1.box52_pensionAdjustment) (\amt pg-> pg{line_20600_PensionAdjustment = amt}) $
+               fromT4s t4 (.slip1.box20_employeeRPP) (\amt pg-> pg{line_20700_RPPDeduction = amt}) $
+               fromT4s t4 (.slip1.box44_unionDues) (\amt pg-> pg{line_21200_Dues = amt}) $
+               fromT4s t4 (additionalT4 ["77"]) (\amt step-> step{line_22900_OtherEmployExpenses = amt}) $
                t1.page4{line_20800_RRSPDeduction = schedule7.page3.partC.line20_deduction},
        page5 = t1.page5{
           step4_TaxableIncome =
-             fromT4s t4 (additionalT4 ["39", "41"]) (\amt step-> step{line_24900_SecurityDeductions = amt}) $
+             fromT4s t4 (additionalT4 ["39", "41", "91", "92"])
+                (\amt step-> step{line_24900_SecurityDeductions = amt}) $
              fromT4s t4 (additionalT4 ["43"]) (\amt step-> step{line_24400_MilitaryPoliceDeduction = amt}) $
              t1.page5.step4_TaxableIncome},
-       page6 = (fromT4s t4 (.slip1.box18_employeeEI) (\amt pg-> pg{line_31200 = amt}) t1.page6)
+       page6 = (case province
+                of Province.QC ->
+                     fromT4s t4 (.slip1.box18_employeeEI) (\amt pg-> pg{line_31200 = amt}) $
+                     fromT4s t4 (.slip1.box55_premiumPPIP) (\amt pg-> pg{line_31205 = amt}) t1.page6
+                   _ -> fromT4s t4 (\t4-> totalOf [t4.slip1.box18_employeeEI, t4.slip1.box55_premiumPPIP])
+                           (\amt pg-> pg{line_31200 = amt}) t1.page6)
                {line_32300 = schedule11.page1.line17_sum, line_34900 = schedule9.line23_sum},
        page8 = t1.page8{
           step6_RefundOrBalanceOwing =

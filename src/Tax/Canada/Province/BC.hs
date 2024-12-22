@@ -64,7 +64,7 @@ fixReturns =
                                        page2 = page2@BC.Page2{BC.partB = partB2@BC.Page2PartB{BC.medicalExpenses}},
                                        page3 = page3@BC.Page3{BC.partC}},
                    bc479}
-          -> Returns{federal = fixFederalForms
+          -> Returns{federal = fixFederalForms BC $
                                ff{t1 = t1{page7 =
                                           page7{step6_RefundOrBalanceOwing =
                                                 step6_RefundOrBalanceOwing{T1.line_42800_ProvTerrTax =
