@@ -27,7 +27,7 @@ import Data.Semigroup (Endo (Endo, appEndo))
 import Data.Semigroup.Cancellative (stripSuffix)
 import Data.Text (Text)
 import Data.Text qualified as Text
-import Data.Time (Day, defaultTimeLocale, formatTime, parseTimeM)
+import Data.Time (Day, MonthOfYear, defaultTimeLocale, formatTime, parseTimeM)
 import Data.Void (Void)
 import Rank2 qualified
 import Text.FDF (FDF (FDF, body), Field, foldMapWithKey, mapWithKey, parse, serialize, traverseWithKey)
@@ -43,6 +43,7 @@ data Entry a where
   Count :: Entry Word
   Date :: Entry Day
   Year :: Entry Int
+  Month :: Entry MonthOfYear
   Province :: Entry Province.Code
   Textual :: Entry Text
   Amount :: Entry Centi
@@ -175,6 +176,7 @@ textualFields = Rank2.liftA2 pairKey
           where dropInsignificantZeros = Text.dropWhileEnd (== '.') . Text.dropWhileEnd (== '0')
         fromEntry Count v = Right $ Text.pack (show v)
         fromEntry Year v = Right $ Text.pack (show v)
+        fromEntry Month v = Right $ Text.pack (show v)
         fromEntry Province v = Right $ Text.pack (show v)
 
 fromFieldMap :: Rank2.Traversable form => form FieldConst -> Map [Text] Text -> Either String (form Maybe)
@@ -183,8 +185,8 @@ fromFieldMap fieldForm fieldMap = Rank2.traverse (fill fieldMap) fieldForm
 fill :: forall a. Map [Text] Text -> FieldConst a -> Either String (Maybe a)
 fill fieldValues NoField = Right Nothing
 fill fieldValues Field {path, entry}
-  | Just v <- Map.lookup path fieldValues = toEntry entry (Text.unpack v)
-  | Just v <- Map.lookup (addIndex <$> path) fieldValues = toEntry entry (Text.unpack v)
+  | Just v <- Map.lookup path fieldValues = toEntry entry v
+  | Just v <- Map.lookup (addIndex <$> path) fieldValues = toEntry entry v
   | RadioButtons start step leaf values <- entry,
     alts <- [ (Map.lookup (map addIndex path <> [leaf <> "[" <> Text.pack (show $ start + i*step) <> "]"]) fieldValues,
                v)
@@ -209,19 +211,20 @@ fill fieldValues Field {path, entry}
                        ++ show (Map.lookupLT (addIndex <$> path) fieldValues,
                                 Map.lookupGT (addIndex <$> path) fieldValues))
 
-toEntry :: Entry a -> String -> Either String (Maybe a)
-toEntry _ "" = Right Nothing
+toEntry :: Entry a -> Text -> Either String (Maybe a)
+toEntry _ v | Text.null v = Right Nothing
 toEntry (Constant expected entry) v = do
   e <- toEntry entry v
   if e == Just expected
     then pure e
     else Left ("Expected " <> show expected <> ", got " <> show (v, e))
-toEntry Count v = bimap (<> " for the count of " <> show v) Just $ readEither v
-toEntry Year v = bimap (<> " for year " <> show v) Just $ readEither v
-toEntry Date v =  bimap (<> " for date " <> show v) Just $ parseTimeM False defaultTimeLocale "%Y%m%d" v
-toEntry Province v = bimap (<> " for province code " <> show v) Just $ readEither v
-toEntry Textual v = Right $ Just $ Text.pack v
-toEntry Amount v = bimap (<> " for the amount of " <> show v) Just $ readEither (dropCommas v)
+toEntry Count v = bimap (<> " for the count of " <> show v) Just $ readEither $ Text.unpack v
+toEntry Date v =  bimap (<> " for date " <> show v) Just $ parseTimeM False defaultTimeLocale "%Y%m%d" $ Text.unpack v
+toEntry Month v = bimap (<> " for month " <> show v) Just $ readEither $ Text.unpack v
+toEntry Year v = bimap (<> " for year " <> show v) Just $ readEither $ Text.unpack v
+toEntry Province v = bimap (<> " for province code " <> show v) Just $ readEither $ Text.unpack v
+toEntry Textual v = Right $ Just v
+toEntry Amount v = bimap (<> " for the amount of " <> show v) Just $ readEither $ dropCommas $ Text.unpack v
   where dropCommas num
           | (wholePart, pointyPart@('.' : decimals)) <- span (/= '.') num,
             length decimals == 2,
@@ -230,8 +233,8 @@ toEntry Amount v = bimap (<> " for the amount of " <> show v) Just $ readEither 
           | (suffix, ',':_) <- span (/= ',') (reverse num), length suffix > 2 = filter (/= ',') num
           | otherwise = num
 toEntry Percent v
-  | Just v' <- stripSuffix "%" v,
-    (wholePart, pointyPart) <- span (/= '.') v',
+  | Just v' <- stripSuffix "%" (Text.dropWhileEnd isSpace v),
+    (wholePart, pointyPart) <- span (/= '.') $ Text.unpack v',
     Right whole <- fromInteger <$> readEither wholePart,
     Right decimal <- case takeWhile (not . isSpace) pointyPart
                      of '.' : decimals -> (/ 10 ^ length decimals) . fromInteger <$> readEither decimals
@@ -245,7 +248,7 @@ toEntry Checkbox "Off" = Right $ Just False
 toEntry Checkbox "1" = Right $ Just True
 toEntry Checkbox v = Left ("Bad checkbox value: " <> show v)
 toEntry e@(RadioButton values) v
-  | Right n <- readEither v, n > 0, x:_ <- drop (n - 1) values = Right $ Just x
+  | Right n <- readEither $ Text.unpack v, n > 0, x:_ <- drop (n - 1) values = Right $ Just x
   | otherwise = Left ("Bad radio button value: " <> show (e, v))
 toEntry e@RadioButtons{} v = Left (show (e, v))
 toEntry e@(Switch a b leaf) v = Left (show (e, v))
