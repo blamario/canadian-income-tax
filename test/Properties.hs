@@ -23,6 +23,7 @@ import Tax.Canada.T1 (T1, fixT1)
 import Tax.Canada.T4 (t4Fields)
 import Tax.Canada.Federal.Schedule6 (schedule6Fields)
 import Tax.Canada.Federal.Schedule7 (schedule7Fields)
+import Tax.Canada.Federal.Schedule8 (schedule8Fields)
 import Tax.Canada.Federal.Schedule9 (schedule9Fields)
 import Tax.Canada.Federal.Schedule11 (schedule11Fields)
 import Tax.FDF as FDF
@@ -31,11 +32,13 @@ import Paths_canadian_income_tax (getDataDir)
 import Test.Transformations qualified as Transformations
 
 import Data.ByteString qualified as ByteString
+import Data.Char qualified as Char
 import Data.Either (isLeft, isRight)
 import Data.Functor.Const (Const (Const, getConst))
 import Data.List qualified as List
 import Data.Maybe (fromMaybe)
-import Data.Semigroup.Cancellative (isSuffixOf)
+import Data.Monoid.Textual qualified as Textual
+import Data.Semigroup.Cancellative (isSuffixOf, stripPrefix)
 import Data.Semigroup (All (All, getAll))
 import Data.Text (Text, isInfixOf, stripSuffix)
 import Rank2 qualified
@@ -90,6 +93,7 @@ properties [dataRootMap, fdfT1Map, fdf428Map, fdf479Map] =
       testProperty "T4" (checkFormFields t4Fields $ List.lookup "t4-fill-24e.fdf" dataRootMap),
       testProperty "Schedule 6" (checkFormFields schedule6Fields $ List.lookup "5000-s6-fill-23e.fdf" dataRootMap),
       testProperty "Schedule 7" (checkFormFields schedule7Fields $ List.lookup "5000-s7-fill-23e.fdf" dataRootMap),
+      testProperty "Schedule 8" (checkFormFields schedule8Fields $ List.lookup "5000-s8-fill-23e.fdf" dataRootMap),
       testProperty "Schedule 9" (checkFormFields schedule9Fields $ List.lookup "5000-s9-fill-23e.fdf" dataRootMap),
       testProperty "Schedule 11" (checkFormFields schedule11Fields $ List.lookup "5000-s11-fill-23e.fdf" dataRootMap),
       testGroup "428" [
@@ -143,7 +147,8 @@ checkFormFields fields (Just fdf) = property $ do
       noCheckbox :: [[Text]] -> [[Text]]
       noCheckbox = filter $ not . or . ([isSuffixOf "Checkbox", isInfixOf "CheckBox",
                                          isInfixOf "Footnote", isInfixOf "address", isInfixOf "Nameof",
-                                         (== "QuestionA"), (== "Note1"), (== "Note2"), (== "CAI-2023")] <*>)
+                                         any (Textual.all Char.isDigit) . stripPrefix "Note",
+                                         (== "QuestionA"), (== "CAI-2023")] <*>)
   -- annotateShow fdf'
   FDF.load fields fdf' === Right form
   List.sort (noCheckbox formKeys) === List.sort (noCheckbox $ filter (\x-> any (`List.isPrefixOf` x) keyHeads) fdfKeys)
