@@ -50,8 +50,8 @@ data BaseCredit line = BaseCredit {
    difference :: line Centi,
    cont :: line Centi}
 
--- | A pair of form fields appearing next to each other at the same line, the right field value always a copy of the
--- left one.
+-- | A pair of form fields appearing next to each other at the same line, the right field value always depending only
+-- on the left one.
 data SubCalculation line = SubCalculation {
    calculation :: line Centi,
    result :: line Centi}
@@ -90,10 +90,10 @@ fixMedicalExpenses ceiling = fixEq $ \part@MedicalExpenses{..} -> part{
    lesser = min ceiling <$> fraction,
    difference = nonNegativeDifference expenses lesser}
 
-fixSubCalculation :: Maybe Centi -> SubCalculation Maybe
-fixSubCalculation result = SubCalculation{
+fixSubCalculation :: (Centi -> Centi) -> Maybe Centi -> SubCalculation Maybe
+fixSubCalculation carry result = SubCalculation{
    calculation = result,
-   result = result}
+   result = carry <$> result}
 
 subCalculationFields :: Text -> [Text] -> [Text] -> SubCalculation FieldConst
 subCalculationFields parent calculationPath resultPath = SubCalculation{

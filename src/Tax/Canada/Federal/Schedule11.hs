@@ -93,7 +93,7 @@ fixSchedule11 t1 = fixEq $ \Schedule11{page1 = page1@Page1{..}, page2 = page2@Pa
       line11_numerator = if taxableIncomeUnderThreshold then taxableIncome else (/ 0.15) <$> line11_copy,
       line12_copy = t1.page6.line101_sum,
       line13_difference = nonNegativeDifference line11_numerator line12_copy,
-      line14_minUnused = fixSubCalculation $ minimum [line9_pastUnused, line13_difference],
+      line14_minUnused = fixSubCalculation id $ minimum [line9_pastUnused, line13_difference],
       line15_difference = difference line13_difference line14_minUnused.result,
       line16_min = minimum [line8_sum, line15_difference],
       line17_sum = totalOf [line14_minUnused.result, line16_min]},

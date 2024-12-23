@@ -144,7 +144,7 @@ fixSchedule6 t1spouse t1  =
          line23_copy = page3.line15_difference,
          line24_threshold = if eitherEligible then Just 28_494 else Just 24_975,
          line25_difference = nonNegativeDifference line23_copy line24_threshold,
-         line27_fraction = fixSubCalculation $ line26_rate `fractionOf` line25_difference,
+         line27_fraction = fixSubCalculation id $ line26_rate `fractionOf` line25_difference,
          line28_difference = nonNegativeDifference line22_least line27_fraction.result},
       step3 = if all not page2.questions.line_38103 then Rank2.pure Nothing else let Step3{..} = step3 in step3{
          line29_copy = page2.partA_self.line_38108_sum,
@@ -155,7 +155,7 @@ fixSchedule6 t1spouse t1  =
          line36_threshold = if eitherEligible then Just 45_932 else Just 35_098,
          line37_difference = nonNegativeDifference line35_copy line36_threshold,
          line38_rate = if or page2.questions.line_38104 then Just 0.075 else Just 0.15,
-         line39_fraction = fixSubCalculation $ line38_rate `fractionOf` line37_difference,
+         line39_fraction = fixSubCalculation id $ line38_rate `fractionOf` line37_difference,
          line40_difference = nonNegativeDifference line34_capped line39_fraction.result,
          line41_copy = if or page2.questions.line_38102 then step2.line28_difference else Just 0,
          line42_sum = totalOf [line40_difference, line41_copy]}}}

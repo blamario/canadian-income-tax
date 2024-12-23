@@ -95,12 +95,13 @@ $(foldMap
 fixSchedule7 :: T1 Maybe -> Schedule7 Maybe -> Schedule7 Maybe
 fixSchedule7 t1  = fixEq $ \Schedule7{page2, page3, page4} -> Schedule7{
    page2 = let Page2{..} = page2 in page2{
-      line_24500_contributions_sum = fixSubCalculation $ totalOf [line2_pastYearContributions, line3_thisYearContributions],
+      line_24500_contributions_sum =
+         fixSubCalculation id $ totalOf [line2_pastYearContributions, line3_thisYearContributions],
       line5_sum = totalOf [line1_pastUnused, line_24500_contributions_sum.result]},
    page3 = let Page3{partB = partB@PartB{..}, partC = partC@PartC{..}} = page3 in Page3{
       partB = partB{
          line6_contributions_copy = page2.line5_sum,
-         line9_repayments_sum = fixSubCalculation $ totalOf [line_24600_hbp, line_24620_llp],
+         line9_repayments_sum = fixSubCalculation id $ totalOf [line_24600_hbp, line_24620_llp],
          line10_difference = difference line6_contributions_copy line9_repayments_sum.result},
       partC = partC{
          line12_prpp_copy = t1.page4.line_20810_PRPP,

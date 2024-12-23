@@ -45,7 +45,7 @@ fixPage1PartB = fixEq $ \part@Page1PartB{..}-> part{
    spouseAmount = fixBaseCredit spouseAmount,
    dependantAmount = fixBaseCredit dependantAmount,
    line18 = totalOf [line9_basic, line10_age, spouseAmount.cont, dependantAmount.cont, line17_caregiver],
-   line24_sum = fixSubCalculation $
+   line24_sum = fixSubCalculation id $
                 totalOf [line19_cppQpp,
                          line20_cppQpp,
                          line21_employmentInsurance,
@@ -65,7 +65,7 @@ fixPage2PartB on428 = fixEq $ \part@Page2PartB{..}-> part{
    line31 = totalOf [line28, line29_disability, line30],
    line35 = totalOf [line31, line32_interest, line33_education, line34_transferred],
    medicalExpenses = fixMedicalExpenses 2685 medicalExpenses,
-   line43_sum = fixSubCalculation $ totalOf [medicalExpenses.difference, line42],
+   line43_sum = fixSubCalculation id $ totalOf [medicalExpenses.difference, line42],
    line44 = totalOf [line35, line43_sum.result],
    line46_fraction = line45_rate `fractionOf` line44,
    donations = fixDonations donations,
@@ -91,7 +91,7 @@ fixDonations :: Donations Maybe -> Donations Maybe
 fixDonations = fixEq $ \part@Donations{..} -> part{
    line47_fraction = Just 0.0505 `fractionOf` line47_base,
    line48_fraction = Just 0.1116 `fractionOf` line48_base,
-   line49_sum = fixSubCalculation $ totalOf [line47_fraction, line48_fraction]}
+   line49_sum = fixSubCalculation id $ totalOf [line47_fraction, line48_fraction]}
 
 fixPage3 :: ON428 Maybe -> Page3 Maybe -> Page3 Maybe
 fixPage3 on428 = fixEq $ \page@Page3{..}-> page{
@@ -103,7 +103,7 @@ fixPage3 on428 = fixEq $ \page@Page3{..}-> page{
    line66_surtax = Just 0.2 `fractionOf` nonNegativeDifference line66_copy (Just 5315),
    line67_copy = line65,
    line67_surtax = Just 0.36 `fractionOf` nonNegativeDifference line67_copy (Just 6802),
-   line68_sum = fixSubCalculation $ totalOf [line66_surtax, line67_surtax],
+   line68_sum = fixSubCalculation id $ totalOf [line66_surtax, line67_surtax],
    line69 = totalOf [line62, line68_sum.result],
    line70 = on428.page2.partC.line57,
    line71 = nonNegativeDifference line69 line70,
@@ -114,7 +114,7 @@ fixPage3 on428 = fixEq $ \page@Page3{..}-> page{
    line78_copy = line77,
    line78_product = (2 *) <$> line78_copy,
    line79 = line73,
-   line80_difference = fixSubCalculation $ nonNegativeDifference line78_product line79,
+   line80_difference = fixSubCalculation id $ nonNegativeDifference line78_product line79,
    line81 = nonNegativeDifference line73 line80_difference.result,
    line83 = nonNegativeDifference line81 line82}
 

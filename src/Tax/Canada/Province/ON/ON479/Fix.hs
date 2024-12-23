@@ -26,8 +26,8 @@ fixPage1 = fixEq $ \page@Page1{..}-> page{
    line6_fraction = line5_allowable `fractionOf` line4_homecare_copy,
    line9_sum = totalOf [line7_netIncome_copy, line8_spouse_copy],
    line11_difference = nonNegativeDifference line9_sum line10_base,
-   line13_fraction = fixSubCalculation $ line12_rate `fractionOf` line11_difference,
-   line_63095_difference = fixSubCalculation $ nonNegativeDifference line6_fraction line13_fraction.result,
+   line13_fraction = fixSubCalculation id $ line12_rate `fractionOf` line11_difference,
+   line_63095_difference = fixSubCalculation id $ nonNegativeDifference line6_fraction line13_fraction.result,
    line_63100_fraction = (0.15 *) <$> line_63100_transit,
    line16_sum = totalOf [line_63050_childcare, line_63095_difference.result, line_63100_fraction]}
 
