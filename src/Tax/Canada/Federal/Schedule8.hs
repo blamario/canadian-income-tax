@@ -72,11 +72,9 @@ data Part4 line = Part4{
    line5_difference :: line Centi,
    line6_contributionRate :: line Rational,
    line7_fraction :: line Centi,
-   line8_copy :: line Centi,
-   line8_fraction :: line Centi,
+   line8_fraction :: SubCalculation line,
    line9_difference :: line Centi,
-   line10_copy :: line Centi,
-   line10_fraction :: line Centi,
+   line10_fraction :: SubCalculation line,
    line11_sum :: line Centi}
 
 data Page4Part5 line = Page4Part5{
@@ -186,11 +184,9 @@ schedule8Fields = within "form1" Rank2.<$> Schedule8{
          line5_difference = Field ["Line5", "Amount"] Amount,
          line6_contributionRate = Field ["Line6", "Percent"] $ Constant 0.119 Percent,
          line7_fraction = Field ["Line7", "Amount"] Amount,
-         line8_copy = Field ["Line8", "Amount1"] Amount,
-         line8_fraction = Field ["Line8", "Amount2"] Amount,
+         line8_fraction = subCalculationFields "Line8" ["Amount1"] ["Amount2"],
          line9_difference = Field ["Line9", "Amount"] Amount,
-         line10_copy = Field ["Line10", "Amount1"] Amount,
-         line10_fraction = Field ["Line10", "Amount2"] Amount,
+         line10_fraction = subCalculationFields "Line10" ["Amount1"] ["Amount2"],
          line11_sum = Field ["Line11", "amount"] Amount},
       part5 = within "part5" Rank2.<$> Page4Part5{
          line1_netSelfEmploymentEarnings = Field ["Line1", "Amount"] Amount,

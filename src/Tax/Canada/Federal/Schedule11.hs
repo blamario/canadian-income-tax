@@ -36,8 +36,7 @@ data Schedule11 line = Schedule11{
 
 data Page1 line = Page1{
    line_32000_tuition :: line Centi,
-   line2_copy :: line Centi,
-   line2_fraction :: line Centi,
+   line2_fraction :: SubCalculation line,
    line3_limit :: line Centi,
    line4_min :: line Centi,
    line5_trainingClaim :: line Centi,
@@ -83,9 +82,8 @@ $(foldMap
 fixSchedule11 :: T1 Maybe -> Schedule11 Maybe -> Schedule11 Maybe
 fixSchedule11 t1 = fixEq $ \Schedule11{page1 = page1@Page1{..}, page2 = page2@Page2{..}} -> Schedule11{
    page1 = page1{
-      line2_copy = line_32000_tuition,
-      line2_fraction = (0.5 *) <$> line2_copy,
-      line4_min = minimum [line2_fraction, line3_limit],
+      line2_fraction = fixSubCalculation (0.5 *) line_32000_tuition,
+      line4_min = minimum [line2_fraction.result, line3_limit],
       line6_difference = difference line_32000_tuition line5_trainingClaim,
       line8_sum = totalOf [line6_difference, line_32001_eligible],
       line10_sum = totalOf [line9_pastUnused, line8_sum],
@@ -116,8 +114,7 @@ schedule11Fields = within "form1" Rank2.<$> Schedule11 {
 page1Fields :: Page1 FieldConst
 page1Fields = within "Page1"  . within "YourTuition" Rank2.<$> Page1 {
    line_32000_tuition = Field ["Line1", "Amount2"] Amount,
-   line2_copy = Field ["Line2", "Amount1"] Amount,
-   line2_fraction = Field ["Line2", "Amount2"] Amount,
+   line2_fraction = subCalculationFields "Line2" ["Amount1"] ["Amount2"],
    line3_limit = Field ["Line3", "Amount4"] Amount,
    line4_min = Field ["Line4", "Amount5"] Amount,
    line5_trainingClaim = Field ["Line5", "Amount6"] Amount,

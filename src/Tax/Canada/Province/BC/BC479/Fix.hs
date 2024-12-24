@@ -23,9 +23,8 @@ fixPage1 = fixEq $ \page@Page1{..}-> page{
    line8_difference = nonNegativeDifference line6_sum line7_threshold,
    line_60330_sales = Just 75,
    line11_sum = totalOf [line_60330_sales, line_60350_spouse],
-   line12_copy = line8_difference,
-   line12_fraction = (0.02 *) <$> line8_difference,
-   line13_difference = nonNegativeDifference line11_sum line12_fraction,
+   line12_fraction = fixSubCalculation (0.02 *) line8_difference,
+   line13_difference = nonNegativeDifference line11_sum line12_fraction.result,
    line14_fraction = (0.1 *) <$> line_60480_renovation,
    line15_sum = totalOf [line13_difference, line14_fraction]}
 
