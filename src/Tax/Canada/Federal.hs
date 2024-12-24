@@ -20,7 +20,8 @@ import Control.Applicative ((<|>))
 import Data.CAProvinceCodes qualified as Province
 import Data.Fixed (Centi)
 import Data.List.NonEmpty (NonEmpty((:|)))
-import Data.Semigroup (Sum(Sum, getSum))
+import Data.Maybe (isNothing)
+import Data.Semigroup (All (All, getAll), Sum(Sum, getSum))
 import Data.Text (Text)
 import Data.Time (Day)
 import Rank2 qualified
@@ -76,32 +77,33 @@ Transformation.Shallow.TH.deriveAll ''Forms
 
 -- | Complete all the federal forms, also handling the inter-form field references.
 fixFederalForms :: Province.Code -> Forms Maybe -> Forms Maybe
-fixFederalForms province = fixEq $ \Forms{t1, t4, schedule6, schedule7, schedule9, schedule11}-> Forms{
+fixFederalForms province = fixEq $ \Forms{t1, t4, schedule6, schedule7, schedule9, schedule11}->
+                                     let fromT4s' = fromT4s t4 in Forms{
    t1 = fixT1 t1{
-       page3 = fromT4s t4 (.slip1.box14_employmentIncome) (\amt pg-> pg{line_10100_EmploymentIncome = amt}) $
-               fromT4s t4 (additionalT4 ["42"]) (\amt pg-> pg{line_10120_Commissions = amt}) $
+       page3 = fromT4s' (.slip1.box14_employmentIncome) (\amt pg-> pg{line_10100_EmploymentIncome = amt}) $
+               fromT4s' (additionalT4 ["42"]) (\amt pg-> pg{line_10120_Commissions = amt}) $
                t1.page3,
-       page4 = fromT4s t4 (.slip1.box52_pensionAdjustment) (\amt pg-> pg{line_20600_PensionAdjustment = amt}) $
-               fromT4s t4 (.slip1.box20_employeeRPP) (\amt pg-> pg{line_20700_RPPDeduction = amt}) $
-               fromT4s t4 (.slip1.box44_unionDues) (\amt pg-> pg{line_21200_Dues = amt}) $
-               fromT4s t4 (additionalT4 ["77"]) (\amt step-> step{line_22900_OtherEmployExpenses = amt}) $
+       page4 = fromT4s' (.slip1.box52_pensionAdjustment) (\amt pg-> pg{line_20600_PensionAdjustment = amt}) $
+               fromT4s' (.slip1.box20_employeeRPP) (\amt pg-> pg{line_20700_RPPDeduction = amt}) $
+               fromT4s' (.slip1.box44_unionDues) (\amt pg-> pg{line_21200_Dues = amt}) $
+               fromT4s' (additionalT4 ["77"]) (\amt step-> step{line_22900_OtherEmployExpenses = amt}) $
                t1.page4{line_20800_RRSPDeduction = schedule7.page3.partC.line20_deduction},
        page5 = t1.page5{
           step4_TaxableIncome =
-             fromT4s t4 (additionalT4 ["39", "41", "91", "92"])
+             fromT4s' (additionalT4 ["39", "41", "91", "92"])
                 (\amt step-> step{line_24900_SecurityDeductions = amt}) $
-             fromT4s t4 (additionalT4 ["43"]) (\amt step-> step{line_24400_MilitaryPoliceDeduction = amt}) $
+             fromT4s' (additionalT4 ["43"]) (\amt step-> step{line_24400_MilitaryPoliceDeduction = amt}) $
              t1.page5.step4_TaxableIncome},
        page6 = (case province
                 of Province.QC ->
-                     fromT4s t4 (.slip1.box18_employeeEI) (\amt pg-> pg{line_31200 = amt}) $
-                     fromT4s t4 (.slip1.box55_premiumPPIP) (\amt pg-> pg{line_31205 = amt}) t1.page6
-                   _ -> fromT4s t4 (\t4-> totalOf [t4.slip1.box18_employeeEI, t4.slip1.box55_premiumPPIP])
+                     fromT4s' (.slip1.box18_employeeEI) (\amt pg-> pg{line_31200 = amt}) $
+                     fromT4s' (.slip1.box55_premiumPPIP) (\amt pg-> pg{line_31205 = amt}) t1.page6
+                   _ -> fromT4s' (\t4-> totalOf [t4.slip1.box18_employeeEI, t4.slip1.box55_premiumPPIP])
                            (\amt pg-> pg{line_31200 = amt}) t1.page6)
                {line_32300 = schedule11.page1.line17_sum, line_34900 = schedule9.line23_sum},
        page8 = t1.page8{
           step6_RefundOrBalanceOwing =
-             (fromT4s t4 (.slip1.box22_incomeTaxDeducted) (\amt pt-> pt{line_43700_Total_income_tax_ded = amt})
+             (fromT4s' (.slip1.box22_incomeTaxDeducted) (\amt pt-> pt{line_43700_Total_income_tax_ded = amt})
                  t1.page8.step6_RefundOrBalanceOwing)
              {line_45300_CWB = schedule6.page4.step3.line42_sum <|>
                                schedule6.page4.step2.line28_difference,
@@ -124,7 +126,9 @@ formFieldsForProvince p = Forms{
 
 fromT4s :: Maybe (NonEmpty (T4 Maybe)) -> (T4 Maybe -> Maybe Centi) -> (Maybe Centi -> form -> form) -> form -> form
 fromT4s Nothing _ _ = id
-fromT4s (Just t4s) field set = set $ totalOf $ field <$> t4s
+fromT4s (Just t4s) field set
+   | getAll $ foldMap (Rank2.foldMap (All . isNothing)) t4s = id
+   | otherwise = set $ totalOf $ field <$> t4s
 
 additionalT4 :: [Text] -> T4 Maybe -> Maybe Centi
 additionalT4 codes t4 = getSum <$> foldMap findCode t4.slip1.otherInformation
