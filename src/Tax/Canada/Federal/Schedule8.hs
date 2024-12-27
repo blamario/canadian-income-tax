@@ -18,6 +18,7 @@
 
 module Tax.Canada.Federal.Schedule8 where
 
+import Control.Applicative ((<|>))
 import Data.Fixed (Centi)
 import Data.Text (Text)
 import Data.Time.Calendar (MonthOfYear)
@@ -151,7 +152,8 @@ $(foldMap
 
 fixSchedule8 :: Schedule8 Maybe -> Schedule8 Maybe
 fixSchedule8 = fixEq $ \Schedule8{page2, page3, page4, page5, page6}-> Schedule8{
-   page2 = page2,
+   page2 = page2{
+      lineA_months = page2.lineA_months <|> Just 12},
    page3 = let Page3{..} = page3 in page3{
       line1_maxPensionableEarnings = ((5550 *) . fromIntegral . max 12) <$> page2.lineA_months,
       line3_least = min line1_maxPensionableEarnings line_50339_totalPensionableEarnings,
@@ -166,15 +168,17 @@ fixSchedule8 = fixEq $ \Schedule8{page2, page3, page4, page5, page6}-> Schedule8
       line13_copy = line11_sum,
       line14_difference = nonNegativeDifference line12_copy line13_copy},
    page4 = Page4{
-      part4 = let Part4{..} = page4.part4 in page4.part4{
-         line3_sum = totalOf [line1_netSelfEmploymentEarnings, line_50373_additionalEmploymentEarningsOffT4],
-         line4_basicExemption = ((/ 12) . (3500 *) . fromIntegral . min 12) <$> page2.lineA_months,
-         line5_difference = nonNegativeDifference line3_sum line4_basicExemption,
-         line7_fraction = line6_contributionRate `fractionOf` line5_difference,
-         line8_fraction = fixSubCalculation (0.831933 *) line7_fraction,
-         line9_difference = nonNegativeDifference line7_fraction line8_fraction.result,
-         line10_fraction = fixSubCalculation (0.5 *) line8_fraction.result,
-         line11_sum = totalOf [line9_difference, line10_fraction.result]},
+      part4 = let Part4{..} = page4.part4 in case page3.line_50339_totalPensionableEarnings of
+         Just{} -> Rank2.pure Nothing
+         Nothing -> page4.part4{
+            line3_sum = totalOf [line1_netSelfEmploymentEarnings, line_50373_additionalEmploymentEarningsOffT4],
+            line4_basicExemption = ((/ 12) . (3500 *) . fromIntegral . min 12) <$> page2.lineA_months,
+            line5_difference = nonNegativeDifference line3_sum line4_basicExemption,
+            line7_fraction = line6_contributionRate `fractionOf` line5_difference,
+            line8_fraction = fixSubCalculation (0.831933 *) line7_fraction,
+            line9_difference = nonNegativeDifference line7_fraction line8_fraction.result,
+            line10_fraction = fixSubCalculation (0.5 *) line8_fraction.result,
+            line11_sum = totalOf [line9_difference, line10_fraction.result]},
       part5 = let Page4Part5{..} = page4.part5 in page4.part5{
          line4_sum = totalOf [line1_netSelfEmploymentEarnings, line_50373_additionalEmploymentEarningsOffT4],
          line5_copy = page3.line_50340_totalContributions,
