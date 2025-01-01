@@ -21,7 +21,8 @@ import Control.Applicative ((<|>))
 import Control.Monad ((=<<))
 import Data.CAProvinceCodes qualified as Province
 import Data.Fixed (Centi)
-import Data.Functor.Compose (Compose(Compose))
+import Data.Foldable (toList)
+import Data.Functor.Compose (Compose(Compose, getCompose))
 import Data.List.NonEmpty (NonEmpty((:|)))
 import Data.Maybe (isJust)
 import Data.Semigroup (Any (Any, getAny), Sum(Sum, getSum))
@@ -69,7 +70,7 @@ import Tax.Util (fixEq, totalOf)
 -- | All supported federal forms
 data Forms line = Forms{
    t1 :: T1 line,
-   t4 :: Maybe (NonEmpty (T4 line)),
+   t4 :: Rank2.Compose T4 NonEmpty line,
    schedule6 :: Schedule6 line,
    schedule7 :: Schedule7 line,
    schedule8 :: Schedule8 line,
@@ -119,10 +120,11 @@ fixFederalForms province = fixEq $ \Forms{t1, t4, schedule6, schedule7, schedule
                 of Province.QC ->
                      fromT4s' (.slip1.box18_employeeEI) (\amt pg-> pg{line_31200 = amt}) $
                      fromT4s' (.slip1.box55_premiumPPIP) (\amt pg-> pg{line_31205 = amt}) t1.page6
-                   _ -> fromT4s' (\t4-> totalOf [t4.slip1.box18_employeeEI, t4.slip1.box55_premiumPPIP])
+                   _ -> fromT4s' (\t4-> Compose $ pure $ totalOf [totalOf $ getCompose t4.slip1.box18_employeeEI,
+                                                                  totalOf $ getCompose t4.slip1.box55_premiumPPIP])
                            (\amt pg-> pg{line_31200 = amt}) t1.page6)
-               {line_30800 = if any hasAnyField t4 then schedule8.page5.line30_least else t1.page6.line_30800,
-                line_31000 = if any hasAnyField t4
+               {line_30800 = if hasAnyField t4 then schedule8.page5.line30_least else t1.page6.line_30800,
+                line_31000 = if hasAnyField t4
                              then schedule8.page4.part4.line10_fraction.result <|>
                                   schedule8.page6.line40_difference <|>
                                   schedule8.page6.line51_sum
@@ -146,8 +148,8 @@ fixFederalForms province = fixEq $ \Forms{t1, t4, schedule6, schedule7, schedule
    schedule7 = fixSchedule7 t1 schedule7,
    schedule8 = fixSchedule8 schedule8{
       page3 = schedule8.page3{
-         line_50339_totalPensionableEarnings = totalOf . fmap (.slip1.box26_pensionableEarnings) =<< t4,
-         line_50340_totalContributions = totalOf . fmap (.slip1.box16_employeeCPP) =<< t4},
+         line_50339_totalPensionableEarnings = totalOf t4.getCompose.slip1.box26_pensionableEarnings.getCompose,
+         line_50340_totalContributions = totalOf t4.getCompose.slip1.box16_employeeCPP.getCompose},
       page4 = Schedule8.Page4{
          part4 = schedule8.page4.part4{
             line1_netSelfEmploymentEarnings = totalOf [t1.page3.line_12200_PartnershipIncome,
@@ -163,23 +165,24 @@ fixFederalForms province = fixEq $ \Forms{t1, t4, schedule6, schedule7, schedule
 formFieldsForProvince :: Province.Code -> Forms FieldConst
 formFieldsForProvince p = Forms{
   t1 = within "T1" Rank2.<$> t1FieldsForProvince p,
-  t4 = Just (pure $ within "T4" Rank2.<$> t4Fields),
+  t4 = Rank2.Compose (Compose . pure . within "T4" Rank2.<$> t4Fields),
   schedule6 = within "Schedule6" Rank2.<$> schedule6Fields,
   schedule7 = within "Schedule7" Rank2.<$> schedule7Fields,
   schedule8 = within "Schedule8" Rank2.<$> schedule8Fields,
   schedule9 = within "Schedule9" Rank2.<$> schedule9Fields,
   schedule11 = within "Schedule11" Rank2.<$> schedule11Fields}
 
-hasAnyField :: Foldable f => f (T4 Maybe) -> Bool
-hasAnyField = getAny . foldMap (Rank2.foldMap (Any . isJust))
+hasAnyField :: Rank2.Foldable g => g Maybe -> Bool
+hasAnyField = getAny . Rank2.foldMap (Any . isJust)
 
-fromT4s :: Maybe (NonEmpty (T4 Maybe)) -> (T4 Maybe -> Maybe Centi) -> (Maybe Centi -> form -> form) -> form -> form
+fromT4s :: Rank2.Compose T4 NonEmpty Maybe -> (T4 (Compose NonEmpty Maybe) -> Compose NonEmpty Maybe Centi) -> (Maybe Centi -> form -> form) -> form -> form
 fromT4s t4 field set
-   | hasAnyField (Compose t4) = set $ totalOf $ field <$> Compose t4
+   | hasAnyField t4 = set $ totalOf $ getCompose $ field $ Rank2.getCompose t4
    | otherwise = id
 
-additionalT4 :: [Text] -> T4 Maybe -> Maybe Centi
-additionalT4 codes t4 = getSum <$> foldMap findCode t4.slip1.otherInformation
-   where findCode (Rank2.Pair (Rank2.Only (Just code)) (Rank2.Only (Just amt)))
-           | elem code codes = Just (Sum amt)
-         findCode _ = Nothing
+additionalT4 :: [Text] -> T4 (Compose NonEmpty Maybe) -> Compose NonEmpty Maybe Centi
+additionalT4 codes t4 = Compose $ pure $ totalOf $ foldMap findCodes t4.slip1.otherInformation
+   where findCodes (Rank2.Pair (Rank2.Only (Compose codes)) (Rank2.Only (Compose amts))) =
+            zipWith findCode (toList codes) (toList amts)
+         findCode (Just code) amt | elem code codes = amt
+         findCode _ _ = Nothing

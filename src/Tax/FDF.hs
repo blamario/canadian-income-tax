@@ -21,6 +21,7 @@ import Data.Fixed (Centi)
 import Data.Foldable (find)
 import Data.Functor.Const (Const (Const, getConst))
 import Data.List (elemIndex)
+import Data.List.NonEmpty (NonEmpty((:|)))
 import Data.Map.Lazy (Map)
 import Data.Map.Lazy qualified as Map
 import Data.Semigroup (Endo (Endo, appEndo))
@@ -53,6 +54,7 @@ data Entry a where
   RadioButtons :: (Bounded a, Enum a, Eq a, Show a) => Int -> Int -> Text -> [a] -> Entry a
   Switch :: Text -> Text -> Text -> Entry Bool
   Switch' :: Text -> Entry Bool
+  Multiple :: Show a => Entry a -> Entry (NonEmpty a)
 
 deriving instance Show a => Show (Entry a)
 
@@ -178,6 +180,7 @@ textualFields = Rank2.liftA2 pairKey
         fromEntry Year v = Right $ Text.pack (show v)
         fromEntry Month v = Right $ Text.pack (show v)
         fromEntry Province v = Right $ Text.pack (show v)
+        fromEntry (Multiple item) (v :| _) = fromEntry item v
 
 fromFieldMap :: Rank2.Traversable form => form FieldConst -> Map [Text] Text -> Either String (form Maybe)
 fromFieldMap fieldForm fieldMap = Rank2.traverse (fill fieldMap) fieldForm
@@ -253,6 +256,7 @@ toEntry e@(RadioButton values) v
 toEntry e@RadioButtons{} v = Left (show (e, v))
 toEntry e@(Switch a b leaf) v = Left (show (e, v))
 toEntry e@(Switch' leaf) v = Left (show (e, v))
+toEntry (Multiple item) v = (pure <$>) <$> toEntry item v
 
 addIndex :: Text -> Text
 addIndex key
