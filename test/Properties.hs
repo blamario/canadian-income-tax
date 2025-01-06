@@ -21,6 +21,7 @@ import Tax.Canada.Territory.NU qualified as NU
 import Tax.Canada.Territory.YT qualified as YT
 import Tax.Canada.T1 (T1, fixT1)
 import Tax.Canada.T4 (t4Fields)
+import Tax.Canada.Federal qualified as Federal
 import Tax.Canada.Federal.Schedule6 (schedule6Fields)
 import Tax.Canada.Federal.Schedule7 (schedule7Fields)
 import Tax.Canada.Federal.Schedule8 (schedule8Fields)
@@ -72,20 +73,20 @@ properties [dataRootMap, fdfT1Map, fdf428Map, fdf479Map] =
       testGroup "Alberta" [
         testProperty "T1" (checkFormIdempotent AB.t1Fields fixT1),
         testProperty "AB428" (checkFormIdempotent AB.ab428Fields AB.fixAB428),
-        testProperty "Federal+AB428" (checkFormIdempotent AB.returnFields AB.fixReturns)],
+        testProperty "Federal+AB428" (checkFederalFormIdempotent AB.returnFields AB.fixReturns)],
       testGroup "British Columbia" [
         testProperty "T1" (checkFormIdempotent BC.t1Fields fixT1),
         testProperty "BC428" (checkFormIdempotent BC.bc428Fields BC.fixBC428),
-        testProperty "Federal+BC428+BC479" (checkFormIdempotent BC.returnFields BC.fixReturns)],
+        testProperty "Federal+BC428+BC479" (checkFederalFormIdempotent BC.returnFields BC.fixReturns)],
       testGroup "Manitoba" [
         testProperty "T1" (checkFormIdempotent MB.t1Fields fixT1),
         testProperty "MB428" (checkFormIdempotent MB.mb428Fields MB.fixMB428),
-        testProperty "Federal+MB428" (checkFormIdempotent MB.returnFields MB.fixReturns)],
+        testProperty "Federal+MB428" (checkFederalFormIdempotent MB.returnFields MB.fixReturns)],
       testGroup "Ontario" [
         testProperty "T1" (checkFormIdempotent ON.t1Fields fixT1),
         testProperty "ON428" (checkFormIdempotent ON.returnFields.on428 ON.fixON428),
         testProperty "ON479" (checkFormIdempotent ON.returnFields.on479 ON.fixON479),
-        testProperty "Federal+ON428+ON479" (checkFormIdempotent ON.returnFields ON.fixReturns)]],
+        testProperty "Federal+ON428+ON479" (checkFederalFormIdempotent ON.returnFields ON.fixReturns)]],
     testGroup "Roundtrip" [
       testGroup "T1" [
         testProperty ("T1 for " <> name) (checkFormFields fields $ List.lookup (prefix <> "-r-fill-23e.fdf") fdfT1Map)
@@ -130,6 +131,11 @@ checkFormIdempotent :: (Eq (g Maybe), Show (g Maybe),
                         Rank2.Applicative g, Shallow.Traversable Transformations.Gen g)
                     => g FieldConst -> (g Maybe -> g Maybe) -> Property
 checkFormIdempotent fields f = checkIdempotent (generateForm fields) f
+
+checkFederalFormIdempotent :: (Eq (g Maybe), Show (g Maybe),
+                               Rank2.Applicative g, Shallow.Traversable Transformations.Gen g)
+                           => g FieldConst -> (Federal.InputForms Maybe -> g Maybe -> g Maybe) -> Property
+checkFederalFormIdempotent fields f = checkIdempotent (generateForm fields) (f mempty)
 
 checkFormFields :: (Eq (g Maybe), Show (g Maybe),
                     Rank2.Applicative g, Shallow.Traversable Transformations.Gen g)

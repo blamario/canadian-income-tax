@@ -33,8 +33,8 @@ import Data.Functor.Product (Product(Pair))
 
 type Returns = Product Federal.Forms AB428
 
-fixReturns :: Returns Maybe -> Returns Maybe
-fixReturns =
+fixReturns :: Federal.InputForms Maybe -> Returns Maybe -> Returns Maybe
+fixReturns inputs =
   fixEq $ \(Pair
             ff@Federal.Forms{t1 = t1@T1{page7 = page7@Page7{step6_RefundOrBalanceOwing},
                                         page8 = page8@Page8{step6_RefundOrBalanceOwing = page8step6}},
@@ -42,7 +42,7 @@ fixReturns =
             ab428@AB428{page1 = page1@AB.Page1{partA, partB = partB1@AB.Page1PartB{spouseAmount}},
                         page2 = page2@AB.Page2{AB.partB = partB2@AB.Page2PartB{AB.medicalExpenses}},
                         page3 = page3@AB.Page3{AB.partC}})
-          -> (fixFederalForms AB
+          -> (fixFederalForms AB inputs
               ff{t1 = t1{page7 =
                          page7{step6_RefundOrBalanceOwing =
                                step6_RefundOrBalanceOwing{T1.line_42800_ProvTerrTax = ab428.page3.partC.line66_tax}},

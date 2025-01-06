@@ -69,7 +69,8 @@ testReturn path = do
   fdfBytes <- traverse (ByteString.readFile . combine inputPath) fdfFileNames
   case traverse parse fdfBytes of
     Left err -> die err
-    Right fdfs -> case FDF.mapForms ON.returnFields ON.fixReturns (Map.fromList $ zip (formKey <$> fdfFileNames) fdfs) of
+    Right fdfs -> case FDF.mapForms ON.returnFields (ON.fixReturns mempty)
+                       $ Map.fromList $ zip (formKey <$> fdfFileNames) fdfs of
       Left err -> die err
       Right filled
         | let fdfOutputs = fromStrict . serialize <$> filled

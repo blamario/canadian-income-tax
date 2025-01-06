@@ -57,8 +57,8 @@ Rank2.TH.deriveFoldable ''Returns
 Rank2.TH.deriveTraversable ''Returns
 Transformation.Shallow.TH.deriveAll ''Returns
 
-fixReturns :: Returns Maybe -> Returns Maybe
-fixReturns =
+fixReturns :: Federal.InputForms Maybe -> Returns Maybe -> Returns Maybe
+fixReturns inputs =
   fixEq $ \Returns{federal = ff@Federal.Forms{t1 = t1@T1{page7 = page7@Page7{step6_RefundOrBalanceOwing},
                                                          page8 = page8@Page8{step6_RefundOrBalanceOwing = page8step6}},
                                               schedule9},
@@ -66,7 +66,7 @@ fixReturns =
                                        page2 = page2@ON.Page2{ON.partB = partB2@ON.Page2PartB{ON.medicalExpenses},
                                                               ON.partC}},
                    on479}
-          -> Returns{federal = fixFederalForms ON $
+          -> Returns{federal = fixFederalForms ON inputs $
                                ff{t1 =
                                   t1{page7 =
                                      page7{step6_RefundOrBalanceOwing =

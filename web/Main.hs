@@ -66,7 +66,7 @@ main = scotty 3000 $ do
         pure ((,) key <$> fdf)
       case fdfBytes >>= traverse (traverse $ Lazy.toStrict >>> parse) of
         Left err -> status unsupportedMediaType415 >> text (fromString err)
-        Right fdfs -> case completeForms province (Map.fromList fdfs) of
+        Right fdfs -> case completeForms province mempty (Map.fromList fdfs) of
           Left err -> status unprocessableEntity422 >> text (fromString err)
           Right fdfs' -> do
             let fdfBytes' = Lazy.fromStrict . serialize <$> fdfs'

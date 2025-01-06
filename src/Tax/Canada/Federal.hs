@@ -15,21 +15,23 @@
 
 -- | The federal income tax forms
 
-module Tax.Canada.Federal (Forms(..), fixFederalForms, formFieldsForProvince) where
+module Tax.Canada.Federal (InputForms, Forms(..), loadInputForms, fixFederalForms, formFieldsForProvince) where
 
 import Control.Applicative ((<|>))
 import Control.Monad ((=<<))
 import Data.CAProvinceCodes qualified as Province
 import Data.Fixed (Centi)
 import Data.Functor.Compose (Compose(Compose))
-import Data.List.NonEmpty (NonEmpty((:|)))
+import Data.List.NonEmpty (NonEmpty((:|)), nonEmpty)
 import Data.Maybe (isJust)
 import Data.Semigroup (Any (Any, getAny), Sum(Sum, getSum))
 import Data.Text (Text)
 import Data.Time (Day)
+import GHC.Stack (HasCallStack)
 import Rank2 qualified
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
+import Text.FDF (FDF)
 
 import Tax.Canada.Federal.Schedule6 qualified as Schedule6
 import Tax.Canada.Federal.Schedule6 (Schedule6, fixSchedule6, schedule6Fields)
@@ -63,13 +65,22 @@ import Tax.Canada.T1.Types (T1(page3, page4, page5, page6, page7, page8),
 import Tax.Canada.T4 (T4, t4Fields, T4Slip(box16_employeeCPP, box26_pensionableEarnings))
 import Tax.Canada.T4 qualified as T4
 import Tax.Canada.Shared (SubCalculation(result))
-import Tax.FDF (Entry (Amount), FieldConst (Field), within)
+import Tax.FDF (Entry (Amount), FieldConst (Field), load, within)
 import Tax.Util (fixEq, totalOf)
+
+-- | All supported federal input forms, not to be filled in
+data InputForms line = InputForms{
+  t4 :: Maybe (NonEmpty (T4 line))}
+
+instance Semigroup (InputForms Maybe) where
+  InputForms x <> InputForms y = InputForms $ x <> y
+
+instance Monoid (InputForms Maybe) where
+  mempty = InputForms Nothing
 
 -- | All supported federal forms
 data Forms line = Forms{
    t1 :: T1 line,
-   t4 :: Maybe (NonEmpty (T4 line)),
    schedule6 :: Schedule6 line,
    schedule7 :: Schedule7 line,
    schedule8 :: Schedule8 line,
@@ -85,17 +96,16 @@ deriving instance (Eq (line Bool), Eq (line Centi), Eq (line Word), Eq (line Int
                    Eq (line LanguageOfCorrespondence), Eq (line MaritalStatus))
                => Eq (Forms line)
 
-Rank2.TH.deriveFunctor ''Forms
-Rank2.TH.deriveApply ''Forms
-Rank2.TH.deriveApplicative ''Forms
-Rank2.TH.deriveFoldable ''Forms
-Rank2.TH.deriveTraversable ''Forms
+Rank2.TH.deriveAll ''Forms
 Transformation.Shallow.TH.deriveAll ''Forms
 
+loadInputForms :: [(Text, FDF)] -> Either String (InputForms Maybe)
+loadInputForms forms = InputForms . nonEmpty <$> traverse (load T4.t4Fields . snd) forms
+
 -- | Complete all the federal forms, also handling the inter-form field references.
-fixFederalForms :: Province.Code -> Forms Maybe -> Forms Maybe
-fixFederalForms province = fixEq $ \Forms{t1, t4, schedule6, schedule7, schedule8, schedule9, schedule11}->
-                                    let fromT4s' = fromT4s t4 in Forms{
+fixFederalForms :: Province.Code -> InputForms Maybe -> Forms Maybe -> Forms Maybe
+fixFederalForms province InputForms{t4} = fixEq $ \Forms{t1, schedule6, schedule7, schedule8, schedule9, schedule11}->
+                                                    let fromT4s' = fromT4s t4 in Forms{
    t1 = fixT1 t1{
        page3 = fromT4s' (.slip1.box14_employmentIncome) (\amt pg-> pg{line_10100_EmploymentIncome = amt}) $
                fromT4s' (additionalT4 ["42"]) (\amt pg-> pg{line_10120_Commissions = amt}) $
@@ -141,7 +151,6 @@ fixFederalForms province = fixEq $ \Forms{t1, t4, schedule6, schedule7, schedule
               line_45300_CWB = schedule6.page4.step3.line42_sum <|>
                                schedule6.page4.step2.line28_difference,
               line_45350_CTC = schedule11.page1.line5_trainingClaim}}},
-   t4 = t4,
    schedule6 = fixSchedule6 Nothing t1 schedule6,
    schedule7 = fixSchedule7 t1 schedule7,
    schedule8 = fixSchedule8 schedule8{
@@ -163,7 +172,6 @@ fixFederalForms province = fixEq $ \Forms{t1, t4, schedule6, schedule7, schedule
 formFieldsForProvince :: Province.Code -> Forms FieldConst
 formFieldsForProvince p = Forms{
   t1 = within "T1" Rank2.<$> t1FieldsForProvince p,
-  t4 = Just (pure $ within "T4" Rank2.<$> t4Fields),
   schedule6 = within "Schedule6" Rank2.<$> schedule6Fields,
   schedule7 = within "Schedule7" Rank2.<$> schedule7Fields,
   schedule8 = within "Schedule8" Rank2.<$> schedule8Fields,

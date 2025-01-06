@@ -9,9 +9,10 @@ module Main where
 
 import Codec.Archive.Tar qualified as Tar
 import Codec.Archive.Tar.Entry (fileEntry, toTarPath)
-import Control.Applicative ((<**>), optional)
+import Control.Applicative ((<**>), many, optional)
 import Control.Arrow ((&&&))
 import Control.Monad (unless, void, when)
+import Data.Bifunctor (bimap)
 import Data.ByteString (ByteString)
 import Data.ByteString qualified as ByteString
 import Data.ByteString.Lazy qualified as Lazy
@@ -19,7 +20,8 @@ import Data.ByteString.Lazy qualified as ByteString.Lazy
 import Data.CAProvinceCodes qualified as Province
 import Data.Char (toUpper)
 import Data.Foldable (toList)
-import Data.List (intercalate, sortOn)
+import Data.Functor.Compose (Compose(Compose, getCompose))
+import Data.List (intercalate, partition, sortOn)
 import Data.Map.Lazy qualified as Map
 import Data.Maybe (catMaybes)
 import Data.Semigroup (Any (Any))
@@ -34,6 +36,7 @@ import System.IO (hPutStrLn, stderr)
 import Text.FDF (FDF, parse, serialize)
 
 import Tax.Canada (completeForms)
+import Tax.Canada.Federal (loadInputForms)
 import Tax.FDF (FDFs)
 import Tax.FDF qualified as FDF
 import Tax.PDFtk (fdf2pdf, pdf2fdf)
@@ -46,6 +49,7 @@ main = OptsAp.execParser (OptsAp.info optionsParser
 data Options = Options {
    province :: Province.Code,
    t1InputPath :: FilePath,
+   t4InputPaths :: [FilePath],
    p428InputPath :: Maybe FilePath,
    p479InputPath :: Maybe FilePath,
    schedule6InputPath :: Maybe FilePath,
@@ -61,6 +65,7 @@ optionsParser =
    Options
    <$> OptsAp.argument readProvince (metavar "<two-letter province code>")
    <*> OptsAp.strOption (long "t1" <> metavar "<input T1 form file>")
+   <*> many (OptsAp.strOption (long "t4" <> metavar "<input t4 form file>"))
    <*> optional (OptsAp.strOption (long "428" <> metavar "<input 428 form file>"))
    <*> optional (OptsAp.strOption (long "479" <> metavar "<input 479 form file>"))
    <*> optional (OptsAp.strOption (long "s6" <> metavar "<input Schedule 6 form file>"))
@@ -94,11 +99,12 @@ readFDF inputPath = do
            else error "Expecting an FDF or PDF file"
 
 process :: Options -> IO ()
-process Options{province, t1InputPath, p428InputPath, p479InputPath,
+process Options{province, t1InputPath, t4InputPaths, p428InputPath, p479InputPath,
                 schedule6InputPath, schedule7InputPath, schedule8InputPath, schedule9InputPath, schedule11InputPath,
                 outputPath, verbose} = do
    let inputFiles :: [(Text, FilePath)]
        inputFiles = sortOn fst $
+                    ((,) "T4" <$> t4InputPaths) <>
                     catMaybes [(,) "T1"  <$> Just t1InputPath,
                                (,) "428" <$> p428InputPath,
                                (,) "479" <$> p479InputPath,
@@ -119,9 +125,14 @@ process Options{province, t1InputPath, p428InputPath, p479InputPath,
                    then ByteString.writeFile (replaceDirectory inputPath outputPath) content'
                    else ByteString.writeFile outputPath content'
        paths = snd <$> inputFiles :: [FilePath]
-       arePDFs = fst . snd <$> inputs
+       arePDFs = fst . snd <$> filter (("T4" /=) . fst) inputs
+       fdfs = getCompose <$> traverse (parse . Lazy.toStrict . snd) (Compose inputs) :: Either String [(Text, FDF)]
+--       (inputFDFs, ioFDFs) = partition (("T4" /=) . fst) <$> fdfs
        bytesMap = Lazy.toStrict . snd <$> Map.fromAscList inputs
-   case traverse parse bytesMap >>= completeForms province of
+   case do (inputFDFs, ioFDFs) <- partition (("T4" ==) . fst) <$> fdfs
+           inputForms <- loadInputForms inputFDFs
+           completeForms province inputForms (Map.fromAscList ioFDFs)
+     of
       Left err -> error err
       Right fixedFDFs -> do
          let bytesMap' = serialize <$> fixedFDFs
