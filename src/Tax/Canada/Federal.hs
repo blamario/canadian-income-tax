@@ -155,7 +155,8 @@ fixFederalForms province InputForms{t4} = fixEq $ \Forms{t1, schedule6, schedule
    schedule7 = fixSchedule7 t1 schedule7,
    schedule8 = fixSchedule8 schedule8{
       page3 = schedule8.page3{
-         line_50339_totalPensionableEarnings = totalOf . fmap (.slip1.box26_pensionableEarnings) =<< t4,
+         line_50339_totalPensionableEarnings =
+            totalOf . (liftA2 (<|>) (.slip1.box26_pensionableEarnings) (.slip1.box14_employmentIncome) <$>) =<< t4,
          line_50340_totalContributions = totalOf . fmap (.slip1.box16_employeeCPP) =<< t4},
       page4 = Schedule8.Page4{
          part4 = schedule8.page4.part4{

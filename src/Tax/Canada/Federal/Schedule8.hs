@@ -154,7 +154,9 @@ fixSchedule8 :: Schedule8 Maybe -> Schedule8 Maybe
 fixSchedule8 = fixEq $ \Schedule8{page2, page3, page4, page5, page6}-> Schedule8{
    page2 = page2{
       lineA_months = page2.lineA_months <|> Just 12},
-   page3 = let Page3{..} = page3 in page3{
+   page3 = let Page3{..} = page3 in case line_50339_totalPensionableEarnings of
+         Nothing -> Rank2.pure Nothing
+         Just{} -> page3{
       line1_maxPensionableEarnings = ((5550 *) . fromIntegral . max 12) <$> page2.lineA_months,
       line3_least = min line1_maxPensionableEarnings line_50339_totalPensionableEarnings,
       line4_maxBasicExemption = ((/ 12) . (3500 *) . fromIntegral . min 12) <$> page2.lineA_months,
@@ -203,7 +205,7 @@ fixSchedule8 = fixEq $ \Schedule8{page2, page3, page4, page5, page6}-> Schedule8
       line23_fraction = fixSubCalculation (0.119 *) line22_difference,
       line24_double = fixSubCalculation (2 *) page3.line14_difference,
       line25_difference = liftA2 (-) line23_fraction.result line24_double.result,
-      line26_abs = abs <$> line25_difference,
+      line26_abs = if any (< 0) line25_difference then abs <$> line25_difference else Nothing,
       line27_copy = page3.line7_fraction.result,
       line28_copy = page3.line9_fraction.result,
       line29_difference = nonNegativeDifference line27_copy line28_copy,
@@ -213,7 +215,7 @@ fixSchedule8 = fixEq $ \Schedule8{page2, page3, page4, page5, page6}-> Schedule8
       line33_difference = nonNegativeDifference line31_copy line32_copy,
       line34_least = min line31_copy line32_copy},
    page6 = let Page6{..} = page6 in page6{
-      line35_fraction = fixSubCalculation (0.5 *) (if any (< 0) page5.line25_difference then page5.line25_difference else Nothing),
+      line35_fraction = fixSubCalculation (0.5 *) page5.line26_abs,
       line36_fraction = fixSubCalculation (0.831933 *) line35_fraction.result,
       line37_difference = liftA2 (-) line35_fraction.result line36_fraction.result,
       line38_copy = page5.line29_difference,
