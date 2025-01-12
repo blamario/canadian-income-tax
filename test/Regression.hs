@@ -88,6 +88,7 @@ testReturn path = do
 
 formKey :: FilePath -> Text
 formKey "5000-s6-fill-23e.fdf" = "Schedule6"
+formKey "5000-s8-fill-23e.fdf" = "Schedule8"
 formKey "5006-c-fill-23e.fdf" = "428"
 formKey "5006-r-fill-23e.fdf" = "T1"
 formKey name = error ("File name " <> name <> " is not recognized as a form.")
