@@ -90,10 +90,10 @@ fixMedicalExpenses ceiling = fixEq $ \part@MedicalExpenses{..} -> part{
    lesser = min ceiling <$> fraction,
    difference = nonNegativeDifference expenses lesser}
 
-fixSubCalculation :: (Centi -> Centi) -> Maybe Centi -> SubCalculation Maybe
+fixSubCalculation :: (Rational -> Rational) -> Maybe Centi -> SubCalculation Maybe
 fixSubCalculation carry result = SubCalculation{
    calculation = result,
-   result = carry <$> result}
+   result = fromRational . carry . toRational <$> result}
 
 subCalculationFields :: Text -> [Text] -> [Text] -> SubCalculation FieldConst
 subCalculationFields parent calculationPath resultPath = SubCalculation{
