@@ -8,6 +8,7 @@
 
 module Main where
 
+import Tax.Canada.Federal qualified as Federal
 import Tax.Canada.Province.ON qualified as ON
 import Tax.Canada.Province.AB qualified as AB (t1Fields)
 import Tax.Canada.Province.BC qualified as BC (t1Fields)
@@ -67,18 +68,22 @@ testReturn path = do
   let inputPath = combine inputDir path
   fdfFileNames <- listDirectory inputPath
   fdfBytes <- traverse (ByteString.readFile . combine inputPath) fdfFileNames
-  case traverse parse fdfBytes of
-    Left err -> die err
-    Right fdfs -> case FDF.mapForms ON.returnFields (ON.fixReturns mempty)
-                       $ Map.fromList $ zip (formKey <$> fdfFileNames) fdfs of
-      Left err -> die err
-      Right filled
-        | let fdfOutputs = fromStrict . serialize <$> filled
-              diff ref new = ["diff", "-uw", ref, new]
-              compare key fdfOutput
-                | let Just fileName = List.find ((key ==) . formKey) fdfFileNames
-                = pure $ goldenVsStringDiff fileName diff (combine referenceDir $ combine path fileName) (pure fdfOutput)
-        -> testGroup path . toList <$> Map.traverseWithKey compare fdfOutputs
+  case do fdfs <- traverse parse fdfBytes
+          let (inputs, keyedFillables) = foldMap decide $ zip fdfFileNames fdfs
+              decide (name, fdf)
+                | "t4-" `List.isPrefixOf` name = ([("T4", fdf)], [])
+                | otherwise = ([], [(formKey name, fdf)])
+          loadedInputs <- Federal.loadInputForms inputs
+          FDF.mapForms ON.returnFields (ON.fixReturns loadedInputs) $ Map.fromList keyedFillables
+    of Left err -> die err
+       Right filled
+         | let fdfOutputs = fromStrict . serialize <$> filled
+               diff ref new = ["diff", "-uw", ref, new]
+               compare key fdfOutput
+                 | let Just fileName = List.find ((key ==) . formKey) fdfFileNames
+                         = pure $ goldenVsStringDiff fileName diff (combine referenceDir $ combine path fileName)
+                           $ pure fdfOutput
+           -> testGroup path . toList <$> Map.traverseWithKey compare fdfOutputs
 
 
 formKey :: FilePath -> Text
