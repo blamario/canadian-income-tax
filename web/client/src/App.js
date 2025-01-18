@@ -40,10 +40,15 @@ export default function Uploads() {
     const [output, setOutput] = useState(null);
     const [error, setError] = useState("");
 
-    function handleUpload (formKey) {
+    function handleUpload(formKey, multi) {
         return (event) => {
             let newInputs = Object.assign({}, inputs);
-            newInputs[formKey] = event.target.files[0];
+            if (multi) {
+                newInputs[formKey] = event.target.files;
+            }
+            else {
+                newInputs[formKey] = event.target.files[0];
+            }
             setInputs(newInputs);
             setSubmitted(false);
             setError("");
@@ -106,6 +111,8 @@ export default function Uploads() {
           : ""}
          </dl>
          <h4>You can also optionally upload the following forms, if they apply:</h4>
+         <dt>T4 slips</dt>
+         <dd><input type="file" multiple="true" name="T4 fillable PDFs" onChange={handleUpload("T4", true)}/></dd>
          <dl>
          {province.value.has479
           ? <>
@@ -117,6 +124,8 @@ export default function Uploads() {
          <dd><input type="file" name="Schedule 6 PDF" onChange={handleUpload("Schedule6")}/></dd>
          <dt>Schedule 7</dt>
          <dd><input type="file" name="Schedule 7 PDF" onChange={handleUpload("Schedule7")}/></dd>
+         <dt>Schedule 8</dt>
+         <dd><input type="file" name="Schedule 8 PDF" onChange={handleUpload("Schedule8")}/></dd>
          <dt>Schedule 9</dt>
          <dd><input type="file" name="Schedule 9 PDF" onChange={handleUpload("Schedule9")}/></dd>
          <dt>Schedule 11</dt>

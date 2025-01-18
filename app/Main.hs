@@ -127,7 +127,6 @@ process Options{province, t1InputPath, t4InputPaths, p428InputPath, p479InputPat
        paths = snd <$> inputFiles :: [FilePath]
        arePDFs = fst . snd <$> filter (("T4" /=) . fst) inputs
        fdfs = getCompose <$> traverse (parse . Lazy.toStrict . snd) (Compose inputs) :: Either String [(Text, FDF)]
---       (inputFDFs, ioFDFs) = partition (("T4" /=) . fst) <$> fdfs
        bytesMap = Lazy.toStrict . snd <$> Map.fromAscList inputs
    case do (inputFDFs, ioFDFs) <- partition (("T4" ==) . fst) <$> fdfs
            inputForms <- loadInputForms inputFDFs
