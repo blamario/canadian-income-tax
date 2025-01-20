@@ -57,7 +57,7 @@ import Test.Tasty.Hedgehog
 
 main = do
   dataDir <- getDataDir
-  fdfMaps <- traverse (readFDFs . combine dataDir) [".", "T1/fdf", "428", "479"]
+  fdfMaps <- traverse (readFDFs . combine dataDir) ["fdf", "fdf/T1", "fdf/428", "fdf/479"]
   either die (defaultMain . properties) $ sequenceA fdfMaps
   where
     readFDFs :: FilePath -> IO (Either String [(FilePath, FDF)])
