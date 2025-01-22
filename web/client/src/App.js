@@ -66,9 +66,9 @@ export default function Uploads() {
     }
 
     function formInput(label, key, multiple) {
-        return multiple
-            ? <dd><input type="file" multiple="true" name={label} onChange={handleUpload(key, true)}/></dd>
-            : <dd><input type="file" name={label} onChange={handleUpload(key)}/></dd>
+        return <dd>
+            <input type="file" accept=".pdf" multiple={multiple} name={label} onChange={handleUpload(key, multiple)}/>
+            </dd>;
     }
 
     function handleSubmit (event) {
