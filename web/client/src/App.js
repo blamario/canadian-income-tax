@@ -65,6 +65,12 @@ export default function Uploads() {
         }
     }
 
+    function formInput(label, key, multiple) {
+        return multiple
+            ? <dd><input type="file" multiple="true" name={label} onChange={handleUpload(key, true)}/></dd>
+            : <dd><input type="file" name={label} onChange={handleUpload(key)}/></dd>
+    }
+
     function handleSubmit (event) {
         if (province && inputs) {
             const forms = new FormData();
@@ -102,34 +108,34 @@ export default function Uploads() {
          <h3>Step 4. Upload the filled {formsAgain}:</h3>
          <dl>
          <dt>T1</dt>
-         <dd><input type="file" name="T1 PDF" onChange={handleUpload("T1")}/></dd>
+         {formInput("T1 PDF", "T1")}
          {province.value.prefix428
           ? <>
           <dt>{province.value.code}428</dt>
-          <dd><input type="file" name="428 PDF" onChange={handleUpload("428")}/></dd>
+          {formInput("428 PDF", "428")}
           </>
           : ""}
          </dl>
          <h4>You can also optionally upload the following forms, if they apply:</h4>
-         <dt>T4 slips</dt>
-         <dd><input type="file" multiple="true" name="T4 fillable PDFs" onChange={handleUpload("T4", true)}/></dd>
          <dl>
+         <dt>T4 slips</dt>
+         {formInput("T4 fillable PDFs", "T4", true)}
          {province.value.has479
           ? <>
           <dt>{province.value.code}479 tax credits form</dt>
-          <dd><input type="file" name="479 PDF" onChange={handleUpload("479")}/></dd>
+          {formInput("479 PDF", "479")}
           </>
           : ""}
          <dt>Schedule 6</dt>
-         <dd><input type="file" name="Schedule 6 PDF" onChange={handleUpload("Schedule6")}/></dd>
+         {formInput("Schedule 6 PDF", "Schedule6")}
          <dt>Schedule 7</dt>
-         <dd><input type="file" name="Schedule 7 PDF" onChange={handleUpload("Schedule7")}/></dd>
+         {formInput("Schedule 7 PDF", "Schedule7")}
          <dt>Schedule 8</dt>
-         <dd><input type="file" name="Schedule 8 PDF" onChange={handleUpload("Schedule8")}/></dd>
+         {formInput("Schedule 8 PDF", "Schedule8")}
          <dt>Schedule 9</dt>
-         <dd><input type="file" name="Schedule 9 PDF" onChange={handleUpload("Schedule9")}/></dd>
+         {formInput("Schedule 9 PDF", "Schedule9")}
          <dt>Schedule 11</dt>
-         <dd><input type="file" name="Schedule 11 PDF" onChange={handleUpload("Schedule11")}/></dd>
+         {formInput("Schedule 11 PDF", "Schedule11")}
          </dl>
          <h3>Step 5. <button name="Calculate"
                              disabled={submitted !== false
