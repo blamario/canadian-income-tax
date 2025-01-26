@@ -83,7 +83,7 @@ export default function Uploads() {
              ? <span> or &nbsp;
                  <button onClick={handleOverlay}>Enter data</button>
                  <ReactModal isOpen={showT4} onRequestClose={() => setShowT4(false)}>
-                 {T4(t4)}
+                     {T4(t4, setT4)}
                  </ReactModal>
                </span>
              : ""}
@@ -94,6 +94,9 @@ export default function Uploads() {
         if (province && inputs) {
             const forms = new FormData();
 
+            if (Object.keys(t4).length) {
+                forms.append("T4", JSON.stringify(t4));
+            }
             for (const key in inputs)
                 forms.append(key, inputs[key]);
             fetch("/t1/PDF/" + province.value.code, {method: "POST", mode: "same-origin", body: forms})

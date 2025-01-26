@@ -1,106 +1,38 @@
 
-export default function T4 (values) {
+export default function T4 (values, setValues) {
+    function t4box (number, english, french) {
+        return <div class="box">
+                 <label class="bilingual-text">{english}<br/>{french}</label>
+                 <span class="box-number">{number}</span>
+                 <input type="number" step="0.01" value={values[number]} onChange={handleEntry(number)}/>
+               </div>;
+    }
+
+    function handleEntry (number) {
+        return (event) => {
+            let newValues = Object.assign({}, values);
+            newValues[number] = event.target.value;
+            setValues(newValues);
+        }
+    }
+    
     return <div class="grid-container">
-      <div class="box">
-        <label class="bilingual-text">Employment income<br/>Revenus d'emploi</label>
-        <span class="box-number">14</span>
-        <input type="number" step="0.01"/>
-      </div>
-      
-      <div class="box">
-        <label class="bilingual-text">Income tax deducted<br/>Impôt sur le revenu retenu</label>
-        <span class="box-number">22</span>
-        <input type="number" step="0.01"/>
-      </div>
-      
-      <div class="box">
-        <label class="bilingual-text">Employee's CPP contributions<br/>Cotisations de l'employé au RPC</label>
-        <span class="box-number">16</span>
-        <input type="number" step="0.01"/>
-      </div>
-      
-      <div class="box">
-        <label class="bilingual-text">Employee's QPP contributions<br/>Cotisations de l'employé au RRQ</label>
-        <span class="box-number">17</span>
-        <input type="number" step="0.01"/>
-      </div>
-      
-      <div class="box">
-        <label class="bilingual-text">Employee's second CPP contributions – see over<br/>Deuxièmes cotisations de l'employé au RPC – voir au verso</label>
-        <span class="box-number">16A</span>
-        <input type="number" step="0.01"/>
-      </div>
-      
-      <div class="box">
-        <label class="bilingual-text">Employee's second QPP contributions – see over<br/>Deuxièmes cotisations de l'employé au RRQ – voir au verso</label>
-        <span class="box-number">17A</span>
-        <input type="number" step="0.01"/>
-      </div>
-      
-      <div class="box">
-        <label class="bilingual-text">EI insurable earnings<br/>Gains assurables d'AE</label>
-        <span class="box-number">24</span>
-        <input type="number" step="0.01"/>
-      </div>
-      
-      <div class="box">
-        <label class="bilingual-text">CPP/QPP pensionable earnings<br/>Gains ouvrant droit à pension – RPC/RRQ</label>
-        <span class="box-number">26</span>
-        <input type="number" step="0.01"/>
-      </div>
-      
-      <div class="box">
-        <label class="bilingual-text">Employee's EI premiums<br/>Cotisations de l'employé à l'AE</label>
-        <span class="box-number">18</span>
-        <input type="number" step="0.01"/>
-      </div>
-      
-      <div class="box">
-        <label class="bilingual-text">Union dues<br/>Cotisations syndicales</label>
-        <span class="box-number">44</span>
-        <input type="number" step="0.01"/>
-      </div>
-      
-      <div class="box">
-        <label class="bilingual-text">RPP contributions<br/>Cotisations à un RPA</label>
-        <span class="box-number">20</span>
-        <input type="number" step="0.01"/>
-      </div>
-      
-      <div class="box">
-        <label class="bilingual-text">Charitable donations<br/>Dons de bienfaisance</label>
-        <span class="box-number">46</span>
-        <input type="number" step="0.01"/>
-      </div>
-      
-      <div class="box">
-        <label class="bilingual-text">Pension adjustment<br/>Facteur d'équivalence</label>
-        <span class="box-number">52</span>
-        <input type="number" step="0.01"/>
-      </div>
-      
-      <div class="box">
-        <label class="bilingual-text">RPP or DPSP registration number<br/>N° d'agrément d'un RPA ou d'un RPDB</label>
-        <span class="box-number">50</span>
-        <input type="number" step="0.01"/>
-      </div>
-      
-      <div class="box">
-        <label class="bilingual-text">Employee's PPIP premiums – see over<br/>Cotisations de l'employé au RPAP – voir au verso</label>
-        <span class="box-number">55</span>
-        <input type="number" step="0.01"/>
-      </div>
-      
-      <div class="box">
-        <label class="bilingual-text">PPIP insurable earnings<br/>Gains assurables du RPAP</label>
-        <span class="box-number">56</span>
-        <input type="number" step="0.01"/>
-      </div>
-      
-      <div class="box">
-        <label class="bilingual-text">Employer-offered dental benefits<br/>Prestations dentaires offertes par l'employeur</label>
-        <span class="box-number">45</span>
-        <input type="number" step="0.01"/>
-      </div>
-    </div>
+        {t4box("14", "Employment income", "Revenus d'emploi")}
+        {t4box("22", "Income tax deducted", "Impôt sur le revenu retenu")}
+        {t4box("16", "Employee's CPP contributions", "Cotisations de l'employé au RPC")}
+        {t4box("17", "Employee's QPP contributions", "Cotisations de l'employé au RRQ")}
+        {t4box("16A", "Employee's second CPP contributions – see over", "Deuxièmes cotisations de l'employé au RPC – voir au verso")}
+        {t4box("17A", "Employee's second QPP contributions – see over", "Deuxièmes cotisations de l'employé au RRQ – voir au verso")}
+        {t4box("24", "EI insurable earnings", "Gains assurables d'AE")}
+        {t4box("26", "CPP/QPP pensionable earnings", "Gains ouvrant droit à pension – RPC/RRQ")}
+        {t4box("18", "Employee's EI premiums", "Cotisations de l'employé à l'AE")}
+        {t4box("44", "Union dues", "Cotisations syndicales")}
+        {t4box("20", "RPP contributions", "Cotisations à un RPA")}
+        {t4box("46", "Charitable donations", "Dons de bienfaisance")}
+        {t4box("52", "Pension adjustment", "Facteur d'équivalence")}
+        {t4box("50", "RPP or DPSP registration number", "N° d'agrément d'un RPA ou d'un RPDB")}
+        {t4box("55", "Employee's PPIP premiums – see over", "Cotisations de l'employé au RPAP – voir au verso")}
+        {t4box("56", "PPIP insurable earnings", "Gains assurables du RPAP")}
+        {t4box("45", "Employer-offered dental benefits", "Prestations dentaires offertes par l'employeur")}
+    </div>;
 }
