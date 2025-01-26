@@ -1,7 +1,11 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Dropdown from 'react-dropdown';
+import ReactModal from 'react-modal';
 import 'react-dropdown/style.css';
+import 'react-modal-overlay/dist/index.css'
 import '../../static/shared.css';
+import '../../static/t4.css';
+import T4 from './t4';
 import './App.css';
 
 const provinces = [
@@ -39,6 +43,9 @@ export default function Uploads() {
     const [submitted, setSubmitted] = useState(null);
     const [output, setOutput] = useState(null);
     const [error, setError] = useState("");
+    const [t4, setT4] = useState({});
+    const [showT4, setShowT4] = useState(false);
+    const inputRef = useRef(null);
 
     function handleUpload(formKey, multi) {
         return (event) => {
@@ -65,9 +72,21 @@ export default function Uploads() {
         }
     }
 
+    function handleOverlay (event) {
+        setShowT4(true);
+    }
+
     function formInput(label, key, multiple) {
-        return <dd>
+        return <dd ref={inputRef}>
             <input type="file" accept=".pdf" multiple={multiple} name={label} onChange={handleUpload(key, multiple)}/>
+            {multiple
+             ? <span> or &nbsp;
+                 <button onClick={handleOverlay}>Enter data</button>
+                 <ReactModal isOpen={showT4} onRequestClose={() => setShowT4(false)}>
+                 {T4(t4)}
+                 </ReactModal>
+               </span>
+             : ""}
             </dd>;
     }
 
