@@ -11,7 +11,7 @@ export default function T4 (values, setValues) {
     function handleEntry (number) {
         return (event) => {
             let newValues = Object.assign({}, values);
-            newValues[number] = event.target.value;
+            newValues[number] = Number.parseFloat(event.target.value);
             setValues(newValues);
         }
     }
@@ -21,8 +21,10 @@ export default function T4 (values, setValues) {
         {t4box("22", "Income tax deducted", "Impôt sur le revenu retenu")}
         {t4box("16", "Employee's CPP contributions", "Cotisations de l'employé au RPC")}
         {t4box("17", "Employee's QPP contributions", "Cotisations de l'employé au RRQ")}
-        {t4box("16A", "Employee's second CPP contributions – see over", "Deuxièmes cotisations de l'employé au RPC – voir au verso")}
-        {t4box("17A", "Employee's second QPP contributions – see over", "Deuxièmes cotisations de l'employé au RRQ – voir au verso")}
+        {t4box("16A", "Employee's second CPP contributions – see over",
+               "Deuxièmes cotisations de l'employé au RPC – voir au verso")}
+        {t4box("17A", "Employee's second QPP contributions – see over",
+               "Deuxièmes cotisations de l'employé au RRQ – voir au verso")}
         {t4box("24", "EI insurable earnings", "Gains assurables d'AE")}
         {t4box("26", "CPP/QPP pensionable earnings", "Gains ouvrant droit à pension – RPC/RRQ")}
         {t4box("18", "Employee's EI premiums", "Cotisations de l'employé à l'AE")}

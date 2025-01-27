@@ -77,13 +77,18 @@ export default function Uploads() {
     }
 
     function formInput(label, key, multiple) {
+        function setT4_ (values) {
+            setSubmitted(false);
+            setT4(values);
+        }
+
         return <dd ref={inputRef}>
             <input type="file" accept=".pdf" multiple={multiple} name={label} onChange={handleUpload(key, multiple)}/>
             {multiple
              ? <span> or &nbsp;
                  <button onClick={handleOverlay}>Enter data</button>
                  <ReactModal isOpen={showT4} onRequestClose={() => setShowT4(false)}>
-                     {T4(t4, setT4)}
+                     {T4(t4, setT4_)}
                  </ReactModal>
                </span>
              : ""}
