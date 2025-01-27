@@ -72,6 +72,8 @@ import Tax.Util (fixEq, totalOf)
 data InputForms line = InputForms{
   t4 :: Maybe (NonEmpty (T4 line))}
 
+deriving instance Show (InputForms Maybe)
+
 instance Semigroup (InputForms Maybe) where
   InputForms x <> InputForms y = InputForms $ x <> y
 
