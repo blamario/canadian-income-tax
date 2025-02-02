@@ -23,13 +23,8 @@ t1Fields = within "form1" Rank2.<$> T1 {
    page5 = within "Page5" . within "Return-pg5" Rank2.<$> ON.page5Fields,
    page6 = within "Page6" . within "Return-pg6" . within "PartB" Rank2.<$> ON.page6Fields,
    page7 = within "Page7" . within "Return-pg7" Rank2.<$> ON.page7Fields,
-   page8 = within "Page8" . within "Return-pg8" Rank2.<$> page8Fields}
+   page8 = within "Page8" . within "Return-pg8" Rank2.<$> BC.page8Fields}
 
 page2Fields = ON.page2Fields {
    cai = Field ["CAI", "AB_CAI", "Tick_box"] Checkbox,
    organ_donor = NoField}
-
-page8Fields = BC.page8Fields {
-   Page8.step6_RefundOrBalanceOwing = within "Step6-Cont" Rank2.<$> BC.page8step6Fields,
-   line_48400_Refund = Field ["Refund_or_Balance-Owing", "Line48400", "Line_48400_Amount"] Amount,
-   line_48500_BalanceOwing = Field ["Refund_or_Balance-Owing", "Line48500", "Line_48500_Amount"] Amount}

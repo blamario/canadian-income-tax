@@ -30,7 +30,6 @@ partCFields = ON.partCFields {
    line_41000 = Field ["Line4100", "Line_41000_Amount"] Amount}
 
 page7step6Fields = ON.page7step6Fields {
-   line142_copy = Field ["Line142", "Amount"] Amount,
    line_43200_FirstNationsTax = Field ["Line43200", "Line_43200_Amount"] Amount}
 
 page8Fields = BC.page8Fields {
@@ -38,8 +37,8 @@ page8Fields = BC.page8Fields {
    taxPreparer = within "Line_49000_IfFeeWasCharged" Rank2.<$> BC.taxPreparerFields}
 
 page8step6Fields = ON.page8step6Fields {
-   line_43500_totalpayable = Field ["Line149", "Amount"] Amount,
+   line_43500_totalpayable = Field ["Line155", "Amount"] Amount,
    line_44100 = Field ["Line44100", "Line_44000_Amount"] Amount,
    line_46800 = Field ["Line46900", "sfline46800end", "Line_46800_Amount"] Amount,
    line_47555_TaxPaid = Field ["Line47555", "Line_47555_Amount"] Amount,
-   line164_Refund_or_BalanceOwing = Field ["Line169", "Amount"] Amount}
+   line164_Refund_or_BalanceOwing = Field ["Line174", "Amount"] Amount}

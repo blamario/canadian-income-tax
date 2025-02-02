@@ -26,4 +26,4 @@ t1Fields = ON.t1Fields {
    page8 = within "form1" . within "Page8" . within "Return-pg8" Rank2.<$> page8Fields}
 
 page8Fields = BC.page8Fields {
-   Page8.step6_RefundOrBalanceOwing = within "Step6" Rank2.<$> BC.page8step6Fields}
+   Page8.step6_RefundOrBalanceOwing = within "Step6-Cont" Rank2.<$> BC.page8step6Fields}

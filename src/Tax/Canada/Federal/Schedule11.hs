@@ -87,9 +87,9 @@ fixSchedule11 t1 = fixEq $ \Schedule11{page1 = page1@Page1{..}, page2 = page2@Pa
       line6_difference = difference line_32000_tuition line5_trainingClaim,
       line8_sum = totalOf [line6_difference, line_32001_eligible],
       line10_sum = totalOf [line9_pastUnused, line8_sum],
-      line11_copy = if taxableIncomeUnderThreshold then Nothing else t1.page7.partC_NetFederalTax.line118_copy,
+      line11_copy = if taxableIncomeUnderThreshold then Nothing else t1.page7.partC_NetFederalTax.tax_copy,
       line11_numerator = if taxableIncomeUnderThreshold then taxableIncome else (/ 0.15) <$> line11_copy,
-      line12_copy = t1.page6.line101_sum,
+      line12_copy = t1.page6.line107_sum,
       line13_difference = nonNegativeDifference line11_numerator line12_copy,
       line14_minUnused = fixSubCalculation id $ minimum [line9_pastUnused, line13_difference],
       line15_difference = difference line13_difference line14_minUnused.result,
@@ -104,7 +104,7 @@ fixSchedule11 t1 = fixEq $ \Schedule11{page1 = page1@Page1{..}, page2 = page2@Pa
       line23_difference = nonNegativeDifference line21_copy line22_copy,
       line25_difference = nonNegativeDifference line20_difference line24_transferred}}
    where taxableIncome = t1.page5.step4_TaxableIncome.line_26000_TaxableIncome
-         taxableIncomeUnderThreshold = taxableIncome <= Just 50_197
+         taxableIncomeUnderThreshold = taxableIncome <= Just 55_867
 
 schedule11Fields :: Schedule11 FieldConst
 schedule11Fields = within "form1" Rank2.<$> Schedule11 {

@@ -39,7 +39,9 @@ fixPage2 = id
 
 fixPage3 :: Page3 Maybe -> Page3 Maybe
 fixPage3 = fixEq $ \page@Page3{selfEmployment=SelfEmploymentIncome{..}, ..}-> page{
-   line21_sum = totalOf [line_10100_EmploymentIncome ,
+   line16_difference = fixSubCalculation id $
+                       nonNegativeDifference line_12700_TaxableCapitalGains line_12701_CapitalGainsReduction,
+   line23_sum = totalOf [line_10100_EmploymentIncome ,
                          line_10400_OtherEmploymentIncome,
                          line_11300_OldAgeSecurityPension,
                          line_11400_CPP_QPP,
@@ -52,25 +54,25 @@ fixPage3 = fixEq $ \page@Page3{selfEmployment=SelfEmploymentIncome{..}, ..}-> pa
                          line_12200_PartnershipIncome,
                          line_12500_RDSP,
                          line_12600_Amount,
-                         line_12700_TaxableCapitalGains,
+                         line16_difference.result,
                          line_12800_Amount,
                          line_12900_RRSPIncome,
                          line_12905_FHSAIncome,
                          line_12906_OtherFHSAIncome,
                          line_13000_OtherIncome,
                          line_13010_TaxableScholarship],
-   line27_sum = fixSubCalculation id $
+   line29_sum = fixSubCalculation id $
                 totalOf [line_13500_Amount,
                          line_13700_Amount,
                          line_13900_Amount,
                          line_14100_Amount,
                          line_14300_Amount],
-   line28_sum = totalOf [line21_sum, line27_sum.result],
+   line30_sum = totalOf [line23_sum, line29_sum.result],
    line_14700_sum = fixSubCalculation id $
                     totalOf [line_14400_WorkersCompBen,
                              line_14500_SocialAssistPay,
                              line_14600_NetFedSupplements],
-   line_15000_TotalIncome = totalOf [line28_sum, line_14700_sum.result]}
+   line_15000_TotalIncome = totalOf [line30_sum, line_14700_sum.result]}
 
 fixPage4 :: T1 Maybe -> Page4 Maybe -> Page4 Maybe
 fixPage4 t1 = fixEq $ \page@Page4{..}-> page{
@@ -106,31 +108,31 @@ fixPage5 t1 = fixEq $ \Page5{..}-> Page5{
 
 fixPage6 :: T1 Maybe -> Page6 Maybe -> Page6 Maybe
 fixPage6 t1 = fixEq $ \page@Page6{..}-> page{
-   line84_copy = t1.page5.partB_FederalTaxCredits.line83_sum,
+   pageBreakCarry = t1.page5.partB_FederalTaxCredits.pageBreakSummary,
    line_31260 = minimum [Just 1368,
                         totalOf [t1.page3.line_10100_EmploymentIncome, t1.page3.line_10400_OtherEmploymentIncome]],
-   line96_sum = fixSubCalculation id $
-                totalOf [line_30800,
-                         line_31000,
-                         line_31200,
-                         line_31205,
-                         line_31210,
-                         line_31215,
-                         line_31217,
-                         line_31220,
-                         line_31240,
-                         line_31260,
-                         line_31270,
-                         line_31285,
-                         line_31300,
-                         line_31350],
-   line98_sum = totalOf [line84_copy, line96_sum.result, line_31400],
-   line101_sum = totalOf [line98_sum, line_31600, line_31800],
-   line106_sum = totalOf [line101_sum, line_31900, line_32300, line_32400, line_32600],
+   line102_sum = fixSubCalculation id $
+                 totalOf [line_30800,
+                          line_31000,
+                          line_31200,
+                          line_31205,
+                          line_31210,
+                          line_31215,
+                          line_31217,
+                          line_31220,
+                          line_31240,
+                          line_31260,
+                          line_31270,
+                          line_31285,
+                          line_31300,
+                          line_31350],
+   line104_sum = totalOf [pageBreakCarry, line102_sum.result, line_31400],
+   line107_sum = totalOf [line104_sum, line_31600, line_31800],
+   line112_sum = totalOf [line107_sum, line_31900, line_32300, line_32400, line_32600],
    medical_expenses = fixMedicalExpenses t1 medical_expenses,
    line_33200_sum = fixSubCalculation id $ totalOf [medical_expenses.difference, medical_expenses.otherDependants],
-   line_33500 = totalOf [line106_sum, line_33200_sum.result],
-   line_33800 = line114_taxCreditRate `fractionOf` line_33500,
+   line_33500 = totalOf [line112_sum, line_33200_sum.result],
+   line_33800 = line120_taxCreditRate `fractionOf` line_33500,
    line_35000 = totalOf [line_33800, line_34900]}
 
 fixPage7 :: T1 Maybe -> Page7 Maybe -> Page7 Maybe
@@ -154,14 +156,17 @@ fixStep4 t1 = fixEq $ \step@Step4{..}-> step{
    line_25700_sum = fixSubCalculation id $
                     totalOf [line_24400_MilitaryPoliceDeduction,
                              line_24900_SecurityDeductions,
+                             line_24901_SecurityDeductions,
                              line_25000_OtherPayDeductions,
                              line_25100_PartnershipLosses,
                              line_25200_NoncapitalLosses,
                              line_25300_NetCapitalLosses,
+                             line_25395_BusinessTransfer,
                              line_25400_CapitalGainsDeduction,
                              line_25500_NorthernDeductions,
                              line_25600_AdditionalDeductions_Amount],
-   line_26000_TaxableIncome = nonNegativeDifference line_23600_NetIncome_2 line_25700_sum.result}
+   line72_difference = nonNegativeDifference line_23600_NetIncome_2 line_25700_sum.result,
+   line_26000_TaxableIncome = totalOf [line72_difference, line_25999_CapitalGainsReductionAddBack]}
 
 fixPage5PartA :: HasCallStack => T1 Maybe -> Page5PartA Maybe -> Page5PartA Maybe
 fixPage5PartA t1 = fixEq $ \part@Page5PartA{..}-> part{
@@ -189,13 +194,13 @@ fixPage5PartB t1 = fixEq $ \part@Page5PartB{..}-> part{
                              else Just (8396 - (income - threshold) * 0.15)
                 else Nothing,
    line_30500 =  ((* 2499) . fromIntegral) <$> line_30499_ChildrenNum,
-   line83_sum = totalOf [line_30000,
-                         line_30100,
-                         line_30300,
-                         line_30400,
-                         line_30425,
-                         line_30450,
-                         line_30500]}
+   pageBreakSummary = totalOf [line_30000,
+                               line_30100,
+                               line_30300,
+                               line_30400,
+                               line_30425,
+                               line_30450,
+                               line_30500]}
 
 fixMedicalExpenses :: T1 Maybe -> MedicalExpenses Maybe -> MedicalExpenses Maybe
 fixMedicalExpenses t1 = fixEq $ \expenses@MedicalExpenses{familyExpenses, taxableIncome,
@@ -207,22 +212,22 @@ fixMedicalExpenses t1 = fixEq $ \expenses@MedicalExpenses{familyExpenses, taxabl
 
 fixPage7PartC :: T1 Maybe -> Page7PartC Maybe -> Page7PartC Maybe
 fixPage7PartC t1 = fixEq $ \part@Page7PartC{..}-> part{
-   line118_copy = let partA = t1.page5.partA_FederalTax
-                  in partA.column1.equalsTax
-                     <|> partA.column2.equalsTax
-                     <|> partA.column3.equalsTax
-                     <|> partA.column4.equalsTax
-                     <|> partA.column5.equalsTax,
-   line_40400 = totalOf [line118_copy, line_40424],
-   line121_copy = t1.page6.line_35000,
+   tax_copy = let partA = t1.page5.partA_FederalTax
+              in partA.column1.equalsTax
+                 <|> partA.column2.equalsTax
+                 <|> partA.column3.equalsTax
+                 <|> partA.column4.equalsTax
+                 <|> partA.column5.equalsTax,
+   line_40400 = totalOf [tax_copy, line_40424],
+   credits_copy = t1.page6.line_35000,
    line_40425,
    line_40427,
-   line124_sum = fixSubCalculation id $ totalOf [line121_copy, line_40425, line_40427],
-   line_42900 = nonNegativeDifference line_40400 line124_sum.result,
-   line127_sum = totalOf [line_42900, line126_foreignSurtax],
-   line129_difference = difference line127_sum line_40500,
-   line131_sum = totalOf [line127_sum, line130_recapture],
-   line_40600 = nonNegativeDifference line131_sum line132_logging,
+   line130_sum = fixSubCalculation id $ totalOf [credits_copy, line_40425, line_40427],
+   line_42900 = nonNegativeDifference line_40400 line130_sum.result,
+   line133_sum = totalOf [line_42900, line132_foreignSurtax],
+   line135_difference = difference line133_sum line_40500,
+   line137_sum = totalOf [line135_difference, line136_recapture],
+   line_40600 = nonNegativeDifference line137_sum line138_logging,
    line_41000 = case line_40900
                of Just x
                     | x <=  400 -> Just (x * 0.75)
@@ -236,8 +241,8 @@ fixPage7PartC t1 = fixEq $ \part@Page7PartC{..}-> part{
 
 fixPage7Step6 :: T1 Maybe -> Page7Step6 Maybe -> Page7Step6 Maybe
 fixPage7Step6 t1 = fixEq $ \step@Page7Step6{..}-> step{
-   line142_copy = t1.page7.partC_NetFederalTax.line_42000,
-   line_43500_TotalPayable = totalOf [line142_copy, line_42100_CPPContributions, line_42120_EIPremiums,
+   tax_copy = t1.page7.partC_NetFederalTax.line_42000,
+   line_43500_TotalPayable = totalOf [tax_copy, line_42100_CPPContributions, line_42120_EIPremiums,
                                       line_42200_SocialBenefits, line_42800_ProvTerrTax]}
 
 fixPage8Step6 :: T1 Maybe -> Page8Step6 Maybe -> Page8Step6 Maybe

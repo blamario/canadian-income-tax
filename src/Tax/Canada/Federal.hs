@@ -49,7 +49,7 @@ import Tax.Canada.Federal.Schedule11 (Schedule11(page1), Page1(line5_trainingCla
 import Tax.Canada.T1 (fixT1, t1FieldsForProvince)
 import Tax.Canada.T1.Types (T1(page3, page4, page5, page6, page7, page8),
                             Page3(line_10100_EmploymentIncome, line_10120_Commissions, line_12200_PartnershipIncome,
-                                  line27_sum),
+                                  line29_sum),
                             Page4(line_20600_PensionAdjustment, line_20700_RPPDeduction, line_20800_RRSPDeduction,
                                   line_21200_Dues, line_22200_CPP_QPP_Contributions, line_22215_DeductionCPP_QPP,
                                   line_22900_OtherEmployExpenses),
@@ -163,10 +163,10 @@ fixFederalForms province InputForms{t4} = fixEq $ \Forms{t1, schedule6, schedule
       page4 = Schedule8.Page4{
          part4 = schedule8.page4.part4{
             line1_netSelfEmploymentEarnings = totalOf [t1.page3.line_12200_PartnershipIncome,
-                                                       t1.page3.line27_sum.result]},
+                                                       t1.page3.line29_sum.result]},
          part5 = schedule8.page4.part5{
             line1_netSelfEmploymentEarnings = totalOf [t1.page3.line_12200_PartnershipIncome,
-                                                       t1.page3.line27_sum.result]}
+                                                       t1.page3.line29_sum.result]}
          }},
    schedule9 = fixSchedule9 t1 schedule9,
    schedule11 = fixSchedule11 t1 schedule11}

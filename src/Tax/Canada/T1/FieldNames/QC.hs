@@ -24,7 +24,7 @@ t1Fields :: T1 FieldConst
 t1Fields = within "form1" Rank2.<$> T1 {
    page1 = within "Page1" . within "Return-pg1" Rank2.<$> ON.page1Fields,
    page2 = within "Page2" . within "Return-pg2" Rank2.<$> page2Fields,
-   page3 = within "Page3" . within "Return-pg3" Rank2.<$> page3Fields,
+   page3 = within "Page3" . within "Return-pg3" Rank2.<$> ON.page3Fields,
    page4 = within "Page4" . within "Step3" Rank2.<$> page4Fields,
    page5 = within "Page5" Rank2.<$> page5Fields,
    page6 = within "Page6" . within "PartB" Rank2.<$> page6Fields,
@@ -34,9 +34,6 @@ t1Fields = within "form1" Rank2.<$> T1 {
 page2Fields = ON.page2Fields {
    cai = NoField,
    organ_donor = NoField}
-
-page3Fields = ON.page3Fields{
-   line_10100_EmploymentIncome = Field ["Line1", "Line_10100_Amount"] Amount}
 
 page4Fields = ON.page4Fields{
    line_20810_PRPP = Field ["Line20810", "Amount"] Amount,
@@ -63,21 +60,21 @@ step4Fields = ON.step4Fields {
 partBFields = ON.partBFields {
    line_30499_ChildrenNum = Field ["Line30500", "Line30499", "Line_30499_Number"] Count,
    line_30500 = Field ["Line30500", "Line_30499_Amount"] Amount,
-   line83_sum = Field ["Line84", "Amount"] Amount}
+   pageBreakSummary = Field ["Line84", "Amount"] Amount}
 
 page6Fields = ON.page6Fields {
-   line84_copy = Field ["Line85", "Amount"] Amount,
+   pageBreakCarry = Field ["Line85", "Amount"] Amount,
    line_31205 = Field ["Line31205", "Line_31205_Amount"] Amount,
    line_31210 = Field ["Line31210", "Line_31210_Amount"] Amount,
    line_31215 = Field ["Line31215", "Line_31215_Amount"] Amount,
    line_31600 = Field ["Line31600", "Line_31600_mount"] Amount,
-   line96_sum = subCalculationFields "Line100" ["Amount1"] ["Amount2"],
-   line98_sum = Field ["Line102", "Amount"] Amount,
-   line101_sum = Field ["Line105", "Amount"] Amount,
-   line106_sum = Field ["Line110", "Amount"] Amount,
+   line102_sum = subCalculationFields "Line100" ["Amount1"] ["Amount2"],
+   line104_sum = Field ["Line102", "Amount"] Amount,
+   line107_sum = Field ["Line105", "Amount"] Amount,
+   line112_sum = Field ["Line110", "Amount"] Amount,
    medical_expenses = page6MedicalExpensesFields,
    line_33200_sum = subCalculationFields "Line33200" ["Line_33200_Amount1"] ["Line_33200_Line32Amount2"],
-   line114_taxCreditRate = Field ["Line118", "Percent"] $ Constant 0.15 Percent}
+   line120_taxCreditRate = Field ["Line124", "Percent"] $ Constant 0.15 Percent}
 
 page6MedicalExpensesFields = ON.page6MedicalExpensesFields {
    taxableIncome = Field ["Line112", "Amount1"] Amount,
@@ -90,18 +87,18 @@ page7Fields = Page7 {
    step6_RefundOrBalanceOwing = within "Step6" Rank2.<$> page7step6Fields}
 
 partCFields = ON.partCFields {
-   line118_copy = Field ["Line122", "Amount"] Amount,
-   line121_copy = Field ["Line125", "Amount"] Amount,
-   line124_sum = subCalculationFields "Line128" ["Amount1"] ["Amount2"],
-   line126_foreignSurtax = Field ["Line130", "Amount"] Amount,
-   line127_sum = Field ["Line131", "Amount"] Amount,
-   line129_difference = Field ["Line133", "Amount"] Amount,
-   line130_recapture = Field ["Line134", "Amount"] Amount,
-   line131_sum = Field ["Line135", "Amount"] Amount,
-   line132_logging = Field ["Line136", "Amount"] Amount}
+   tax_copy = Field ["Line122", "Amount"] Amount,
+   credits_copy = Field ["Line125", "Amount"] Amount,
+   line130_sum = subCalculationFields "Line128" ["Amount1"] ["Amount2"],
+   line132_foreignSurtax = Field ["Line130", "Amount"] Amount,
+   line133_sum = Field ["Line131", "Amount"] Amount,
+   line135_difference = Field ["Line133", "Amount"] Amount,
+   line136_recapture = Field ["Line134", "Amount"] Amount,
+   line137_sum = Field ["Line135", "Amount"] Amount,
+   line138_logging = Field ["Line136", "Amount"] Amount}
 
 page7step6Fields = ON.page7step6Fields {
-   line142_copy = Field ["Line146", "Amount"] Amount,
+   tax_copy = Field ["Line146", "Amount"] Amount,
    line_42100_CPPContributions = NoField}
 
 page8Fields = ON.page8Fields {

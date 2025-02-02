@@ -15,19 +15,16 @@ import Tax.Canada.T1.FieldNames.ON qualified as ON
 t1Fields :: T1 FieldConst
 t1Fields = ON.t1Fields {
    page2 = within "form1" . within "Page2" Rank2.<$> page2Fields,
-   page3 = within "form1" . within "Page3" . within "Return-pg3" Rank2.<$> page3Fields,
-   page4 = within "form1" . within "Page4" . within "Return-pg4" . within "Step3" Rank2.<$> ON.page4Fields,
    page8 = within "form1" . within "Page8" . within "Return-pg8" Rank2.<$> page8Fields}
 
 page2Fields = ON.page2Fields {
    cai = NoField,
    organ_donor = NoField}
 
-page3Fields = ON.page3Fields{
-   line_10100_EmploymentIncome = Field ["Line1", "Line_10100_Amount"] Amount}
+page3Fields = ON.page3Fields
 
 page8Fields = ON.page8Fields {
-   Page8.step6_RefundOrBalanceOwing = within "Step6-Continued" Rank2.<$> page8step6Fields,
+   Page8.step6_RefundOrBalanceOwing = within "Step6-Cont" Rank2.<$> page8step6Fields,
    taxPreparer = within "Efile" Rank2.<$> taxPreparerFields,
    line1_ONOpportunitiesFund = NoField,
    line_46500 = NoField,

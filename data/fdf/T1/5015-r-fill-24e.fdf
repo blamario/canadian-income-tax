@@ -10,94 +10,6 @@
 /T (form1[0])
 /Kids [
 <<
-/T (Page2[0])
-/Kids [
-<<
-/T (Return-pg2[0])
-/Kids [
-<<
-/T (Tax_exempt[0])
-/Kids [
-<<
-/T (Exempt[0])
-/Kids [
-<<
-/T (Spouse_SelfEmployed[0])
-/V /
->>]
->>]
->> 
-<<
-/T (Foreign_property[0])
-/Kids [
-<<
-/T (Line26600[0])
-/Kids [
-<<
-/T (Option2[0])
-/Kids [
-<<
-/T (ForeignProperty_CheckBox[0])
-/V /
->>]
->> 
-<<
-/T (Option1[0])
-/Kids [
-<<
-/T (ForeignProperty_CheckBox[0])
-/V /
->>]
->>]
->>]
->> 
-<<
-/T (ElectionsCanada[0])
-/Kids [
-<<
-/T (LineA[0])
-/Kids [
-<<
-/T (Option2[0])
-/Kids [
-<<
-/T (A_CheckBox[0])
-/V /
->>]
->> 
-<<
-/T (Option1[0])
-/Kids [
-<<
-/T (A_CheckBox[0])
-/V /
->>]
->>]
->> 
-<<
-/T (LineB[0])
-/Kids [
-<<
-/T (Option2[0])
-/Kids [
-<<
-/T (B_Authorize_CheckBox[0])
-/V /
->>]
->> 
-<<
-/T (Option1[0])
-/Kids [
-<<
-/T (B_Authorize_CheckBox[0])
-/V /
->>]
->>]
->>]
->>]
->>]
->> 
-<<
 /T (Page3[0])
 /Kids [
 <<
@@ -128,7 +40,7 @@
 >>]
 >> 
 <<
-/T (Line27[0])
+/T (Line29[0])
 /Kids [
 <<
 /T (Amount2[0])
@@ -144,6 +56,14 @@
 /Kids [
 <<
 /T (Line_12000_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line12701[0])
+/Kids [
+<<
+/T (Line_12701_Amount[0])
 /V ()
 >>]
 >> 
@@ -200,6 +120,18 @@
 /Kids [
 <<
 /T (Line_15000_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line16[0])
+/Kids [
+<<
+/T (Amount2[0])
+/V ()
+>> 
+<<
+/T (Amount1[0])
 /V ()
 >>]
 >> 
@@ -276,14 +208,6 @@
 >>]
 >> 
 <<
-/T (Line21[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
 /T (Line14600[0])
 /Kids [
 <<
@@ -292,18 +216,18 @@
 >>]
 >> 
 <<
-/T (Line11900[0])
+/T (Line23[0])
 /Kids [
 <<
-/T (Line_11900_Amount[0])
+/T (Amount[0])
 /V ()
 >>]
 >> 
 <<
-/T (Line28[0])
+/T (Line11900[0])
 /Kids [
 <<
-/T (Amount[0])
+/T (Line_11900_Amount[0])
 /V ()
 >>]
 >> 
@@ -364,6 +288,14 @@
 /Kids [
 <<
 /T (Line_10100_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line30[0])
+/Kids [
+<<
+/T (Amount[0])
 /V ()
 >>]
 >> 
@@ -489,6 +421,106 @@
 <<
 /T (Line_12500_Amount[0])
 /V ()
+>>]
+>>]
+>>]
+>> 
+<<
+/T (Page2[0])
+/Kids [
+<<
+/T (Step1-Cont[0])
+/Kids [
+<<
+/T (Foreign_property[0])
+/Kids [
+<<
+/T (Line26600[0])
+/Kids [
+<<
+/T (Option2[0])
+/Kids [
+<<
+/T (ForeignProperty_CheckBox[0])
+/V /
+>>]
+>> 
+<<
+/T (Option1[0])
+/Kids [
+<<
+/T (ForeignProperty_CheckBox[0])
+/V /
+>>]
+>>]
+>>]
+>> 
+<<
+/T (Tax_exempt[0])
+/Kids [
+<<
+/T (Exempt[0])
+/Kids [
+<<
+/T (Spouse_SelfEmployed[0])
+/V /
+>>]
+>>]
+>> 
+<<
+/T (ElectionsCanada[0])
+/Kids [
+<<
+/T (LineA[0])
+/Kids [
+<<
+/T (Option2[0])
+/Kids [
+<<
+/T (A_CheckBox[0])
+/V /
+>>]
+>> 
+<<
+/T (Option1[0])
+/Kids [
+<<
+/T (A_CheckBox[0])
+/V /
+>>]
+>>]
+>> 
+<<
+/T (LineB[0])
+/Kids [
+<<
+/T (Option2[0])
+/Kids [
+<<
+/T (B_Authorize_CheckBox[0])
+/V /
+>>]
+>> 
+<<
+/T (Option1[0])
+/Kids [
+<<
+/T (B_Authorize_CheckBox[0])
+/V /
+>>]
+>>]
+>>]
+>> 
+<<
+/T (CAI[0])
+/Kids [
+<<
+/T (AB_CAI[0])
+/Kids [
+<<
+/T (Tick_box[0])
+/V /
+>>]
 >>]
 >>]
 >>]
@@ -765,6 +797,9 @@
 /T (Page5[0])
 /Kids [
 <<
+/T (Return-pg5[0])
+/Kids [
+<<
 /T (Step4[0])
 /Kids [
 <<
@@ -772,14 +807,6 @@
 /Kids [
 <<
 /T (Line_25500_Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line24900[0])
-/Kids [
-<<
-/T (Line_24900_Amount[0])
 /V ()
 >>]
 >> 
@@ -792,18 +819,6 @@
 >>]
 >> 
 <<
-/T (Line25600[0])
-/Kids [
-<<
-/T (Line_25600_Amount[0])
-/V ()
->> 
-<<
-/T (Line_25600_Specify[0])
-/V ()
->>]
->> 
-<<
 /T (Line25200[0])
 /Kids [
 <<
@@ -812,23 +827,15 @@
 >>]
 >> 
 <<
-/T (Line26000[0])
+/T (Line25999[0])
 /Kids [
 <<
-/T (Line_26000_Amount[0])
+/T (Line_Amount[0])
 /V ()
 >>]
 >> 
 <<
-/T (Line25100[0])
-/Kids [
-<<
-/T (Line_25100_Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line58[0])
+/T (Line59[0])
 /Kids [
 <<
 /T (Amount[0])
@@ -836,14 +843,10 @@
 >>]
 >> 
 <<
-/T (Line25700[0])
+/T (Line72[0])
 /Kids [
 <<
-/T (Line_25700_Amount2[0])
-/V ()
->> 
-<<
-/T (Line_25700_Amount1[0])
+/T (Line_26000_Amount[0])
 /V ()
 >>]
 >> 
@@ -864,6 +867,70 @@
 >>]
 >> 
 <<
+/T (Line25395[0])
+/Kids [
+<<
+/T (Line_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line24900[0])
+/Kids [
+<<
+/T (Line_24900_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line24901[0])
+/Kids [
+<<
+/T (Line_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line25600[0])
+/Kids [
+<<
+/T (Line_25600_Specify[0])
+/V ()
+>> 
+<<
+/T (Line_25600_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line25100[0])
+/Kids [
+<<
+/T (Line_25100_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line26000[0])
+/Kids [
+<<
+/T (Line_26000_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line25700[0])
+/Kids [
+<<
+/T (Line_25700_Amount2[0])
+/V ()
+>> 
+<<
+/T (Line_25700_Amount1[0])
+/V ()
+>>]
+>> 
+<<
 /T (Line25400[0])
 /Kids [
 <<
@@ -873,177 +940,21 @@
 >>]
 >> 
 <<
-/T (Part_A[0])
-/Kids [
-<<
-/T (Column3[0])
-/Kids [
-<<
-/T (Amount_Line77[0])
-/V ()
->> 
-<<
-/T (Amount_Line76[0])
-/V ( 18,942.24)
->> 
-<<
-/T (Amount_Line75[0])
-/V ()
->> 
-<<
-/T (Percent_Line74[0])
-/V (26%)
->> 
-<<
-/T (Amount_Line71[0])
-/V ()
->> 
-<<
-/T (Amount_Line72[0])
-/V ( 106,717.00)
->> 
-<<
-/T (Amount_Line73[0])
-/V ()
->>]
->> 
-<<
-/T (Column5[0])
-/Kids [
-<<
-/T (Line41Amount5[0])
-/V ()
->> 
-<<
-/T (Line42Rate5[0])
-/V (33%)
->> 
-<<
-/T (Line44Amount5[0])
-/V ( 54,578.67)
->> 
-<<
-/T (Line39Amount5[0])
-/V ()
->> 
-<<
-/T (Line43Amount5[0])
-/V ()
->> 
-<<
-/T (Line40Amount5[0])
-/V ( 235,675.00)
->> 
-<<
-/T (Line45Amount5[0])
-/V ()
->>]
->> 
-<<
-/T (Column4[0])
-/Kids [
-<<
-/T (Line42Rate4[0])
-/V (29%)
->> 
-<<
-/T (Line41Amount4[0])
-/V ()
->> 
-<<
-/T (Line44Amount4[0])
-/V ( 34,207.62)
->> 
-<<
-/T (Amount_Line71[0])
-/V ()
->> 
-<<
-/T (Amount_Line72[0])
-/V ( 165,430.00)
->> 
-<<
-/T (Line43Amount4[0])
-/V ()
->> 
-<<
-/T (Line45Amount4[0])
-/V ()
->>]
->> 
-<<
-/T (Column1[0])
-/Kids [
-<<
-/T (Amount_Line77[0])
-/V ()
->> 
-<<
-/T (Amount_Line76[0])
-/V ( 0.00)
->> 
-<<
-/T (Amount_Line75[0])
-/V ()
->> 
-<<
-/T (Percent_Line74[0])
-/V (15%)
->> 
-<<
-/T (Amount_Line71[0])
-/V ()
->> 
-<<
-/T (Amount_Line72[0])
-/V ( 0.00)
->> 
-<<
-/T (Amount_Line73[0])
-/V ()
->>]
->> 
-<<
-/T (Column2[0])
-/Kids [
-<<
-/T (Amount_Line77[0])
-/V ()
->> 
-<<
-/T (Amount_Line75[0])
-/V ()
->> 
-<<
-/T (Amount_Line76[0])
-/V ( 8,003.85)
->> 
-<<
-/T (Percent_Line74[0])
-/V (20.5%)
->> 
-<<
-/T (Amount_Line71[0])
-/V ()
->> 
-<<
-/T (Amount_Line72[0])
-/V ( 53,359.00)
->> 
-<<
-/T (Amount_Line73[0])
-/V ()
->>]
->>]
->> 
-<<
-/T (Part_B[0])
+/T (PartB[0])
 /Kids [
 <<
 /T (Line30100[0])
 /Kids [
 <<
 /T (Line_30100_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line89[0])
+/Kids [
+<<
+/T (Amount[0])
 /V ()
 >>]
 >> 
@@ -1083,24 +994,16 @@
 /T (Line30500[0])
 /Kids [
 <<
-/T (Line_30499_Amount[0])
+/T (Line_30500_Amount[0])
 /V ()
 >> 
 <<
 /T (Line30499[0])
 /Kids [
 <<
-/T (Line_30499_Number[0])
+/T (Numeric_NoDecimal_BordersAll[0])
 /V ()
 >>]
->>]
->> 
-<<
-/T (Line84[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
 >>]
 >> 
 <<
@@ -1111,19 +1014,184 @@
 /V ()
 >>]
 >>]
+>> 
+<<
+/T (PartA[0])
+/Kids [
+<<
+/T (Column3[0])
+/Kids [
+<<
+/T (Line42Amount3[0])
+/V ()
+>> 
+<<
+/T (Line37Amount3[0])
+/V ( 111,733.00)
+>> 
+<<
+/T (Line39Rate3[0])
+/V (26%)
+>> 
+<<
+/T (Line41Amount3[0])
+/V ( 19,832.58)
+>> 
+<<
+/T (Line36Amount3[0])
+/V ()
+>> 
+<<
+/T (Line40Amount3[0])
+/V ()
+>> 
+<<
+/T (Line38Amount3[0])
+/V ()
+>>]
+>> 
+<<
+/T (Column5[0])
+/Kids [
+<<
+/T (Line41Amount5[0])
+/V ( 57,143.93)
+>> 
+<<
+/T (Line36Amount5[0])
+/V ()
+>> 
+<<
+/T (Line37Amount5[0])
+/V ( 246,752.00)
+>> 
+<<
+/T (Line39Rate5[0])
+/V (33%)
+>> 
+<<
+/T (Line40Amount5[0])
+/V ()
+>> 
+<<
+/T (Line42Amount5[0])
+/V ()
+>> 
+<<
+/T (Line38Amount5[0])
+/V ()
+>>]
+>> 
+<<
+/T (Column4[0])
+/Kids [
+<<
+/T (Line36Amount4[0])
+/V ()
+>> 
+<<
+/T (Line37Amount4[0])
+/V ( 173,205.00)
+>> 
+<<
+/T (Line39Rate4[0])
+/V (29%)
+>> 
+<<
+/T (Line41Amount4[0])
+/V ( 35,815.30)
+>> 
+<<
+/T (Line40Amount4[0])
+/V ()
+>> 
+<<
+/T (Line42Amount4[0])
+/V ()
+>> 
+<<
+/T (Line38Amount4[0])
+/V ()
+>>]
+>> 
+<<
+/T (Column2[0])
+/Kids [
+<<
+/T (Line37Amount2[0])
+/V ( 55,867.00)
+>> 
+<<
+/T (Line41Amount2[0])
+/V ( 8,380.05)
+>> 
+<<
+/T (Line36Amount2[0])
+/V ()
+>> 
+<<
+/T (Line40Amount2[0])
+/V ()
+>> 
+<<
+/T (Line39Rate2[0])
+/V (20.5%)
+>> 
+<<
+/T (Line38Amount2[0])
+/V ()
+>> 
+<<
+/T (Line42Amount2[0])
+/V ()
+>>]
+>> 
+<<
+/T (Column1[0])
+/Kids [
+<<
+/T (Line38Amount1[0])
+/V ()
+>> 
+<<
+/T (Line37Amount1[0])
+/V ( 0.00)
+>> 
+<<
+/T (Line36Amount1[0])
+/V ()
+>> 
+<<
+/T (Line39Rate1[0])
+/V (15%)
+>> 
+<<
+/T (Line40Amount1[0])
+/V ()
+>> 
+<<
+/T (Line41Amount1[0])
+/V ( 0.00)
+>> 
+<<
+/T (Line42Amount1[0])
+/V ()
+>>]
+>>]
+>>]
 >>]
 >> 
 <<
 /T (Page4[0])
 /Kids [
 <<
-/T (Step3[0])
+/T (Return-pg4[0])
 /Kids [
 <<
 /T (Line23400[0])
 /Kids [
 <<
-/T (Line_23400_Amount[0])
+/T (Line19Amount[0])
 /V ()
 >>]
 >> 
@@ -1140,14 +1208,6 @@
 >> 
 <<
 /T (Line_22000_Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line22300[0])
-/Kids [
-<<
-/T (Line_22300_Amount[0])
 /V ()
 >>]
 >> 
@@ -1188,18 +1248,18 @@
 >>]
 >> 
 <<
-/T (Line20700[0])
-/Kids [
-<<
-/T (Line_20700_Amount[0])
-/V ()
->>]
->> 
-<<
 /T (Line21500[0])
 /Kids [
 <<
 /T (Line_21500_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line20700[0])
+/Kids [
+<<
+/T (Line_20700_Amount[0])
 /V ()
 >>]
 >> 
@@ -1228,7 +1288,7 @@
 >>]
 >> 
 <<
-/T (Line34[0])
+/T (Line36[0])
 /Kids [
 <<
 /T (Amount[0])
@@ -1252,18 +1312,18 @@
 >>]
 >> 
 <<
-/T (Line22215[0])
-/Kids [
-<<
-/T (Line_22215_Amount[0])
-/V ()
->>]
->> 
-<<
 /T (Line22100[0])
 /Kids [
 <<
 /T (Line_22100_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line22215[0])
+/Kids [
+<<
+/T (Line_22215_Amount[0])
 /V ()
 >>]
 >> 
@@ -1287,7 +1347,7 @@
 /T (Line20810[0])
 /Kids [
 <<
-/T (Amount[0])
+/T (Line_20810_Amount[0])
 /V ()
 >>]
 >> 
@@ -1308,11 +1368,31 @@
 >>]
 >> 
 <<
-/T (Line20600[0])
+/T (Line45[0])
 /Kids [
 <<
-/T (Line_20600_Amount[0])
+/T (Line21699[0])
+/Kids [
+<<
+/T (Line_21699_Amount[0])
 /V ()
+>>]
+>> 
+<<
+/T (Line21698[0])
+/Kids [
+<<
+/T (Line_21698_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line21700[0])
+/Kids [
+<<
+/T (Line_21900_Amount[0])
+/V ()
+>>]
 >>]
 >> 
 <<
@@ -1320,6 +1400,14 @@
 /Kids [
 <<
 /T (Line_21400_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line20600[0])
+/Kids [
+<<
+/T (Line_20600_Amount[0])
 /V ()
 >>]
 >> 
@@ -1334,19 +1422,283 @@
 /T (Line_23300_Amount1[0])
 /V ()
 >>]
+>>]
+>>]
 >> 
 <<
-/T (Line21700[0])
+/T (Page7[0])
 /Kids [
 <<
-/T (Line_21700_Amount[0])
+/T (Return-pg7[0])
+/Kids [
+<<
+/T (Step6[0])
+/Kids [
+<<
+/T (Line42200[0])
+/Kids [
+<<
+/T (Line_42200_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line43500[0])
+/Kids [
+<<
+/T (Line_43500_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line42120[0])
+/Kids [
+<<
+/T (Line_42120_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line42800[0])
+/Kids [
+<<
+/T (Line_42800_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line148[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line42100[0])
+/Kids [
+<<
+/T (Line_42100_Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (PartC[0])
+/Kids [
+<<
+/T (Line40600[0])
+/Kids [
+<<
+/T (Line_40600_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line41000[0])
+/Kids [
+<<
+/T (Line_41000_Amount[0])
 /V ()
 >> 
 <<
-/T (Line21699[0])
+/T (Line40900[0])
 /Kids [
 <<
-/T (Line_21699_Amount[0])
+/T (Line_40900_Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line124[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line127[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line40427[0])
+/Kids [
+<<
+/T (Line_40427_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line41600[0])
+/Kids [
+<<
+/T (Line_41600_Amount1[0])
+/V ()
+>> 
+<<
+/T (Line_41600_Amount2[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line42900[0])
+/Kids [
+<<
+/T (Line_42900_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line40500[0])
+/Kids [
+<<
+/T (Line_40500_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line133[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line41200[0])
+/Kids [
+<<
+/T (Line_41200_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line135[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line41800[0])
+/Kids [
+<<
+/T (Line_41800_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line136[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line40424[0])
+/Kids [
+<<
+/T (Line_40424_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line40425[0])
+/Kids [
+<<
+/T (Line_40425_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line132[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line130[0])
+/Kids [
+<<
+/T (Amount2[0])
+/V ()
+>> 
+<<
+/T (Amount1[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line41500[0])
+/Kids [
+<<
+/T (Line_41500_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line138[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line41400[0])
+/Kids [
+<<
+/T (Line_41400_Amount[0])
+/V ()
+>> 
+<<
+/T (Line41300[0])
+/Kids [
+<<
+/T (Line_41300_Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line137[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line42000[0])
+/Kids [
+<<
+/T (Line_42000_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line40400[0])
+/Kids [
+<<
+/T (Line_40400_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line41700[0])
+/Kids [
+<<
+/T (Line_41700_Amount[0])
 /V ()
 >>]
 >>]
@@ -1355,6 +1707,9 @@
 >> 
 <<
 /T (Page6[0])
+/Kids [
+<<
+/T (Return-pg6[0])
 /Kids [
 <<
 /T (PartB[0])
@@ -1368,15 +1723,7 @@
 >>]
 >> 
 <<
-/T (Line31215[0])
-/Kids [
-<<
-/T (Line_31215_Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line100[0])
+/T (Line102[0])
 /Kids [
 <<
 /T (Amount2[0])
@@ -1388,10 +1735,10 @@
 >>]
 >> 
 <<
-/T (Line102[0])
+/T (Line32300[0])
 /Kids [
 <<
-/T (Amount[0])
+/T (Line_32300_Amount[0])
 /V ()
 >>]
 >> 
@@ -1400,14 +1747,6 @@
 /Kids [
 <<
 /T (Line_31217_Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line32300[0])
-/Kids [
-<<
-/T (Line_32300_Amount[0])
 /V ()
 >>]
 >> 
@@ -1428,7 +1767,7 @@
 >>]
 >> 
 <<
-/T (Line110[0])
+/T (Line90[0])
 /Kids [
 <<
 /T (Amount[0])
@@ -1455,6 +1794,18 @@
 /T (Line114[0])
 /Kids [
 <<
+/T (Amount2[0])
+/V ()
+>> 
+<<
+/T (Amount1[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line104[0])
+/Kids [
+<<
 /T (Amount[0])
 /V ()
 >>]
@@ -1463,11 +1814,15 @@
 /T (Line112[0])
 /Kids [
 <<
-/T (Amount2[0])
+/T (Amount[0])
 /V ()
+>>]
 >> 
 <<
-/T (Amount1[0])
+/T (Line116[0])
+/Kids [
+<<
+/T (Amount[0])
 /V ()
 >>]
 >> 
@@ -1515,7 +1870,7 @@
 /T (Line31600[0])
 /Kids [
 <<
-/T (Line_31600_mount[0])
+/T (Line_31600_Amount[0])
 /V ()
 >>]
 >> 
@@ -1528,11 +1883,11 @@
 >>]
 >> 
 <<
-/T (Line118[0])
+/T (Line31900[0])
 /Kids [
 <<
-/T (Percent[0])
-/V (15%)
+/T (Line_31900_Amount[0])
+/V ()
 >>]
 >> 
 <<
@@ -1540,14 +1895,6 @@
 /Kids [
 <<
 /T (Line_32400_Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line31900[0])
-/Kids [
-<<
-/T (Line_31900_Amount[0])
 /V ()
 >>]
 >> 
@@ -1568,14 +1915,22 @@
 >>]
 >> 
 <<
+/T (Line120[0])
+/Kids [
+<<
+/T (Percent[0])
+/V (15%)
+>>]
+>> 
+<<
 /T (Line33200[0])
 /Kids [
 <<
-/T (Line_33200_Amount1[0])
+/T (Line_33200_Amount2[0])
 /V ()
 >> 
 <<
-/T (Line_33200_Line32Amount2[0])
+/T (Line_33200_Amount1[0])
 /V ()
 >>]
 >> 
@@ -1584,14 +1939,6 @@
 /Kids [
 <<
 /T (Line_30800_Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line31210[0])
-/Kids [
-<<
-/T (Line_31210_Amount[0])
 /V ()
 >>]
 >> 
@@ -1612,15 +1959,7 @@
 >>]
 >> 
 <<
-/T (Line31205[0])
-/Kids [
-<<
-/T (Line_31205_Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line85[0])
+/T (Line107[0])
 /Kids [
 <<
 /T (Amount[0])
@@ -1628,15 +1967,7 @@
 >>]
 >> 
 <<
-/T (Line105[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line113[0])
+/T (Line115[0])
 /Kids [
 <<
 /T (Amount[0])
@@ -1668,318 +1999,30 @@
 >>]
 >>]
 >>]
->> 
-<<
-/T (Page7[0])
-/Kids [
-<<
-/T (Step6[0])
-/Kids [
-<<
-/T (Line146[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line42200[0])
-/Kids [
-<<
-/T (Line_42200_Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line43500[0])
-/Kids [
-<<
-/T (Line_43500_Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line42120[0])
-/Kids [
-<<
-/T (Line_42120_Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line42800[0])
-/Kids [
-<<
-/T (Line_42800_Amount[0])
-/V ()
->>]
->>]
->> 
-<<
-/T (PartC[0])
-/Kids [
-<<
-/T (Line40600[0])
-/Kids [
-<<
-/T (Line_40600_Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line122[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line41000[0])
-/Kids [
-<<
-/T (Line_41000_Amount[0])
-/V ()
->> 
-<<
-/T (Line40900[0])
-/Kids [
-<<
-/T (Line_40900_Amount[0])
-/V ()
->>]
->>]
->> 
-<<
-/T (Line125[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line40427[0])
-/Kids [
-<<
-/T (Line_40427_Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line41600[0])
-/Kids [
-<<
-/T (Line_41600_Amount1[0])
-/V ()
->> 
-<<
-/T (Line_41600_Amount2[0])
-/V ()
->>]
->> 
-<<
-/T (Line128[0])
-/Kids [
-<<
-/T (Amount2[0])
-/V ()
->> 
-<<
-/T (Amount1[0])
-/V ()
->>]
->> 
-<<
-/T (Line42900[0])
-/Kids [
-<<
-/T (Line_42900_Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line40500[0])
-/Kids [
-<<
-/T (Line_40500_Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line134[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line133[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line41200[0])
-/Kids [
-<<
-/T (Line_41200_Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line135[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line41800[0])
-/Kids [
-<<
-/T (Line_41800_Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line136[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line131[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line40424[0])
-/Kids [
-<<
-/T (Line_40424_Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line40425[0])
-/Kids [
-<<
-/T (Line_40425_Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line130[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line41500[0])
-/Kids [
-<<
-/T (Line_41500_Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line41400[0])
-/Kids [
-<<
-/T (Line_41400_Amount[0])
-/V ()
->> 
-<<
-/T (Line41300[0])
-/Kids [
-<<
-/T (Line_41300_Amount[0])
-/V ()
->>]
->>]
->> 
-<<
-/T (Line42000[0])
-/Kids [
-<<
-/T (Line_42000_Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line40400[0])
-/Kids [
-<<
-/T (Line_40400_Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line41700[0])
-/Kids [
-<<
-/T (Line_41700_Amount[0])
-/V ()
->>]
->>]
 >>]
 >> 
 <<
 /T (Page8[0])
 /Kids [
 <<
-/T (Line_49000_IfFeeWasCharged[0])
+/T (Return-pg8[0])
 /Kids [
 <<
-/T (TelephoneOfPreparer[0])
-/V ()
->> 
-<<
-/T (NameOfPreparer[0])
-/V ()
->> 
-<<
-/T (EFileNumber_Comb[0])
+/T (Step6-Cont[0])
 /Kids [
 <<
-/T (EFile[0])
+/T (Line44800[0])
+/Kids [
+<<
+/T (Line_44800_Amount[0])
 /V ()
 >>]
 >> 
-<<
-/T (Line49000_CheckBoxGroup[0])
-/Kids [
-<<
-/T (Line49000_CheckBox_EN[0])
-/V /
->> 
-<<
-/T (Line49000_CheckBox_EN[1])
-/V /
->>]
->>]
->> 
-<<
-/T (Step6-Continued[0])
-/Kids [
 <<
 /T (Line45355[0])
 /Kids [
 <<
-/T (Line_45355_Amount[0])
+/T (Line_45300_Amount[0])
 /V ()
 >>]
 >> 
@@ -1987,7 +2030,7 @@
 /T (Line172[0])
 /Kids [
 <<
-/T (Refund_or_BalanceOwing_Amount[0])
+/T (Amount[0])
 /V ()
 >>]
 >> 
@@ -1995,16 +2038,16 @@
 /T (Line46900[0])
 /Kids [
 <<
+/T (Line_46900_Amount[0])
+/V ()
+>> 
+<<
 /T (Line46800[0])
 /Kids [
 <<
 /T (Line_46800_Amount[0])
 /V ()
 >>]
->> 
-<<
-/T (Line_46900_Amount[0])
-/V ()
 >>]
 >> 
 <<
@@ -2056,10 +2099,10 @@
 >>]
 >> 
 <<
-/T (Line47557[0])
+/T (Line47900[0])
 /Kids [
 <<
-/T (Line_47557_Amount[0])
+/T (Line_47900_Amount[0])
 /V ()
 >>]
 >> 
@@ -2108,62 +2151,18 @@
 >>]
 >> 
 <<
-/T (Line43900[0])
-/Kids [
-<<
-/T (Line_43900_Amount1[0])
-/V ()
->> 
-<<
-/T (Line_43900_Amount2[0])
-/V ()
->>]
->> 
-<<
-/T (Line157[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
 /T (Line44000[0])
 /Kids [
 <<
-/T (Line_44000_Amount2[0])
-/V ()
->> 
-<<
-/T (Line_44000_Amount1[0])
+/T (Line_44000_Amount[0])
 /V ()
 >>]
 >> 
 <<
-/T (Line45100[0])
-/Kids [
-<<
-/T (Line_45100_Amount1[0])
-/V ()
->> 
-<<
-/T (Line_45100_Amount2[0])
-/V ()
->>]
->> 
-<<
-/T (Line151[0])
+/T (Line154[0])
 /Kids [
 <<
 /T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line43800[0])
-/Kids [
-<<
-/T (Line_43800_Amount[0])
 /V ()
 >>]
 >> 
@@ -2189,7 +2188,43 @@
 >>]
 >> 
 <<
-/T (Refund_or_Balancing-owing[0])
+/T (Efile[0])
+/Kids [
+<<
+/T (Line48900[0])
+/Kids [
+<<
+/T (EFile[0])
+/V ()
+>>]
+>> 
+<<
+/T (TelephoneOfPreparer[0])
+/V ()
+>> 
+<<
+/T (NameOfPreparer[0])
+/V ()
+>> 
+<<
+/T (Line49000[0])
+/Kids [
+<<
+/T (Line49000_CheckBoxGroup[0])
+/Kids [
+<<
+/T (Line49000_CheckBox_EN[0])
+/V /
+>> 
+<<
+/T (Line49000_CheckBox_EN[1])
+/V /
+>>]
+>>]
+>>]
+>> 
+<<
+/T (Refund_or_Balance-owing[0])
 /Kids [
 <<
 /T (Line48500[0])
@@ -2205,6 +2240,7 @@
 <<
 /T (Line_48400_Amount[0])
 /V ()
+>>]
 >>]
 >>]
 >>]
