@@ -22,8 +22,11 @@ import Tax.Canada.T1.FieldNames.ON qualified as ON
 
 t1Fields :: T1 FieldConst
 t1Fields = ON.t1Fields {
-   page2 = within "form1" . within "Page2" Rank2.<$> BC.page2Fields,
+   page2 = within "form1" . within "Page2" Rank2.<$> page2Fields,
    page8 = within "form1" . within "Page8" . within "Return-pg8" Rank2.<$> page8Fields}
+
+page2Fields = BC.page2Fields{
+   organ_donor = NoField}
 
 page8Fields = BC.page8Fields {
    Page8.step6_RefundOrBalanceOwing = within "Step6-Cont" Rank2.<$> BC.page8step6Fields}

@@ -19,7 +19,7 @@ t1Fields = ON.t1Fields {
 
 page2Fields = ON.page2Fields {
    cai = NoField,
-   organ_donor = NoField}
+   organ_donor = Field ["Organ_donor", "Authori"] $ Switch "Option1" "Option2" "OrganDonor_CheckBox"}
 
 page3Fields = ON.page3Fields
 

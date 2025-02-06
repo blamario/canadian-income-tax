@@ -17,7 +17,7 @@ import Tax.Canada.T1.FieldNames.ON qualified as ON
 
 t1Fields :: T1 FieldConst
 t1Fields = NT.t1Fields{
-   page2 = within "form1" . within "Page2" . within "Step1-Continued" Rank2.<$> BC.page2Fields,
+   page2 = within "form1" . within "Page2" . within "Step1-Continued" Rank2.<$> NT.page2Fields,
    page7 = within "form1" . within "Page7" Rank2.<$> page7Fields,
    page8 = within "form1" . within "Page8" Rank2.<$> page8Fields}
 
