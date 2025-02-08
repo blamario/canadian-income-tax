@@ -10,6 +10,90 @@
 /T (form1[0])
 /Kids [
 <<
+/T (Page2[0])
+/Kids [
+<<
+/T (Charts[0])
+/Kids [
+<<
+/T (Chart2[0])
+/Kids [
+<<
+/T (Line1[0])
+/Kids [
+<<
+/T (Amount1[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line3[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line2[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Chart1[0])
+/Kids [
+<<
+/T (Line_3[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line_1[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line_2[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line_4[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (TextField_Underlined_Bottom[0])
+/V ()
+>> 
+<<
+/T (Line_5[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>]
+>>]
+>>]
+>> 
+<<
 /T (Page1[0])
 /Kids [
 <<
@@ -112,7 +196,7 @@
 /T (Line16[0])
 /Kids [
 <<
-/T (NumWithoutCurrency[0])
+/T (Amount[0])
 /V ()
 >>]
 >> 
@@ -217,7 +301,7 @@
 /Kids [
 <<
 /T (Amount[0])
-/V ( 235,675.00)
+/V ( 246,752.00)
 >>]
 >> 
 <<
@@ -264,6 +348,14 @@
 <<
 /T (#pageSet[0])
 /Kids [
+<<
+/T (Page1[1])
+/Kids [
+<<
+/T (ClearData_EN[0])
+/V /
+>>]
+>> 
 <<
 /T (Page1[0])
 /Kids [
