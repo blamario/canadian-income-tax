@@ -33,7 +33,8 @@ import Tax.Util (fixEq, fractionOf, difference, nonNegativeDifference, totalOf)
 data Schedule6 line = Schedule6{
    page2 :: Page2 line,
    page3 :: Page3 line,
-   page4 :: Page4 line}
+   page4 :: Page4 line,
+   page5 :: Page5 line}
 
 data Page2 line = Page2{
    questions :: Questions line,
@@ -106,6 +107,15 @@ data Step3 line = Step3{
    line41_copy :: line Centi,
    line42_sum :: line Centi}
 
+data Page5 line = Page5{
+   line43_greatest :: line Centi,
+   line_38120_acwb_self :: line Centi,
+   line_38121_acwb_spouse :: line Centi,
+   line46_sum :: line Centi,
+   line_38122_acwb_disability :: line Centi,
+   line48_sum :: line Centi,
+   line49_least :: line Centi}
+
 $(foldMap
    (\t-> concat <$> sequenceA [
        [d|
@@ -114,11 +124,11 @@ $(foldMap
        |],
        Rank2.TH.deriveAll t,
        Transformation.Shallow.TH.deriveAll t])
-   [''Schedule6, ''Page2, ''Page3, ''Page4, ''Questions, ''PartAColumn, ''PartBColumn, ''Step2, ''Step3])
+   [''Schedule6, ''Page2, ''Page3, ''Page4, ''Page5, ''Questions, ''PartAColumn, ''PartBColumn, ''Step2, ''Step3])
 
 fixSchedule6 :: Maybe (T1 Maybe) -> T1 Maybe -> Schedule6 Maybe -> Schedule6 Maybe
 fixSchedule6 t1spouse t1  =
-   fixEq $ \Schedule6{page2, page3, page4=Page4{step2, step3}} ->
+   fixEq $ \Schedule6{page2, page3, page4=Page4{step2, step3}, page5} ->
             let eitherEligible = or page2.questions.line_38100 || or page2.questions.line_38101 in Schedule6{
    page2 = Page2{
       questions = page2.questions,
@@ -158,7 +168,12 @@ fixSchedule6 t1spouse t1  =
          line39_fraction = fixSubCalculation id $ line38_rate `fractionOf` line37_difference,
          line40_difference = nonNegativeDifference line34_capped line39_fraction.result,
          line41_copy = if or page2.questions.line_38102 then step2.line28_difference else Just 0,
-         line42_sum = totalOf [line40_difference, line41_copy]}}}
+         line42_sum = totalOf [line40_difference, line41_copy]}},
+   page5 = let Page5{..} = page5 in page5{
+      line43_greatest = max step2.line28_difference step3.line42_sum,
+      line46_sum = totalOf [line_38120_acwb_self, line_38121_acwb_spouse],
+      line48_sum = totalOf [line46_sum, line_38122_acwb_disability],
+      line49_least = min line43_greatest line48_sum}}
 
 fixPartAColumn :: T1 Maybe -> PartAColumn Maybe -> PartAColumn Maybe
 fixPartAColumn t1 PartAColumn{..} = PartAColumn{
@@ -250,5 +265,13 @@ schedule6Fields = within "form1" Rank2.<$> Schedule6{
          line39_fraction = subCalculationFields "Line39" ["Amount1"] ["Amount2"],
          line40_difference = Field ["Line40", "Amount"] Amount,
          line41_copy = Field ["Line41", "Amount"] Amount,
-         line42_sum = Field ["Line42", "Amount"] Amount}}}
+         line42_sum = Field ["Line42", "Amount"] Amount}},
+   page5 = within "Page5" . within "Step4" Rank2.<$> Page5{
+      line43_greatest = Field ["Line43", "Amount"] Amount,
+      line_38120_acwb_self = Field ["Line44", "Amount"] Amount,
+      line_38121_acwb_spouse = Field ["Line45", "Amount"] Amount,
+      line46_sum = Field ["Line46", "Amount"] Amount,
+      line_38122_acwb_disability = Field ["Line47", "Amount"] Amount,
+      line48_sum = Field ["Line48", "Amount"] Amount,
+      line49_least = Field ["Line49", "Amount"] Amount}}
 
