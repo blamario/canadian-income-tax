@@ -3,6 +3,7 @@
 {-# LANGUAGE ImportQualifiedPost #-}
 {-# LANGUAGE InstanceSigs #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE NoFieldSelectors #-}
 {-# LANGUAGE NumericUnderscores #-}
 {-# LANGUAGE OverloadedRecordDot #-}
@@ -18,16 +19,21 @@ module Tax.Canada.Federal.Schedule9 where
 
 import Data.Fixed (Centi)
 import Data.Text (Text)
+import Language.Haskell.TH qualified as TH
 import Rank2 qualified
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
 import Tax.Canada.T1.Types (T1)
 import Tax.Canada.T1.Types qualified
-import Tax.FDF (Entry (Amount, Constant), FieldConst (Field), within)
+import Tax.FDF (Entry (Amount, Constant, Textual), FieldConst (Field), within)
 import Tax.Util (fixEq, fractionOf, difference, nonNegativeDifference, totalOf)
 
 data Schedule9 line = Schedule9{
+   page1 :: Page1 line,
+   page2 :: Page2 line}
+
+data Page1 line = Page1{
    line1_charities :: line Centi,
    line_32900_government :: line Centi,
    line_33300_universities :: line Centi,
@@ -60,17 +66,35 @@ data Schedule9 line = Schedule9{
    line22_fraction :: line Centi,
    line23_sum :: line Centi}
 
-deriving instance Show (line Centi) => Show (Schedule9 line)
-deriving instance Eq (line Centi) => Eq (Schedule9 line)
+data Page2 line = Page2{
+   propertyClass :: line Text,
+   line1_depreciation :: line Centi,
+   line2_dispositionProceeds :: line Centi,
+   line3_capitalCost :: line Centi,
+   line4_least :: line Centi,
+   line5_least :: line Centi,
+   line1_capitalGains :: line Centi,
+   line2_capitalGainsDeduction :: line Centi,
+   line3_difference :: line Centi}
 
-Rank2.TH.deriveAll ''Schedule9
-Transformation.Shallow.TH.deriveAll ''Schedule9
+$(foldMap
+   (\t-> concat <$> sequenceA [
+       [d|
+           deriving instance (Show (line Centi), Show (line Text)) => Show ($(TH.conT t) line)
+           deriving instance (Eq (line Centi), Eq (line Text)) => Eq ($(TH.conT t) line)
+       |],
+       Rank2.TH.deriveAll t,
+       Transformation.Shallow.TH.deriveAll t])
+   [''Schedule9, ''Page1, ''Page2])
 
 fixSchedule9 :: T1 Maybe -> Schedule9 Maybe -> Schedule9 Maybe
-fixSchedule9 t1 = fixEq $ \form@Schedule9{..} -> form{
+fixSchedule9 t1 = fixEq $ \form@Schedule9{page1, page2} -> form{
+  page1 = let Page1{..} = page1 in page1{
    line5_sum = totalOf [line1_charities, line_32900_government, line_33300_universities, line_33400_UN],
    line6_copy = t1.page4.line_23600_NetIncome,
    line6_fraction = (0.75 *) <$> line6_copy,
+   line_33700_depreciable = page2.line5_least,
+   line_33900_capital = page2.line3_difference,
    line7_sum = totalOf [line_33700_depreciable, line_33900_capital],
    line7_fraction = (0.25 *) <$> line7_sum,
    line8_sum = totalOf [line6_fraction, line7_fraction],
@@ -89,10 +113,15 @@ fixSchedule9 t1 = fixEq $ \form@Schedule9{..} -> form{
    line21_fraction = (0.29 *) <$> line21_difference,
    line22_copy = line13_min,
    line22_fraction = (0.15 *) <$> line22_copy,
-   line23_sum = totalOf [line20_fraction, line21_fraction, line22_fraction]}
+   line23_sum = totalOf [line20_fraction, line21_fraction, line22_fraction]},
+  page2 = let Page2{..} = page2 in page2{
+   line4_least = minimum [line2_dispositionProceeds, line3_capitalCost],
+   line5_least = minimum [line1_depreciation, line4_least],
+   line3_difference = nonNegativeDifference line1_capitalGains line2_capitalGainsDeduction}}
 
 schedule9Fields :: Schedule9 FieldConst
-schedule9Fields = within "form1" . within "Page1" Rank2.<$> Schedule9 {
+schedule9Fields = within "form1" Rank2.<$> Schedule9 {
+  page1 = within "Page1" Rank2.<$> Page1{
    line1_charities = Field ["Line1", "Amount"] Amount,
    line_32900_government = Field ["Line2", "Amount"] Amount,
    line_33300_universities = Field ["Line3", "Amount"] Amount,
@@ -123,5 +152,15 @@ schedule9Fields = within "form1" . within "Page1" Rank2.<$> Schedule9 {
    line21_fraction = Field ["Line21", "Amount"] Amount,
    line22_copy = Field ["Line22", "AmountH", "Amount_Line14"] Amount,
    line22_fraction = Field ["Line22", "Amount"] Amount,
-   line23_sum = Field ["Line23", "Amount"] Amount}
+   line23_sum = Field ["Line23", "Amount"] Amount},
+  page2 = within "Page2" . within "Charts" Rank2.<$> Page2{
+   propertyClass = Field ["Chart1", "TextField_Underlined_Bottom"] Textual,
+   line1_depreciation = Field ["Chart1", "Line_1", "Amount"] Amount,
+   line2_dispositionProceeds = Field ["Chart1", "Line_2", "Amount"] Amount,
+   line3_capitalCost = Field ["Chart1", "Line_3", "Amount"] Amount,
+   line4_least = Field ["Chart1", "Line_4", "Amount"] Amount,
+   line5_least = Field ["Chart1", "Line_5", "Amount"] Amount,
+   line1_capitalGains = Field ["Chart2", "Line1", "Amount1"] Amount,
+   line2_capitalGainsDeduction = Field ["Chart2", "Line2", "Amount"] Amount,
+   line3_difference = Field ["Chart2", "Line3", "Amount"] Amount}}
 

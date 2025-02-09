@@ -62,8 +62,8 @@ fixReturns inputs =
                                                                    expenses = t1.page6.medical_expenses.familyExpenses,
                                                                    netIncome = t1.page4.line_23600_NetIncome},
                                                                 MB.donations = partB2.donations{
-                                                                   MB.line54_base = schedule9.line13_min,
-                                                                   MB.line55_base = schedule9.line14_difference}}},
+                                                                   MB.line54_base = schedule9.page1.line13_min,
+                                                                   MB.line55_base = schedule9.page1.line14_difference}}},
                                   MB.page3 =
                                   page3{MB.partC = partC{MB.line63_copy = t1.page7.partC_NetFederalTax.line_40427}}})
 

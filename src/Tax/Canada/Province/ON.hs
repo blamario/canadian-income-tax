@@ -88,8 +88,8 @@ fixReturns inputs =
                                                              medicalExpenses{
                                                              netIncome = t1.page4.line_23600_NetIncome},
                                                           ON.donations = partB2.donations{
-                                                             ON.line47_base = schedule9.line13_min,
-                                                             ON.line48_base = schedule9.line14_difference}},
+                                                             ON.line47_base = schedule9.page1.line13_min,
+                                                             ON.line48_base = schedule9.page1.line14_difference}},
                                   ON.partC = partC{ON.line59_copy = t1.page7.partC_NetFederalTax.line_40427}}},
                      on479}
 

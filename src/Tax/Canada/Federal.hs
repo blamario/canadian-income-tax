@@ -44,7 +44,7 @@ import Tax.Canada.Federal.Schedule8 (Schedule8(page3, page4), fixSchedule8, sche
                                            line14_difference),
                                      Part4(line1_netSelfEmploymentEarnings),
                                      Page4Part5(line1_netSelfEmploymentEarnings))
-import Tax.Canada.Federal.Schedule9 (Schedule9(line23_sum), fixSchedule9, schedule9Fields)
+import Tax.Canada.Federal.Schedule9 (Schedule9(page1), Page1(line23_sum), fixSchedule9, schedule9Fields)
 import Tax.Canada.Federal.Schedule11 (Schedule11(page1), Page1(line5_trainingClaim, line17_sum), fixSchedule11, schedule11Fields)
 import Tax.Canada.T1 (fixT1, t1FieldsForProvince)
 import Tax.Canada.T1.Types (T1(page3, page4, page5, page6, page7, page8),
@@ -139,7 +139,7 @@ fixFederalForms province InputForms{t4} = fixEq $ \Forms{t1, schedule6, schedule
                                   schedule8.page6.line40_difference <|>
                                   schedule8.page6.line51_sum
                              else t1.page6.line_31000,
-                line_32300 = schedule11.page1.line17_sum, line_34900 = schedule9.line23_sum},
+                line_32300 = schedule11.page1.line17_sum, line_34900 = schedule9.page1.line23_sum},
        page7 = t1.page7{
           step6_RefundOrBalanceOwing = t1.page7.step6_RefundOrBalanceOwing{
              line_42100_CPPContributions = schedule8.page4.part4.line7_fraction <|>
