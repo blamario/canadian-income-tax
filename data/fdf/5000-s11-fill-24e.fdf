@@ -19,7 +19,7 @@
 /T (Line25[0])
 /Kids [
 <<
-/T (Amount25[0])
+/T (Amount[0])
 /V ()
 >>]
 >> 
@@ -27,15 +27,7 @@
 /T (Line20[0])
 /Kids [
 <<
-/T (Amount20[0])
-/V ()
->>]
->> 
-<<
-/T (Line18[0])
-/Kids [
-<<
-/T (Amount18[0])
+/T (Amount[0])
 /V ()
 >>]
 >> 
@@ -43,7 +35,15 @@
 /T (Line19[0])
 /Kids [
 <<
-/T (Amount19[0])
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line18[0])
+/Kids [
+<<
+/T (Amount[0])
 /V ()
 >>]
 >> 
@@ -51,7 +51,7 @@
 /T (Line24[0])
 /Kids [
 <<
-/T (Amount24[0])
+/T (Amount[0])
 /V ()
 >>]
 >> 
@@ -59,15 +59,7 @@
 /T (Line21[0])
 /Kids [
 <<
-/T (Amount21[0])
-/V ()
->>]
->> 
-<<
-/T (Line23[0])
-/Kids [
-<<
-/T (Amount22[0])
+/T (Amount[0])
 /V ()
 >>]
 >> 
@@ -75,7 +67,15 @@
 /T (Line22[0])
 /Kids [
 <<
-/T (Amount22[0])
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line23[0])
+/Kids [
+<<
+/T (Amount[0])
 /V ()
 >>]
 >>]
@@ -87,7 +87,7 @@
 /T (Line32020[0])
 /Kids [
 <<
-/T (Fulltime_Months[0])
+/T (Part_time_months[0])
 /V ()
 >>]
 >> 
@@ -95,7 +95,7 @@
 /T (Line32010[0])
 /Kids [
 <<
-/T (parttime_Months[0])
+/T (Part_time_months[0])
 /V ()
 >>]
 >> 
@@ -116,26 +116,18 @@
 /T (YourTuition[0])
 /Kids [
 <<
-/T (Line5[0])
-/Kids [
-<<
-/T (Amount6[0])
-/V ()
->>]
->> 
-<<
 /T (Line8[0])
 /Kids [
 <<
-/T (Amount1[0])
+/T (Amount[0])
 /V ()
 >>]
 >> 
 <<
-/T (Line6[0])
+/T (Line5[0])
 /Kids [
 <<
-/T (Amount7[0])
+/T (Amount[0])
 /V ()
 >>]
 >> 
@@ -143,7 +135,15 @@
 /T (Line7[0])
 /Kids [
 <<
-/T (Amount8[0])
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line6[0])
+/Kids [
+<<
+/T (Amount[0])
 /V ()
 >>]
 >> 
@@ -151,7 +151,7 @@
 /T (Line9[0])
 /Kids [
 <<
-/T (Amount1[0])
+/T (Amount[0])
 /V ()
 >>]
 >> 
@@ -167,31 +167,23 @@
 /T (Line11[0])
 /Kids [
 <<
-/T (Amount11[0])
-/V ()
->> 
-<<
 /T (Line11[0])
 /Kids [
 <<
-/T (Amount11[0])
+/T (Amount[0])
 /V ()
 >>]
+>> 
+<<
+/T (Amount[0])
+/V ()
 >>]
 >> 
 <<
 /T (Line10[0])
 /Kids [
 <<
-/T (Amount10[0])
-/V ()
->>]
->> 
-<<
-/T (Line4[0])
-/Kids [
-<<
-/T (Amount5[0])
+/T (Amount[0])
 /V ()
 >>]
 >> 
@@ -199,7 +191,15 @@
 /T (Line13[0])
 /Kids [
 <<
-/T (Amount13[0])
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line4[0])
+/Kids [
+<<
+/T (Amount[0])
 /V ()
 >>]
 >> 
@@ -207,15 +207,7 @@
 /T (Line3[0])
 /Kids [
 <<
-/T (Amount4[0])
-/V ()
->>]
->> 
-<<
-/T (Line12[0])
-/Kids [
-<<
-/T (Amount12[0])
+/T (Amount[0])
 /V ()
 >>]
 >> 
@@ -232,18 +224,18 @@
 >>]
 >> 
 <<
-/T (Line17[0])
+/T (Line12[0])
 /Kids [
 <<
-/T (Amount17[0])
+/T (Amount[0])
 /V ()
 >>]
 >> 
 <<
-/T (Line15[0])
+/T (Line17[0])
 /Kids [
 <<
-/T (Amount15[0])
+/T (Amount[0])
 /V ()
 >>]
 >> 
@@ -251,11 +243,19 @@
 /T (Line14[0])
 /Kids [
 <<
-/T (Amount14[0])
+/T (Amount2[0])
 /V ()
 >> 
 <<
-/T (Amount1[0])
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line15[0])
+/Kids [
+<<
+/T (Amount[0])
 /V ()
 >>]
 >> 
@@ -263,7 +263,7 @@
 /T (Line16[0])
 /Kids [
 <<
-/T (Amount16[0])
+/T (Amount[0])
 /V ()
 >>]
 >>]
