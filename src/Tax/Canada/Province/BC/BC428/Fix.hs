@@ -42,7 +42,7 @@ fixPage1PartA = fixEq $ \Page1PartA{..}-> Page1PartA{
 
 fixPage1PartB :: Page1PartB Maybe -> Page1PartB Maybe
 fixPage1PartB = fixEq $ \part@Page1PartB{..}-> part{
-   line16_basic = Just 11981,
+   line16_basic = Just 12580,
    spouseAmount = fixBaseCredit spouseAmount,
    dependantAmount = fixBaseCredit dependantAmount,
    line25 = totalOf [line16_basic, line17_age, spouseAmount.cont, dependantAmount.cont, line24_caregiver]}
@@ -65,7 +65,7 @@ fixPage2PartB bc428 = fixEq $ \part@Page2PartB{..}-> part{
    line37 = totalOf [line35, line36_pension],
    line40 = totalOf [line37, line38_disability, line39],
    line45 = totalOf [line40, line41_interest, line42_education, line43_transferredChild, line44_transferredSpouse],
-   medicalExpenses = fixMedicalExpenses 2491 medicalExpenses,
+   medicalExpenses = fixMedicalExpenses 2616 medicalExpenses,
    line53_sum = fixSubCalculation id $ totalOf [medicalExpenses.difference, line52],
    line54 = totalOf [line45, line53_sum.result],
    line56_fraction = line55_rate `fractionOf` line54,
@@ -94,13 +94,13 @@ fixPartC bc428 = fixEq $ \part@PartC{..}-> part{
 fixPage3 :: BC428 Maybe -> Page3 Maybe -> Page3 Maybe
 fixPage3 bc428 = fixEq $ \page@Page3{..}-> page{
    partC = fixPartC bc428 partC,
-   line73_basicReduction = Just 521,
+   line73_basicReduction = Just 547,
    line76_difference = nonNegativeDifference line74_copy line75_base,
    line78_fraction = fixSubCalculation id $ line77_rate `fractionOf` line76_difference,
    line79_difference = fixSubCalculation id $ nonNegativeDifference line73_basicReduction line78_fraction.result,
    line80_difference = nonNegativeDifference partC.line72 line79_difference.result,
    line82_difference = nonNegativeDifference line80_difference line81_logging,
    line85_difference = nonNegativeDifference line82_difference line84_political,
-   line88_sum = fixSubCalculation id $ min 2000 <$> totalOf [line86_esop20, line87_evcc30],
+   line88_sum = fixSubCalculation id $ min 2000 <$> totalOf [line_60450_esop20, line_60470_evcc30],
    line89_difference = nonNegativeDifference line85_difference line88_sum.result,
    line91_tax = nonNegativeDifference line89_difference line90_mining}

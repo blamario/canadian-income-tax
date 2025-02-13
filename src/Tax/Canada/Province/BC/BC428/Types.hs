@@ -15,6 +15,7 @@
 module Tax.Canada.Province.BC.BC428.Types where
 
 import Data.Fixed (Centi)
+import Data.Text (Text)
 import Language.Haskell.TH qualified as TH
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
@@ -115,8 +116,10 @@ data Page3 line = Page3 {
    line83_political :: line Centi,
    line84_political :: line Centi,
    line85_difference :: line Centi,
-   line86_esop20 :: line Centi,
-   line87_evcc30 :: line Centi,
+   line86_esop20 :: line Text,
+   line_60450_esop20 :: line Centi,
+   line87_evcc30 :: line Text,
+   line_60470_evcc30 :: line Centi,
    line88_sum :: SubCalculation line,
    line89_difference :: line Centi,
    line90_mining :: line Centi,
@@ -125,9 +128,9 @@ data Page3 line = Page3 {
 $(foldMap
    (\t-> concat <$> sequenceA [
        [d|
-           deriving instance (Show (line Centi), Show (line Rational), Show (line Word))
+           deriving instance (Show (line Centi), Show (line Rational), Show (line Text), Show (line Word))
                           => Show ($(TH.conT t) line)
-           deriving instance (Eq (line Centi), Eq (line Rational), Eq (line Word))
+           deriving instance (Eq (line Centi), Eq (line Rational), Eq (line Text), Eq (line Word))
                           => Eq ($(TH.conT t) line)
        |],
        Rank2.TH.deriveAll t,

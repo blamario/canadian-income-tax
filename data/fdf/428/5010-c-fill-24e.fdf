@@ -337,7 +337,7 @@
 /Kids [
 <<
 /T (Amount_ReadOnly[0])
-/V ( 23,179.00)
+/V ( 24,338.00)
 >>]
 >> 
 <<
@@ -395,6 +395,14 @@
 <<
 /T (Line86[0])
 /Kids [
+<<
+/T (Certificatenumber[0])
+/Kids [
+<<
+/T (Certificat-no[0])
+/V ()
+>>]
+>> 
 <<
 /T (Amount[0])
 /V ()
@@ -576,6 +584,14 @@
 /T (Line87[0])
 /Kids [
 <<
+/T (Certificatenumber[0])
+/Kids [
+<<
+/T (Certificat-no[0])
+/V ()
+>>]
+>> 
+<<
 /T (Amount[0])
 /V ()
 >>]
@@ -627,7 +643,7 @@
 /Kids [
 <<
 /T (Amount[0])
-/V ( 11,285.00)
+/V ( 11,850.00)
 >>]
 >> 
 <<
@@ -671,7 +687,7 @@
 /Kids [
 <<
 /T (Amount[0])
-/V ( 11,285.00)
+/V ( 11,850.00)
 >>]
 >> 
 <<
@@ -735,7 +751,7 @@
 /Kids [
 <<
 /T (Amount_ReadOnly[0])
-/V (240,716.00)
+/V (252,752.00)
 >>]
 >> 
 <<
@@ -750,7 +766,7 @@
 /T (Line12[0])
 /Kids [
 <<
-/T (Percent_Amount[0])
+/T (Percent_ReadOnly[0])
 /V (20.5%)
 >>]
 >> 
@@ -759,7 +775,7 @@
 /Kids [
 <<
 /T (Amount_ReadOnly[0])
-/V (28,109.25)
+/V (29,514.76)
 >>]
 >> 
 <<
@@ -786,7 +802,7 @@
 /T (Line5[0])
 /Kids [
 <<
-/T (Percent_Amount[0])
+/T (Percent_ReadOnly[0])
 /V (10.5%)
 >>]
 >> 
@@ -795,7 +811,7 @@
 /Kids [
 <<
 /T (Amount_ReadOnly[0])
-/V ( 5,825.60)
+/V ( 6,116.84)
 >>]
 >> 
 <<
@@ -819,7 +835,7 @@
 /Kids [
 <<
 /T (Amount_ReadOnly[0])
-/V ( 91,310.00)
+/V ( 95,875.00)
 >>]
 >> 
 <<
@@ -863,7 +879,7 @@
 /Kids [
 <<
 /T (Amount_ReadOnly[0])
-/V (172,602.00)
+/V (181,232.00)
 >>]
 >> 
 <<
@@ -878,7 +894,7 @@
 /T (Line12[0])
 /Kids [
 <<
-/T (Percent_amount[0])
+/T (Percent_ReadOnly[0])
 /V (16.8%)
 >>]
 >> 
@@ -895,7 +911,7 @@
 /Kids [
 <<
 /T (Amount_ReadOnly[0])
-/V (16,666.10)
+/V (17,499.40)
 >>]
 >>]
 >> 
@@ -931,7 +947,7 @@
 /Kids [
 <<
 /T (Amount_ReadOnly[0])
-/V (127,299.00)
+/V (133,664.00)
 >>]
 >> 
 <<
@@ -946,7 +962,7 @@
 /T (Line12[0])
 /Kids [
 <<
-/T (Percent_Amount[0])
+/T (Percent_ReadOnly[0])
 /V (14.7%)
 >>]
 >> 
@@ -955,21 +971,13 @@
 /Kids [
 <<
 /T (Amount_ReadOnly[0])
-/V (10,006.56)
+/V (10,506.91)
 >>]
 >>]
 >> 
 <<
 /T (Column4[0])
 /Kids [
-<<
-/T (Line5[0])
-/Kids [
-<<
-/T (Percent_Amount[0])
-/V (12.29%)
->>]
->> 
 <<
 /T (Line8[0])
 /Kids [
@@ -979,11 +987,19 @@
 >>]
 >> 
 <<
+/T (Line5[0])
+/Kids [
+<<
+/T (Percent_ReadOnly[0])
+/V (12.29%)
+>>]
+>> 
+<<
 /T (Line7[0])
 /Kids [
 <<
 /T (Amount_ReadOnly[0])
-/V ( 7,245.73)
+/V ( 7,607.94)
 >>]
 >> 
 <<
@@ -1007,7 +1023,67 @@
 /Kids [
 <<
 /T (Amount_ReadOnly[0])
-/V ( 104,835.00)
+/V ( 110,076.00)
+>>]
+>> 
+<<
+/T (Line2[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Column2[0])
+/Kids [
+<<
+/T (Line8[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line5[0])
+/Kids [
+<<
+/T (Percent_ReadOnly[0])
+/V (7.7%)
+>>]
+>> 
+<<
+/T (Line6[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line7[0])
+/Kids [
+<<
+/T (Amount_ReadOnly[0])
+/V ( 2,425.61)
+>>]
+>> 
+<<
+/T (Line4[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line3[0])
+/Kids [
+<<
+/T (Amount_ReadOnly[0])
+/V ( 47,937.00)
 >>]
 >> 
 <<
@@ -1026,7 +1102,7 @@
 /T (Line5[0])
 /Kids [
 <<
-/T (Percent_Amount[0])
+/T (Percent_ReadOnly[0])
 /V (5.06%)
 >>]
 >> 
@@ -1068,66 +1144,6 @@
 <<
 /T (Amount_ReadOnly[0])
 /V ( 0.00)
->>]
->> 
-<<
-/T (Line2[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->>]
->> 
-<<
-/T (Column2[0])
-/Kids [
-<<
-/T (Line8[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line5[0])
-/Kids [
-<<
-/T (Percent_Amount[0])
-/V (7.7%)
->>]
->> 
-<<
-/T (Line6[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line7[0])
-/Kids [
-<<
-/T (Amount_ReadOnly[0])
-/V ( 2,310.09)
->>]
->> 
-<<
-/T (Line4[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line3[0])
-/Kids [
-<<
-/T (Amount_ReadOnly[0])
-/V ( 45,654.00)
 >>]
 >> 
 <<

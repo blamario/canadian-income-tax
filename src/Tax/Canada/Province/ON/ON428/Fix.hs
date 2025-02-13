@@ -2,6 +2,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE NumericUnderscores #-}
 {-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
@@ -41,7 +42,7 @@ fixPage1PartA income = fixEq $ \Page1PartA{..}-> Page1PartA{
 
 fixPage1PartB :: Page1PartB Maybe -> Page1PartB Maybe
 fixPage1PartB = fixEq $ \part@Page1PartB{..}-> part{
-   line9_basic = Just 11865,
+   line9_basic = Just 12_399,
    spouseAmount = fixBaseCredit spouseAmount,
    dependantAmount = fixBaseCredit dependantAmount,
    line18 = totalOf [line9_basic, line10_age, spouseAmount.cont, dependantAmount.cont, line17_caregiver],
@@ -64,7 +65,7 @@ fixPage2PartB on428 = fixEq $ \part@Page2PartB{..}-> part{
    line28 = totalOf [line26, line27_pension],
    line31 = totalOf [line28, line29_disability, line30],
    line35 = totalOf [line31, line32_interest, line33_education, line34_transferred],
-   medicalExpenses = fixMedicalExpenses 2685 medicalExpenses,
+   medicalExpenses = fixMedicalExpenses 2806 medicalExpenses,
    line43_sum = fixSubCalculation id $ totalOf [medicalExpenses.difference, line42],
    line44 = totalOf [line35, line43_sum.result],
    line46_fraction = line45_rate `fractionOf` line44,
@@ -99,8 +100,8 @@ fixPage3 on428 = fixEq $ \page@Page3{..}-> page{
    line63 = line62,
    line64 = on428.page2.partC.line54,
    line65 = nonNegativeDifference line63 line64,
-   line66_surtax = fixSubCalculation (\x-> 0.2 * max 0 (x - 5315)) line65,
-   line67_surtax = fixSubCalculation (\x-> 0.36 * max 0 (x - 6802)) line65,
+   line66_surtax = fixSubCalculation (\x-> 0.2 * max 0 (x - 5554)) line65,
+   line67_surtax = fixSubCalculation (\x-> 0.36 * max 0 (x - 7108)) line65,
    line68_sum = fixSubCalculation id $ totalOf [line66_surtax.result, line67_surtax.result],
    line69 = totalOf [line62, line68_sum.result],
    line70 = on428.page2.partC.line57,
