@@ -21,6 +21,7 @@ import Control.Applicative ((<|>))
 import Control.Monad ((=<<))
 import Data.CAProvinceCodes qualified as Province
 import Data.Fixed (Centi)
+import Data.Foldable (find)
 import Data.Functor.Compose (Compose(Compose))
 import Data.List.NonEmpty (NonEmpty((:|)), nonEmpty)
 import Data.Maybe (isJust)
@@ -38,12 +39,13 @@ import Tax.Canada.Federal.Schedule6 (Schedule6, fixSchedule6, schedule6Fields)
 import Tax.Canada.Federal.Schedule7 qualified
 import Tax.Canada.Federal.Schedule7 (Schedule7, fixSchedule7, schedule7Fields)
 import Tax.Canada.Federal.Schedule8 qualified as Schedule8
-import Tax.Canada.Federal.Schedule8 (Schedule8(page3, page4), fixSchedule8, schedule8Fields,
-                                     Page3(line_50339_totalPensionableEarnings, line_50340_totalContributions,
-                                           line7_fraction, line8_difference, line9_fraction, line10_fraction,
-                                           line14_difference),
-                                     Part4(line1_netSelfEmploymentEarnings),
-                                     Page4Part5(line1_netSelfEmploymentEarnings))
+import Tax.Canada.Federal.Schedule8 (Schedule8(page4, page5, page6, page7, page8, page9, page10),
+                                     fixSchedule8, schedule8Fields,
+                                     Page4(line_50339_totalPensionableEarnings,
+                                           line_50340_totalContributions,
+                                           line_50341_totalSecondContributions),
+                                     Page6(line1_netSelfEmploymentEarnings),
+                                     Page7(line1_netSelfEmploymentEarnings))
 import Tax.Canada.Federal.Schedule9 (Schedule9(page1), Page1(line23_sum), fixSchedule9, schedule9Fields)
 import Tax.Canada.Federal.Schedule11 (Schedule11(page1), Page1(line5_trainingClaim, line17_sum), fixSchedule11, schedule11Fields)
 import Tax.Canada.T1 (fixT1, t1FieldsForProvince)
@@ -117,10 +119,11 @@ fixFederalForms province InputForms{t4} = fixEq $ \Forms{t1, schedule6, schedule
                fromT4s' (.slip1.box44_unionDues) (\amt pg-> pg{line_21200_Dues = amt}) $
                fromT4s' (additionalT4 ["77"]) (\amt step-> step{line_22900_OtherEmployExpenses = amt}) $
                t1.page4{line_20800_RRSPDeduction = schedule7.page3.partC.line20_deduction,
-                        line_22200_CPP_QPP_Contributions = schedule8.page4.part4.line11_sum <|>
-                                                           schedule8.page6.line43_difference <|>
-                                                           schedule8.page6.line54_sum,
-                        line_22215_DeductionCPP_QPP = schedule8.page5.line34_least},
+                        line_22200_CPP_QPP_Contributions = schedule8.page6.line17_sum <|>
+                                                           schedule8.page10.line97_sum,
+                        line_22215_DeductionCPP_QPP = schedule8.page5.part3a.line30_sum <|>
+                                                      schedule8.page5.part3b.line43_sum <|>
+                                                      schedule8.page9.line77_sum},
        page5 = t1.page5{
           step4_TaxableIncome =
              fromT4s' (additionalT4 ["39", "41", "91", "92"])
@@ -133,41 +136,41 @@ fixFederalForms province InputForms{t4} = fixEq $ \Forms{t1, schedule6, schedule
                      fromT4s' (.slip1.box55_premiumPPIP) (\amt pg-> pg{line_31205 = amt}) t1.page6
                    _ -> fromT4s' (\t4-> totalOf [t4.slip1.box18_employeeEI, t4.slip1.box55_premiumPPIP])
                            (\amt pg-> pg{line_31200 = amt}) t1.page6)
-               {line_30800 = if any hasAnyField t4 then schedule8.page5.line30_least else t1.page6.line_30800,
+               {line_30800 = if any hasAnyField t4
+                             then schedule8.page5.part3a.line27_copy <|>
+                                  schedule8.page5.part3b.line32_join <|>
+                                  schedule8.page9.line60_least
+                             else t1.page6.line_30800,
                 line_31000 = if any hasAnyField t4
-                             then schedule8.page4.part4.line10_fraction.result <|>
-                                  schedule8.page6.line40_difference <|>
-                                  schedule8.page6.line51_sum
+                             then schedule8.page6.line15_half.result <|>
+                                  schedule8.page9.line78_half.result
                              else t1.page6.line_31000,
                 line_32300 = schedule11.page1.line17_sum, line_34900 = schedule9.page1.line23_sum},
        page7 = t1.page7{
           step6_RefundOrBalanceOwing = t1.page7.step6_RefundOrBalanceOwing{
-             line_42100_CPPContributions = schedule8.page4.part4.line7_fraction <|>
-                                           schedule8.page6.line44_copy}},
+             line_42100_CPPContributions = schedule8.page6.line14_sum <|>
+                                           find (> 0) schedule8.page8.line55_difference}},
        page8 = t1.page8{
           step6_RefundOrBalanceOwing =
              (fromT4s' (.slip1.box22_incomeTaxDeducted) (\amt pt-> pt{line_43700_Total_income_tax_ded = amt})
                  t1.page8.step6_RefundOrBalanceOwing)
-             {line_44800_CPPOverpayment = schedule8.page3.line14_difference <|>
-                                          schedule8.page6.line35_fraction.result,
+             {line_44800_CPPOverpayment = schedule8.page5.part3a.line31_copy <|> schedule8.page9.line56_half.result,
               line_45300_CWB = schedule6.page4.step3.line42_sum <|>
                                schedule6.page4.step2.line28_difference,
               line_45350_CTC = schedule11.page1.line5_trainingClaim}}},
    schedule6 = fixSchedule6 Nothing t1 schedule6,
    schedule7 = fixSchedule7 t1 schedule7,
    schedule8 = fixSchedule8 schedule8{
-      page3 = schedule8.page3{
+      page4 = schedule8.page4{
          line_50339_totalPensionableEarnings =
             totalOf . (liftA2 (<|>) (.slip1.box26_pensionableEarnings) (.slip1.box14_employmentIncome) <$>) =<< t4,
          line_50340_totalContributions = totalOf . fmap (.slip1.box16_employeeCPP) =<< t4},
-      page4 = Schedule8.Page4{
-         part4 = schedule8.page4.part4{
-            line1_netSelfEmploymentEarnings = totalOf [t1.page3.line_12200_PartnershipIncome,
-                                                       t1.page3.line29_sum.result]},
-         part5 = schedule8.page4.part5{
-            line1_netSelfEmploymentEarnings = totalOf [t1.page3.line_12200_PartnershipIncome,
-                                                       t1.page3.line29_sum.result]}
-         }},
+      page6 = schedule8.page6{
+         line1_netSelfEmploymentEarnings = totalOf [t1.page3.line_12200_PartnershipIncome,
+                                                    t1.page3.line29_sum.result]},
+      page7 = schedule8.page7{
+         line1_netSelfEmploymentEarnings = totalOf [t1.page3.line_12200_PartnershipIncome,
+                                                    t1.page3.line29_sum.result]}},
    schedule9 = fixSchedule9 t1 schedule9,
    schedule11 = fixSchedule11 t1 schedule11}
 
