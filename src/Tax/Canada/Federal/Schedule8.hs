@@ -399,7 +399,7 @@ fixSchedule8 = fixEq $ \Schedule8{page2, page3, page4, page5, page6, page7, page
                line35_difference = fixSubCalculation id $ nonNegativeDifference line33_copy line34_copy,
                line36_difference = fixSubCalculation id
                                    $ nonNegativeDifference line32_difference line35_difference.result,
-               line37_difference = nonNegativeDifference line29_least line37_difference,
+               line37_difference = nonNegativeDifference line29_least line36_difference.result,
                line38to48 = if page7.line23_sum <= page7.line24_copyC then (Rank2.pure Nothing){line48_least = Just 0}
                             else let Page8Cond1{..} = line38to48 in Page8Cond1{
                    line38_copyE = page3.lineE_maxSubjectToSecondAdditionalContributions,
