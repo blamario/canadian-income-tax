@@ -139,7 +139,7 @@ test-suite             properties
     build-depends:       base >= 4.7 && < 5, bytestring,
                          directory ^>= 1.3, filepath,
                          forms-data-format, monoid-subclasses, rank2classes, deep-transformations,
-                         text, time >= 1.9.1 && < 1.13, ca-province-codes,
+                         text, time >= 1.9.1 && < 1.15, ca-province-codes,
                          tasty >= 0.7, tasty-hedgehog ^>= 1.4, hedgehog ^>= 1.4 || ^>= 1.5,
                          canadian-income-tax
     hs-source-dirs:      test
@@ -155,7 +155,7 @@ test-suite             regression
                          directory ^>= 1.3, filepath,
                          forms-data-format,
                          rank2classes, deep-transformations,
-                         text, time >= 1.9.1 && < 1.13, ca-province-codes,
+                         text, time >= 1.9.1 && < 1.15, ca-province-codes,
                          tasty >= 0.7, tasty-golden ^>=2.3,
                          canadian-income-tax
     hs-source-dirs:      test
