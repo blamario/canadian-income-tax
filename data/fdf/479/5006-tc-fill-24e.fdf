@@ -13,7 +13,39 @@
 /T (Page2[0])
 /Kids [
 <<
-/T (ON_Political_Contribution[0])
+/T (ON-Coop-Education[0])
+/Kids [
+<<
+/T (Line63265[0])
+/Kids [
+<<
+/T (RadioButtonGroup[0])
+/V /
+>>]
+>> 
+<<
+/T (Line63260[0])
+/Kids [
+<<
+/T (NmbrApprentices[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line63270[0])
+/Kids [
+<<
+/T (BusinessNumber_9_Comb_Bottom_Adv[0])
+/Kids [
+<<
+/T (BusinessNumber[0])
+/V ()
+>>]
+>>]
+>>]
+>> 
+<<
+/T (ON-Political-Contribution[0])
 /Kids [
 <<
 /T (Line16[0])
@@ -62,38 +94,6 @@
 <<
 /T (Amount[0])
 /V ()
->>]
->> 
-<<
-/T (ON_coop_education[0])
-/Kids [
-<<
-/T (Line63265[0])
-/Kids [
-<<
-/T (RadioButtonGroup[0])
-/V /
->>]
->> 
-<<
-/T (Line63260[0])
-/Kids [
-<<
-/T (NmbrApprentices[0])
-/V ()
->>]
->> 
-<<
-/T (Line63270[0])
-/Kids [
-<<
-/T (BusinessNumber_9_Comb_Bottom_Adv[0])
-/Kids [
-<<
-/T (BusinessNumber[0])
-/V ()
->>]
->>]
 >>]
 >> 
 <<

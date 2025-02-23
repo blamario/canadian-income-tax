@@ -34,6 +34,6 @@ fixPage1 = fixEq $ \page@Page1{..}-> page{
 fixPage2 :: ON479 Maybe -> Page2 Maybe -> Page2 Maybe
 fixPage2 on479 = fixEq $ \page2@Page2{..}-> page2{
    line17_copy = on479.page1.line16_sum,
-   line_63110_credit = if line_63110_contributions >= Just 3531 then Just 1552 else line_63110_credit, -- TODO worksheet?
+   line_63110_credit = if line_63110_contributions >= Just 3691 then Just 1622.08 else line_63110_credit, -- TODO worksheet?
    line_63220_fraction = (0.05 *) <$> line_63220_fromT1221,
    line23_credits = totalOf [line17_copy, line_63110_credit, line_63220_fraction, line_63300_total]}

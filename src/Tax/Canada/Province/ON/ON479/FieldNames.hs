@@ -37,12 +37,12 @@ page1Fields = Page1 {
 
 page2Fields = Page2 {
    line17_copy = Field ["Line15", "Amount"] Amount,
-   line_63110_contributions = Field ["ON_Political_Contribution", "Line16", "Amount"] Amount,
-   line_63110_credit = Field ["ON_Political_Contribution", "Line17", "Amount"] Amount,
+   line_63110_contributions = Field ["ON-Political-Contribution", "Line16", "Amount"] Amount,
+   line_63110_credit = Field ["ON-Political-Contribution", "Line17", "Amount"] Amount,
    line_63220_fromT1221 = Field ["Line18", "Line63220", "Amount1"] Amount,
    line_63220_fraction = Field ["Line18", "Amount2"] Amount,
-   line_63260_placements = Field ["ON_coop_education", "Line63260", "NmbrApprentices"] Count,
-   line_63265_partnership = Field ["ON_coop_education", "Line63265", "RadioButtonGroup"] $ RadioButton [True, False],
-   line_63270_business = Field ["ON_coop_education", "Line63270", "BusinessNumber_9_Comb_Bottom_Adv", "BusinessNumber"] Textual,
+   line_63260_placements = Field ["ON-Coop-Education", "Line63260", "NmbrApprentices"] Count,
+   line_63265_partnership = Field ["ON-Coop-Education", "Line63265", "RadioButtonGroup"] $ RadioButton [True, False],
+   line_63270_business = Field ["ON-Coop-Education", "Line63270", "BusinessNumber_9_Comb_Bottom_Adv", "BusinessNumber"] Textual,
    line_63300_total = Field ["Line19", "Amount"] Amount,
    line23_credits = Field ["Line20", "Amount"] Amount}

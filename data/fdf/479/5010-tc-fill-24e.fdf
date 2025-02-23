@@ -245,58 +245,6 @@
 >>]
 >> 
 <<
-/T (Table[0])
-/Kids [
-<<
-/T (Row1[0])
-/Kids [
-<<
-/T (Nameoflandlord[0])
-/V ()
->> 
-<<
-/T (Rentaladdress[0])
-/V ()
->> 
-<<
-/T (Numberofmonths[0])
-/V ()
->> 
-<<
-/T (RentPaid[0])
-/V ()
->>]
->> 
-<<
-/T (Headers[0])
-/Kids [
-<<
-/T (Footnote1[0])
-/V /
->>]
->> 
-<<
-/T (Row2[0])
-/Kids [
-<<
-/T (Nameoflandlord[0])
-/V ()
->> 
-<<
-/T (Rentpaid[0])
-/V ()
->> 
-<<
-/T (Rentaladdress[0])
-/V ()
->> 
-<<
-/T (Numberofmonths[0])
-/V ()
->>]
->>]
->> 
-<<
 /T (Line38[0])
 /Kids [
 <<
@@ -337,11 +285,71 @@
 >>]
 >> 
 <<
+/T (Declaration-For-Renters[0])
+/Kids [
+<<
+/T (Table[0])
+/Kids [
+<<
+/T (Headers[0])
+/Kids [
+<<
+/T (Footnote2[0])
+/V /
+>> 
+<<
+/T (Footnote3[0])
+/V /
+>>]
+>> 
+<<
+/T (Row1[0])
+/Kids [
+<<
+/T (Nameoflandlord[0])
+/V ()
+>> 
+<<
+/T (Rentpaid[0])
+/V ()
+>> 
+<<
+/T (Rentaladdress[0])
+/V ()
+>> 
+<<
+/T (Numberofmonths[0])
+/V ()
+>>]
+>> 
+<<
+/T (Row2[0])
+/Kids [
+<<
+/T (Nameoflandlord[0])
+/V ()
+>> 
+<<
+/T (Rentpaid[0])
+/V ()
+>> 
+<<
+/T (Rentaladdress[0])
+/V ()
+>> 
+<<
+/T (Numberofmonths[0])
+/V ()
+>>]
+>>]
+>>]
+>> 
+<<
 /T (Line37[0])
 /Kids [
 <<
 /T (AmountRead_Only[0])
-/V ( 60,000.00)
+/V ( 63,000.00)
 >>]
 >> 
 <<
@@ -404,6 +412,18 @@
 /T (Chart[0])
 /Kids [
 <<
+/T (Line5[0])
+/Kids [
+<<
+/T (Col1_Amount[0])
+/V ()
+>> 
+<<
+/T (Col2_Amount[0])
+/V ()
+>>]
+>> 
+<<
 /T (Line6[0])
 /Kids [
 <<
@@ -412,65 +432,14 @@
 >>]
 >> 
 <<
-/T (Column2[0])
-/Kids [
-<<
-/T (Line5[0])
-/Kids [
-<<
-/T (Col2_Amount[0])
-/V ()
->>]
->> 
-<<
 /T (Line1[0])
 /Kids [
 <<
-/T (Col2_Amount[0])
+/T (NumWithoutCurrency[0])
 /V ()
->>]
 >> 
 <<
-/T (Line4[0])
-/Kids [
-<<
-/T (Col2_Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line3[0])
-/Kids [
-<<
-/T (Col2_Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line2[0])
-/Kids [
-<<
-/T (Col2_Amount[0])
-/V ()
->>]
->>]
->> 
-<<
-/T (Column1[0])
-/Kids [
-<<
-/T (Line5[0])
-/Kids [
-<<
-/T (Col1_Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line1[0])
-/Kids [
-<<
-/T (Col1_Amount[0])
+/T (NumWithoutCurrency2[0])
 /V ()
 >>]
 >> 
@@ -480,6 +449,10 @@
 <<
 /T (Col1_Amount[0])
 /V ()
+>> 
+<<
+/T (Col2_Amount[0])
+/V ()
 >>]
 >> 
 <<
@@ -487,6 +460,10 @@
 /Kids [
 <<
 /T (Col1_Amount[0])
+/V ()
+>> 
+<<
+/T (Col2_Amount[0])
 /V ()
 >>]
 >> 
@@ -496,7 +473,10 @@
 <<
 /T (Col1_Amount[0])
 /V ()
->>]
+>> 
+<<
+/T (Col2_Amount[0])
+/V ()
 >>]
 >>]
 >> 
@@ -588,36 +568,24 @@
 /T (Page1[2])
 /Kids [
 <<
-/T (Background[0])
-/Kids [
-<<
 /T (ClearData_EN[0])
 /V /
->>]
 >>]
 >> 
 <<
 /T (Page1[1])
 /Kids [
 <<
-/T (Background[0])
-/Kids [
-<<
 /T (ClearData_EN[0])
 /V /
->>]
 >>]
 >> 
 <<
 /T (Page1[0])
 /Kids [
 <<
-/T (Background[0])
-/Kids [
-<<
 /T (ClearData_EN[0])
 /V /
->>]
 >>]
 >>]
 >>]
