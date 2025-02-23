@@ -45,10 +45,7 @@ fixReturns inputs =
           -> (fixFederalForms AB inputs
               ff{t1 = t1{page7 =
                          page7{step6_RefundOrBalanceOwing =
-                               step6_RefundOrBalanceOwing{T1.line_42800_ProvTerrTax = ab428.page3.partC.line66_tax}},
-                         page8 =
-                         page8{Page8.step6_RefundOrBalanceOwing =
-                               page8step6{T1.line_47900_ProvTerrCredits = ab428.page3.partD.line69_credits}}}}
+                               step6_RefundOrBalanceOwing{T1.line_42800_ProvTerrTax = ab428.page3.partC.line66_tax}}}}
               `Pair`
               fixAB428 ab428{AB.page1 =
                              page1{AB.Page1.income = t1.page5.step4_TaxableIncome.line_26000_TaxableIncome,

@@ -25,9 +25,9 @@ page1Fields = Page1 {
    partB = page1PartBFields}
 
 page1PartAFields = Page1PartA {
-   column1 = within "Column1" Rank2.<$> taxIncomeBracketFields      0  0.108      0,
-   column2 = within "Column2" Rank2.<$> taxIncomeBracketFields  36_842 0.1275 3_978.94,
-   column3 = within "Column3" Rank2.<$> (taxIncomeBracketFields 79_625 0.174  9_433.77)}
+   column1 = within "Column1" Rank2.<$> taxIncomeBracketFields       0  0.108       0,
+   column2 = within "Column2" Rank2.<$> taxIncomeBracketFields   47_000 0.1275   5076,
+   column3 = within "Column3" Rank2.<$> (taxIncomeBracketFields 100_000 0.174  11_833.5)}
 
 taxIncomeBracketFields :: Centi -> Rational -> Centi -> TaxIncomeBracket FieldConst
 taxIncomeBracketFields threshold rate baseTax = TaxIncomeBracket {

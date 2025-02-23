@@ -40,7 +40,7 @@ fixPage1PartA income = fixEq $ \Page1PartA{..}-> Page1PartA{
 
 fixPage1PartB :: Page1PartB Maybe -> Page1PartB Maybe
 fixPage1PartB = fixEq $ \part@Page1PartB{..}-> part{
-   line9_basic = Just 21003,
+   line9_basic = Just 21885,
    spouseAmount = fixBaseCredit spouseAmount,
    dependantAmount = fixBaseCredit dependantAmount,
    line18 = totalOf [line9_basic, line10_age, spouseAmount.cont, dependantAmount.cont, line17_infirm],
@@ -62,7 +62,7 @@ fixPage2PartB ab428 = fixEq $ \part@Page2PartB{..}-> part{
    line29 = totalOf [line26, line27_pension, line28_caregiver],
    line32 = totalOf [line29, line30_disability, line31],
    line36 = totalOf [line32, line33_interest, line34_education, line35_transferredSpouse],
-   medicalExpenses = fixMedicalExpenses 2714 medicalExpenses,
+   medicalExpenses = fixMedicalExpenses 2828 medicalExpenses,
    line44_sum = fixSubCalculation id $ totalOf [medicalExpenses.difference, line43],
    line45 = totalOf [line36, line44_sum.result],
    line47_fraction = line46_rate `fractionOf` line45,
@@ -77,8 +77,7 @@ fixDonations = fixEq $ \part@Donations{..} -> part{
 
 fixPage3 :: AB428 Maybe -> Page3 Maybe -> Page3 Maybe
 fixPage3 ab428 = fixEq $ \page@Page3{..}-> page{
-   partC = fixPartC ab428 partC,
-   partD = fixPartD ab428 partD}
+   partC = fixPartC ab428 partC}
 
 fixPartC :: AB428 Maybe -> PartC Maybe -> PartC Maybe
 fixPartC ab428 = fixEq $ \part@PartC{..}-> part{
@@ -96,7 +95,3 @@ fixPartC ab428 = fixEq $ \part@PartC{..}-> part{
    line61 = totalOf [line59_difference, line60_fraction],
    line63_difference = nonNegativeDifference line61 line62_foreignCredit,
    line66_tax = nonNegativeDifference line63_difference line65_political}
-
-fixPartD :: AB428 Maybe -> PartD Maybe -> PartD Maybe
-fixPartD _ab428 = fixEq $ \part@PartD{..}-> part{
-   line69_credits = totalOf [line67_investorCredit, line68_stockCredit]}

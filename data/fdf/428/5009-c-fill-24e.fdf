@@ -13,10 +13,7 @@
 /T (Page2[0])
 /Kids [
 <<
-/T (PartB[0])
-/Kids [
-<<
-/T (Line53[0])
+/T (Line28[0])
 /Kids [
 <<
 /T (Amount[0])
@@ -24,39 +21,15 @@
 >>]
 >> 
 <<
-/T (Line52[0])
+/T (Line27[0])
 /Kids [
 <<
-/T (Percent_ReadOnly[0])
-/V (10.8%)
->>]
->> 
-<<
-/T (Line54[0])
-/Kids [
-<<
-/T (Amount2[0])
-/V ()
->> 
-<<
-/T (Amount1[0])
+/T (Amount[0])
 /V ()
 >>]
 >> 
 <<
-/T (Line55[0])
-/Kids [
-<<
-/T (Amount2[0])
-/V ()
->> 
-<<
-/T (Amount1[0])
-/V ()
->>]
->> 
-<<
-/T (Line49[0])
+/T (Line29[0])
 /Kids [
 <<
 /T (Amount[0])
@@ -88,26 +61,6 @@
 >>]
 >> 
 <<
-/T (Line57[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line56[0])
-/Kids [
-<<
-/T (Amount2[0])
-/V ()
->> 
-<<
-/T (Amount1[0])
-/V ()
->>]
->> 
-<<
 /T (Line50[0])
 /Kids [
 <<
@@ -116,14 +69,6 @@
 >> 
 <<
 /T (Amount1[0])
-/V ()
->>]
->> 
-<<
-/T (Line37[0])
-/Kids [
-<<
-/T (Amount[0])
 /V ()
 >>]
 >> 
@@ -152,6 +97,14 @@
 >>]
 >> 
 <<
+/T (Line31[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
 /T (Line32[0])
 /Kids [
 <<
@@ -160,13 +113,36 @@
 >>]
 >> 
 <<
-/T (Line31[0])
+/T (Donation-Gift[0])
 /Kids [
 <<
-/T (Amount[0])
+/T (Line49[0])
+/Kids [
+<<
+/T (Amount2[0])
+/V ()
+>> 
+<<
+/T (Amount1[0])
 /V ()
 >>]
 >> 
+<<
+/T (Line48[0])
+/Kids [
+<<
+/T (Amount2[0])
+/V ()
+>> 
+<<
+/T (Amount1[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Medical-Expenses[0])
+/Kids [
 <<
 /T (Line41[0])
 /Kids [
@@ -185,6 +161,14 @@
 >> 
 <<
 /T (Line39[0])
+/Kids [
+<<
+/T (Percent[0])
+/V (3%)
+>>]
+>> 
+<<
+/T (Line37[0])
 /Kids [
 <<
 /T (Amount[0])
@@ -206,32 +190,22 @@
 /T (Amount[0])
 /V ()
 >>]
->> 
-<<
-/T (MedicalExpenses[0])
-/Kids [
-<<
-/T (Line48[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
 >>]
 >> 
 <<
 /T (Line45[0])
 /Kids [
 <<
-/T (Percent_ReadOnly[0])
-/V (3%)
+/T (Amount[0])
+/V ()
 >>]
 >> 
 <<
 /T (Line46[0])
 /Kids [
 <<
-/T (Amount[0])
-/V ()
+/T (Percent[0])
+/V (10%)
 >>]
 >> 
 <<
@@ -246,6 +220,18 @@
 /T (Line44[0])
 /Kids [
 <<
+/T (Amount2[0])
+/V ()
+>> 
+<<
+/T (Amount1[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line26[0])
+/Kids [
+<<
 /T (Amount[0])
 /V ()
 >>]
@@ -258,8 +244,6 @@
 /V ()
 >>]
 >>]
->>]
->>]
 >> 
 <<
 /T (Page3[0])
@@ -268,7 +252,7 @@
 /T (PartC[0])
 /Kids [
 <<
-/T (Line77[0])
+/T (Line53[0])
 /Kids [
 <<
 /T (Amount[0])
@@ -276,7 +260,7 @@
 >>]
 >> 
 <<
-/T (Line75[0])
+/T (Line52[0])
 /Kids [
 <<
 /T (Amount[0])
@@ -284,7 +268,15 @@
 >>]
 >> 
 <<
-/T (Line79[0])
+/T (Line54[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line55[0])
 /Kids [
 <<
 /T (Amount[0])
@@ -295,12 +287,16 @@
 /T (Line58[0])
 /Kids [
 <<
-/T (Amount[0])
+/T (Amount2[0])
+/V ()
+>> 
+<<
+/T (Amount1[0])
 /V ()
 >>]
 >> 
 <<
-/T (Line73[0])
+/T (Line59[0])
 /Kids [
 <<
 /T (Amount[0])
@@ -308,7 +304,19 @@
 >>]
 >> 
 <<
-/T (Line71[0])
+/T (Line57[0])
+/Kids [
+<<
+/T (Amount2[0])
+/V ()
+>> 
+<<
+/T (Amount1[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line56[0])
 /Kids [
 <<
 /T (Amount[0])
@@ -324,131 +332,23 @@
 >>]
 >> 
 <<
-/T (Line63[0])
-/Kids [
-<<
-/T (Amount2[0])
-/V ()
->> 
-<<
-/T (Amount1[0])
-/V ()
->>]
->> 
-<<
-/T (Line67[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line69[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line82[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line61[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line76[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line80[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line74[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line78[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line59[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line70[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line72[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
 /T (Line66[0])
 /Kids [
 <<
-/T (Amount2[0])
+/T (Amount[0])
 /V ()
+>>]
 >> 
 <<
-/T (Amount1[0])
+/T (Line63[0])
+/Kids [
+<<
+/T (Amount[0])
 /V ()
 >>]
 >> 
 <<
 /T (Line64[0])
-/Kids [
-<<
-/T (Amount2[0])
-/V ()
->> 
-<<
-/T (Amount1[0])
-/V ()
->>]
->> 
-<<
-/T (Line68[0])
 /Kids [
 <<
 /T (Amount[0])
@@ -459,12 +359,16 @@
 /T (Line60[0])
 /Kids [
 <<
-/T (Amount[0])
+/T (Amount2[0])
+/V ()
+>> 
+<<
+/T (Amount1[0])
 /V ()
 >>]
 >> 
 <<
-/T (Line81[0])
+/T (Line61[0])
 /Kids [
 <<
 /T (Amount[0])
@@ -478,6 +382,486 @@
 /T (Amount[0])
 /V ()
 >>]
+>>]
+>>]
+>> 
+<<
+/T (Page1[0])
+/Kids [
+<<
+/T (Line9[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line1[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line10[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (EI[0])
+/Kids [
+<<
+/T (Line21[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line22[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line18[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line17[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Chart[0])
+/Kids [
+<<
+/T (Column3[0])
+/Kids [
+<<
+/T (Line4-C3[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line7-C3[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ( 18,385.26)
+>>]
+>> 
+<<
+/T (Line2-C3[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line3-C3[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ( 177,922.00)
+>>]
+>> 
+<<
+/T (Line6-C3[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line8-C3[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (LIne5-C3[0])
+/Kids [
+<<
+/T (Percent[0])
+/V ( 13%)
+>>]
+>>]
+>> 
+<<
+/T (Column5[0])
+/Kids [
+<<
+/T (Line7-C5[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ( 42,701.40)
+>>]
+>> 
+<<
+/T (Line4-C5[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line2-C5[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line5-C5[0])
+/Kids [
+<<
+/T (Percent[0])
+/V ( 15%)
+>>]
+>> 
+<<
+/T (Line3-C5[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ( 355,845.00)
+>>]
+>> 
+<<
+/T (Line6-C5[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line8-C5[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Column4[0])
+/Kids [
+<<
+/T (Line4-C4[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line7-C4[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ( 26,095.30)
+>>]
+>> 
+<<
+/T (Line2-C4[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line6-C4[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line3-C4[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ( 237,230.00)
+>>]
+>> 
+<<
+/T (Line5-C4[0])
+/Kids [
+<<
+/T (Percent[0])
+/V ( 14%)
+>>]
+>> 
+<<
+/T (Line8-C4[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Column1[0])
+/Kids [
+<<
+/T (Line8-C1[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line5-C1[0])
+/Kids [
+<<
+/T (Percent[0])
+/V ( 10%)
+>>]
+>> 
+<<
+/T (Line4-C1[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line2-C1[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line6-C1[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line7-C1[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ( 0.00)
+>>]
+>> 
+<<
+/T (Line3-C1[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ( 0.00)
+>>]
+>>]
+>> 
+<<
+/T (Column2[0])
+/Kids [
+<<
+/T (Line5-C2[0])
+/Kids [
+<<
+/T (Percent[0])
+/V ( 12%)
+>>]
+>> 
+<<
+/T (Line8-C2[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line7-C2[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ( 14,826.90)
+>>]
+>> 
+<<
+/T (Line4-C2[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line2-C2[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line3-C2[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ( 148,269.00)
+>>]
+>> 
+<<
+/T (Line6-C2[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>]
+>>]
+>> 
+<<
+/T (Eligible-Dependant[0])
+/Kids [
+<<
+/T (Line16[0])
+/Kids [
+<<
+/T (Amount2[0])
+/V ()
+>> 
+<<
+/T (Amount1[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line14[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ( 21,885.00)
+>>]
+>> 
+<<
+/T (Line15[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (CPP-QPP[0])
+/Kids [
+<<
+/T (Line20[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line19[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Spouse-Net-Income[0])
+/Kids [
+<<
+/T (Line11[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ( 21,885.00)
+>>]
+>> 
+<<
+/T (Line13[0])
+/Kids [
+<<
+/T (Amount2[0])
+/V ()
+>> 
+<<
+/T (Amount1[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line12[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line25[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line24[0])
+/Kids [
+<<
+/T (Amount2[0])
+/V ()
+>> 
+<<
+/T (Amount1[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line23[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
 >>]
 >>]
 >> 
@@ -506,382 +890,6 @@
 <<
 /T (ClearData_EN[0])
 /V /
->>]
->>]
->> 
-<<
-/T (Page1[0])
-/Kids [
-<<
-/T (Line28[0])
-/Kids [
-<<
-/T (Amount2[0])
-/V ()
->> 
-<<
-/T (Amount1[0])
-/V ()
->>]
->> 
-<<
-/T (Table[0])
-/Kids [
-<<
-/T (Column3[0])
-/Kids [
-<<
-/T (Line5[0])
-/Kids [
-<<
-/T (Percent[0])
-/V (17.4%)
->>]
->> 
-<<
-/T (Line8[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line7[0])
-/Kids [
-<<
-/T (Amount[0])
-/V (9,433.77)
->>]
->> 
-<<
-/T (Line6[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line4[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line3[0])
-/Kids [
-<<
-/T (Amount[0])
-/V (79,625.00)
->>]
->> 
-<<
-/T (Line2[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->>]
->> 
-<<
-/T (Column1[0])
-/Kids [
-<<
-/T (Line5[0])
-/Kids [
-<<
-/T (Percent[0])
-/V (10.8%)
->>]
->> 
-<<
-/T (Line8[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line6[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line7[0])
-/Kids [
-<<
-/T (Amount[0])
-/V (0.00)
->>]
->> 
-<<
-/T (Line4[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line3[0])
-/Kids [
-<<
-/T (Amount[0])
-/V (0.00)
->>]
->> 
-<<
-/T (Line2[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->>]
->> 
-<<
-/T (Column2[0])
-/Kids [
-<<
-/T (Line5[0])
-/Kids [
-<<
-/T (Percent[0])
-/V (12.75%)
->>]
->> 
-<<
-/T (Line8[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line7[0])
-/Kids [
-<<
-/T (Amount[0])
-/V (3,978.94)
->>]
->> 
-<<
-/T (Line6[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line4[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line3[0])
-/Kids [
-<<
-/T (Amount[0])
-/V (36,842.00)
->>]
->> 
-<<
-/T (Line2[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->>]
->>]
->> 
-<<
-/T (Line27[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line29[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line9[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line1[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line10[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line11[0])
-/Kids [
-<<
-/T (Amount[0])
-/V (9,134.00)
->>]
->> 
-<<
-/T (Line19[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line18[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line12[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line17[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line15[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line14[0])
-/Kids [
-<<
-/T (Amount[0])
-/V (9,134.00)
->>]
->> 
-<<
-/T (Line16[0])
-/Kids [
-<<
-/T (Amount2[0])
-/V ()
->> 
-<<
-/T (Amount1[0])
-/V ()
->>]
->> 
-<<
-/T (Line25[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line20[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line26[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line24[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (line13[0])
-/Kids [
-<<
-/T (Amount2[0])
-/V ()
->> 
-<<
-/T (Amount1[0])
-/V ()
->>]
->> 
-<<
-/T (Line21[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line22[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
->>]
->> 
-<<
-/T (Line23[0])
-/Kids [
-<<
-/T (Amount[0])
-/V ()
 >>]
 >>]
 >>]

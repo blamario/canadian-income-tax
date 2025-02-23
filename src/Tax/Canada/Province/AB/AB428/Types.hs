@@ -85,8 +85,7 @@ data Donations line = Donations {
    line49_fraction :: line Centi}
 
 data Page3 line = Page3 {
-   partC :: PartC line,
-   partD :: PartD line}
+   partC :: PartC line}
 
 data PartC line = PartC {
    line52_tax :: line Centi,
@@ -107,11 +106,6 @@ data PartC line = PartC {
    line65_political :: line Centi,
    line66_tax :: line Centi}
 
-data PartD line = PartD {
-   line67_investorCredit :: line Centi,
-   line68_stockCredit :: line Centi,
-   line69_credits :: line Centi}
-
 $(foldMap
    (\t-> concat <$> sequenceA [
        [d|
@@ -123,4 +117,4 @@ $(foldMap
        Rank2.TH.deriveAll t,
        Transformation.Shallow.TH.deriveAll t])
    [''AB428, ''Page1, ''Page2, ''Page3,
-    ''Page1PartA, ''Page1PartB, ''Page2PartB, ''PartC, ''PartD, ''Donations])
+    ''Page1PartA, ''Page1PartB, ''Page2PartB, ''PartC, ''Donations])
