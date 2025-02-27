@@ -17,6 +17,7 @@ import Data.ByteString qualified as ByteString
 import Data.ByteString.Lazy qualified as Lazy
 import Data.ByteString.Lazy qualified as ByteString.Lazy
 import Data.Fixed (Centi)
+import Data.Foldable (fold)
 import Data.Functor.Compose (Compose(..))
 import Data.List qualified as List
 import Data.Map.Lazy (Map)
@@ -74,7 +75,7 @@ main = do
                                 >> finish
                      Just p -> pure p
       t4param <- formParamMaybe "T4"
-      let t4m = Map.mapKeysMonotonic (\k-> "Box" <> k <> "[0]") <$> (t4param >>= decode) :: Maybe (Map Text Centi)
+      let t4m = Map.mapKeysMonotonic (\k-> "Box" <> k <> "[0]") <$> fold (t4param >>= decode) :: [Map Text Centi]
       pdfFiles <- files
       dir <- liftIO $ mkdtemp "tax"
       fdfBytes <- liftIO $ fmap sequenceA $ forM pdfFiles $ \(key, FileInfo name _ content)-> do

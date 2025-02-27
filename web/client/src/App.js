@@ -43,8 +43,8 @@ export default function Uploads() {
     const [submitted, setSubmitted] = useState(null);
     const [output, setOutput] = useState(null);
     const [error, setError] = useState("");
-    const [t4, setT4] = useState({});
-    const [showT4, setShowT4] = useState(false);
+    const [t4s, setT4s] = useState([]);
+    const [showT4, setShowT4] = useState(-1);
     const inputRef = useRef(null);
 
     function handleUpload(formKey, multi) {
@@ -72,35 +72,47 @@ export default function Uploads() {
         }
     }
 
-    function handleOverlay (event) {
-        setShowT4(true);
-    }
-
     function formInput(label, key, multiple) {
-        function setT4_ (values) {
-            setSubmitted(false);
-            setT4(values);
-        }
-
         return <dd ref={inputRef}>
             <input type="file" accept=".pdf" multiple={multiple} name={label} onChange={handleUpload(key, multiple)}/>
-            {multiple
-             ? <span> or &nbsp;
-                 <button onClick={handleOverlay}>Enter data</button>
-                 <ReactModal isOpen={showT4} onRequestClose={() => setShowT4(false)}>
-                     {T4(t4, setT4_)}
-                 </ReactModal>
-               </span>
-             : ""}
             </dd>;
     }
 
-    function handleSubmit (event) {
+    function slipInput (t4, index) {
+        function handleOverlay (event) {
+            setShowT4(index);
+        }
+
+        function handleDelete (event) {
+            setT4s(t4s.slice().splice(index, 1));
+        }
+
+        function setT4_ (values) {
+            let newT4s = t4s.slice();
+            newT4s[index] = values;
+            setSubmitted(false);
+            setT4s(newT4s);
+        }
+
+        return <dd ref={inputRef}>
+                   <button class="enter T4" name="enter" onClick={handleOverlay}>Enter slip #{index+1}</button>
+                   <ReactModal isOpen={showT4 === index} onRequestClose={() => setShowT4(-1)}>
+                       {console.log(index), T4(t4, setT4_)}
+                   </ReactModal>
+                   <button class="delete T4" name="delete" onClick={handleDelete}>Delete slip #{index+1}</button>
+               </dd>;
+    }
+
+    function handleAddT4 (label, key) {
+        setT4s(t4s.concat([{}]));
+    }
+
+    function handleSubmit (label, key) {
         if (province && inputs) {
             const forms = new FormData();
 
-            if (Object.keys(t4).length) {
-                forms.append("T4", JSON.stringify(t4));
+            if (t4s.length) {
+                forms.append("T4", JSON.stringify(t4s));
             }
             for (const key in inputs)
                 forms.append(key, inputs[key]);
@@ -146,7 +158,10 @@ export default function Uploads() {
          <h4>You can also optionally upload the following forms, if they apply:</h4>
          <dl>
          <dt>T4 slips</dt>
-         {formInput("T4 fillable PDFs", "T4", true)}
+         {formInput("T4 fillable PDFs", "T4")}
+         <dd>or enter the slips manually:</dd>
+         {t4s.map(slipInput)}
+         <dd><button class="add T4" name="add" onClick={handleAddT4}>+</button></dd>
          {province.value.has479
           ? <>
           <dt>{province.value.code}479 tax credits form</dt>
