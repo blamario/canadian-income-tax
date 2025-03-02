@@ -87,7 +87,7 @@ library
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
     build-depends:    base == 4.*, text >= 1.0 && < 2.2, bytestring >= 0.10.4 && < 1,
-                      time == 1.*, containers >= 0.5 && < 0.8, bitwise-enum ^>= 1.0.0, bifunctors ^>= 5.6,
+                      time == 1.*, containers >= 0.5 && < 0.9, bitwise-enum ^>= 1.0.0, bifunctors ^>= 5.6,
                       monoid-subclasses == 1.*, rank2classes ^>= 1.5.3, deep-transformations ^>= 0.2.2 || ^>= 0.3,
                       ca-province-codes == 1.0.*, forms-data-format ^>= 0.2, typed-process >= 0.1 && ^>=0.2,
                       template-haskell == 2.*
