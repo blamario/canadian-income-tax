@@ -2,7 +2,6 @@ import { useRef, useState } from 'react';
 import Dropdown from 'react-dropdown';
 import ReactModal from 'react-modal';
 import 'react-dropdown/style.css';
-import 'react-modal-overlay/dist/index.css'
 import '../../static/shared.css';
 import '../../static/t4.css';
 import T4 from './t4';
