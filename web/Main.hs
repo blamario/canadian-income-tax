@@ -22,7 +22,7 @@ import Data.Functor.Compose (Compose(..))
 import Data.List qualified as List
 import Data.Map.Lazy (Map)
 import Data.Map.Lazy qualified as Map
-import Data.Monoid.Textual (toString)
+import Data.Monoid.Textual (fromText, toString)
 import Data.Monoid.Instances.ByteString.UTF8 (ByteStringUTF8(..))
 import Data.String (fromString)
 import Data.Time.Clock (nominalDiffTimeToSeconds)
@@ -67,6 +67,21 @@ main = do
       file "web/static/about.html"
    get "/shared.css" $ do
       file "web/static/shared.css"
+   post "/save/:province" $ do
+      provinceCode <- pathParam "province"
+      t4param <- formParamMaybe "T4"
+      pdfFiles <- files
+      now <- liftIO $ round . nominalDiffTimeToSeconds <$> getPOSIXTime
+      let pdfArchive = foldr addPDF emptyArchive pdfFiles
+          addPDF (_, FileInfo name _ c) = addEntryToArchive (toEntry (fromUTF8 name) now c)
+          ByteStringUTF8 province = fromText provinceCode
+          completeArchive = fromArchive
+                            $ addEntryToArchive (toEntry "province" now $ Lazy.fromStrict province)
+                            $ maybe id (addEntryToArchive . toEntry "T4s" now) t4param
+                            $ pdfArchive
+      setHeader "Content-Type" "application/zip"
+      setHeader "Content-Disposition" "attachment; filename=\"taxell-save.zip\"; filename*=\"taxell-save.zip\""
+      raw completeArchive
    post "/t1/PDF/:province" $ do
       provinceCode <- pathParam "province"
       province <- case readMaybe (Text.Lazy.unpack provinceCode)

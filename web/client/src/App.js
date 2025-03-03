@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import Dropdown from 'react-dropdown';
 import ReactModal from 'react-modal';
+import JSZip from 'jszip';
 import 'react-dropdown/style.css';
 import '../../static/shared.css';
 import '../../static/t4.css';
@@ -40,11 +41,99 @@ export default function Uploads() {
     const [province, setProvince] = useState(null);
     const [inputs, setInputs] = useState({});
     const [submitted, setSubmitted] = useState(null);
+    const [saved, setSaved] = useState(false);
     const [output, setOutput] = useState(null);
     const [error, setError] = useState("");
     const [t4s, setT4s] = useState([]);
     const [showT4, setShowT4] = useState(-1);
     const inputRef = useRef(null);
+
+    function handleLoad(event) {
+        JSZip.loadAsync(event.target.files[0]).then(archive => {
+            const provinceFile = archive.file('province');
+            try {
+                let newInputs = {};
+                archive.forEach((path, file) => {
+                    switch (path) {
+                    case 'province':
+                        break;
+                    case 'T4s':
+                        file.async("text").then(contents => setT4s(JSON.parse(contents)));
+                        break;
+                    default:
+                        dir = path.split("/")[0];
+                        switch (dir) {
+                        case "T1":
+                        case "428":
+                        case "479":
+                        case "Schedule6":
+                        case "Schedule7":
+                        case "Schedule8":
+                        case "Schedule9":
+                        case "Schedule11":
+                            file.async("blob").then(contents => newInputs[path] = contents);
+                            break;
+                        default:
+                            setError("Invalid save file: directory " + dir);
+                        }
+                    }
+                });
+                if (provinceFile) {
+                    setInputs(newInputs);
+                    setSaved(true);
+                    setSubmitted(false);
+                    provinceFile.async("text").then(code => setProvince(provinces.find(p => p.value.code == code)));
+                    setError("");
+                }
+                else {
+                    setError("Invalid save file: no province");
+                }
+            }
+            catch (err) {
+                if (err instanceof SyntaxError) {
+                    setError("Invalid save file: JSON");
+                }
+                else {
+                    setError("Invalid save file.");
+                }
+            }
+        });
+    }
+
+    function saveFile(url, filename) {
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
+    function handleSave() {
+        function handleSaveResponse (response) {
+            if (response.ok) {
+                response.blob().then(content => saveFile(URL.createObjectURL(new Blob([content],
+                                                                                      {type: 'application/zip'})),
+                                                         "taxell-save.zip"));
+            }
+            else {
+                response.text().then(setError);
+            }
+        }
+        if (province && inputs) {
+            const forms = new FormData();
+
+            if (t4s.length) {
+                forms.append("T4", JSON.stringify(t4s));
+            }
+            for (const key in inputs)
+                forms.append(key, inputs[key]);
+            fetch("/save/" + province.value.code, {method: "POST", mode: "same-origin", body: forms})
+                .then(handleSaveResponse, setError)
+                .catch(setError);
+        }
+        setSaved(true);
+    }
 
     function handleUpload(formKey, multi) {
         return (event) => {
@@ -56,6 +145,7 @@ export default function Uploads() {
                 newInputs[formKey] = event.target.files[0];
             }
             setInputs(newInputs);
+            setSaved(false);
             setSubmitted(false);
             setError("");
             setOutput(null);
@@ -89,6 +179,7 @@ export default function Uploads() {
         function setT4_ (values) {
             let newT4s = t4s.slice();
             newT4s[index] = values;
+            setSaved(false);
             setSubmitted(false);
             setT4s(newT4s);
         }
@@ -96,7 +187,7 @@ export default function Uploads() {
         return <dd ref={inputRef}>
                    <button class="enter T4" name="enter" onClick={handleOverlay}>Enter slip #{index+1}</button>
                    <ReactModal isOpen={showT4 === index} onRequestClose={() => setShowT4(-1)}>
-                       {console.log(index), T4(t4, setT4_)}
+                       {T4(t4, setT4_)}
                    </ReactModal>
                    <button class="delete T4" name="delete" onClick={handleDelete}>Delete slip #{index+1}</button>
                </dd>;
@@ -132,9 +223,15 @@ export default function Uploads() {
       <>
         <a href="/" class="homelink">taxell.ca</a>
         <hr/>
-        <h2>Tax form completion</h2>
+        <h2>Tax form completion
+            <button class="top save" name="save" disabled={saved} onClick={handleSave}>Save As</button>
+            <button class="top load" name="load">
+                <label for="load">Load</label>
+                <input id="load" type="file" class="load" accept=".zip" name="Load" onChange={handleLoad}/>
+            </button>
+        </h2>
 
-        <h3>Step 1. <Dropdown className='provinceRoot' menuClassName='provinceMenu' options={provinces} default={province} onChange={setProvince} placeholder="Select your province"/></h3>
+        <h3>Step 1. <Dropdown className='provinceRoot' menuClassName='provinceMenu' options={provinces} value={province} onChange={setProvince} placeholder="Select your province"/></h3>
 
         {province && <>
          <h3>Step 2. Download the <em>fillable</em> PDF forms from <a target="_blank" href="https://canada.ca">canada.ca</a></h3>

@@ -23,3 +23,11 @@ button.T4 {
 button.enter.T4 {
     min-width: 7em;
 }
+
+button.top {
+    margin-left: 1em;
+}
+
+input.load {
+    display: none;
+}
