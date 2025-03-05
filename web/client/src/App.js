@@ -184,12 +184,12 @@ export default function Uploads() {
             setT4s(newT4s);
         }
 
-        return <dd ref={inputRef}>
-                   <button class="enter T4" name="enter" onClick={handleOverlay}>Enter slip #{index+1}</button>
+        return <dd ref={inputRef} key={index}>
+                   <button className="enter T4" name="enter" onClick={handleOverlay}>Enter slip #{index+1}</button>
                    <ReactModal isOpen={showT4 === index} onRequestClose={() => setShowT4(-1)}>
                        {T4(t4, setT4_)}
                    </ReactModal>
-                   <button class="delete T4" name="delete" onClick={handleDelete}>Delete slip #{index+1}</button>
+                   <button className="delete T4" name="delete" onClick={handleDelete}>Delete slip #{index+1}</button>
                </dd>;
     }
 
@@ -221,7 +221,7 @@ export default function Uploads() {
 
     return (
       <>
-        <a href="/" class="homelink">taxell.ca</a>
+        <a href="/" className="homelink">taxell.ca</a>
         <hr/>
         <h2>Tax form completion
             <button class="top save" name="save" disabled={saved} onClick={handleSave}>Save As</button>
@@ -257,7 +257,7 @@ export default function Uploads() {
          {formInput("T4 fillable PDFs", "T4")}
          <dd>or enter the slips manually:</dd>
          {t4s.map(slipInput)}
-         <dd><button class="add T4" name="add" onClick={handleAddT4}>+</button></dd>
+         <dd><button className="add T4" name="add" onClick={handleAddT4}>+</button></dd>
          {province.value.has479
           ? <>
           <dt>{province.value.code}479 tax credits form</dt>
