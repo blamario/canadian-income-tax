@@ -13,10 +13,12 @@
 {-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE UndecidableInstances #-}
 
-module Tax.Canada.Province.ON (Returns(..), ON428, ON479, fixON428, fixON479, fixReturns,
+module Tax.Canada.Province.ON (Returns(..), ON428, ON479, formFileNames, fixON428, fixON479, fixReturns,
                                returnFields, t1Fields, on428Fields, on479Fields) where
 
 import Data.CAProvinceCodes (Code(ON))
+import Data.Map (Map, fromList)
+import Data.Text (Text)
 import Rank2 qualified
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
@@ -98,3 +100,9 @@ returnFields = Returns{
   federal = Federal.formFieldsForProvince ON,
   on428 = within "428" Rank2.<$> on428Fields,
   on479 = within "479" Rank2.<$> on479Fields}
+
+formFileNames :: Map Text Text
+formFileNames = fromList [
+  ("T1", "T1/5006-r"),
+  ("428", "428/5006-c"),
+  ("479", "479/5006-tc")]

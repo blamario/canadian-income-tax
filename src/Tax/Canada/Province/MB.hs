@@ -5,11 +5,13 @@
 {-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Tax.Canada.Province.MB (MB428, fixMB428, fixReturns, mb428Fields, returnFields, t1Fields) where
+module Tax.Canada.Province.MB (MB428, formFileNames, fixMB428, fixReturns, mb428Fields, returnFields, t1Fields) where
 
 import qualified Rank2
 
 import Data.CAProvinceCodes (Code(MB))
+import Data.Map (Map, fromList)
+import Data.Text (Text)
 
 import Tax.Canada.Federal qualified as Federal
 import Tax.Canada.Federal (Forms(t1), fixFederalForms)
@@ -69,3 +71,8 @@ fixReturns inputs =
 
 returnFields :: Returns FieldConst
 returnFields = Pair (Federal.formFieldsForProvince MB) (within "428" Rank2.<$> mb428Fields)
+
+formFileNames :: Map Text Text
+formFileNames = fromList [
+  ("T1", "T1/5015-r"),
+  ("428", "428/5007-c")]

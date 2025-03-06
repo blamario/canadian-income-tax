@@ -5,9 +5,11 @@
 {-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Tax.Canada.Province.AB (AB428, ab428Fields, fixAB428, fixReturns, returnFields, t1Fields) where
+module Tax.Canada.Province.AB (AB428, ab428Fields, formFileNames, fixAB428, fixReturns, returnFields, t1Fields) where
 
 import Data.CAProvinceCodes (Code(AB))
+import Data.Map (Map, fromList)
+import Data.Text (Text)
 import qualified Rank2
 
 import Tax.Canada.Federal qualified as Federal
@@ -68,3 +70,8 @@ fixReturns inputs =
 
 returnFields :: Returns FieldConst
 returnFields = Pair (Federal.formFieldsForProvince AB) (within "428" Rank2.<$> ab428Fields)
+
+formFileNames :: Map Text Text
+formFileNames = fromList [
+  ("T1", "T1/5015-r"),
+  ("428", "428/5015-c")]

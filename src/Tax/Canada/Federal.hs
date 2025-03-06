@@ -15,7 +15,8 @@
 
 -- | The federal income tax forms
 
-module Tax.Canada.Federal (InputForms, Forms(..), loadInputForms, fixFederalForms, formFieldsForProvince) where
+module Tax.Canada.Federal (InputForms, Forms(..),
+                           loadInputForms, fixFederalForms, formFieldsForProvince, formFileNames) where
 
 import Control.Applicative ((<|>))
 import Control.Monad ((=<<))
@@ -25,6 +26,7 @@ import Data.Foldable (find)
 import Data.Functor.Compose (Compose(Compose))
 import Data.List.NonEmpty (NonEmpty((:|)), nonEmpty)
 import Data.Maybe (isJust)
+import Data.Map (Map, fromList)
 import Data.Semigroup (Any (Any, getAny), Sum(Sum, getSum))
 import Data.Text (Text)
 import Data.Time (Day)
@@ -183,6 +185,14 @@ formFieldsForProvince p = Forms{
   schedule8 = within "Schedule8" Rank2.<$> schedule8Fields,
   schedule9 = within "Schedule9" Rank2.<$> schedule9Fields,
   schedule11 = within "Schedule11" Rank2.<$> schedule11Fields}
+
+formFileNames :: Map Text Text
+formFileNames = fromList [
+  ("Schedule6", "5000-s6"),
+  ("Schedule7", "5000-s7"),
+  ("Schedule8", "5000-s8"),
+  ("Schedule9", "5000-s9"),
+  ("Schedule11", "5000-s11")]
 
 hasAnyField :: Foldable f => f (T4 Maybe) -> Bool
 hasAnyField = getAny . foldMap (Rank2.foldMap (Any . isJust))
