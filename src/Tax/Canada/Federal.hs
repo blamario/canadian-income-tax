@@ -15,8 +15,8 @@
 
 -- | The federal income tax forms
 
-module Tax.Canada.Federal (InputForms, Forms(..),
-                           loadInputForms, fixFederalForms, formFieldsForProvince, formFileNames) where
+module Tax.Canada.Federal (InputForms, Forms(..), loadInputForms, fixFederalForms,
+                           formFieldsForProvince, formFileNames, relevantFormKeys) where
 
 import Control.Applicative ((<|>))
 import Control.Monad ((=<<))
@@ -27,6 +27,7 @@ import Data.Functor.Compose (Compose(Compose))
 import Data.List.NonEmpty (NonEmpty((:|)), nonEmpty)
 import Data.Maybe (isJust)
 import Data.Map (Map, fromList)
+import Data.Set (Set, fromDistinctAscList)
 import Data.Semigroup (Any (Any, getAny), Sum(Sum, getSum))
 import Data.Text (Text)
 import Data.Time (Day)
@@ -147,7 +148,8 @@ fixFederalForms province InputForms{t4} = fixEq $ \Forms{t1, schedule6, schedule
                              then schedule8.page6.line15_half.result <|>
                                   schedule8.page9.line78_half.result
                              else t1.page6.line_31000,
-                line_32300 = schedule11.page1.line17_sum, line_34900 = schedule9.page1.line23_sum},
+                line_32300 = schedule11.page1.line17_sum,
+                line_34900 = schedule9.page1.line23_sum},
        page7 = t1.page7{
           step6_RefundOrBalanceOwing = t1.page7.step6_RefundOrBalanceOwing{
              line_42100_CPPContributions = schedule8.page6.line14_sum <|>
@@ -193,6 +195,21 @@ formFileNames = fromList [
   ("Schedule8", "5000-s8"),
   ("Schedule9", "5000-s9"),
   ("Schedule11", "5000-s11")]
+
+relevantFormKeys :: T1 Maybe -> Set Text
+relevantFormKeys t1 = fromDistinctAscList $
+  ["428" | isJust t1.page8.step6_RefundOrBalanceOwing.line_45300_CWB] <>
+  ["Schedule6" | isJust t1.page8.step6_RefundOrBalanceOwing.line_45300_CWB] <>
+  ["Schedule7" | isJust t1.page4.line_20800_RRSPDeduction] <>
+  ["Schedule8" | isJust (t1.page4.line_22200_CPP_QPP_Contributions
+                         <|> t1.page4.line_22215_DeductionCPP_QPP
+                         <|> t1.page6.line_30800
+                         <|> t1.page6.line_31000
+                         <|> t1.page7.step6_RefundOrBalanceOwing.line_42100_CPPContributions
+                         <|> t1.page8.step6_RefundOrBalanceOwing.line_44800_CPPOverpayment)] <>
+  ["Schedule9" | isJust t1.page6.line_34900] <>
+  ["Schedule11" | isJust (t1.page6.line_32300 <|> t1.page8.step6_RefundOrBalanceOwing.line_45350_CTC)] <>
+  ["T1"]
 
 hasAnyField :: Foldable f => f (T4 Maybe) -> Bool
 hasAnyField = getAny . foldMap (Rank2.foldMap (Any . isJust))
