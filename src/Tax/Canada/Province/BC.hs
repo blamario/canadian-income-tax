@@ -13,7 +13,7 @@
 {-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE UndecidableInstances #-}
 
-module Tax.Canada.Province.BC (BC428, bc428Fields, bc479Fields, formFileNames,
+module Tax.Canada.Province.BC (Returns(..), BC428, bc428Fields, bc479Fields, formFileNames,
                                fixBC428, fixBC479, fixReturns, returnFields, t1Fields) where
 
 import Data.CAProvinceCodes (Code(BC))
