@@ -125,7 +125,7 @@ process Options{province, t1InputPath, t4InputPaths, p428InputPath, p479InputPat
                                (,) FormKey.Schedule11 <$> schedule11InputPath]
        allFiles
          | onlyGivenForms = inputFiles
-         | otherwise = Map.toList $ Map.fromDistinctAscList inputFiles <> emptyFiles
+         | otherwise = Map.toList $ Map.fromAscList inputFiles <> emptyFiles
        emptyFiles = completePath <$> Map.delete FormKey.Provincial479 (formFileNames province)
        completePath baseName = combine dataDir $ combine "pdf" $ Text.unpack baseName <> "-fill-24e.pdf"
    inputs <- traverse (traverse readFDF) allFiles :: IO [(FormKey, (Bool, Lazy.ByteString))]
@@ -142,7 +142,6 @@ process Options{province, t1InputPath, t4InputPaths, p428InputPath, p479InputPat
                 if isDir
                    then ByteString.writeFile (replaceDirectory inputPath outputPath) content'
                    else ByteString.writeFile outputPath content'
-       arePDFs = fst . snd <$> filter ((FormKey.T4 /=) . fst) inputs
        fdfs = getCompose <$> traverse (parse . Lazy.toStrict . snd) (Compose inputs) :: Either String [(FormKey, FDF)]
        bytesMap = Lazy.toStrict . snd <$> Map.fromAscList inputs
    case do (inputFDFs, ioFDFs) <- List.partition ((FormKey.T4 ==) . fst) <$> fdfs

@@ -2,7 +2,6 @@
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE ScopedTypeVariables #-}
 
 module Main where
 
@@ -18,7 +17,7 @@ import Data.ByteString qualified as ByteString
 import Data.ByteString.Lazy qualified as Lazy
 import Data.ByteString.Lazy qualified as ByteString.Lazy
 import Data.Fixed (Centi)
-import Data.Foldable (fold)
+import Data.Foldable (fold, toList)
 import Data.Functor.Compose (Compose(..))
 import Data.List qualified as List
 import Data.Map.Lazy (Map)
@@ -45,8 +44,8 @@ import Web.Scotty (file, files, finish, formParamMaybe, get, middleware, pathPar
                    scotty, setHeader, status, text)
 
 import Paths_canadian_income_tax (getDataDir)
-import Tax.Canada (completeForms)
-import Tax.Canada.Federal (loadInputForms)
+import Tax.Canada (completeRelevantForms)
+import Tax.Canada.Federal qualified as Federal
 import Tax.Canada.FormKey (FormKey)
 import Tax.Canada.FormKey qualified as FormKey
 import Tax.FDF qualified as FDF
@@ -56,6 +55,10 @@ main :: IO ()
 main = do
   dataDir <- getDataDir
   t4fdfBytes <- ByteString.readFile (dataDir </> "fdf" </> "t4-fill-24e.fdf")
+  let readEmptyForm baseName = (,) completeName <$> ByteString.Lazy.readFile completePath
+        where completePath = dataDir </> "pdf" </> completeName
+              completeName = Text.unpack baseName <> "-fill-24e.pdf"
+  emptyForms <- traverse readEmptyForm Federal.formFileNames
   let t4fdf = case FDF.parse t4fdfBytes of
         Left err -> error ("Can't load built-in T4 FDF: " <> err)
         Right parsed -> parsed
@@ -92,17 +95,18 @@ main = do
                      Just p -> pure p
       t4param <- formParamMaybe "T4"
       let t4m = Map.mapKeysMonotonic (\k-> "Box" <> k <> "[0]") <$> fold (t4param >>= decode) :: [Map Text Centi]
-          resolveForm (key, file)
-            | Just formKey <- readMaybe (Text.unpack key) = Right (formKey, file)
+          resolveForm (key, FileInfo name _ content)
+            | Just formKey <- readMaybe (Text.unpack key) = Right (formKey, (fromUTF8 name, content))
             | otherwise = Left key
       pdfFiles <- files >>= \fs-> case traverse resolveForm fs of
         Left name -> status notFound404
                      >> text ("No such form key as " <> Text.Lazy.fromStrict name)
                      >> finish
         Right fs -> pure fs
+      let allPdfFiles = Map.toList (Map.fromList pdfFiles <> emptyForms)
       dir <- liftIO $ mkdtemp "tax"
-      fdfBytes :: Either String [(FormKey, ByteString.Lazy.ByteString)] <- liftIO $ fmap sequenceA $ forM pdfFiles $ \(key, FileInfo name _ content)-> do
-        let path = dir </> fromUTF8 name
+      fdfBytes <- liftIO $ fmap sequenceA $ forM allPdfFiles $ \(key, (name, content))-> do
+        let path = dir </> name
         Lazy.writeFile path content
         fdf <- pdfFile2fdf path
         pure ((,) key <$> fdf)
@@ -115,28 +119,30 @@ main = do
                             | Just v <- List.find (Text.isPrefixOf "Box") keyPath >>= (`Map.lookup` values)
                             = Text.pack $ show v
                           injectT4box _ v = v
-              inputForms <- first ((,) unprocessableEntity422) $ loadInputForms $ inputFDFs <> inputT4s
-              first ((,) unprocessableEntity422) $ completeForms province inputForms (Map.fromList fdfs)
+              inputForms <- first ((,) unprocessableEntity422) $ Federal.loadInputForms $ inputFDFs <> inputT4s
+              first ((,) unprocessableEntity422) $ completeRelevantForms province inputForms (Map.fromList fdfs)
         of Left (code, err) -> status code >> text (fromString err)
            Right fdfs' -> do
              let fdfBytes' = Lazy.fromStrict . FDF.serialize <$> fdfs'
-                 replaceContent :: (FormKey, FileInfo Lazy.ByteString)
-                                -> IO (Either String (FormKey, FileInfo Lazy.ByteString))
-                 replaceContent (key, FileInfo name ty _) = case Map.lookup key fdfBytes' of
-                   Just c -> ((,) key . FileInfo name ty <$>) <$> fdf2pdf (dir </> fromUTF8 name) c
+                 replaceContent :: FormKey -> Lazy.ByteString
+                                -> IO (Either String (FilePath, Lazy.ByteString))
+                 replaceContent key content = case List.lookup key allPdfFiles of
+                   Just (name, _) -> ((,) name <$>) <$> fdf2pdf (dir </> name) content
                    Nothing -> pure (Left $ "Unknown key " <> show key)
-             pdfFiles' <- liftIO $ traverse replaceContent pdfFiles
-             case sequenceA pdfFiles' of
+             pdfFiles' <- liftIO $ Map.traverseWithKey replaceContent fdfBytes'
+             case toList <$> sequenceA pdfFiles' of
                Left err -> do
                  status internalServerError500 >> text (fromString err)
-               Right [(_, FileInfo _ _ pdf)] -> do
+               Right [(name, pdf)] -> do
                  status ok200
                  setHeader "Content-Type" "application/pdf"
+                 setHeader "Content-Disposition" ("attachment; filename=\"" <> Text.Lazy.pack name
+                                                  <> "\"; filename*=\"" <> Text.Lazy.pack name <> "\"")
                  raw pdf
-               Right pdfFiles' -> do
+               Right pdfFiles'' -> do
                  now <- liftIO $ round . nominalDiffTimeToSeconds <$> getPOSIXTime
-                 let pdfArchive = foldr addPDF emptyArchive pdfFiles'
-                     addPDF (_, FileInfo name _ c) = addEntryToArchive (toEntry (fromUTF8 name) now c)
+                 let pdfArchive = foldr addPDF emptyArchive pdfFiles''
+                     addPDF (name, c) = addEntryToArchive (toEntry name now c)
                  status ok200
                  setHeader "Content-Type" "application/zip"
                  raw (fromArchive pdfArchive)
