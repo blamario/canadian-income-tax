@@ -27,7 +27,8 @@ import Data.Functor.Compose (Compose(Compose))
 import Data.List.NonEmpty (NonEmpty((:|)), nonEmpty)
 import Data.Maybe (isJust)
 import Data.Map (Map, fromList)
-import Data.Set (Set, fromDistinctAscList)
+import Data.Set (Set)
+import Data.Set qualified as Set
 import Data.Semigroup (Any (Any, getAny), Sum(Sum, getSum))
 import Data.Text (Text)
 import Data.Text qualified as Text
@@ -202,7 +203,7 @@ formFileNames = fromList [
 
 -- | The set of keys of all auxiliary forms that have effect in the given 'T1' form.
 relevantFormKeys :: T1 Maybe -> Set FormKey
-relevantFormKeys t1 = fromDistinctAscList $
+relevantFormKeys t1 = Set.fromList $
   [FormKey.Provincial428 | isJust t1.page8.step6_RefundOrBalanceOwing.line_45300_CWB] <>
   [FormKey.Schedule6 | isJust t1.page8.step6_RefundOrBalanceOwing.line_45300_CWB] <>
   [FormKey.Schedule7 | isJust t1.page4.line_20800_RRSPDeduction] <>

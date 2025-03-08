@@ -65,7 +65,7 @@ completeRelevantForms p =
 -- also kept, as well as any provincial forms.
 filterRelevant :: T1 Maybe -> FDFs FormKey -> FDFs FormKey
 filterRelevant t1 = flip Map.restrictKeys (relevantFormKeys t1 <> alwaysRelevant)
-  where alwaysRelevant = Set.fromDistinctAscList [FormKey.Provincial428, FormKey.Provincial479, FormKey.T1]
+  where alwaysRelevant = Set.fromList [FormKey.Provincial428, FormKey.Provincial479, FormKey.T1]
 
 -- | Like 'mapForms', but also returns the T1 form by itself.
 mapFormsWithT1 :: (Rank2.Apply form, Rank2.Traversable form)

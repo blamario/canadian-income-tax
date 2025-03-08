@@ -133,7 +133,8 @@ process Options{province, t1InputPath, t4InputPaths, p428InputPath, p479InputPat
        writeFrom key content = do
           let Just inputPath = List.lookup key allFiles
               Just (asPDF, _) = List.lookup key inputs
-          content' <- (if asPDF then (either error Lazy.toStrict <$>) . fdf2pdf inputPath . Lazy.fromStrict else pure) content
+              fromFDF = if asPDF then (either error Lazy.toStrict <$>) . fdf2pdf inputPath . Lazy.fromStrict else pure
+          content' <- fromFDF content
           if outputPath == "-"
              then ByteString.putStr content'
              else do
@@ -152,12 +153,12 @@ process Options{province, t1InputPath, t4InputPaths, p428InputPath, p479InputPat
       Left err -> error err
       Right fixedFDFs -> do
          let bytesMap' = serialize <$> fixedFDFs
-             tarEntries = toList <$> Map.traverseWithKey fdfEntry bytesMap'
+             tarEntries = Map.traverseWithKey fdfEntry bytesMap'
              fdfEntry key content
                | Just path <- List.lookup key allFiles
                = (`fileEntry` ByteString.Lazy.fromStrict content) <$> toTarPath False (takeFileName path)
                | otherwise = Left (show key)
-             tarFile = either (error . ("Can't tar: " <>)) (ByteString.Lazy.toStrict . Tar.write) tarEntries
+             tarFile = either (error . ("Can't tar: " <>)) (ByteString.Lazy.toStrict . Tar.write . toList) tarEntries
          -- when verbose (hPutStrLn stderr $ show (form'T1, form'ON))
          when ("/" `isSuffixOf` outputPath) (createDirectoryIfMissing True outputPath)
          if outputPath == "-"
