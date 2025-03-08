@@ -64,8 +64,8 @@ export default function Uploads() {
                         dir = path.split("/")[0];
                         switch (dir) {
                         case "T1":
-                        case "428":
-                        case "479":
+                        case "Provincial428":
+                        case "Provincial479":
                         case "Schedule6":
                         case "Schedule7":
                         case "Schedule8":
@@ -247,7 +247,7 @@ export default function Uploads() {
          {province.value.prefix428
           ? <>
           <dt>{province.value.code}428</dt>
-          {formInput("428 PDF", "428")}
+          {formInput("428 PDF", "Provincial428")}
           </>
           : ""}
          </dl>
@@ -261,7 +261,7 @@ export default function Uploads() {
          {province.value.has479
           ? <>
           <dt>{province.value.code}479 tax credits form</dt>
-          {formInput("479 PDF", "479")}
+          {formInput("479 PDF", "Provincial479")}
           </>
           : ""}
          <dt>Schedule 6</dt>
@@ -278,7 +278,7 @@ export default function Uploads() {
          <h3>Step 5. <button name="Calculate"
                              disabled={submitted !== false
                                        || !province || !inputs || !inputs["T1"]
-                                       || province.value.prefix428 && !inputs["428"]}
+                                       || province.value.prefix428 && !inputs["Provincial428"]}
                              onClick={handleSubmit}>Calculate</button></h3>
          {output && <>
           <h3>Step 6. <a name="Download" download={download.name}

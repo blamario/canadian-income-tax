@@ -2,6 +2,7 @@
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Main where
 
@@ -46,10 +47,10 @@ import Web.Scotty (file, files, finish, formParamMaybe, get, middleware, pathPar
 import Paths_canadian_income_tax (getDataDir)
 import Tax.Canada (completeForms)
 import Tax.Canada.Federal (loadInputForms)
+import Tax.Canada.FormKey (FormKey)
+import Tax.Canada.FormKey qualified as FormKey
 import Tax.FDF qualified as FDF
 import Tax.PDFtk (fdf2pdf, pdfFile2fdf)
-
-import Debug.Trace
 
 main :: IO ()
 main = do
@@ -91,29 +92,36 @@ main = do
                      Just p -> pure p
       t4param <- formParamMaybe "T4"
       let t4m = Map.mapKeysMonotonic (\k-> "Box" <> k <> "[0]") <$> fold (t4param >>= decode) :: [Map Text Centi]
-      pdfFiles <- files
+          resolveForm (key, file)
+            | Just formKey <- readMaybe (Text.unpack key) = Right (formKey, file)
+            | otherwise = Left key
+      pdfFiles <- files >>= \fs-> case traverse resolveForm fs of
+        Left name -> status notFound404
+                     >> text ("No such form key as " <> Text.Lazy.fromStrict name)
+                     >> finish
+        Right fs -> pure fs
       dir <- liftIO $ mkdtemp "tax"
-      fdfBytes <- liftIO $ fmap sequenceA $ forM pdfFiles $ \(key, FileInfo name _ content)-> do
+      fdfBytes :: Either String [(FormKey, ByteString.Lazy.ByteString)] <- liftIO $ fmap sequenceA $ forM pdfFiles $ \(key, FileInfo name _ content)-> do
         let path = dir </> fromUTF8 name
         Lazy.writeFile path content
         fdf <- pdfFile2fdf path
         pure ((,) key <$> fdf)
       case do fdfs <- first ((,) unsupportedMediaType415)
                       $ fdfBytes >>= traverse (traverse $ Lazy.toStrict >>> FDF.parse)
-              let (inputFDFs, ioFDFs) = List.partition (("T4" ==) . fst) fdfs
+              let (inputFDFs, ioFDFs) = List.partition ((FormKey.T4 ==) . fst) fdfs
                   inputT4s = foldMap injectT4 t4m
-                  injectT4 values = [("T4", FDF.mapWithKey injectT4box t4fdf)]
+                  injectT4 values = [(FormKey.T4, FDF.mapWithKey injectT4box t4fdf)]
                     where injectT4box keyPath ""
                             | Just v <- List.find (Text.isPrefixOf "Box") keyPath >>= (`Map.lookup` values)
                             = Text.pack $ show v
                           injectT4box _ v = v
-              inputForms <- first ((,) unprocessableEntity422) $ loadInputForms $ inputFDFs <> traceShowId inputT4s
+              inputForms <- first ((,) unprocessableEntity422) $ loadInputForms $ inputFDFs <> inputT4s
               first ((,) unprocessableEntity422) $ completeForms province inputForms (Map.fromList fdfs)
         of Left (code, err) -> status code >> text (fromString err)
            Right fdfs' -> do
              let fdfBytes' = Lazy.fromStrict . FDF.serialize <$> fdfs'
-                 replaceContent :: (Text, FileInfo Lazy.ByteString)
-                                -> IO (Either String (Text, FileInfo Lazy.ByteString))
+                 replaceContent :: (FormKey, FileInfo Lazy.ByteString)
+                                -> IO (Either String (FormKey, FileInfo Lazy.ByteString))
                  replaceContent (key, FileInfo name ty _) = case Map.lookup key fdfBytes' of
                    Just c -> ((,) key . FileInfo name ty <$>) <$> fdf2pdf (dir </> fromUTF8 name) c
                    Nothing -> pure (Left $ "Unknown key " <> show key)

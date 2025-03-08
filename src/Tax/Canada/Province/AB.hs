@@ -15,6 +15,8 @@ import qualified Rank2
 import Tax.Canada.Federal qualified as Federal
 import Tax.Canada.Federal (Forms(t1), fixFederalForms)
 import Tax.Canada.Federal.Schedule9 qualified as Schedule9
+import Tax.Canada.FormKey qualified as FormKey
+import Tax.Canada.FormKey (FormKey)
 import Tax.Canada.T1.Types (T1 (T1, page7, page8), Page7(Page7, step6_RefundOrBalanceOwing), Page8(Page8))
 import Tax.Canada.T1.Types qualified as T1
 import Tax.Canada.T1.Types qualified as Page8 (Page8(..))
@@ -69,9 +71,9 @@ fixReturns inputs =
                              page3{AB.partC = partC{AB.line57_copy = t1.page7.partC_NetFederalTax.line_40427}}})
 
 returnFields :: Returns FieldConst
-returnFields = Pair (Federal.formFieldsForProvince AB) (within "428" Rank2.<$> ab428Fields)
+returnFields = Pair (Federal.formFieldsForProvince AB) (within "Provincial428" Rank2.<$> ab428Fields)
 
-formFileNames :: Map Text Text
+formFileNames :: Map FormKey Text
 formFileNames = fromList [
-  ("T1", "T1/5015-r"),
-  ("428", "428/5015-c")]
+  (FormKey.T1, "T1/5015-r"),
+  (FormKey.Provincial428, "428/5015-c")]

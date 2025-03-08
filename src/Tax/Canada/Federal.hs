@@ -30,6 +30,7 @@ import Data.Map (Map, fromList)
 import Data.Set (Set, fromDistinctAscList)
 import Data.Semigroup (Any (Any, getAny), Sum(Sum, getSum))
 import Data.Text (Text)
+import Data.Text qualified as Text
 import Data.Time (Day)
 import GHC.Stack (HasCallStack)
 import Rank2 qualified
@@ -51,6 +52,8 @@ import Tax.Canada.Federal.Schedule8 (Schedule8(page4, page5, page6, page7, page8
                                      Page7(line1_netSelfEmploymentEarnings))
 import Tax.Canada.Federal.Schedule9 (Schedule9(page1), Page1(line23_sum), fixSchedule9, schedule9Fields)
 import Tax.Canada.Federal.Schedule11 (Schedule11(page1), Page1(line5_trainingClaim, line17_sum), fixSchedule11, schedule11Fields)
+import Tax.Canada.FormKey (FormKey)
+import Tax.Canada.FormKey qualified as FormKey
 import Tax.Canada.T1 (fixT1, t1FieldsForProvince)
 import Tax.Canada.T1.Types (T1(page3, page4, page5, page6, page7, page8),
                             Page3(line_10100_EmploymentIncome, line_10120_Commissions, line_12200_PartnershipIncome,
@@ -106,7 +109,7 @@ deriving instance (Eq (line Bool), Eq (line Centi), Eq (line Word), Eq (line Int
 Rank2.TH.deriveAll ''Forms
 Transformation.Shallow.TH.deriveAll ''Forms
 
-loadInputForms :: [(Text, FDF)] -> Either String (InputForms Maybe)
+loadInputForms :: [(FormKey, FDF)] -> Either String (InputForms Maybe)
 loadInputForms forms = InputForms . nonEmpty <$> traverse (load T4.t4Fields . snd) forms
 
 -- | Complete all the federal forms, also handling the inter-form field references.
@@ -181,35 +184,37 @@ fixFederalForms province InputForms{t4} = fixEq $ \Forms{t1, schedule6, schedule
 -- | The paths of all the fields in all federal forms, with the form key added as the head of every field path.
 formFieldsForProvince :: Province.Code -> Forms FieldConst
 formFieldsForProvince p = Forms{
-  t1 = within "T1" Rank2.<$> t1FieldsForProvince p,
-  schedule6 = within "Schedule6" Rank2.<$> schedule6Fields,
-  schedule7 = within "Schedule7" Rank2.<$> schedule7Fields,
-  schedule8 = within "Schedule8" Rank2.<$> schedule8Fields,
-  schedule9 = within "Schedule9" Rank2.<$> schedule9Fields,
-  schedule11 = within "Schedule11" Rank2.<$> schedule11Fields}
+  t1 = within (Text.pack $ show FormKey.T1) Rank2.<$> t1FieldsForProvince p,
+  schedule6 = within (Text.pack $ show FormKey.Schedule6) Rank2.<$> schedule6Fields,
+  schedule7 = within (Text.pack $ show FormKey.Schedule7) Rank2.<$> schedule7Fields,
+  schedule8 = within (Text.pack $ show FormKey.Schedule8) Rank2.<$> schedule8Fields,
+  schedule9 = within (Text.pack $ show FormKey.Schedule9) Rank2.<$> schedule9Fields,
+  schedule11 = within (Text.pack $ show FormKey.Schedule11) Rank2.<$> schedule11Fields}
 
-formFileNames :: Map Text Text
+-- | A map of standard file paths, without the common suffix and extension, of all supported federal schedule forms.
+formFileNames :: Map FormKey Text
 formFileNames = fromList [
-  ("Schedule6", "5000-s6"),
-  ("Schedule7", "5000-s7"),
-  ("Schedule8", "5000-s8"),
-  ("Schedule9", "5000-s9"),
-  ("Schedule11", "5000-s11")]
+  (FormKey.Schedule6, "5000-s6"),
+  (FormKey.Schedule7, "5000-s7"),
+  (FormKey.Schedule8, "5000-s8"),
+  (FormKey.Schedule9, "5000-s9"),
+  (FormKey.Schedule11, "5000-s11")]
 
-relevantFormKeys :: T1 Maybe -> Set Text
+-- | The set of keys of all auxiliary forms that have effect in the given 'T1' form.
+relevantFormKeys :: T1 Maybe -> Set FormKey
 relevantFormKeys t1 = fromDistinctAscList $
-  ["428" | isJust t1.page8.step6_RefundOrBalanceOwing.line_45300_CWB] <>
-  ["Schedule6" | isJust t1.page8.step6_RefundOrBalanceOwing.line_45300_CWB] <>
-  ["Schedule7" | isJust t1.page4.line_20800_RRSPDeduction] <>
-  ["Schedule8" | isJust (t1.page4.line_22200_CPP_QPP_Contributions
-                         <|> t1.page4.line_22215_DeductionCPP_QPP
-                         <|> t1.page6.line_30800
-                         <|> t1.page6.line_31000
-                         <|> t1.page7.step6_RefundOrBalanceOwing.line_42100_CPPContributions
-                         <|> t1.page8.step6_RefundOrBalanceOwing.line_44800_CPPOverpayment)] <>
-  ["Schedule9" | isJust t1.page6.line_34900] <>
-  ["Schedule11" | isJust (t1.page6.line_32300 <|> t1.page8.step6_RefundOrBalanceOwing.line_45350_CTC)] <>
-  ["T1"]
+  [FormKey.Provincial428 | isJust t1.page8.step6_RefundOrBalanceOwing.line_45300_CWB] <>
+  [FormKey.Schedule6 | isJust t1.page8.step6_RefundOrBalanceOwing.line_45300_CWB] <>
+  [FormKey.Schedule7 | isJust t1.page4.line_20800_RRSPDeduction] <>
+  [FormKey.Schedule8 | isJust (t1.page4.line_22200_CPP_QPP_Contributions
+                               <|> t1.page4.line_22215_DeductionCPP_QPP
+                               <|> t1.page6.line_30800
+                               <|> t1.page6.line_31000
+                               <|> t1.page7.step6_RefundOrBalanceOwing.line_42100_CPPContributions
+                               <|> t1.page8.step6_RefundOrBalanceOwing.line_44800_CPPOverpayment)] <>
+  [FormKey.Schedule9 | isJust t1.page6.line_34900] <>
+  [FormKey.Schedule11 | isJust (t1.page6.line_32300 <|> t1.page8.step6_RefundOrBalanceOwing.line_45350_CTC)] <>
+  [FormKey.T1]
 
 hasAnyField :: Foldable f => f (T4 Maybe) -> Bool
 hasAnyField = getAny . foldMap (Rank2.foldMap (Any . isJust))

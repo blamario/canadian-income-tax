@@ -34,6 +34,7 @@ library
         Tax.Canada.Federal.Schedule8
         Tax.Canada.Federal.Schedule9
         Tax.Canada.Federal.Schedule11
+        Tax.Canada.FormKey
         Tax.Canada.Province.AB
         Tax.Canada.Province.BC
         Tax.Canada.Province.MB

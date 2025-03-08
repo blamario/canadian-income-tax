@@ -9,6 +9,8 @@
 module Main where
 
 import Tax.Canada.Federal qualified as Federal
+import Tax.Canada.FormKey (FormKey)
+import Tax.Canada.FormKey qualified as FormKey
 import Tax.Canada.Province.ON qualified as ON
 import Tax.Canada.Province.AB qualified as AB (t1Fields)
 import Tax.Canada.Province.BC qualified as BC (t1Fields)
@@ -71,7 +73,7 @@ testReturn path = do
   case do fdfs <- traverse parse fdfBytes
           let (inputs, keyedFillables) = foldMap decide $ zip fdfFileNames fdfs
               decide (name, fdf)
-                | "t4-" `List.isPrefixOf` name = ([("T4", fdf)], [])
+                | "t4-" `List.isPrefixOf` name = ([(FormKey.T4, fdf)], [])
                 | otherwise = ([], [(formKey name, fdf)])
           loadedInputs <- Federal.loadInputForms inputs
           FDF.mapForms ON.returnFields (ON.fixReturns loadedInputs) $ Map.fromList keyedFillables
@@ -86,10 +88,10 @@ testReturn path = do
            -> testGroup path . toList <$> Map.traverseWithKey compare fdfOutputs
 
 
-formKey :: FilePath -> Text
-formKey "5000-s6-fill-24e.fdf" = "Schedule6"
-formKey "5000-s8-fill-24e.fdf" = "Schedule8"
-formKey "5006-c-fill-24e.fdf" = "428"
-formKey "5006-r-fill-24e.fdf" = "T1"
-formKey "t4-fill-24e.fdf" = "T4"
+formKey :: FilePath -> FormKey
+formKey "5000-s6-fill-24e.fdf" = FormKey.Schedule6
+formKey "5000-s8-fill-24e.fdf" = FormKey.Schedule8
+formKey "5006-c-fill-24e.fdf" = FormKey.Provincial428
+formKey "5006-r-fill-24e.fdf" = FormKey.T1
+formKey "t4-fill-24e.fdf" = FormKey.T4
 formKey name = error ("File name " <> name <> " is not recognized as a form.")

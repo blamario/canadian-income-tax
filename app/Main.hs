@@ -40,6 +40,8 @@ import Text.FDF (FDF, parse, serialize)
 import Paths_canadian_income_tax (getDataDir)
 import Tax.Canada (completeForms, completeRelevantForms, formFileNames)
 import Tax.Canada.Federal (loadInputForms)
+import Tax.Canada.FormKey (FormKey)
+import Tax.Canada.FormKey qualified as FormKey
 import Tax.FDF (FDFs)
 import Tax.FDF qualified as FDF
 import Tax.PDFtk (fdf2pdf, pdf2fdf)
@@ -110,24 +112,24 @@ process Options{province, t1InputPath, t4InputPaths, p428InputPath, p479InputPat
                 schedule6InputPath, schedule7InputPath, schedule8InputPath, schedule9InputPath, schedule11InputPath,
                 outputPath, onlyGivenForms, keepIrrelevantForms, verbose} = do
    dataDir <- getDataDir
-   let inputFiles :: [(Text, FilePath)]
+   let inputFiles :: [(FormKey, FilePath)]
        inputFiles = List.sortOn fst $
-                    ((,) "T4" <$> t4InputPaths) <>
-                    catMaybes [(,) "T1"  <$> Just t1InputPath,
-                               (,) "428" <$> p428InputPath,
-                               (,) "479" <$> p479InputPath,
-                               (,) "Schedule6" <$> schedule6InputPath,
-                               (,) "Schedule7" <$> schedule7InputPath,
-                               (,) "Schedule8" <$> schedule8InputPath,
-                               (,) "Schedule9" <$> schedule9InputPath,
-                               (,) "Schedule11" <$> schedule11InputPath]
+                    ((,) FormKey.T4 <$> t4InputPaths) <>
+                    catMaybes [(,) FormKey.T1  <$> Just t1InputPath,
+                               (,) FormKey.Provincial428 <$> p428InputPath,
+                               (,) FormKey.Provincial479 <$> p479InputPath,
+                               (,) FormKey.Schedule6 <$> schedule6InputPath,
+                               (,) FormKey.Schedule7 <$> schedule7InputPath,
+                               (,) FormKey.Schedule8 <$> schedule8InputPath,
+                               (,) FormKey.Schedule9 <$> schedule9InputPath,
+                               (,) FormKey.Schedule11 <$> schedule11InputPath]
        allFiles
          | onlyGivenForms = inputFiles
          | otherwise = Map.toList $ Map.fromDistinctAscList inputFiles <> emptyFiles
-       emptyFiles = completePath <$> Map.delete "479" (formFileNames province)
+       emptyFiles = completePath <$> Map.delete FormKey.Provincial479 (formFileNames province)
        completePath baseName = combine dataDir $ combine "pdf" $ Text.unpack baseName <> "-fill-24e.pdf"
-   inputs <- traverse (traverse readFDF) allFiles :: IO [(Text, (Bool, Lazy.ByteString))]
-   let writeFrom :: Text -> ByteString.ByteString -> IO ()
+   inputs <- traverse (traverse readFDF) allFiles :: IO [(FormKey, (Bool, Lazy.ByteString))]
+   let writeFrom :: FormKey -> ByteString.ByteString -> IO ()
        writeFrom key content = do
           let Just inputPath = List.lookup key allFiles
               Just (asPDF, _) = List.lookup key inputs
@@ -139,10 +141,10 @@ process Options{province, t1InputPath, t4InputPaths, p428InputPath, p479InputPat
                 if isDir
                    then ByteString.writeFile (replaceDirectory inputPath outputPath) content'
                    else ByteString.writeFile outputPath content'
-       arePDFs = fst . snd <$> filter (("T4" /=) . fst) inputs
-       fdfs = getCompose <$> traverse (parse . Lazy.toStrict . snd) (Compose inputs) :: Either String [(Text, FDF)]
+       arePDFs = fst . snd <$> filter ((FormKey.T4 /=) . fst) inputs
+       fdfs = getCompose <$> traverse (parse . Lazy.toStrict . snd) (Compose inputs) :: Either String [(FormKey, FDF)]
        bytesMap = Lazy.toStrict . snd <$> Map.fromAscList inputs
-   case do (inputFDFs, ioFDFs) <- List.partition (("T4" ==) . fst) <$> fdfs
+   case do (inputFDFs, ioFDFs) <- List.partition ((FormKey.T4 ==) . fst) <$> fdfs
            inputForms <- loadInputForms inputFDFs
            let complete = if keepIrrelevantForms then completeForms else completeRelevantForms
            complete province inputForms (Map.fromAscList ioFDFs)

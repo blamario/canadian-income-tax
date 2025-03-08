@@ -31,7 +31,7 @@ import Data.Time (Day, MonthOfYear, defaultTimeLocale, formatTime, parseTimeM)
 import Data.Void (Void)
 import Rank2 qualified
 import Text.FDF (FDF (FDF, body), Field, foldMapWithKey, mapWithKey, parse, serialize, traverseWithKey)
-import Text.Read (readEither)
+import Text.Read (readEither, readMaybe)
 
 -- | A form field path serves to uniquely identify and locate the field inside a form
 data FieldConst a = Field {path :: [Text], entry :: Entry a}
@@ -56,8 +56,9 @@ data Entry a where
 
 deriving instance Show a => Show (Entry a)
 
--- | A collection of 'FDF' forms keyed by a 'Text' identifier
-type FDFs = Map Text FDF
+-- | A collection of 'FDF' forms keyed by an identifier. The identifier type must be a lawful instance of 'Ord',
+-- 'Read', and 'Show' classes, and its 'show' must be injective and inverse of 'read'.
+type FDFs a = Map a FDF
 
 -- | Add a head component to a field path
 within :: Text -> FieldConst x -> FieldConst x
@@ -82,8 +83,8 @@ mapForm fields f fdf = load fields fdf >>= store fields fdf . f
 -- | Given the field paths of multiple forms with path heads distinguishing among the forms, and a function that
 -- modifies a collection of forms with optional field values, try to update 'FDFs' of the forms. Fail if any of the
 -- field paths can't be found in the forms.
-mapForms :: (Rank2.Apply form, Rank2.Traversable form)
-         => form FieldConst -> (form Maybe -> form Maybe) -> FDFs -> Either String FDFs
+mapForms :: (Rank2.Apply form, Rank2.Traversable form, Ord a, Read a, Show a)
+         => form FieldConst -> (form Maybe -> form Maybe) -> FDFs a -> Either String (FDFs a)
 mapForms fields f fdfs = loadAll fields fdfs >>= storeAll fields fdfs . f
 
 -- | Given two forms' field paths and a function that modifies both forms with optional field values, try to update
@@ -96,14 +97,16 @@ mapForm2 :: (Rank2.Apply form1, Rank2.Apply form2, Rank2.Traversable form1, Rank
 mapForm2 fields f fdfs = bisequence (biliftA2 load load fields fdfs) >>= bisequence . biliftA3 store store fields fdfs . f
 
 -- | Try to load all 'FDFs' into a form with optional values using the given field paths.
-loadAll :: forall form. (Rank2.Apply form, Rank2.Traversable form) => form FieldConst -> FDFs -> Either String (form Maybe)
-loadAll fields fdfs = fromPresentFieldMap $ Map.foldMapWithKey (\k-> foldMapWithKey (Map.singleton . (k <> "[0]" :))) fdfs
+loadAll :: forall form a. (Rank2.Apply form, Rank2.Traversable form, Ord a, Read a, Show a)
+        => form FieldConst -> FDFs a -> Either String (form Maybe)
+loadAll fields fdfs = fromPresentFieldMap $ Map.foldMapWithKey addPrefix fdfs
   where fromPresentFieldMap :: Map [Text] Text -> Either String (form Maybe)
-        fillPresent :: Map [Text] Text -> FieldConst a -> Either String (Maybe a)
+        fillPresent :: Map [Text] Text -> FieldConst v -> Either String (Maybe v)
         fromPresentFieldMap m = Rank2.traverse (fillPresent m) fields
         fillPresent m f@Field {path = root : _}
-          | Map.member root fdfs = fill m f
+          | Just k <- readMaybe (Text.unpack root), Map.member k fdfs = fill m f
         fillPresent _ _ = Right Nothing
+        addPrefix k = foldMapWithKey (Map.singleton . (Text.pack (show k) <> "[0]" :))
 
 -- | Try to load an 'FDF' into a form with optional values using the given field paths.
 load :: (Rank2.Apply form, Rank2.Traversable form) => form FieldConst -> FDF -> Either String (form Maybe)
@@ -112,7 +115,8 @@ load fields = fromFieldMap fields . foldMapWithKey Map.singleton
 -- | Try to store a form with optional values into the given map of 'FDFs' according to given field paths. The heads
 -- of the paths correspond to the map keys. Fail if any of the 'FDF's doesn't contain a field path, but ignore the
 -- path heads not present among the keys of 'FDFs'.
-storeAll :: (Rank2.Apply form, Rank2.Foldable form) => form FieldConst -> FDFs -> form Maybe -> Either String FDFs
+storeAll :: (Rank2.Apply form, Rank2.Foldable form, Ord a, Show a)
+         => form FieldConst -> FDFs a -> form Maybe -> Either String (FDFs a)
 storeAll fields = flip (updateAll fields)
 
 -- | Try to store a form with optional values into the given 'FDF' according to given field paths. Fail if the 'FDF'
@@ -123,10 +127,11 @@ store fields = flip (update fields)
 -- | Try to update the given map of 'FDFs' from the form with optional values according to given field paths. The
 -- heads of the paths correspond to the map keys. Fail if any of the 'FDF's doesn't contain a field path, but ignore
 -- the path heads not present among the keys of 'FDFs'.
-updateAll :: (Rank2.Apply form, Rank2.Foldable form) => form FieldConst -> form Maybe -> FDFs -> Either String FDFs
+updateAll :: (Rank2.Apply form, Rank2.Foldable form, Ord a, Show a)
+          => form FieldConst -> form Maybe -> FDFs a -> Either String (FDFs a)
 updateAll formFields formValues = case toFieldMap formFields formValues of
   Left err -> const (Left err)
-  Right m -> Right . Map.mapWithKey (\k-> mapWithKey (updateKeyFrom m . (k <> "[0]" :)))
+  Right m -> Right . Map.mapWithKey (\k-> mapWithKey (updateKeyFrom m . (Text.pack (show k) <> "[0]" :)))
 
 -- | Try to update the given 'FDF' from the form with optional values according to given form field paths. Fail if
 -- the 'FDF' doesn't contain a field path.

@@ -25,6 +25,8 @@ import Transformation.Shallow.TH qualified
 
 import Tax.Canada.Federal qualified as Federal
 import Tax.Canada.Federal (Forms(t1), fixFederalForms)
+import Tax.Canada.FormKey qualified as FormKey
+import Tax.Canada.FormKey (FormKey)
 import Tax.Canada.T1.Types (T1 (T1, page7, page8), Page7(Page7, step6_RefundOrBalanceOwing), Page8(Page8))
 import Tax.Canada.T1.Types qualified as T1
 import Tax.Canada.T1.Types qualified as Page8 (Page8(..))
@@ -111,11 +113,11 @@ fixReturns inputs =
 returnFields :: Returns FieldConst
 returnFields = Returns{
   federal = Federal.formFieldsForProvince BC,
-  bc428 = within "428" Rank2.<$> bc428Fields,
-  bc479 = within "479" Rank2.<$> bc479Fields}
+  bc428 = within "Provincial428" Rank2.<$> bc428Fields,
+  bc479 = within "Provincial479" Rank2.<$> bc479Fields}
 
-formFileNames :: Map Text Text
+formFileNames :: Map FormKey Text
 formFileNames = fromList [
-  ("T1", "T1/5010-r"),
-  ("428", "428/5010-c"),
-  ("479", "479/5010-tc")]
+  (FormKey.T1, "T1/5010-r"),
+  (FormKey.Provincial428, "428/5010-c"),
+  (FormKey.Provincial479, "479/5010-tc")]
