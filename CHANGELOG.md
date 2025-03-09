@@ -1,5 +1,34 @@
 # Revision history for `canadian-income-tax`
 
+## 2024.0
+
+* Breaking changes to the library:
+  * Support for `T4` slips required signature change to `completeForms`
+  * Generalized the `totalOf` function
+  * Renamed some `T1` fields
+  * Added underscore before the long permanent line numbers
+  * Updated for the 2024 tax return forms
+* Library additions:
+  * Support for federal schedule 8 and `T4` slips
+  * Added functions `formFileNames`, `relevantFormKeys`, and `completeRelevantForms`
+  * Added the `Year` field constructor
+  * Added the `FormKey` and `InputForms` types
+* Improvements to executables:
+  * Both the command-line and the web server executable now automatically include and complete all supported federal
+    schedule forms that are relevant, _i.e._ that affect `T1` in any way.
+  * Added command-line options `--only-given` and `--keep-irrelevant` to override the new default behaviour
+  * Added command-line options `--t4` and `--s8` for newly supported forms
+  * Added the save & load ability to the web server
+  * Added schedule 8 support to the web server
+  * Added T4 support to the web server as both a PDF upload and overlay form input
+* Fixes and maintenance:
+  * Fixed the handling of PDF file names with spaces
+  * Updated dependency bounds
+  * Added more Haddock documentation
+  * Added more regression tests
+  * Fixed compilation with GHC 9.6.4
+  * Fixed the `cabal check` warnings
+
 ## 2023.0
 
 * Updated for the 2023 tax return forms

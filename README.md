@@ -21,19 +21,23 @@ site](https://www.canada.ca/en/revenue-agency/services/forms-publications/tax-pa
    form: your name, SIN, and other identifying information fall into this category, except for the birth date and
    marital status which may affect your tax credits.
 
+   If you have T4 slips in form of fillable PDF files, you can specify them as inputs directly. Otherwise you'll have
+   to manually enter their amounts in the appropriate lines of T1 and Schedule 8 form inputs, or better yet download
+   a blank T4 slip from https://www.canada.ca/content/dam/cra-arc/formspubs/pbg/t4/t4-fill-24e.pdf and fill it in.
+
 3. Save the filled-in PDF form(s).
 
 4. Run
 
-       complete-canadian-taxes <province code> --t1 50??-r-fill-23e.pdf -o completed/
+       complete-canadian-taxes <province code> --t1 50??-r-fill-24e.pdf -o completed/
 
    where `<province code>` is the two-letter code of the province or territory (AB, BC, QC, etc),
-   `50??-r-fill-23e.pdf` is the T1 form file you previously saved and `completed/` is the name of the output
+   `50??-r-fill-24e.pdf` is the T1 form file you previously saved and `completed/` is the name of the output
    directory; feel free to change the names. If applicable, you can also supply the 428 and 479 form with the
    command-line options of the same name. For example, to complete all three forms for Ontario (ON) taxes the full
    command line would be
 
-       complete-canadian-taxes ON --t1 5006-r-fill-23e.pdf --428 5006-c-fill-23e.pdf --479 5006-tc-fill-23e.pdf -o completed/
+       complete-canadian-taxes ON --t1 5006-r-fill-24e.pdf --428 5006-c-fill-24e.pdf --479 5006-tc-fill-24e.pdf -o completed/
 
    The usual `--help` option will give you the full list of all supported forms.
 
@@ -66,23 +70,23 @@ but it should at least reduce the drudgery.
 
 41. Run
 
-        pdftk 5006-r-fill-23e.pdf generate_fdf output 5006-r-fill-23e-filled.fdf
+        pdftk 5006-r-fill-24e.pdf generate_fdf output 5006-r-fill-24e-filled.fdf
 
-    where `5006-r-fill-23e.pdf` is the file you previously saved and `5006-r-fill-23e-filled.fdf` is the name of the
+    where `5006-r-fill-24e.pdf` is the file you previously saved and `5006-r-fill-24e-filled.fdf` is the name of the
     output file; feel free to change them.
 
 42. Run
 
-        complete-canadian-taxes <province code> --t1 5006-r-fill-23e-filled.fdf -o completed/
+        complete-canadian-taxes <province code> --t1 5006-r-fill-24e-filled.fdf -o completed/
 
     to complete all the field calculations and store the result in the output file
-    `completed/5006-r-fill-23e-filled.fdf`.
+    `completed/5006-r-fill-24e-filled.fdf`.
 
 43. Run
 
-        pdftk 5006-r-fill-23e.pdf fill_form completed/5006-r-fill-23e-filled.fdf output 5006-r-fill-23e-completed.pdf
+        pdftk 5006-r-fill-24e.pdf fill_form completed/5006-r-fill-24e-filled.fdf output 5006-r-fill-24e-completed.pdf
 
-    to transfer the FDF field values from the previous step to the new PDF file, `5006-r-fill-23e-completed.pdf`.
+    to transfer the FDF field values from the previous step to the new PDF file, `5006-r-fill-24e-completed.pdf`.
 
 The FDF files are almost (but not quite) text files, which makes them `diff`able. You can use this to quickly compare
 the effects of different changes without eyeballing through the PDF forms.
