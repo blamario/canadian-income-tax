@@ -37,6 +37,9 @@ import Network.Wai.Middleware.Static
 import Network.Wai.Parse (FileInfo (..))
 import System.Directory (removeDirectoryRecursive)
 import System.FilePath.Posix ((</>))
+import System.Log.FastLogger (FastLogger, LogType'(LogFile, LogStdout), FileLogSpec(..), LogStr,
+                              toLogStr, withTimedFastLogger)
+import System.Log.FastLogger.Date (newTimeCache, simpleTimeFormat)
 import System.Posix.Temp (mkdtemp)
 import Text.FDF qualified as FDF (mapWithKey, parse, serialize)
 import Text.Read (readMaybe)
@@ -62,7 +65,11 @@ main = do
   let t4fdf = case FDF.parse t4fdfBytes of
         Left err -> error ("Can't load built-in T4 FDF: " <> err)
         Right parsed -> parsed
-  scotty 3000 $ do
+      logDestination = LogFile (FileLogSpec "taxell.log" (2^(20::Int)) 16) 1024
+  timer <- newTimeCache simpleTimeFormat
+  withTimedFastLogger timer logDestination
+    $ \log-> let log' msg = liftIO $ log (\timestamp-> toLogStr timestamp <> " - " <> msg <> "\n") in (log' "Started" >>)
+    $ scotty 3000 $ do
    middleware logStdoutDev
    get "/" $ do
       setHeader "Content-Type" "text/html; charset=utf-8"
@@ -75,6 +82,8 @@ main = do
       provinceCode <- pathParam "province"
       t4param <- formParamMaybe "T4"
       pdfFiles <- files
+      log' ("Save " <> toLogStr provinceCode <> ": "
+            <> maybe "no" (const "with") t4param <> " T4s, " <> toLogStr (show (fst <$> pdfFiles)))
       now <- liftIO $ round . nominalDiffTimeToSeconds <$> getPOSIXTime
       let pdfArchive = foldr addPDF emptyArchive pdfFiles
           addPDF (_, FileInfo name _ c) = addEntryToArchive (toEntry (fromUTF8 name) now c)
@@ -103,6 +112,8 @@ main = do
                      >> text ("No such form key as " <> Text.Lazy.fromStrict name)
                      >> finish
         Right fs -> pure fs
+      log' ("Complete " <> toLogStr provinceCode <> ": "
+            <> toLogStr (length t4m) <> " T4s, " <> toLogStr (show (fst <$> pdfFiles)))
       let allPdfFiles = Map.toList (Map.fromList pdfFiles <> emptyForms)
       dir <- liftIO $ mkdtemp "tax"
       fdfBytes <- liftIO $ fmap sequenceA $ forM allPdfFiles $ \(key, (name, content))-> do
