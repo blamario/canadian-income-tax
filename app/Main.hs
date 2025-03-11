@@ -72,7 +72,7 @@ optionsParser =
    Options
    <$> OptsAp.argument readProvince (metavar "<two-letter province code>")
    <*> OptsAp.strOption (long "t1" <> metavar "<input T1 form file>")
-   <*> many (OptsAp.strOption (long "t4" <> metavar "<input t4 form file>"))
+   <*> many (OptsAp.strOption (long "t4" <> metavar "<input t4 slip file>"))
    <*> optional (OptsAp.strOption (long "428" <> metavar "<input 428 form file>"))
    <*> optional (OptsAp.strOption (long "479" <> metavar "<input 479 form file>"))
    <*> optional (OptsAp.strOption (long "s6" <> metavar "<input Schedule 6 form file>"))
@@ -81,8 +81,8 @@ optionsParser =
    <*> optional (OptsAp.strOption (long "s9" <> metavar "<input Schedule 9 form file>"))
    <*> optional (OptsAp.strOption (long "s11" <> metavar "<input Schedule 11 form file>"))
    <*> OptsAp.strOption (short 'o' <> long "output" <> OptsAp.value "-" <> metavar "<output file or directory>")
-   <*> OptsAp.switch (long "only-given")
-   <*> OptsAp.switch (long "keep-irrelevant")
+   <*> OptsAp.switch (long "only-given" <> OptsAp.help "Complete only the forms given on the command line")
+   <*> OptsAp.switch (long "keep-irrelevant" <> OptsAp.help "Complete the forms that have no effect on T1")
    <*> OptsAp.switch (short 'v' <> long "verbose")
    <**> OptsAp.helper
 
