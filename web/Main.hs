@@ -1,6 +1,7 @@
 {-# LANGUAGE ImportQualifiedPost #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Main where
@@ -30,7 +31,7 @@ import Data.Time.Clock.POSIX (getPOSIXTime)
 import Data.Text (Text)
 import Data.Text qualified as Text
 import Data.Text.Lazy qualified as Text.Lazy
-import Network.HTTP.Types.Status (ok200, internalServerError500,
+import Network.HTTP.Types.Status (statusCode, ok200, internalServerError500,
                                   notFound404, unsupportedMediaType415, unprocessableEntity422)
 import Network.Wai.Middleware.RequestLogger
 import Network.Wai.Middleware.Static
@@ -132,8 +133,11 @@ main = do
                           injectT4box _ v = v
               inputForms <- first ((,) unprocessableEntity422) $ Federal.loadInputForms $ inputFDFs <> inputT4s
               first ((,) unprocessableEntity422) $ completeRelevantForms province inputForms (Map.fromList fdfs)
-        of Left (code, err) -> status code >> text (fromString err)
+        of Left (code, err) ->
+             log' ("Error " <> toLogStr code.statusCode <> ": " <> toLogStr err)
+             >> status code >> text (fromString err)
            Right fdfs' -> do
+             log' ("Completed " <> toLogStr provinceCode <> ": " <> toLogStr (show (Map.keys fdfs')))
              let fdfBytes' = Lazy.fromStrict . FDF.serialize <$> fdfs'
                  replaceContent :: FormKey -> Lazy.ByteString
                                 -> IO (Either String (FilePath, Lazy.ByteString))
@@ -143,6 +147,7 @@ main = do
              pdfFiles' <- liftIO $ Map.traverseWithKey replaceContent fdfBytes'
              case toList <$> sequenceA pdfFiles' of
                Left err -> do
+                 log' ("Error 500: " <> toLogStr err)
                  status internalServerError500 >> text (fromString err)
                Right [(name, pdf)] -> do
                  status ok200
