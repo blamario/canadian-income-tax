@@ -7,9 +7,6 @@
 module Tax.Canada (completeForms, completeRelevantForms, formFileNames) where
 
 import Data.CAProvinceCodes qualified as Province
-import Data.Functor.Const (Const)
-import Data.Functor.Product (Product (Pair))
-import Data.Kind (Type)
 import Data.Map (Map)
 import Data.Map qualified as Map
 import Data.Set qualified as Set
@@ -24,7 +21,7 @@ import Tax.Canada.Province.AB qualified as AB
 import Tax.Canada.Province.BC qualified as BC
 import Tax.Canada.Province.MB qualified as MB
 import Tax.Canada.Province.ON qualified as ON
-import Tax.Canada.T1 as T1 (T1, fixT1, t1FieldsForProvince, fileNameForProvince)
+import Tax.Canada.T1 as T1 (T1, fileNameForProvince)
 import Tax.FDF (FDFs)
 import Tax.FDF qualified as FDF
 

@@ -18,7 +18,6 @@ import Tax.Canada.T1.Types
 import Tax.Canada.T1.Types qualified as Page8 (Page8(..))
 import Tax.Canada.T1.Types qualified as MedicalExpenses (MedicalExpenses(..))
 import Tax.Canada.T1.FieldNames.ON qualified as ON
-import Tax.Canada.T1.FieldNames.BC qualified as BC
 
 t1Fields :: T1 FieldConst
 t1Fields = within "form1" Rank2.<$> T1 {
@@ -31,15 +30,18 @@ t1Fields = within "form1" Rank2.<$> T1 {
    page7 = within "Page7" Rank2.<$> page7Fields,
    page8 = within "Page8" Rank2.<$> page8Fields}
 
+page2Fields :: Page2 FieldConst
 page2Fields = ON.page2Fields {
    cai = NoField,
    organ_donor = NoField}
 
+page4Fields :: Page4 FieldConst
 page4Fields = ON.page4Fields{
    line_20810_PRPP = Field ["Line20810", "Amount"] Amount,
    line_21698_Amount = Field ["Line45", "Line21698", "Line_21699_Amount"] Amount,
    line_22300_DeductionPPIP = Field ["Line22300", "Line_22300_Amount"] Amount}
 
+page5Fields :: Page5 FieldConst
 page5Fields = Page5 {
    step4_TaxableIncome = within "Step4" Rank2.<$> step4Fields,
    partA_FederalTax = within "Part_A" Rank2.<$> partA1{column4 = column4, column5 = partA2.column5},
@@ -55,6 +57,7 @@ page5Fields = Page5 {
             toText $ "Line" <> decimal line <> (if isRate then "Rate" else "Amount") <> decimal column
          toText = toStrict . toLazyText
 
+step4Fields :: Step4 FieldConst
 step4Fields = ON.step4Fields {
    line_23600_NetIncome_2 = Field ["Line60", "Amount"] Amount,
    line_24901_SecurityDeductions = Field ["Line24901", "Line_24901_Amount"] Amount,
@@ -62,10 +65,12 @@ step4Fields = ON.step4Fields {
    line72_difference = Field ["Line73", "Line_26000_Amount"] Amount,
    line_25999_CapitalGainsReductionAddBack = Field ["Line25999", "Line_25999_Amount"] Amount}
 
+partBFields :: Page5PartB FieldConst
 partBFields = ON.partBFields {
    line_30500 = Field ["Line30500", "Line_30499_Amount"] Amount,
    pageBreakSummary = Field ["Line90", "Amount"] Amount}
 
+page6Fields :: Page6 FieldConst
 page6Fields = ON.page6Fields {
    pageBreakCarry = Field ["Line91", "Amount"] Amount,
    line_31205 = Field ["Line31205", "Line_31205_Amount"] Amount,
@@ -80,16 +85,19 @@ page6Fields = ON.page6Fields {
    line_33200_sum = subCalculationFields "Line33200" ["Line_33200_Amount1"] ["Line_33200_Line32Amount2"],
    line120_taxCreditRate = Field ["Line124", "Percent"] $ Constant 0.15 Percent}
 
+page6MedicalExpensesFields :: MedicalExpenses FieldConst
 page6MedicalExpensesFields = ON.page6MedicalExpensesFields {
    taxableIncome = Field ["Line118", "Amount1"] Amount,
    taxableIncomeFraction = Field ["Line118", "Amount2"] Amount,
    MedicalExpenses.threshold = Field ["Line119", "Amount"] Amount,
    difference = Field ["Line120", "Amount"] Amount}
 
+page7Fields :: Page7 FieldConst
 page7Fields = Page7 {
    partC_NetFederalTax = within "PartC" Rank2.<$> partCFields,
    step6_RefundOrBalanceOwing = within "Step6" Rank2.<$> page7step6Fields}
 
+partCFields :: Page7PartC FieldConst
 partCFields = ON.partCFields {
    tax_copy = Field ["Line128", "Amount"] Amount,
    credits_copy = Field ["Line131", "Amount"] Amount,
@@ -101,10 +109,12 @@ partCFields = ON.partCFields {
    line137_sum = Field ["Line141", "Amount"] Amount,
    line138_logging = Field ["Line142", "Amount"] Amount}
 
+page7step6Fields :: Page7Step6 FieldConst
 page7step6Fields = ON.page7step6Fields {
    tax_copy = Field ["Line152", "Amount"] Amount,
    line_42100_CPPContributions = NoField}
 
+page8Fields :: Page8 FieldConst
 page8Fields = ON.page8Fields {
    Page8.step6_RefundOrBalanceOwing = within "Step6-Continued" Rank2.<$> page8step6Fields,
    line1_ONOpportunitiesFund = NoField,
@@ -113,6 +123,7 @@ page8Fields = ON.page8Fields {
    line_48400_Refund = Field ["Refund_or_Balancing-owing", "Line48400", "Line_48400_Amount"] Amount,
    line_48500_BalanceOwing = Field ["Refund_or_Balancing-owing", "Line48500", "Line_48500_Amount"] Amount}
 
+page8step6Fields :: Page8Step6 FieldConst
 page8step6Fields = ON.page8step6Fields {
    line_43500_totalpayable = Field ["Line157", "Amount"] Amount,
    line_43800_TaxTransferQC = Field ["Line43800", "Line_43800_Amount"] Amount,

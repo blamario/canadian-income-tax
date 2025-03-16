@@ -15,7 +15,6 @@ module Test.Transformations where
 
 import Data.Functor.Compose
 import Data.Void (Void)
-import Data.Word (Word)
 import Data.Text (Text)
 import Data.Time (Day)
 import Data.Time.Calendar (fromGregorian)
@@ -27,8 +26,6 @@ import Hedgehog.Range qualified as Range
 
 import Transformation (Transformation (Domain, Codomain), At)
 import Transformation qualified
-import Transformation.Shallow qualified as Shallow
-import Transformation.Shallow.TH qualified as Shallow.TH
 
 import Tax.FDF (FieldConst (Field, NoField), Entry (Constant))
 import Tax.Canada.T1 (LanguageOfCorrespondence, MaritalStatus)

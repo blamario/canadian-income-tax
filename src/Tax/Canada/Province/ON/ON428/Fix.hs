@@ -9,8 +9,6 @@
 
 module Tax.Canada.Province.ON.ON428.Fix (ON428, fixON428) where
 
-import Control.Applicative (liftA2)
-import Control.Monad (guard, mfilter)
 import Data.Fixed (Centi)
 import Rank2 qualified
 
@@ -19,6 +17,8 @@ import Tax.Canada.Shared (fixBaseCredit, fixMedicalExpenses, fixSubCalculation, 
                           BaseCredit(cont), MedicalExpenses (difference),
                           SubCalculation (result), TaxIncomeBracket (equalsTax))
 import Tax.Util (fixEq, fractionOf, nonNegativeDifference, totalOf)
+
+import Prelude hiding (floor, ceiling)
 
 fixON428 :: ON428 Maybe -> ON428 Maybe
 fixON428 = fixEq $ \on428@ON428{..}-> ON428{page1 = fixPage1 page1,

@@ -27,7 +27,7 @@ import Transformation.Shallow.TH qualified
 import Tax.Canada.T1.Types (T1)
 import Tax.Canada.T1.Types qualified
 import Tax.FDF (Entry (Amount, Constant, Textual), FieldConst (Field), within)
-import Tax.Util (fixEq, fractionOf, difference, nonNegativeDifference, totalOf)
+import Tax.Util (fixEq, difference, nonNegativeDifference, totalOf)
 
 data Schedule9 line = Schedule9{
    page1 :: Page1 line,

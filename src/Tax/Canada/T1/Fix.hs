@@ -10,16 +10,15 @@
 module Tax.Canada.T1.Fix (T1, fixT1) where
 
 import Control.Applicative ((<|>))
-import Data.Fixed (Centi)
 import Data.Maybe (fromMaybe)
-import Data.Text (Text)
 import Data.Time.Calendar (Year, dayPeriod)
 import GHC.Stack (HasCallStack)
-import Rank2 qualified
 
 import Tax.Canada.T1.Types
 import Tax.Canada.Shared (fixSubCalculation, fixTaxIncomeBracket, SubCalculation(result), TaxIncomeBracket (equalsTax))
 import Tax.Util (difference, fixEq, fractionOf, nonNegativeDifference, totalOf)
+
+import Prelude hiding (floor, ceiling)
 
 fixT1 :: HasCallStack => T1 Maybe -> T1 Maybe
 fixT1 = fixEq $ \t1@T1{..}-> T1{page1 = fixPage1 page1,
@@ -141,7 +140,7 @@ fixPage7 t1 = fixEq $ \Page7{partC_NetFederalTax, step6_RefundOrBalanceOwing}-> 
    step6_RefundOrBalanceOwing = fixPage7Step6 t1 step6_RefundOrBalanceOwing}
 
 fixPage8 :: T1 Maybe -> Page8 Maybe -> Page8 Maybe
-fixPage8 t1 = fixEq $ \page@Page8{..}-> Page8{
+fixPage8 t1 = fixEq $ \Page8{..}-> Page8{
    step6_RefundOrBalanceOwing = fixPage8Step6 t1 step6_RefundOrBalanceOwing,
    line_48400_Refund = step6_RefundOrBalanceOwing.line164_Refund_or_BalanceOwing
                       >>= \x-> if x < 0 then Just (negate x) else Nothing,
@@ -169,7 +168,7 @@ fixStep4 t1 = fixEq $ \step@Step4{..}-> step{
    line_26000_TaxableIncome = totalOf [line72_difference, line_25999_CapitalGainsReductionAddBack]}
 
 fixPage5PartA :: HasCallStack => T1 Maybe -> Page5PartA Maybe -> Page5PartA Maybe
-fixPage5PartA t1 = fixEq $ \part@Page5PartA{..}-> part{
+fixPage5PartA t1 = fixEq $ \part-> Page5PartA{
    column1 = fixTaxIncomeBracket income (Just part.column2) part.column1,
    column2 = fixTaxIncomeBracket income (Just part.column3) part.column2,
    column3 = fixTaxIncomeBracket income (Just part.column4) part.column3,

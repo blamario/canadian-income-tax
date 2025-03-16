@@ -10,7 +10,7 @@ import Rank2 qualified
 
 import Data.Text (Text)
 import Data.Text.Lazy (toStrict)
-import Data.Text.Lazy.Builder (fromText, toLazyText)
+import Data.Text.Lazy.Builder (toLazyText)
 import Data.Text.Lazy.Builder.Int (decimal)
 import Tax.FDF (FieldConst (Field, NoField), Entry (..), within)
 import Tax.Canada.Shared (TaxIncomeBracket (..), subCalculationFields)
@@ -27,11 +27,13 @@ t1Fields = within "form1" Rank2.<$> T1 {
    page7 = within "Page7" . within "Return-pg7" Rank2.<$> page7Fields,
    page8 = within "Page8" Rank2.<$> page8Fields}
 
+page1Fields :: Page1 FieldConst
 page1Fields = Page1 {
    identification = within "Identification" Rank2.<$> page1IdentificationFields,
    residence = within "Residence_Info" Rank2.<$> page1ResidenceFields,
    spouse = within "Info_Spouse_CLP" Rank2.<$> page1SpouseFields}
 
+page1IdentificationFields :: Identification FieldConst
 page1IdentificationFields = Identification {
    emailAddress = Field ["EmailAddress"] Textual,
    dateDeath = Field ["DateDeath_Comb_BordersAll", "DateDeath_Comb"] Date,
@@ -48,6 +50,7 @@ page1IdentificationFields = Identification {
    id_POBox = Field ["ID_POBox"] Textual,
    prov_DropDown = Field ["Prov_DropDown"] Province}
 
+page1ResidenceFields :: Residence FieldConst
 page1ResidenceFields = Residence {
    prov_DropDown_Business = Field ["Prov_DropDown-Business"] Province,
    prov_DropDown_Residence = Field ["Prov_DropDown-Residence"] Province,
@@ -55,6 +58,7 @@ page1ResidenceFields = Residence {
    date_Entry = Field ["Date_Entry", "DateMMDD_Comb_BordersAll_Std", "DateMMDD_Comb"] Date,
    prov_DropDown = Field ["Prov_DropDown"] Textual}
   
+page1SpouseFields :: Spouse FieldConst
 page1SpouseFields = Spouse {
    line_23600 = Field ["Line23600", "Amount"] Amount,
    self_employment = Field ["Self-employment", "Checkbox"] Checkbox,
@@ -63,6 +67,7 @@ page1SpouseFields = Spouse {
    line_21300 = Field ["Line21300", "Amount"] Amount,
    sin = Field ["SIN_Comb_BordersAll", "SIN_Comb"] Textual}
 
+page2Fields :: Page2 FieldConst
 page2Fields = Page2 {
    foreign_property = Field ["Foreign_property", "Line26600"] $ Switch "Option1" "Option2" "ForeignProperty_CheckBox",
    tax_exempt = Field ["Tax_exempt", "Exempt", "Spouse_SelfEmployed"] Checkbox,
@@ -71,10 +76,12 @@ page2Fields = Page2 {
    organ_donor = Field ["Organ_donor", "Question"] $ Switch "Option1" "Option2" "OrganDonor_CheckBox"
 }
 
+page2ElectionsCanadaFields :: ElectionsCanada FieldConst
 page2ElectionsCanadaFields = ElectionsCanada {
    citizenship = Field ["LineA"] $ Switch "Option1" "Option2" "A_CheckBox",
    authorization = Field ["LineB"] $ Switch "Option1" "Option2" "B_Authorize_CheckBox"}
 
+page3Fields :: Page3 FieldConst
 page3Fields = Page3 {
    line_10100_EmploymentIncome = Field ["Line1", "Line_10100_Amount"] Amount,
    line_10105_Taxexemptamount = Field ["Line10105", "Line_10105_Amount"] Amount,
@@ -118,6 +125,7 @@ page3Fields = Page3 {
    line_14700_sum = subCalculationFields "Line14700" ["Line_14700_Amount1"] ["Line_14700_Amount2"],
    line_15000_TotalIncome = Field ["Line15000", "Line_15000_Amount"] Amount}
 
+selfEmploymentFields :: SelfEmploymentIncome FieldConst
 selfEmploymentFields = SelfEmploymentIncome {
    line_13499_Amount = Field ["Line13500", "Line13499", "Line_13499_Amount"] Amount,
    line_13500_Amount = Field ["Line13500", "Line_13500_Amount"] Amount,
@@ -130,6 +138,7 @@ selfEmploymentFields = SelfEmploymentIncome {
    line_14299_Amount = Field ["Line14300", "Line14299", "Line_14299_Amount"] Amount,
    line_14300_Amount = Field ["Line14300", "Line_14300_Amount"] Amount}
 
+page4Fields :: Page4 FieldConst
 page4Fields = Page4 {
    line_15000_TotalIncome_2 = Field ["Line36", "Amount"] Amount,
    line_20600_PensionAdjustment = Field ["Line20600", "Line_20600_Amount"] Amount,
@@ -162,11 +171,13 @@ page4Fields = Page4 {
    line_23500_SocialBenefits = Field ["Line23500", "Line_23500_Amount"] Amount,
    line_23600_NetIncome = Field ["Line23600", "Line_23600_Amount"] Amount}
 
+page5Fields :: Page5 FieldConst
 page5Fields = Page5 {
    step4_TaxableIncome = within "Step4" Rank2.<$> step4Fields,
    partA_FederalTax = within "PartA" Rank2.<$> partAFields "Column" 36,
    partB_FederalTaxCredits = within "PartB" Rank2.<$> partBFields}
 
+step4Fields :: Step4 FieldConst
 step4Fields = Step4 {
    line_23600_NetIncome_2 = Field ["Line59", "Amount"] Amount,
    line_24400_MilitaryPoliceDeduction = Field ["Line24400", "Line_24400_Amount"] Amount,
@@ -209,6 +220,7 @@ partAFieldsWith fieldNameAt columnPrefix startLine = Page5PartA {
             equalsTax = Field [fieldNameAt (startLine + 6) n False] Amount}
          toText = toStrict . toLazyText
 
+partBFields :: Page5PartB FieldConst
 partBFields = Page5PartB {
    line_30000 = Field ["Line30000", "Line_30000_Amount"] Amount,
    line_30100 = Field ["Line30100", "Line_30100_Amount"] Amount,
@@ -220,6 +232,7 @@ partBFields = Page5PartB {
    line_30500 = Field ["Line30500", "Line_30500_Amount"] Amount,
    pageBreakSummary = Field ["Line89", "Amount"] Amount}
                                                                                            
+page6Fields :: Page6 FieldConst
 page6Fields = Page6 {
    pageBreakCarry = Field ["Line90", "Amount"] Amount,
    line_30800 = Field ["Line30800", "Line_30800_Amount"] Amount,
@@ -255,6 +268,7 @@ page6Fields = Page6 {
    line_34900 = Field ["Line34900", "Line_34900_Amount"] Amount,
    line_35000 = Field ["Line35000", "Line_35000_Amount"] Amount}
 
+page6MedicalExpensesFields :: MedicalExpenses FieldConst
 page6MedicalExpensesFields = MedicalExpenses {
    familyExpenses = Field ["Line33099", "Line_33099_Amount"] Amount,
    taxableIncome = Field ["Line114", "Amount1"] Amount,
@@ -263,10 +277,12 @@ page6MedicalExpensesFields = MedicalExpenses {
    difference = Field ["Line116", "Amount"] Amount,
    otherDependants = Field ["Line33199", "Line_33199_Amount"] Amount}
 
+page7Fields :: Page7 FieldConst
 page7Fields = Page7 {
    partC_NetFederalTax = within "PartC" Rank2.<$> partCFields,
    step6_RefundOrBalanceOwing = within "Step6" Rank2.<$> page7step6Fields}
 
+partCFields :: Page7PartC FieldConst
 partCFields = Page7PartC {
    tax_copy = Field ["Line124", "Amount"] Amount,
    line_40424 = Field ["Line40424", "Line_40424_Amount"] Amount,
@@ -295,6 +311,7 @@ partCFields = Page7PartC {
    line_41800 = Field ["Line41800", "Line_41800_Amount"] Amount,
    line_42000 = Field ["Line42000", "Line_42000_Amount"] Amount}
 
+page7step6Fields :: Page7Step6 FieldConst
 page7step6Fields = Page7Step6 {
    tax_copy = Field ["Line148", "Amount"] Amount,
    line_42100_CPPContributions = Field ["Line42100", "Line_42100_Amount"] Amount,
@@ -304,6 +321,7 @@ page7step6Fields = Page7Step6 {
    line_43200_FirstNationsTax = NoField,
    line_43500_TotalPayable = Field ["Line43500", "Line_43500_Amount"] Amount}
                                                                                            
+page8Fields :: Page8 FieldConst
 page8Fields = Page8 {
    step6_RefundOrBalanceOwing = within "Step6-Continued" Rank2.<$> page8step6Fields,
    line_48400_Refund = Field ["Refund_or_Balance-owing", "Line48400", "Line_48400_Amount"] Amount,
@@ -315,6 +333,7 @@ page8Fields = Page8 {
    line_46500 = Field ["ONOpportunitiesFund2", "Line_2", "Amount"] Amount,
    line_46600 = Field ["ONOpportunitiesFund2", "Line_3", "Amount"] Amount}
 
+page8step6Fields :: Page8Step6 FieldConst
 page8step6Fields = Page8Step6 {
    line_43500_totalpayable = Field ["Line154", "Amount"] Amount,
    line_43700_Total_income_tax_ded = Field ["Line43700", "Line_43700_Amount"] Amount,
@@ -344,6 +363,7 @@ page8step6Fields = Page8Step6 {
    line_48200_sum = subCalculationFields "Line48200" ["Line_48200_Amount1"] ["Line_48200_Amount2"],
    line164_Refund_or_BalanceOwing = Field ["Line172", "Amount"] Amount}
 
+taxPreparerFields :: TaxPreparer FieldConst
 taxPreparerFields = TaxPreparer {
    eFileNumber = Field ["EFileNumber_Comb", "EFile"] Textual,
    nameOfPreparer = Field ["NameOfPreparer"] Textual,

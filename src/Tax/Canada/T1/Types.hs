@@ -17,7 +17,6 @@
 module Tax.Canada.T1.Types where
 
 import Data.Fixed (Centi)
-import Data.Monoid (Ap(Ap, getAp))
 import Data.Text (Text)
 import Data.Time (Day)
 import Data.CAProvinceCodes qualified as Province

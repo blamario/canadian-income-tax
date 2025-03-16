@@ -18,13 +18,12 @@
 module Tax.Canada.Federal.Schedule6 where
 
 import Data.Fixed (Centi)
-import Data.Text (Text)
 import Language.Haskell.TH qualified as TH
 import Rank2 qualified
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
-import Tax.Canada.Shared (SubCalculation(SubCalculation, calculation, result), fixSubCalculation, subCalculationFields)
+import Tax.Canada.Shared (SubCalculation(result), fixSubCalculation, subCalculationFields)
 import Tax.Canada.T1.Types (T1)
 import Tax.Canada.T1.Types qualified as T1
 import Tax.FDF (Entry (Amount, Constant, Percent, Switch'), FieldConst (Field), within)

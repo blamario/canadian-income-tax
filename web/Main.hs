@@ -8,9 +8,8 @@ module Main where
 
 import Codec.Archive.Zip (addEntryToArchive, emptyArchive, fromArchive, toEntry)
 import Control.Category ((>>>))
-import Control.Monad (forM, join)
+import Control.Monad (forM)
 import Control.Monad.IO.Class (liftIO)
-import Control.Exception (assert)
 import Data.Aeson (decode)
 import Data.Bifunctor (first)
 import Data.ByteString (ByteString)
@@ -19,7 +18,6 @@ import Data.ByteString.Lazy qualified as Lazy
 import Data.ByteString.Lazy qualified as ByteString.Lazy
 import Data.Fixed (Centi)
 import Data.Foldable (fold, toList)
-import Data.Functor.Compose (Compose(..))
 import Data.List qualified as List
 import Data.Map.Lazy (Map)
 import Data.Map.Lazy qualified as Map
@@ -38,8 +36,7 @@ import Network.Wai.Middleware.Static
 import Network.Wai.Parse (FileInfo (..))
 import System.Directory (removeDirectoryRecursive)
 import System.FilePath.Posix ((</>))
-import System.Log.FastLogger (FastLogger, LogType'(LogFile, LogStdout), FileLogSpec(..), LogStr,
-                              toLogStr, withTimedFastLogger)
+import System.Log.FastLogger (LogType'(LogFile), FileLogSpec(FileLogSpec), toLogStr, withTimedFastLogger)
 import System.Log.FastLogger.Date (newTimeCache, simpleTimeFormat)
 import System.Posix.Temp (mkdtemp)
 import Text.FDF qualified as FDF (mapWithKey, parse, serialize)
@@ -52,8 +49,9 @@ import Tax.Canada (completeRelevantForms)
 import Tax.Canada.Federal qualified as Federal
 import Tax.Canada.FormKey (FormKey)
 import Tax.Canada.FormKey qualified as FormKey
-import Tax.FDF qualified as FDF
 import Tax.PDFtk (fdf2pdf, pdfFile2fdf)
+
+import Prelude hiding (log)
 
 main :: IO ()
 main = do
@@ -69,7 +67,7 @@ main = do
       logDestination = LogFile (FileLogSpec "taxell.log" (2^(20::Int)) 16) 1024
   timer <- newTimeCache simpleTimeFormat
   withTimedFastLogger timer logDestination
-    $ \log-> let log' msg = liftIO $ log (\timestamp-> toLogStr timestamp <> " - " <> msg <> "\n") in (log' "Started" >>)
+    $ \l-> let log msg = liftIO $ l (\timestamp-> toLogStr timestamp <> " - " <> msg <> "\n") in (log "Started" >>)
     $ scotty 3000 $ do
    middleware logStdoutDev
    get "/" $ do
@@ -83,8 +81,8 @@ main = do
       provinceCode <- pathParam "province"
       t4param <- formParamMaybe "T4"
       pdfFiles <- files
-      log' ("Save " <> toLogStr provinceCode <> ": "
-            <> maybe "no" (const "with") t4param <> " T4s, " <> toLogStr (show (fst <$> pdfFiles)))
+      log ("Save " <> toLogStr provinceCode <> ": "
+           <> maybe "no" (const "with") t4param <> " T4s, " <> toLogStr (show (fst <$> pdfFiles)))
       now <- liftIO $ round . nominalDiffTimeToSeconds <$> getPOSIXTime
       let pdfArchive = foldr addPDF emptyArchive pdfFiles
           addPDF (_, FileInfo name _ c) = addEntryToArchive (toEntry (fromUTF8 name) now c)
@@ -108,13 +106,13 @@ main = do
           resolveForm (key, FileInfo name _ content)
             | Just formKey <- readMaybe (Text.unpack key) = Right (formKey, (fromUTF8 name, content))
             | otherwise = Left key
-      pdfFiles <- files >>= \fs-> case traverse resolveForm fs of
+      pdfFiles <- (traverse resolveForm <$> files) >>= \case
         Left name -> status notFound404
                      >> text ("No such form key as " <> Text.Lazy.fromStrict name)
                      >> finish
         Right fs -> pure fs
-      log' ("Complete " <> toLogStr provinceCode <> ": "
-            <> toLogStr (length t4m) <> " T4s, " <> toLogStr (show (fst <$> pdfFiles)))
+      log ("Complete " <> toLogStr provinceCode <> ": "
+           <> toLogStr (length t4m) <> " T4s, " <> toLogStr (show (fst <$> pdfFiles)))
       let allPdfFiles = Map.toList (Map.fromList pdfFiles <> emptyForms)
       dir <- liftIO $ mkdtemp "tax"
       fdfBytes <- liftIO $ fmap sequenceA $ forM allPdfFiles $ \(key, (name, content))-> do
@@ -124,7 +122,7 @@ main = do
         pure ((,) key <$> fdf)
       case do fdfs <- first ((,) unsupportedMediaType415)
                       $ fdfBytes >>= traverse (traverse $ Lazy.toStrict >>> FDF.parse)
-              let (inputFDFs, ioFDFs) = List.partition ((FormKey.T4 ==) . fst) fdfs
+              let (inputFDFs, _ioFDFs) = List.partition ((FormKey.T4 ==) . fst) fdfs
                   inputT4s = foldMap injectT4 t4m
                   injectT4 values = [(FormKey.T4, FDF.mapWithKey injectT4box t4fdf)]
                     where injectT4box keyPath ""
@@ -134,10 +132,10 @@ main = do
               inputForms <- first ((,) unprocessableEntity422) $ Federal.loadInputForms $ inputFDFs <> inputT4s
               first ((,) unprocessableEntity422) $ completeRelevantForms province inputForms (Map.fromList fdfs)
         of Left (code, err) ->
-             log' ("Error " <> toLogStr code.statusCode <> ": " <> toLogStr err)
+             log ("Error " <> toLogStr code.statusCode <> ": " <> toLogStr err)
              >> status code >> text (fromString err)
            Right fdfs' -> do
-             log' ("Completed " <> toLogStr provinceCode <> ": " <> toLogStr (show (Map.keys fdfs')))
+             log ("Completed " <> toLogStr provinceCode <> ": " <> toLogStr (show (Map.keys fdfs')))
              let fdfBytes' = Lazy.fromStrict . FDF.serialize <$> fdfs'
                  replaceContent :: FormKey -> Lazy.ByteString
                                 -> IO (Either String (FilePath, Lazy.ByteString))
@@ -147,7 +145,7 @@ main = do
              pdfFiles' <- liftIO $ Map.traverseWithKey replaceContent fdfBytes'
              case toList <$> sequenceA pdfFiles' of
                Left err -> do
-                 log' ("Error 500: " <> toLogStr err)
+                 log ("Error 500: " <> toLogStr err)
                  status internalServerError500 >> text (fromString err)
                Right [(name, pdf)] -> do
                  status ok200

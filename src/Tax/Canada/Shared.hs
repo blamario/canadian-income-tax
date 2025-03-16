@@ -26,6 +26,8 @@ import Transformation.Shallow.TH qualified
 import Tax.FDF (FieldConst(Field), Entry(Amount))
 import Tax.Util (fixEq, fractionOf, nonNegativeDifference)
 
+import Prelude hiding (floor, ceiling)
+
 data TaxIncomeBracket line = TaxIncomeBracket {
    income :: line Centi,
    threshold :: line Centi,

@@ -18,10 +18,9 @@ import Tax.Canada.Federal (Forms(t1), fixFederalForms)
 import Tax.Canada.Federal.Schedule9 qualified as Schedule9
 import Tax.Canada.FormKey (FormKey)
 import Tax.Canada.FormKey qualified as FormKey
-import Tax.Canada.T1.Types (T1 (T1, page7, page8), Page7(Page7, step6_RefundOrBalanceOwing), Page8(Page8))
+import Tax.Canada.T1.Types (T1 (T1, page7), Page7(Page7, step6_RefundOrBalanceOwing))
 import Tax.Canada.T1.Types qualified as T1
 import Tax.Canada.T1.FieldNames.AB (t1Fields)  -- same T1 form as Alberta
-import Tax.Canada.T1.Fix (fixT1)
 
 import Tax.Canada.Province.MB.MB428.Types qualified as MB
 import Tax.Canada.Province.MB.MB428.Types qualified as MB.Page1 (Page1(..))
@@ -40,10 +39,9 @@ type Returns = Product Federal.Forms MB428
 
 fixReturns :: Federal.InputForms Maybe -> Returns Maybe -> Returns Maybe
 fixReturns inputs =
-  fixEq $ \(Pair ff@Federal.Forms{t1 = t1@T1{page7 = page7@Page7{step6_RefundOrBalanceOwing},
-                                             page8 = page8@Page8{step6_RefundOrBalanceOwing = page8step6}},
+  fixEq $ \(Pair ff@Federal.Forms{t1 = t1@T1{page7 = page7@Page7{step6_RefundOrBalanceOwing}},
                                   schedule9}
-                 mb428@MB428{page1 = page1@MB.Page1{partA, partB = partB1@MB.Page1PartB{spouseAmount}},
+                 mb428@MB428{page1 = page1@MB.Page1{partB = partB1@MB.Page1PartB{spouseAmount}},
                              page2 = page2@MB.Page2{MB.partB = partB2@MB.Page2PartB{MB.medicalExpenses}},
                              page3 = page3@MB.Page3{MB.partC}})
           -> Pair (fixFederalForms MB inputs $

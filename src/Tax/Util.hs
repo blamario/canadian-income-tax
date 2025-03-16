@@ -2,8 +2,7 @@
 module Tax.Util where
 
 import Data.Fixed (Centi)
-import Data.List.NonEmpty (nonEmpty)
-import Data.Maybe (fromMaybe, mapMaybe)
+import Data.Maybe (fromMaybe)
 
 -- | Repeatedly apply the function to the argument until it reaches the fixed point.
 fixEq :: Eq a => (a -> a) -> a -> a

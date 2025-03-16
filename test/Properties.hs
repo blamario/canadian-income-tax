@@ -11,7 +11,6 @@ module Main where
 import Tax.Canada.Province.AB qualified as AB
 import Tax.Canada.Province.BC qualified as BC
 import Tax.Canada.Province.MB qualified as MB
-import Tax.Canada.Province.NB qualified as NB
 import Tax.Canada.Province.NL qualified as NL
 import Tax.Canada.Province.ON qualified as ON
 import Tax.Canada.Province.PE qualified as PE
@@ -19,7 +18,7 @@ import Tax.Canada.Province.QC qualified as QC
 import Tax.Canada.Territory.NT qualified as NT
 import Tax.Canada.Territory.NU qualified as NU
 import Tax.Canada.Territory.YT qualified as YT
-import Tax.Canada.T1 (T1, fixT1)
+import Tax.Canada.T1 (fixT1)
 import Tax.Canada.T4 (t4Fields)
 import Tax.Canada.Federal qualified as Federal
 import Tax.Canada.Federal.Schedule6 (schedule6Fields)
@@ -27,7 +26,7 @@ import Tax.Canada.Federal.Schedule7 (schedule7Fields)
 import Tax.Canada.Federal.Schedule8 (schedule8Fields)
 import Tax.Canada.Federal.Schedule9 (schedule9Fields)
 import Tax.Canada.Federal.Schedule11 (schedule11Fields)
-import Tax.FDF as FDF
+import Tax.FDF qualified as FDF
 import Paths_canadian_income_tax (getDataDir)
 
 import Test.Transformations qualified as Transformations
@@ -35,26 +34,24 @@ import Test.Transformations qualified as Transformations
 import Data.ByteString qualified as ByteString
 import Data.Char qualified as Char
 import Data.Either (isLeft, isRight)
-import Data.Functor.Const (Const (Const, getConst))
 import Data.List qualified as List
 import Data.Maybe (fromMaybe)
 import Data.Monoid.Textual qualified as Textual
 import Data.Semigroup.Cancellative (isSuffixOf, stripPrefix)
-import Data.Semigroup (All (All, getAll))
 import Data.Text (Text, isInfixOf, stripSuffix)
 import Rank2 qualified
 import System.Directory (listDirectory)
 import System.Exit (die)
-import System.FilePath.Posix (combine, isExtensionOf)
+import System.FilePath.Posix (combine)
 import Transformation.Shallow qualified as Shallow
-import Text.FDF (FDF (body), Field, parse)
+import Text.FDF (FDF, parse)
 import Text.FDF qualified
 
 import Hedgehog (Gen, Property, (===), annotateShow, assert, forAll, property)
-import Hedgehog.Gen qualified as Gen
 import Test.Tasty
 import Test.Tasty.Hedgehog
 
+main :: IO ()
 main = do
   dataDir <- getDataDir
   fdfMaps <- traverse (readFDFs . combine dataDir) ["fdf", "fdf/T1", "fdf/428", "fdf/479"]
@@ -129,17 +126,17 @@ properties maps = error ("Unexpected data directory contents: " <> show maps)
 
 checkFormIdempotent :: (Eq (g Maybe), Show (g Maybe),
                         Rank2.Applicative g, Shallow.Traversable Transformations.Gen g)
-                    => g FieldConst -> (g Maybe -> g Maybe) -> Property
+                    => g FDF.FieldConst -> (g Maybe -> g Maybe) -> Property
 checkFormIdempotent fields f = checkIdempotent (generateForm fields) f
 
 checkFederalFormIdempotent :: (Eq (g Maybe), Show (g Maybe),
                                Rank2.Applicative g, Shallow.Traversable Transformations.Gen g)
-                           => g FieldConst -> (Federal.InputForms Maybe -> g Maybe -> g Maybe) -> Property
+                           => g FDF.FieldConst -> (Federal.InputForms Maybe -> g Maybe -> g Maybe) -> Property
 checkFederalFormIdempotent fields f = checkIdempotent (generateForm fields) (f mempty)
 
 checkFormFields :: (Eq (g Maybe), Show (g Maybe),
                     Rank2.Applicative g, Shallow.Traversable Transformations.Gen g)
-                => g FieldConst -> Maybe FDF -> Property
+                => g FDF.FieldConst -> Maybe FDF -> Property
 checkFormFields _ Nothing = error "Missing FDF template"
 checkFormFields fields (Just fdf) = property $ do
   annotateShow $ FDF.load fields fdf
@@ -159,7 +156,7 @@ checkFormFields fields (Just fdf) = property $ do
   FDF.load fields fdf' === Right form
   List.sort (noCheckbox formKeys) === List.sort (noCheckbox $ filter (\x-> any (`List.isPrefixOf` x) keyHeads) fdfKeys)
 
-generateForm :: (Rank2.Applicative g, Shallow.Traversable Transformations.Gen g) => g FieldConst -> Gen (g Maybe)
+generateForm :: (Rank2.Applicative g, Shallow.Traversable Transformations.Gen g) => g FDF.FieldConst -> Gen (g Maybe)
 generateForm = Shallow.traverse Transformations.Gen
 
 checkIdempotent :: (Eq a, Show a) => Gen a -> (a -> a) -> Property

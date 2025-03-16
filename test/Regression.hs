@@ -12,32 +12,24 @@ import Tax.Canada.Federal qualified as Federal
 import Tax.Canada.FormKey (FormKey)
 import Tax.Canada.FormKey qualified as FormKey
 import Tax.Canada.Province.ON qualified as ON
-import Tax.Canada.Province.AB qualified as AB (t1Fields)
-import Tax.Canada.Province.BC qualified as BC (t1Fields)
-import Tax.Canada.T1 (T1, fixT1)
-import Tax.FDF as FDF
+import Tax.Canada.T1 (fixT1)
+import Tax.FDF qualified as FDF
 
 import Control.Monad.IO.Class (liftIO)
 import Data.ByteString qualified as ByteString
 import Data.ByteString.Lazy (fromStrict)
 import Data.Foldable (toList)
-import Data.Functor.Const (Const (Const, getConst))
 import Data.List qualified as List
 import Data.Map qualified as Map
-import Data.Maybe (fromMaybe)
-import Data.Semigroup (All (All, getAll))
-import Data.Text (Text)
-import Data.Text qualified as Text
-import Rank2 qualified
 import System.Directory (doesDirectoryExist, listDirectory)
 import System.Exit (die)
 import System.FilePath.Posix (combine)
-import Text.FDF (FDF, parse, serialize)
-import Text.FDF qualified
+import Text.FDF (parse, serialize)
 
 import Test.Tasty
 import Test.Tasty.Golden
 
+main :: IO ()
 main = listDirectory inputDir >>= traverse test >>= defaultMain . testGroup "Regression"
 
 rootDir, inputDir, outputDir, referenceDir :: FilePath
@@ -81,11 +73,11 @@ testReturn path = do
        Right filled
          | let fdfOutputs = fromStrict . serialize <$> filled
                diff ref new = ["diff", "-uw", ref, new]
-               compare key fdfOutput
+               verify key fdfOutput
                  | let Just fileName = List.find ((key ==) . formKey) fdfFileNames
-                         = pure $ goldenVsStringDiff fileName diff (combine referenceDir $ combine path fileName)
-                           $ pure fdfOutput
-           -> testGroup path . toList <$> Map.traverseWithKey compare fdfOutputs
+                 = pure $ goldenVsStringDiff fileName diff (combine referenceDir $ combine path fileName)
+                   $ pure fdfOutput
+           -> testGroup path . toList <$> Map.traverseWithKey verify fdfOutputs
 
 
 formKey :: FilePath -> FormKey

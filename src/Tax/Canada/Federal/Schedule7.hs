@@ -18,17 +18,16 @@
 module Tax.Canada.Federal.Schedule7 where
 
 import Data.Fixed (Centi)
-import Data.Text (Text)
 import Language.Haskell.TH qualified as TH
 import Rank2 qualified
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
-import Tax.Canada.Shared (SubCalculation(SubCalculation, result), fixSubCalculation, subCalculationFields)
+import Tax.Canada.Shared (SubCalculation(result), fixSubCalculation, subCalculationFields)
 import Tax.Canada.T1.Types (T1)
 import Tax.Canada.T1.Types qualified as T1
 import Tax.FDF (Entry (Amount, Checkbox), FieldConst (Field), within)
-import Tax.Util (fixEq, fractionOf, difference, nonNegativeDifference, totalOf)
+import Tax.Util (fixEq, difference, totalOf)
 
 data Schedule7 line = Schedule7{
    page2 :: Page2 line,

@@ -10,10 +10,7 @@ module Main where
 import Codec.Archive.Tar qualified as Tar
 import Codec.Archive.Tar.Entry (fileEntry, toTarPath)
 import Control.Applicative ((<**>), many, optional)
-import Control.Arrow ((&&&))
 import Control.Monad (unless, void, when)
-import Data.Bifunctor (bimap)
-import Data.ByteString (ByteString)
 import Data.ByteString qualified as ByteString
 import Data.ByteString.Lazy qualified as Lazy
 import Data.ByteString.Lazy qualified as ByteString.Lazy
@@ -23,18 +20,13 @@ import Data.Foldable (toList)
 import Data.Functor.Compose (Compose(Compose, getCompose))
 import Data.List qualified as List
 import Data.Map.Lazy qualified as Map
-import Data.Set qualified as Set
 import Data.Maybe (catMaybes)
-import Data.Semigroup (Any (Any))
 import Data.Semigroup.Cancellative (isPrefixOf, isSuffixOf)
-import Data.Text (Text)
 import Data.Text qualified as Text
 import Options.Applicative (Parser, ReadM, long, metavar, short)
 import Options.Applicative qualified as OptsAp
-import Rank2 qualified
 import System.Directory (createDirectoryIfMissing, doesDirectoryExist, doesFileExist)
 import System.FilePath (combine, replaceDirectory, takeFileName)
-import System.IO (hPutStrLn, stderr)
 import Text.FDF (FDF, parse, serialize)
 
 import Paths_canadian_income_tax (getDataDir)
@@ -42,8 +34,6 @@ import Tax.Canada (completeForms, completeRelevantForms, formFileNames)
 import Tax.Canada.Federal (loadInputForms)
 import Tax.Canada.FormKey (FormKey)
 import Tax.Canada.FormKey qualified as FormKey
-import Tax.FDF (FDFs)
-import Tax.FDF qualified as FDF
 import Tax.PDFtk (fdf2pdf, pdf2fdf)
 
 main :: IO ()
@@ -110,7 +100,7 @@ readFDF inputPath = do
 process :: Options -> IO ()
 process Options{province, t1InputPath, t4InputPaths, p428InputPath, p479InputPath,
                 schedule6InputPath, schedule7InputPath, schedule8InputPath, schedule9InputPath, schedule11InputPath,
-                outputPath, onlyGivenForms, keepIrrelevantForms, verbose} = do
+                outputPath, onlyGivenForms, keepIrrelevantForms} = do
    dataDir <- getDataDir
    let inputFiles :: [(FormKey, FilePath)]
        inputFiles = List.sortOn fst $
@@ -143,7 +133,6 @@ process Options{province, t1InputPath, t4InputPaths, p428InputPath, p479InputPat
                    then ByteString.writeFile (replaceDirectory inputPath outputPath) content'
                    else ByteString.writeFile outputPath content'
        fdfs = getCompose <$> traverse (parse . Lazy.toStrict . snd) (Compose inputs) :: Either String [(FormKey, FDF)]
-       bytesMap = Lazy.toStrict . snd <$> Map.fromAscList inputs
    case do (inputFDFs, ioFDFs) <- List.partition ((FormKey.T4 ==) . fst) <$> fdfs
            inputForms <- loadInputForms inputFDFs
            let complete = if keepIrrelevantForms then completeForms else completeRelevantForms

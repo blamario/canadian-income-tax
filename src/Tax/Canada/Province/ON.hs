@@ -39,7 +39,7 @@ import Tax.Canada.Province.ON.ON428.Types qualified as ON.Page2 (Page2(..))
 import Tax.Canada.Province.ON.ON428.Types (ON428 (ON428))
 import Tax.Canada.Province.ON.ON428.Fix (fixON428)
 import Tax.Canada.Province.ON.ON428.FieldNames (on428Fields)
-import Tax.Canada.Province.ON.ON479.Types (ON479 (ON479, page2), Page2(line23_credits))
+import Tax.Canada.Province.ON.ON479.Types (ON479 (page2), Page2(line23_credits))
 import Tax.Canada.Province.ON.ON479.Fix (fixON479)
 import Tax.Canada.Province.ON.ON479.FieldNames (on479Fields)
 

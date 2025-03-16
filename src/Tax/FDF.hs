@@ -11,10 +11,9 @@
 module Tax.FDF (FDFs, FieldConst(..), Entry(..),
                 mapForm, mapForm2, mapForms, load, loadAll, store, storeAll, update, updateAll, formKeys, within) where
 
-import Control.Monad (join)
 import Data.Biapplicative (biliftA2, biliftA3)
 import Data.Bifunctor (bimap)
-import Data.Bitraversable (bisequence, bitraverse)
+import Data.Bitraversable (bisequence)
 import Data.CAProvinceCodes qualified as Province
 import Data.Char (isDigit, isSpace)
 import Data.Fixed (Centi)
@@ -28,9 +27,8 @@ import Data.Semigroup.Cancellative (stripSuffix)
 import Data.Text (Text)
 import Data.Text qualified as Text
 import Data.Time (Day, MonthOfYear, defaultTimeLocale, formatTime, parseTimeM)
-import Data.Void (Void)
 import Rank2 qualified
-import Text.FDF (FDF (FDF, body), Field, foldMapWithKey, mapWithKey, parse, serialize, traverseWithKey)
+import Text.FDF (FDF, foldMapWithKey, mapWithKey)
 import Text.Read (readEither, readMaybe)
 
 -- | A form field path serves to uniquely identify and locate the field inside a form
@@ -162,7 +160,7 @@ textualFields = Rank2.liftA2 pairKey
         pairKey Field {path, entry = Switch' leaf} (Just True) = Const $ Just (addIndex <$> (path ++ [leaf]), Right "1")
         pairKey Field {path, entry = Switch' leaf} (Just False) =
           Const $ Just (map addIndex path ++ [leaf <> "[1]"], Right "1")
-        pairKey Field {path, entry = Constant c e} (Just v)
+        pairKey Field {path, entry = Constant c _} (Just v)
           | c == v = Const Nothing
           | otherwise = Const $ Just (path, Left ("Trying to replace constant field " ++ show (path, c) ++ " with " ++ show v))
         pairKey Field {path, entry} v = Const $ Just (addIndex <$> path, maybe (Right "") (fromEntry entry) v)
@@ -188,7 +186,7 @@ fromFieldMap :: Rank2.Traversable form => form FieldConst -> Map [Text] Text -> 
 fromFieldMap fieldForm fieldMap = Rank2.traverse (fill fieldMap) fieldForm
 
 fill :: forall a. Map [Text] Text -> FieldConst a -> Either String (Maybe a)
-fill fieldValues NoField = Right Nothing
+fill _ NoField = Right Nothing
 fill fieldValues Field {path, entry}
   | Just v <- Map.lookup path fieldValues = toEntry entry v
   | Just v <- Map.lookup (addIndex <$> path) fieldValues = toEntry entry v
@@ -256,8 +254,8 @@ toEntry e@(RadioButton values) v
   | Right n <- readEither $ Text.unpack v, n > 0, x:_ <- drop (n - 1) values = Right $ Just x
   | otherwise = Left ("Bad radio button value: " <> show (e, v))
 toEntry e@RadioButtons{} v = Left (show (e, v))
-toEntry e@(Switch a b leaf) v = Left (show (e, v))
-toEntry e@(Switch' leaf) v = Left (show (e, v))
+toEntry e@Switch{} v = Left (show (e, v))
+toEntry e@Switch'{} v = Left (show (e, v))
 
 addIndex :: Text -> Text
 addIndex key

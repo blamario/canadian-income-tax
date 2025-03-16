@@ -8,9 +8,7 @@ module Tax.Canada.T1.FieldNames.AB (module Tax.Canada.T1.FieldNames.AB, ON.page1
 import Rank2 qualified
 
 import Tax.FDF (FieldConst (Field, NoField), Entry (..), within)
-import Tax.Canada.Shared (subCalculationFields)
 import Tax.Canada.T1.Types
-import Tax.Canada.T1.Types qualified as Page8 (Page8(..))
 import Tax.Canada.T1.FieldNames.BC qualified as BC
 import Tax.Canada.T1.FieldNames.ON qualified as ON
 
@@ -25,6 +23,7 @@ t1Fields = within "form1" Rank2.<$> T1 {
    page7 = within "Page7" . within "Return-pg7" Rank2.<$> ON.page7Fields,
    page8 = within "Page8" . within "Return-pg8" Rank2.<$> BC.page8Fields}
 
+page2Fields :: Page2 FieldConst
 page2Fields = ON.page2Fields {
    cai = Field ["CAI", "AB_CAI", "Tick_box"] Checkbox,
    organ_donor = NoField}

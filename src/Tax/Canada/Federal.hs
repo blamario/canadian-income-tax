@@ -19,12 +19,11 @@ module Tax.Canada.Federal (InputForms, Forms(..), loadInputForms, fixFederalForm
                            formFieldsForProvince, formFileNames, relevantFormKeys) where
 
 import Control.Applicative ((<|>))
-import Control.Monad ((=<<))
 import Data.CAProvinceCodes qualified as Province
 import Data.Fixed (Centi)
 import Data.Foldable (find)
 import Data.Functor.Compose (Compose(Compose))
-import Data.List.NonEmpty (NonEmpty((:|)), nonEmpty)
+import Data.List.NonEmpty (NonEmpty, nonEmpty)
 import Data.Maybe (isJust)
 import Data.Map (Map, fromList)
 import Data.Set (Set)
@@ -33,7 +32,6 @@ import Data.Semigroup (Any (Any, getAny), Sum(Sum, getSum))
 import Data.Text (Text)
 import Data.Text qualified as Text
 import Data.Time (Day)
-import GHC.Stack (HasCallStack)
 import Rank2 qualified
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
@@ -71,10 +69,10 @@ import Tax.Canada.T1.Types (T1(page3, page4, page5, page6, page7, page8),
                             Page8Step6(line_43700_Total_income_tax_ded, line_44800_CPPOverpayment,
                                        line_45300_CWB, line_45350_CTC),
                             LanguageOfCorrespondence, MaritalStatus)
-import Tax.Canada.T4 (T4, t4Fields, T4Slip(box16_employeeCPP, box26_pensionableEarnings))
+import Tax.Canada.T4 (T4, T4Slip(box16_employeeCPP, box26_pensionableEarnings))
 import Tax.Canada.T4 qualified as T4
 import Tax.Canada.Shared (SubCalculation(result))
-import Tax.FDF (Entry (Amount), FieldConst (Field), load, within)
+import Tax.FDF (FieldConst, load, within)
 import Tax.Util (fixEq, totalOf)
 
 -- | All supported federal input forms, not to be filled in
@@ -115,8 +113,9 @@ loadInputForms forms = InputForms . nonEmpty <$> traverse (load T4.t4Fields . sn
 
 -- | Complete all the federal forms, also handling the inter-form field references.
 fixFederalForms :: Province.Code -> InputForms Maybe -> Forms Maybe -> Forms Maybe
-fixFederalForms province InputForms{t4} = fixEq $ \Forms{t1, schedule6, schedule7, schedule8, schedule9, schedule11}->
-                                                    let fromT4s' = fromT4s t4 in Forms{
+fixFederalForms province InputForms{t4 = t4s} = fixEq $
+                                                \Forms{t1, schedule6, schedule7, schedule8, schedule9, schedule11}->
+                                                  let fromT4s' = fromT4s t4s in Forms{
    t1 = fixT1 t1{
        page3 = fromT4s' (.slip1.box14_employmentIncome) (\amt pg-> pg{line_10100_EmploymentIncome = amt}) $
                fromT4s' (additionalT4 ["42"]) (\amt pg-> pg{line_10120_Commissions = amt}) $
@@ -143,12 +142,12 @@ fixFederalForms province InputForms{t4} = fixEq $ \Forms{t1, schedule6, schedule
                      fromT4s' (.slip1.box55_premiumPPIP) (\amt pg-> pg{line_31205 = amt}) t1.page6
                    _ -> fromT4s' (\t4-> totalOf [t4.slip1.box18_employeeEI, t4.slip1.box55_premiumPPIP])
                            (\amt pg-> pg{line_31200 = amt}) t1.page6)
-               {line_30800 = if any hasAnyField t4
+               {line_30800 = if any hasAnyField t4s
                              then schedule8.page5.part3a.line27_copy <|>
                                   schedule8.page5.part3b.line32_join <|>
                                   schedule8.page9.line60_least
                              else t1.page6.line_30800,
-                line_31000 = if any hasAnyField t4
+                line_31000 = if any hasAnyField t4s
                              then schedule8.page6.line15_half.result <|>
                                   schedule8.page9.line78_half.result
                              else t1.page6.line_31000,
@@ -171,8 +170,8 @@ fixFederalForms province InputForms{t4} = fixEq $ \Forms{t1, schedule6, schedule
    schedule8 = fixSchedule8 schedule8{
       page4 = schedule8.page4{
          line_50339_totalPensionableEarnings =
-            totalOf . (liftA2 (<|>) (.slip1.box26_pensionableEarnings) (.slip1.box14_employmentIncome) <$>) =<< t4,
-         line_50340_totalContributions = totalOf . fmap (.slip1.box16_employeeCPP) =<< t4},
+            totalOf . (liftA2 (<|>) (.slip1.box26_pensionableEarnings) (.slip1.box14_employmentIncome) <$>) =<< t4s,
+         line_50340_totalContributions = totalOf . fmap (.slip1.box16_employeeCPP) =<< t4s},
       page6 = schedule8.page6{
          line1_netSelfEmploymentEarnings = totalOf [t1.page3.line_12200_PartnershipIncome,
                                                     t1.page3.line29_sum.result]},

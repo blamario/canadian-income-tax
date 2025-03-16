@@ -6,18 +6,19 @@
 
 module Tax.Canada.Province.ON.ON479.FieldNames (on479Fields) where
 
-import Data.Fixed (Centi)
 import Rank2 qualified
 
 import Tax.Canada.Province.ON.ON479.Types
 import Tax.Canada.Shared (subCalculationFields)
 import Tax.FDF (Entry (Count, Constant, Amount, Percent, RadioButton, Textual), FieldConst (Field), within)
 
+on479Fields :: ON479 FieldConst
 on479Fields = within "form1" Rank2.<$> ON479 {
    page1 = within "Page1" Rank2.<$> page1Fields,
    page2 = within "Page2" Rank2.<$> page2Fields}
 
 
+page1Fields :: Page1 FieldConst
 page1Fields = Page1 {
    line_63050_childcare = Field ["Line1", "Amount"] Amount,
    line4_homecare_copy = Field ["Line2", "Amount"] Amount,
@@ -35,6 +36,7 @@ page1Fields = Page1 {
    line_63100_fraction = Field ["Line13", "Amount"] Amount,
    line16_sum = Field ["Line14", "Amount"] Amount}
 
+page2Fields :: Page2 FieldConst
 page2Fields = Page2 {
    line17_copy = Field ["Line15", "Amount"] Amount,
    line_63110_contributions = Field ["ON-Political-Contribution", "Line16", "Amount"] Amount,

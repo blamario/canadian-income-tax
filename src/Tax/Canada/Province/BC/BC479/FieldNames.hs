@@ -4,18 +4,19 @@
 
 module Tax.Canada.Province.BC.BC479.FieldNames (bc479Fields) where
 
-import Data.Fixed (Centi)
 import Rank2 qualified
 
 import Tax.Canada.Province.BC.BC479.Types
 import Tax.Canada.Shared (subCalculationFields)
 import Tax.FDF (Entry (Amount, Checkbox, Constant, Count, Percent, Textual), FieldConst (Field), within)
 
+bc479Fields :: BC479 FieldConst
 bc479Fields = within "form1" Rank2.<$> BC479 {
    page1 = within "Page1" Rank2.<$> page1Fields,
    page2 = within "Page2" Rank2.<$> page2Fields,
    page3 = within "Page3" Rank2.<$> page3Fields}
 
+page1Fields :: Page1 FieldConst
 page1Fields = Page1 {
    line1_netIncome_self = Field ["Chart", "Line1", "NumWithoutCurrency"] Amount,
    line1_netIncome_spouse = Field ["Chart", "Line1", "NumWithoutCurrency2"] Amount,
@@ -40,6 +41,7 @@ page1Fields = Page1 {
    line14_fraction = Field ["BCSHRTC", "Line14", "Amount"] Amount,
    line15_sum = Field ["BCSHRTC", "Line15", "Amount"] Amount}
 
+page2Fields :: Page2 FieldConst
 page2Fields = Page2 {
    line16_copy = Field ["Line16", "Amount"] Amount,
    line17_venture = Field ["BCVCTC", "Line17", "Amount"] Amount,
@@ -59,6 +61,7 @@ page2Fields = Page2 {
    line31_sum = subCalculationFields "BCTTC" ["Line31", "I1", "Amount1"] ["Line31", "I2", "Amount2"],
    line32_credits = Field ["BCTTC", "Line32", "Amount"] Amount}
 
+page3Fields :: Page3 FieldConst
 page3Fields = Page3 {
    line33_copy = Field ["Line33", "Amount"] Amount,
    tenancy_months1 = Field ["Declaration-For-Renters", "Table", "Row1", "Numberofmonths"] Count,

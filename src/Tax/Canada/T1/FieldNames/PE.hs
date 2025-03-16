@@ -6,7 +6,7 @@ module Tax.Canada.T1.FieldNames.PE (t1Fields, NT.page2Fields, BC.page8Fields) wh
 
 import Rank2 qualified
 
-import Tax.FDF (FieldConst (Field), Entry (..), within)
+import Tax.FDF (FieldConst, within)
 import Tax.Canada.T1.Types
 import Tax.Canada.T1.FieldNames.AB qualified as AB
 import Tax.Canada.T1.FieldNames.BC qualified as BC

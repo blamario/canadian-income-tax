@@ -12,19 +12,22 @@ import Rank2 qualified
 
 import Tax.Canada.Province.AB.AB428.Types
 import Tax.Canada.Shared (BaseCredit(..), MedicalExpenses(..), TaxIncomeBracket (..), subCalculationFields)
-import Tax.FDF (Entry (Count, Constant, Amount, Percent), FieldConst (Field, NoField), within)
+import Tax.FDF (Entry (Constant, Amount, Percent), FieldConst (Field), within)
 
+ab428Fields :: AB428 FieldConst
 ab428Fields = within "form1" Rank2.<$> AB428 {
    page1 = within "Page1" Rank2.<$> page1Fields,
    page2 = within "Page2" Rank2.<$> page2Fields,
    page3 = within "Page3" Rank2.<$> page3Fields}
 
 
+page1Fields :: Page1 FieldConst
 page1Fields = Page1 {
    income = Field ["Line1", "Amount"] Amount,
    partA = within "Chart" Rank2.<$> page1PartAFields,
    partB = page1PartBFields}
 
+page1PartAFields :: Page1PartA FieldConst
 page1PartAFields = Page1PartA {
    column1 = within "Column1" Rank2.<$> taxIncomeBracketFields "1"        0 0.10      0,
    column2 = within "Column2" Rank2.<$> taxIncomeBracketFields "2"  148_269 0.12 14_826.90,
@@ -43,6 +46,7 @@ taxIncomeBracketFields column threshold rate baseTax = TaxIncomeBracket {
    baseTax = Field ["Line7-C" <> column, "Amount"] $ Constant baseTax Amount,
    equalsTax = Field ["Line8-C" <> column, "Amount"] Amount}
 
+page1PartBFields :: Page1PartB FieldConst
 page1PartBFields = Page1PartB {
    line9_basic = Field ["Line9", "Amount"] Amount,
    line10_age = Field ["Line10", "Amount"] Amount,
@@ -66,9 +70,11 @@ page1PartBFields = Page1PartB {
    line24_sum = subCalculationFields "Line24" ["Amount1"] ["Amount2"],
    line25 = Field ["Line25", "Amount"] Amount}
 
+page2Fields :: Page2 FieldConst
 page2Fields = Page2 {
   partB = page2PartBFields}
 
+page2PartBFields :: Page2PartB FieldConst
 page2PartBFields = Page2PartB {
    line26 = Field ["Line26", "Amount"] Amount,
    line27_pension = Field ["Line27", "Amount"] Amount,
@@ -91,6 +97,7 @@ page2PartBFields = Page2PartB {
    line50_sum = subCalculationFields "Line50" ["Amount1"] ["Amount2"],
    line51 = Field ["Line51", "Amount"] Amount}
 
+medicalExpensesFields :: MedicalExpenses FieldConst
 medicalExpensesFields = MedicalExpenses {
    expenses = Field ["Line37", "Amount"] Amount,
    netIncome = Field ["Line38", "Amount"] Amount,
@@ -99,15 +106,18 @@ medicalExpensesFields = MedicalExpenses {
    lesser = Field ["Line41", "Amount"] Amount,
    difference = Field ["Line42", "Amount"] Amount}
 
+donationFields :: Donations FieldConst
 donationFields = Donations {
    line48_base = Field ["Line48", "Amount1"] Amount,
    line48_fraction = Field ["Line48", "Amount2"] Amount,
    line49_base = Field ["Line49", "Amount1"] Amount,
    line49_fraction = Field ["Line49", "Amount2"] Amount}
 
+page3Fields :: Page3 FieldConst
 page3Fields = Page3 {
    partC = within "PartC" Rank2.<$> partCFields}
 
+partCFields :: PartC FieldConst
 partCFields = PartC {
    line52_tax = Field ["Line52", "Amount"] Amount,
    line53_splitIncomeTax = Field ["Line53", "Amount"] Amount,

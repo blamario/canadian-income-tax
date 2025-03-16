@@ -14,6 +14,7 @@ import Tax.Canada.Province.ON.ON428.Types qualified as HealthPremiumBracket (Hea
 import Tax.Canada.Shared (BaseCredit(..), MedicalExpenses(..), TaxIncomeBracket (..), subCalculationFields)
 import Tax.FDF (Entry (Count, Constant, Amount, Percent), FieldConst (Field, NoField), within)
 
+on428Fields :: ON428 FieldConst
 on428Fields = within "form1" Rank2.<$> ON428 {
    page1 = within "Page1" Rank2.<$> page1Fields,
    page2 = within "Page2" Rank2.<$> page2Fields,
@@ -21,11 +22,13 @@ on428Fields = within "form1" Rank2.<$> ON428 {
    page4 = within "Page4" Rank2.<$> page4Fields}
 
 
+page1Fields :: Page1 FieldConst
 page1Fields = Page1 {
    line1 = Field ["Line1", "Amount"] Amount,
    partA = within "Chart" Rank2.<$> page1PartAFields,
    partB = within "Part_B" Rank2.<$> page1PartBFields}
 
+page1PartAFields :: Page1PartA FieldConst
 page1PartAFields = Page1PartA {
    column1 = within "Column1" Rank2.<$> taxIncomeBracketFields 0 0.0505 0,
    column2 = within "Column2" Rank2.<$> taxIncomeBracketFields 51_446.00 0.0915 2_598.02,
@@ -43,6 +46,7 @@ taxIncomeBracketFields threshold rate baseTax = TaxIncomeBracket {
    baseTax = Field ["Line7", "Amount"] $ Constant baseTax Amount,
    equalsTax = Field ["Line8", "Amount"] Amount}
 
+page1PartBFields :: Page1PartB FieldConst
 page1PartBFields = Page1PartB {
    line9_basic = Field ["Line9", "Amount"] Amount,
    line10_age = Field ["Line10", "Amount"] Amount,
@@ -66,10 +70,12 @@ page1PartBFields = Page1PartB {
    line24_sum = subCalculationFields "Line24" ["Amount1"] ["Amount2"],
    line25 = Field ["Line25", "Amount"] Amount}
 
+page2Fields :: Page2 FieldConst
 page2Fields = Page2 {
   partB = page2PartBFields,
   partC = page2PartCFields}
 
+page2PartBFields :: Page2PartB FieldConst
 page2PartBFields = Page2PartB {
    line26 = Field ["Line26", "Amount"] Amount,
    line27_pension = Field ["Line27", "Amount"] Amount,
@@ -90,6 +96,7 @@ page2PartBFields = Page2PartB {
    donations = within "Donations" Rank2.<$> donationsFields,
    line50 = Field ["Line50", "Amount"] Amount}
 
+medicalExpensesFields :: MedicalExpenses FieldConst
 medicalExpensesFields = MedicalExpenses {
    expenses = Field ["Line36", "Amount"] Amount,
    netIncome = Field ["Line37", "Amount"] Amount,
@@ -98,6 +105,7 @@ medicalExpensesFields = MedicalExpenses {
    lesser = Field ["Line40", "Amount"] Amount,
    difference = Field ["Line41", "Amount"] Amount}
 
+donationsFields :: Donations FieldConst
 donationsFields = Donations {
    line47_base = Field ["Line47", "Amount1"] Amount,
    line47_fraction = Field ["Line47", "Amount2"] Amount,
@@ -105,6 +113,7 @@ donationsFields = Donations {
    line48_fraction = Field ["Line48", "Amount2"] Amount,
    line49_sum = subCalculationFields "Line49" ["Amount1"] ["Amount2"]}
 
+page2PartCFields :: Page2PartC FieldConst
 page2PartCFields = Page2PartC {
    line51_tax = Field ["Line51", "Amount"] Amount,
    line52_credits = Field ["Line52", "Amount"] Amount,
@@ -119,6 +128,7 @@ page2PartCFields = Page2PartC {
    line60_lesser = Field ["Min-Tax-Carryover", "Line60", "Amount"] Amount,
    line61 = Field ["Line61", "Amount"] Amount}
 
+page3Fields :: Page3 FieldConst
 page3Fields = Page3 {
    line62 = Field ["Line62", "Amount"] Amount,
    line63 = Field ["ON-Surtax", "Line63", "Amount"] Amount,
@@ -145,6 +155,7 @@ page3Fields = Page3 {
    line82 = Field ["Line82", "Amount"] Amount,
    line83 = Field ["Line83", "Amount"] Amount}
 
+page4Fields :: Page4 FieldConst
 page4Fields = Page4 {
    line84 = Field ["Line84", "Amount"] Amount,
    line85_lift = Field ["Line85", "Amount"] Amount,
@@ -156,6 +167,7 @@ page4Fields = Page4 {
    line90 = Field ["Line90", "Amount"] Amount,
    healthPremium = within "ON_Health_Prenium-worksheet" . within "Chart_ON_Health_Prenium" Rank2.<$> healthPremiumFields}
 
+healthPremiumFields :: HealthPremium FieldConst
 healthPremiumFields = HealthPremium {
    row1 = within "Taxable_Line2" Rank2.<$> healthPremiumBracketFields{HealthPremiumBracket.equalsTax = NoField},
    row2 = within "Taxable_Line4" Rank2.<$> healthPremiumBracketFields,
@@ -163,6 +175,7 @@ healthPremiumFields = HealthPremium {
    row4 = within "Taxable_Line8" Rank2.<$> healthPremiumBracketFields,
    row5 = within "Taxable_Line10" Rank2.<$> healthPremiumBracketFields}
 
+healthPremiumBracketFields :: HealthPremiumBracket FieldConst
 healthPremiumBracketFields = HealthPremiumBracket {
    taxableIncome = Field ["Amount1"] Amount,
    overThreshold = Field ["Amount2"] Amount,

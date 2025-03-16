@@ -8,11 +8,6 @@
 
 module Tax.Canada.Province.ON.ON479.Fix (ON479, fixON479) where
 
-import Control.Applicative (liftA2)
-import Control.Monad (guard, mfilter)
-import Data.Fixed (Centi)
-import Rank2 qualified
-
 import Tax.Canada.Province.ON.ON479.Types
 import Tax.Canada.Shared (fixSubCalculation, SubCalculation(result))
 import Tax.Util (fixEq, fractionOf, nonNegativeDifference, totalOf)

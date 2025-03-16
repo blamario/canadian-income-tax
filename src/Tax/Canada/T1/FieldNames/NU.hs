@@ -7,7 +7,7 @@ module Tax.Canada.T1.FieldNames.NU (t1Fields) where
 
 import Rank2 qualified
 
-import Tax.FDF (FieldConst (NoField), within)
+import Tax.FDF (FieldConst, within)
 import Tax.Canada.T1.Types
 import Tax.Canada.T1.FieldNames.PE qualified as PE
 import Tax.Canada.T1.FieldNames.ON qualified as ON

@@ -8,10 +8,7 @@
 
 module Tax.Canada.Province.AB.AB428.Fix (AB428, fixAB428) where
 
-import Control.Applicative (liftA2)
-import Control.Monad (guard)
 import Data.Fixed (Centi)
-import Rank2 qualified
 
 import Tax.Canada.Province.AB.AB428.Types
 import Tax.Canada.Shared (fixBaseCredit, fixMedicalExpenses, fixSubCalculation, fixTaxIncomeBracket,

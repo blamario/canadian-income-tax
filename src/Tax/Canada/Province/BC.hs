@@ -39,7 +39,7 @@ import Tax.Canada.Province.BC.BC428.Types (BC428 (BC428))
 import Tax.Canada.Province.BC.BC428.Fix (fixBC428)
 import Tax.Canada.Province.BC.BC428.FieldNames (bc428Fields)
 import Tax.Canada.Province.BC.BC479.Types qualified as BCC
-import Tax.Canada.Province.BC.BC479.Types (BC479 (BC479))
+import Tax.Canada.Province.BC.BC479.Types (BC479)
 import Tax.Canada.Province.BC.BC479.Fix (fixBC479)
 import Tax.Canada.Province.BC.BC479.FieldNames (bc479Fields)
 

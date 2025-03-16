@@ -20,7 +20,7 @@ import Rank2 qualified
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
-import Tax.FDF (FieldConst (Field, NoField), Entry (Amount, Province, Textual, Year), within)
+import Tax.FDF (FieldConst (Field), Entry (Amount, Province, Textual, Year), within)
 
 data T4 line = T4{
    slip1 :: T4Slip line,
