@@ -26,7 +26,8 @@ difference a b = Just (fromMaybe 0 a - fromMaybe 0 b)
 -- | Non-negative subtraction under 'Maybe', returning @Just 0@ instead of negative results
 nonNegativeDifference :: Maybe Centi -> Maybe Centi -> Maybe Centi
 nonNegativeDifference Nothing Nothing = Nothing
-nonNegativeDifference a b = Just (max 0 $ fromMaybe 0 a - fromMaybe 0 b)
+nonNegativeDifference Nothing (Just x) | x >= 0 = Nothing
+nonNegativeDifference x y = Just (max 0 $ fromMaybe 0 x - fromMaybe 0 y)
 
 -- | Multiplication under 'Maybe'
 fractionOf :: Maybe Rational -> Maybe Centi -> Maybe Centi
