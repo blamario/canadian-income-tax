@@ -17,6 +17,7 @@
 
 module Tax.Canada.Federal.Schedule7 where
 
+import Control.Applicative ((<|>))
 import Data.Fixed (Centi)
 import Language.Haskell.TH qualified as TH
 import Rank2 qualified
@@ -27,7 +28,7 @@ import Tax.Canada.Shared (SubCalculation(result), fixSubCalculation, subCalculat
 import Tax.Canada.T1.Types (T1)
 import Tax.Canada.T1.Types qualified as T1
 import Tax.FDF (Entry (Amount, Checkbox), FieldConst (Field), within)
-import Tax.Util (fixEq, difference, totalOf)
+import Tax.Util (fixEq, difference, nonNegativeDifference, totalOf)
 
 data Schedule7 line = Schedule7{
    page2 :: Page2 line,
@@ -101,7 +102,7 @@ fixSchedule7 t1  = fixEq $ \Schedule7{page2, page3, page4} -> Schedule7{
       partB = partB{
          line6_contributions_copy = page2.line5_sum,
          line9_repayments_sum = fixSubCalculation id $ totalOf [line_24600_hbp, line_24620_llp],
-         line10_difference = difference line6_contributions_copy line9_repayments_sum.result},
+         line10_difference = nonNegativeDifference line6_contributions_copy line9_repayments_sum.result},
       partC = partC{
          line12_prpp_copy = t1.page4.line_20810_PRPP,
          line13_difference = difference line11_deductionLimit line12_prpp_copy,
@@ -109,6 +110,7 @@ fixSchedule7 t1  = fixEq $ \Schedule7{page2, page3, page4} -> Schedule7{
          line15_cont = line_24640_transfers,
          line16_difference = difference line14_copy line15_cont,
          line17_lesser = min line13_difference line16_difference,
+         line18_deducting = line18_deducting <|> line17_lesser,
          line19_sum = totalOf [line15_cont, line18_deducting],
          line20_deduction = min line10_difference line19_sum}},
    page4 = page4{
