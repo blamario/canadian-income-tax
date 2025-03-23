@@ -224,7 +224,7 @@ export default function Uploads() {
         <a href="/" className="homelink">taxell.ca</a>
         <hr/>
         <h2>Tax form completion
-            <button class="top save" name="save" disabled={saved} onClick={handleSave}>Save As</button>
+            <button class="top save" name="save" disabled={saved} onClick={handleSave}>Save</button>
             <button class="top load" name="load">
                 <label for="load">Load</label>
                 <input id="load" type="file" class="load" accept=".zip" name="Load" onChange={handleLoad}/>
