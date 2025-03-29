@@ -123,7 +123,8 @@ fixFederalForms province InputForms{t4 = t4s} = fixEq $
        page4 = fromT4s' (.slip1.box52_pensionAdjustment) (\amt pg-> pg{line_20600_PensionAdjustment = amt}) $
                fromT4s' (.slip1.box20_employeeRPP) (\amt pg-> pg{line_20700_RPPDeduction = amt}) $
                fromT4s' (.slip1.box44_unionDues) (\amt pg-> pg{line_21200_Dues = amt}) $
-               fromT4s' (additionalT4 ["77"]) (\amt step-> step{line_22900_OtherEmployExpenses = amt}) $
+               fromT4s' (additionalT4 ["77"]) (\amt step-> step{line_22900_OtherEmployExpenses =
+                                                                amt <|> step.line_22900_OtherEmployExpenses}) $
                t1.page4{line_20800_RRSPDeduction = schedule7.page3.partC.line20_deduction,
                         line_22200_CPP_QPP_Contributions = schedule8.page6.line17_sum <|>
                                                            schedule8.page10.line97_sum,
@@ -171,7 +172,8 @@ fixFederalForms province InputForms{t4 = t4s} = fixEq $
       page4 = schedule8.page4{
          line_50339_totalPensionableEarnings =
             totalOf . (liftA2 (<|>) (.slip1.box26_pensionableEarnings) (.slip1.box14_employmentIncome) <$>) =<< t4s,
-         line_50340_totalContributions = totalOf . fmap (.slip1.box16_employeeCPP) =<< t4s},
+         line_50340_totalContributions = totalOf . fmap (.slip1.box16_employeeCPP) =<< t4s,
+         line_50341_totalSecondContributions = totalOf . fmap (.slip1.box16a_employeeCPP) =<< t4s},
       page6 = schedule8.page6{
          line1_netSelfEmploymentEarnings = totalOf [t1.page3.line_12200_PartnershipIncome,
                                                     t1.page3.line29_sum.result]},
