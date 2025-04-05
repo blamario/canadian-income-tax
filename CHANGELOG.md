@@ -1,5 +1,15 @@
 # Revision history for `canadian-income-tax`
 
+## 2024.1
+
+* Library function behaviour changes:
+  * `nonNegativeDifference` returns `Nothing` instead of `Just 0` if the difference is negative
+  * Default to deducting all available RRSP contributions on Schedule 7
+* Fixed the collection of the T4 line 16A
+* Fixed compiler warnings
+* Added command line option help
+* Added logging to the web server
+
 ## 2024.0
 
 * Breaking changes to the library:
