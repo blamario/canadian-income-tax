@@ -1,5 +1,9 @@
 # Revision history for `canadian-income-tax`
 
+## 2024.1.0.1
+
+* Bumped the upper `deep-transformations` dependency bounds
+
 ## 2024.1
 
 * Library function behaviour changes:
@@ -9,6 +13,10 @@
 * Fixed compiler warnings
 * Added command line option help
 * Added logging to the web server
+
+## 2024.0.0.1
+
+* Bumped the upper `deep-transformations` dependency bounds, backport
 
 ## 2024.0
 
