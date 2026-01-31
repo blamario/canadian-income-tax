@@ -15,11 +15,10 @@ import Tax.Canada.T1.FieldNames.ON qualified as ON
 t1Fields :: T1 FieldConst
 t1Fields = ON.t1Fields {
    page2 = within "form1" . within "Page2" Rank2.<$> page2Fields,
-   page8 = within "form1" . within "Page8" . within "Return-pg8" Rank2.<$> page8Fields}
+   page8 = within "form1" . within "Page8" Rank2.<$> page8Fields}
 
 page2Fields :: Page2 FieldConst
 page2Fields = ON.page2Fields {
-   cai = NoField,
    organ_donor = Field ["Organ_donor", "Authori"] $ Switch "Option1" "Option2" "OrganDonor_CheckBox"}
 
 page3Fields :: Page3 FieldConst

@@ -21,9 +21,9 @@ import Tax.Canada.T1.FieldNames.ON qualified as ON
 
 t1Fields :: T1 FieldConst
 t1Fields = within "form1" Rank2.<$> T1 {
-   page1 = within "Page1" . within "Return-pg1" Rank2.<$> ON.page1Fields,
-   page2 = within "Page2" . within "Return-pg2" Rank2.<$> page2Fields,
-   page3 = within "Page3" . within "Return-pg3" Rank2.<$> ON.page3Fields,
+   page1 = within "Page1" Rank2.<$> ON.page1Fields,
+   page2 = within "Page2" Rank2.<$> page2Fields,
+   page3 = within "Page3" Rank2.<$> ON.page3Fields,
    page4 = within "Page4" . within "Step3" Rank2.<$> page4Fields,
    page5 = within "Page5" Rank2.<$> page5Fields,
    page6 = within "Page6" . within "PartB" Rank2.<$> page6Fields,
@@ -32,13 +32,11 @@ t1Fields = within "form1" Rank2.<$> T1 {
 
 page2Fields :: Page2 FieldConst
 page2Fields = ON.page2Fields {
-   cai = NoField,
    organ_donor = NoField}
 
 page4Fields :: Page4 FieldConst
 page4Fields = ON.page4Fields{
    line_20810_PRPP = Field ["Line20810", "Amount"] Amount,
-   line_21698_Amount = Field ["Line45", "Line21698", "Line_21699_Amount"] Amount,
    line_22300_DeductionPPIP = Field ["Line22300", "Line_22300_Amount"] Amount}
 
 page5Fields :: Page5 FieldConst
@@ -60,10 +58,7 @@ page5Fields = Page5 {
 step4Fields :: Step4 FieldConst
 step4Fields = ON.step4Fields {
    line_23600_NetIncome_2 = Field ["Line60", "Amount"] Amount,
-   line_24901_SecurityDeductions = Field ["Line24901", "Line_24901_Amount"] Amount,
-   line_25395_BusinessTransfer = Field ["Line25395", "Line_25400_Amount"] Amount,
-   line72_difference = Field ["Line73", "Line_26000_Amount"] Amount,
-   line_25999_CapitalGainsReductionAddBack = Field ["Line25999", "Line_25999_Amount"] Amount}
+   line_25395_BusinessTransfer = Field ["Line25395", "Line_25400_Amount"] Amount}
 
 partBFields :: Page5PartB FieldConst
 partBFields = ON.partBFields {
@@ -83,7 +78,7 @@ page6Fields = ON.page6Fields {
    line112_sum = Field ["Line116", "Amount"] Amount,
    medical_expenses = page6MedicalExpensesFields,
    line_33200_sum = subCalculationFields "Line33200" ["Line_33200_Amount1"] ["Line_33200_Line32Amount2"],
-   line120_taxCreditRate = Field ["Line124", "Percent"] $ Constant 0.15 Percent}
+   line120_taxCreditRate = Field ["Line124", "Percent"] $ Constant 0.145 Percent}
 
 page6MedicalExpensesFields :: MedicalExpenses FieldConst
 page6MedicalExpensesFields = ON.page6MedicalExpensesFields {

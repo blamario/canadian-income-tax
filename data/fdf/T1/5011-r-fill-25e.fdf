@@ -1,0 +1,2230 @@
+%FDF-1.2
+%‚„œ”
+1 0 obj
+
+<<
+/FDF 
+<<
+/Fields [
+<<
+/T (form1[0])
+/Kids [
+<<
+/T (Page2[0])
+/Kids [
+<<
+/T (Step1-Continued[0])
+/Kids [
+<<
+/T (Foreign_property[0])
+/Kids [
+<<
+/T (Line26600[0])
+/Kids [
+<<
+/T (Option2[0])
+/Kids [
+<<
+/T (ForeignProperty_CheckBox[0])
+/V /
+>>]
+>> 
+<<
+/T (Option1[0])
+/Kids [
+<<
+/T (ForeignProperty_CheckBox[0])
+/V /
+>>]
+>>]
+>>]
+>> 
+<<
+/T (Tax_exempt[0])
+/Kids [
+<<
+/T (Exempt[0])
+/Kids [
+<<
+/T (Spouse_SelfEmployed[0])
+/V /
+>>]
+>>]
+>> 
+<<
+/T (ElectionsCanada[0])
+/Kids [
+<<
+/T (LineA[0])
+/Kids [
+<<
+/T (Option2[0])
+/Kids [
+<<
+/T (A_CheckBox[0])
+/V /
+>>]
+>> 
+<<
+/T (Option1[0])
+/Kids [
+<<
+/T (A_CheckBox[0])
+/V /
+>>]
+>>]
+>> 
+<<
+/T (LineB[0])
+/Kids [
+<<
+/T (Option2[0])
+/Kids [
+<<
+/T (B_Authorize_CheckBox[0])
+/V /
+>>]
+>> 
+<<
+/T (Option1[0])
+/Kids [
+<<
+/T (B_Authorize_CheckBox[0])
+/V /
+>>]
+>>]
+>>]
+>> 
+<<
+/T (ResidencyInformation[0])
+/Kids [
+<<
+/T (Question1[0])
+/Kids [
+<<
+/T (Residency_CheckBox[1])
+/V /
+>> 
+<<
+/T (Residency_CheckBox[0])
+/V /
+>>]
+>> 
+<<
+/T (QuestionB[0])
+/Kids [
+<<
+/T (B_CheckBox[1])
+/V /
+>> 
+<<
+/T (B_CheckBox[0])
+/V /
+>>]
+>> 
+<<
+/T (QuestionA[0])
+/Kids [
+<<
+/T (A_Self_Governing_Field[0])
+/V ()
+>> 
+<<
+/T (A_IdentificationNumber[0])
+/Kids [
+<<
+/T (IdentificationNum[0])
+/V ()
+>>]
+>>]
+>>]
+>>]
+>>]
+>> 
+<<
+/T (Page3[0])
+/Kids [
+<<
+/T (Line11410[0])
+/Kids [
+<<
+/T (Line_11410_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line13700[0])
+/Kids [
+<<
+/T (Line_13700_Amount[0])
+/V ()
+>> 
+<<
+/T (Line13699[0])
+/Kids [
+<<
+/T (Line_13699_Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line29[0])
+/Kids [
+<<
+/T (Amount2[0])
+/V ()
+>> 
+<<
+/T (Amount1[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line12000[0])
+/Kids [
+<<
+/T (Line_12000_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line14500[0])
+/Kids [
+<<
+/T (Line_14500_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line12600[0])
+/Kids [
+<<
+/T (Line12599[0])
+/Kids [
+<<
+/T (Line_12599_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line_12600_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line13010[0])
+/Kids [
+<<
+/T (Line_13010_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line10130[0])
+/Kids [
+<<
+/T (Line_10130_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line12900[0])
+/Kids [
+<<
+/T (Line_12900_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line15000[0])
+/Kids [
+<<
+/T (Line_15000_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line10400[0])
+/Kids [
+<<
+/T (Line_10400_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line12010[0])
+/Kids [
+<<
+/T (Line_12010_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line12905[0])
+/Kids [
+<<
+/T (Line_12905_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line13500[0])
+/Kids [
+<<
+/T (Line13499[0])
+/Kids [
+<<
+/T (Line_13499_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line_13500_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line14300[0])
+/Kids [
+<<
+/T (Line14299[0])
+/Kids [
+<<
+/T (Line_14299_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line_14300_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line11500[0])
+/Kids [
+<<
+/T (Line_11500_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line14600[0])
+/Kids [
+<<
+/T (Line_14600_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line11701[0])
+/Kids [
+<<
+/T (Line_11701_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line23[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line11900[0])
+/Kids [
+<<
+/T (Line_11900_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line14100[0])
+/Kids [
+<<
+/T (Line_14100_Amount[0])
+/V ()
+>> 
+<<
+/T (Line14099[0])
+/Kids [
+<<
+/T (Line_14099_Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line11600[0])
+/Kids [
+<<
+/T (Line_11600_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line14700[0])
+/Kids [
+<<
+/T (Line_14700_Amount1[0])
+/V ()
+>> 
+<<
+/T (Line_14700_Amount2[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line14400[0])
+/Kids [
+<<
+/T (Line_14400_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line12700[0])
+/Kids [
+<<
+/T (Line_12700_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line1[0])
+/Kids [
+<<
+/T (Line_10100_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line30[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line12100[0])
+/Kids [
+<<
+/T (Line_12100_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line11300[0])
+/Kids [
+<<
+/T (Line_11300_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line12800[0])
+/Kids [
+<<
+/T (Line_12800_Amount[0])
+/V ()
+>> 
+<<
+/T (Line_12799[0])
+/Kids [
+<<
+/T (Line_12799_Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line12906[0])
+/Kids [
+<<
+/T (Line_12906_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line11400[0])
+/Kids [
+<<
+/T (Line_11400_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line13900[0])
+/Kids [
+<<
+/T (Line_13900_Amount[0])
+/V ()
+>> 
+<<
+/T (Line13899[0])
+/Kids [
+<<
+/T (Line_13899_Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line13000[0])
+/Kids [
+<<
+/T (Line_13000_Amount[0])
+/V ()
+>> 
+<<
+/T (Line_13000_Specify[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line11905[0])
+/Kids [
+<<
+/T (Line_11905_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line11700[0])
+/Kids [
+<<
+/T (Line_11700_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line12200[0])
+/Kids [
+<<
+/T (Line_12200_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line10105[0])
+/Kids [
+<<
+/T (Line_10105_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line12500[0])
+/Kids [
+<<
+/T (Line_12500_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line10120[0])
+/Kids [
+<<
+/T (Line_10120_Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (#pageSet[0])
+/Kids [
+<<
+/T (Page1[2])
+/Kids [
+<<
+/T (ClearData_EN[0])
+/V /
+>>]
+>> 
+<<
+/T (Page1[1])
+/Kids [
+<<
+/T (ClearData_EN[0])
+/V /
+>>]
+>> 
+<<
+/T (Page1[0])
+/Kids [
+<<
+/T (ClearData_EN[0])
+/V /
+>>]
+>> 
+<<
+/T (Page1[6])
+/Kids [
+<<
+/T (ClearData_EN[0])
+/V /
+>>]
+>> 
+<<
+/T (Page1[5])
+/Kids [
+<<
+/T (ClearData_EN[0])
+/V /
+>>]
+>> 
+<<
+/T (Page1[4])
+/Kids [
+<<
+/T (ClearData_EN[0])
+/V /
+>>]
+>> 
+<<
+/T (Page1[3])
+/Kids [
+<<
+/T (ClearData_EN[0])
+/V /
+>>]
+>> 
+<<
+/T (Page1[7])
+/Kids [
+<<
+/T (ClearData_EN[0])
+/V /
+>>]
+>>]
+>> 
+<<
+/T (Page1[0])
+/Kids [
+<<
+/T (Identification[0])
+/Kids [
+<<
+/T (EmailAddress[0])
+/V ()
+>> 
+<<
+/T (DateDeath_Comb_BordersAll[0])
+/Kids [
+<<
+/T (DateDeath_Comb[0])
+/V ()
+>>]
+>> 
+<<
+/T (DateMMDD_Comb_BordersAll_Std[0])
+/Kids [
+<<
+/T (DateMMDD_Comb[0])
+/V ()
+>>]
+>> 
+<<
+/T (PostalCode_Comb_BordersAll[0])
+/Kids [
+<<
+/T (PostalCode[0])
+/V ()
+>>]
+>> 
+<<
+/T (NumericField_Comb9_CaptionTop[0])
+/Kids [
+<<
+/T (NumericField_Comb9_CaptionTop_Field[0])
+/V ()
+>>]
+>> 
+<<
+/T (Your_Language[0])
+/Kids [
+<<
+/T (RadioButtonlanguaget[0])
+/V /
+>>]
+>> 
+<<
+/T (ID_City[0])
+/V ()
+>> 
+<<
+/T (ID_LastName[0])
+/V ()
+>> 
+<<
+/T (DateBirth_Comb_BordersAll[0])
+/Kids [
+<<
+/T (DateBirth_Comb[0])
+/V ()
+>>]
+>> 
+<<
+/T (ID_FirstNameInitial[0])
+/V ()
+>> 
+<<
+/T (ID_MailingAddress[0])
+/V ()
+>> 
+<<
+/T (MaritalStatus_Checkbox[0])
+/Kids [
+<<
+/T (MaritalStatus[2])
+/V /
+>> 
+<<
+/T (MaritalStatus[1])
+/V /
+>> 
+<<
+/T (MaritalStatus[0])
+/V /
+>> 
+<<
+/T (MaritalStatus[5])
+/V /
+>> 
+<<
+/T (MaritalStatus[4])
+/V /
+>> 
+<<
+/T (MaritalStatus[3])
+/V /
+>>]
+>> 
+<<
+/T (ID_RuralRoute[0])
+/V ()
+>> 
+<<
+/T (ID_POBox[0])
+/V ()
+>> 
+<<
+/T (Prov_DropDown[0])
+/V ()
+>>]
+>> 
+<<
+/T (Residence_Info[0])
+/Kids [
+<<
+/T (Prov_DropDown-Business[0])
+/V ()
+>> 
+<<
+/T (Prov_DropDown-Residence[0])
+/V ()
+>> 
+<<
+/T (Date_Departure[0])
+/Kids [
+<<
+/T (DateMMDD_Comb_BordersAll_Std[0])
+/Kids [
+<<
+/T (DateMMDD_Comb[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Date_Entry[0])
+/Kids [
+<<
+/T (DateMMDD_Comb_BordersAll_Std[0])
+/Kids [
+<<
+/T (DateMMDD_Comb[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Prov_DropDown[0])
+/V ()
+>>]
+>> 
+<<
+/T (Info_Spouse_CLP[0])
+/Kids [
+<<
+/T (Line23600[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (NumericField_Comb9_CaptionTop[0])
+/Kids [
+<<
+/T (NumericField_Comb9_CaptionTop_Field[0])
+/V ()
+>>]
+>> 
+<<
+/T (Self-employment[0])
+/Kids [
+<<
+/T (Checkbox[0])
+/V /
+>>]
+>> 
+<<
+/T (Spouse_First_Name[0])
+/V ()
+>> 
+<<
+/T (Line11700[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line21300[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>]
+>>]
+>> 
+<<
+/T (Page5[0])
+/Kids [
+<<
+/T (Step4[0])
+/Kids [
+<<
+/T (Line25500[0])
+/Kids [
+<<
+/T (Line_25500_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line24400[0])
+/Kids [
+<<
+/T (Line_24400_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line25200[0])
+/Kids [
+<<
+/T (Line_25200_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line59[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line25300[0])
+/Kids [
+<<
+/T (Line_25300_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line25000[0])
+/Kids [
+<<
+/T (Line_25000_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line25395[0])
+/Kids [
+<<
+/T (Line_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line24900[0])
+/Kids [
+<<
+/T (Line_24900_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line25600[0])
+/Kids [
+<<
+/T (Line_25600_Amount[0])
+/V ()
+>> 
+<<
+/T (Line_25600_Specify[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line26000[0])
+/Kids [
+<<
+/T (Line_26000_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line25100[0])
+/Kids [
+<<
+/T (Line_25100_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line25700[0])
+/Kids [
+<<
+/T (Line_25700_Amount2[0])
+/V ()
+>> 
+<<
+/T (Line_25700_Amount1[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line25400[0])
+/Kids [
+<<
+/T (Line_25400_Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (PartB[0])
+/Kids [
+<<
+/T (Line89[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line30100[0])
+/Kids [
+<<
+/T (Line_30100_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line30400[0])
+/Kids [
+<<
+/T (Line_30400_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line30300[0])
+/Kids [
+<<
+/T (Line_30300_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line30450[0])
+/Kids [
+<<
+/T (Line_30450_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line30425[0])
+/Kids [
+<<
+/T (Line_30425_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line30500[0])
+/Kids [
+<<
+/T (Line_30500_Amount[0])
+/V ()
+>> 
+<<
+/T (Line30499[0])
+/Kids [
+<<
+/T (Numeric_NoDecimal_BordersAll[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line30000[0])
+/Kids [
+<<
+/T (Line_30000_Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (PartA[0])
+/Kids [
+<<
+/T (Column3[0])
+/Kids [
+<<
+/T (Line37Amount3[0])
+/V ( 114,750.00)
+>> 
+<<
+/T (Line42Amount3[0])
+/V ()
+>> 
+<<
+/T (Line36Amount3[0])
+/V ()
+>> 
+<<
+/T (Line39Rate3[0])
+/V (26%)
+>> 
+<<
+/T (Line41Amount3[0])
+/V ( 20,081.25)
+>> 
+<<
+/T (Line40Amount3[0])
+/V ()
+>> 
+<<
+/T (Line38Amount3[0])
+/V ()
+>>]
+>> 
+<<
+/T (Column5[0])
+/Kids [
+<<
+/T (Line41Amount5[0])
+/V ( 58,399.85)
+>> 
+<<
+/T (Line36Amount5[0])
+/V ()
+>> 
+<<
+/T (Line37Amount5[0])
+/V ( 253,414.00)
+>> 
+<<
+/T (Line39Rate5[0])
+/V (33%)
+>> 
+<<
+/T (Line40Amount5[0])
+/V ()
+>> 
+<<
+/T (Line42Amount5[0])
+/V ()
+>> 
+<<
+/T (Line38Amount5[0])
+/V ()
+>>]
+>> 
+<<
+/T (Column4[0])
+/Kids [
+<<
+/T (Line37Amount4[0])
+/V ( 177,882.00)
+>> 
+<<
+/T (Line36Amount4[0])
+/V ()
+>> 
+<<
+/T (Line39Rate4[0])
+/V (29%)
+>> 
+<<
+/T (Line41Amount4[0])
+/V ( 36,495.57)
+>> 
+<<
+/T (Line40Amount4[0])
+/V ()
+>> 
+<<
+/T (Line42Amount4[0])
+/V ()
+>> 
+<<
+/T (Line38Amount4[0])
+/V ()
+>>]
+>> 
+<<
+/T (Column1[0])
+/Kids [
+<<
+/T (Line38Amount1[0])
+/V ()
+>> 
+<<
+/T (Line37Amount1[0])
+/V ( 0.00)
+>> 
+<<
+/T (Line36Amount1[0])
+/V ()
+>> 
+<<
+/T (Line39Rate2[0])
+/V (14.5%)
+>> 
+<<
+/T (Line40Amount1[0])
+/V ()
+>> 
+<<
+/T (Line41Amount1[0])
+/V ( 0.00)
+>> 
+<<
+/T (Line42Amount1[0])
+/V ()
+>>]
+>> 
+<<
+/T (Column2[0])
+/Kids [
+<<
+/T (Line37Amount2[0])
+/V ( 57,375.00)
+>> 
+<<
+/T (Line36Amount2[0])
+/V ()
+>> 
+<<
+/T (Line41Amount2[0])
+/V ( 8,319.38)
+>> 
+<<
+/T (Line40Amount2[0])
+/V ()
+>> 
+<<
+/T (Line39Rate2[0])
+/V (20.5%)
+>> 
+<<
+/T (Line38Amount2[0])
+/V ()
+>> 
+<<
+/T (Line42Amount2[0])
+/V ()
+>>]
+>>]
+>>]
+>> 
+<<
+/T (Page4[0])
+/Kids [
+<<
+/T (Line23400[0])
+/Kids [
+<<
+/T (Line19Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line22000[0])
+/Kids [
+<<
+/T (Line21999[0])
+/Kids [
+<<
+/T (Line_21999_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line_22000_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line23100[0])
+/Kids [
+<<
+/T (Line_23100_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line22900[0])
+/Kids [
+<<
+/T (Line_22900_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line23200[0])
+/Kids [
+<<
+/T (Line_23200_Amount[0])
+/V ()
+>> 
+<<
+/T (Line_23200_Specify[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line23500[0])
+/Kids [
+<<
+/T (Line_23500_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line21500[0])
+/Kids [
+<<
+/T (Line_21500_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line20700[0])
+/Kids [
+<<
+/T (Line_20700_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line21200[0])
+/Kids [
+<<
+/T (Line_21200_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line21000[0])
+/Kids [
+<<
+/T (Line_21000_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line21900[0])
+/Kids [
+<<
+/T (Line_21900_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line36[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line22400[0])
+/Kids [
+<<
+/T (Line_22400_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line20800[0])
+/Kids [
+<<
+/T (Line_20800_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line21300[0])
+/Kids [
+<<
+/T (Line_21300_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line22100[0])
+/Kids [
+<<
+/T (Line_22100_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line22215[0])
+/Kids [
+<<
+/T (Line_22215_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line22200[0])
+/Kids [
+<<
+/T (Line_22200_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line20810[0])
+/Kids [
+<<
+/T (Line_20810_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line23600[0])
+/Kids [
+<<
+/T (Line_23600_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line20805[0])
+/Kids [
+<<
+/T (Line_20805_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line45[0])
+/Kids [
+<<
+/T (Line21699[0])
+/Kids [
+<<
+/T (Line_21699_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line_21900_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line20600[0])
+/Kids [
+<<
+/T (Line_20600_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line21400[0])
+/Kids [
+<<
+/T (Line_21400_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line23300[0])
+/Kids [
+<<
+/T (Line_23300_Amount2[0])
+/V ()
+>> 
+<<
+/T (Line_23300_Amount1[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Page7[0])
+/Kids [
+<<
+/T (Step6[0])
+/Kids [
+<<
+/T (Line42200[0])
+/Kids [
+<<
+/T (Line_42200_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line43500[0])
+/Kids [
+<<
+/T (Line_43500_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line43200[0])
+/Kids [
+<<
+/T (Line_43200_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line42120[0])
+/Kids [
+<<
+/T (Line_42120_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line42800[0])
+/Kids [
+<<
+/T (Line_42800_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line148[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line42100[0])
+/Kids [
+<<
+/T (Line_42100_Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (PartC[0])
+/Kids [
+<<
+/T (Line40600[0])
+/Kids [
+<<
+/T (Line_40600_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line41000[0])
+/Kids [
+<<
+/T (Line_41000_Amount[0])
+/V ()
+>> 
+<<
+/T (Line40900[0])
+/Kids [
+<<
+/T (Line_40900_Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line124[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line127[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line40427[0])
+/Kids [
+<<
+/T (Line_40427_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line41600[0])
+/Kids [
+<<
+/T (Line_41600_Amount1[0])
+/V ()
+>> 
+<<
+/T (Line_41600_Amount2[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line42900[0])
+/Kids [
+<<
+/T (Line_42900_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line40500[0])
+/Kids [
+<<
+/T (Line_40500_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line133[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line41200[0])
+/Kids [
+<<
+/T (Line_41200_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line135[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line41800[0])
+/Kids [
+<<
+/T (Line_41800_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line136[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line40424[0])
+/Kids [
+<<
+/T (Line_40424_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line132[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line40425[0])
+/Kids [
+<<
+/T (Line_40425_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line130[0])
+/Kids [
+<<
+/T (Amount2[0])
+/V ()
+>> 
+<<
+/T (Amount1[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line41500[0])
+/Kids [
+<<
+/T (Line_41500_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line138[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line41400[0])
+/Kids [
+<<
+/T (Line_41400_Amount[0])
+/V ()
+>> 
+<<
+/T (Line41300[0])
+/Kids [
+<<
+/T (Line_41300_Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line137[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line42000[0])
+/Kids [
+<<
+/T (Line_42000_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line40400[0])
+/Kids [
+<<
+/T (Line_40400_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line41700[0])
+/Kids [
+<<
+/T (Line_41700_Amount[0])
+/V ()
+>>]
+>>]
+>>]
+>> 
+<<
+/T (Page6[0])
+/Kids [
+<<
+/T (PartB[0])
+/Kids [
+<<
+/T (Line31240[0])
+/Kids [
+<<
+/T (Line_31240_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line102[0])
+/Kids [
+<<
+/T (Amount2[0])
+/V ()
+>> 
+<<
+/T (Amount1[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line31217[0])
+/Kids [
+<<
+/T (Line_31217_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line32300[0])
+/Kids [
+<<
+/T (Line_32300_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line32600[0])
+/Kids [
+<<
+/T (Line_32600_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line35000[0])
+/Kids [
+<<
+/T (Line_35000_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line90[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line31800[0])
+/Kids [
+<<
+/T (Line_31800_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line33099[0])
+/Kids [
+<<
+/T (Line_33099_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line114[0])
+/Kids [
+<<
+/T (Amount2[0])
+/V ()
+>> 
+<<
+/T (Amount1[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line112[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line104[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line116[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line33500[0])
+/Kids [
+<<
+/T (Line_33500_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line33800[0])
+/Kids [
+<<
+/T (Line_33800_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line34990[0])
+/Kids [
+<<
+/T (Line_34990_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line31200[0])
+/Kids [
+<<
+/T (Line_31200_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line34900[0])
+/Kids [
+<<
+/T (Line_34900_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line31000[0])
+/Kids [
+<<
+/T (Line_31000_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line31600[0])
+/Kids [
+<<
+/T (Line_31600_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line32400[0])
+/Kids [
+<<
+/T (Line_32400_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line31900[0])
+/Kids [
+<<
+/T (Line_31900_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line33199[0])
+/Kids [
+<<
+/T (Line_33199_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line31260[0])
+/Kids [
+<<
+/T (Line_31260_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line120[0])
+/Kids [
+<<
+/T (Rate[0])
+/V (14.5%)
+>>]
+>> 
+<<
+/T (Line33200[0])
+/Kids [
+<<
+/T (Line_33200_Amount1[0])
+/V ()
+>> 
+<<
+/T (Line_33200_Amount2[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line30800[0])
+/Kids [
+<<
+/T (Line_30800_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line31285[0])
+/Kids [
+<<
+/T (Line_31285_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line31300[0])
+/Kids [
+<<
+/T (Line_31300_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line107[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line115[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line31270[0])
+/Kids [
+<<
+/T (Line_31270_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line31220[0])
+/Kids [
+<<
+/T (Line_31220_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line31400[0])
+/Kids [
+<<
+/T (Line_31400_Amount[0])
+/V ()
+>>]
+>>]
+>>]
+>> 
+<<
+/T (Page8[0])
+/Kids [
+<<
+/T (Line_49000_IfFeeWasCharged[0])
+/Kids [
+<<
+/T (Line48900[0])
+/Kids [
+<<
+/T (EFile[0])
+/V ()
+>>]
+>> 
+<<
+/T (TelephoneOfPreparer[0])
+/V ()
+>> 
+<<
+/T (NameOfPreparer[0])
+/V ()
+>> 
+<<
+/T (Line49000[0])
+/Kids [
+<<
+/T (Line49000_CheckBoxGroup[0])
+/Kids [
+<<
+/T (Line49000_CheckBox_EN[0])
+/V /
+>> 
+<<
+/T (Line49000_CheckBox_EN[1])
+/V /
+>>]
+>>]
+>>]
+>> 
+<<
+/T (Step6-Cont[0])
+/Kids [
+<<
+/T (Line44800[0])
+/Kids [
+<<
+/T (Line_44800_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line45355[0])
+/Kids [
+<<
+/T (Line_45355_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line46900[0])
+/Kids [
+<<
+/T (sfline46800end[0])
+/Kids [
+<<
+/T (Line_46800_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line_46900_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line47600[0])
+/Kids [
+<<
+/T (Line_47600_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line45200[0])
+/Kids [
+<<
+/T (Line_45200_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line45350[0])
+/Kids [
+<<
+/T (Line_45350_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line45600[0])
+/Kids [
+<<
+/T (Line_45600_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line45300[0])
+/Kids [
+<<
+/T (Line_45300_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line45000[0])
+/Kids [
+<<
+/T (Line_45000_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line47900[0])
+/Kids [
+<<
+/T (Line_47900_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line47555[0])
+/Kids [
+<<
+/T (Line_47555_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line47556[0])
+/Kids [
+<<
+/T (Line_47556_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line43700[0])
+/Kids [
+<<
+/T (Line_43700_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line48200[0])
+/Kids [
+<<
+/T (Line_48200_Amount1[0])
+/V ()
+>> 
+<<
+/T (Line_48200_Amount2[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line45700[0])
+/Kids [
+<<
+/T (Line_45700_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line44000[0])
+/Kids [
+<<
+/T (Line_44000_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line44100[0])
+/Kids [
+<<
+/T (Line_44000_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line155[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line174[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line45400[0])
+/Kids [
+<<
+/T (Line_45400_Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Certification[0])
+/Kids [
+<<
+/T (Date[0])
+/V ()
+>> 
+<<
+/T (Telephone[0])
+/V ()
+>>]
+>> 
+<<
+/T (Refund_or_Balance-owing[0])
+/Kids [
+<<
+/T (Line48500[0])
+/Kids [
+<<
+/T (Line_48500_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line48400[0])
+/Kids [
+<<
+/T (Line_48400_Amount[0])
+/V ()
+>>]
+>>]
+>>]
+>>]
+>>]
+>>
+>>
+endobj
+
+trailer
+
+<<
+/Root 1 0 R
+>>
+%%EOF

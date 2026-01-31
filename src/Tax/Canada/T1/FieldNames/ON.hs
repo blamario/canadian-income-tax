@@ -18,13 +18,13 @@ import Tax.Canada.T1.Types
 
 t1Fields :: T1 FieldConst
 t1Fields = within "form1" Rank2.<$> T1 {
-   page1 = within "Page1" . within "Return-pg1" Rank2.<$> page1Fields,
+   page1 = within "Page1" Rank2.<$> page1Fields,
    page2 = within "Page2" Rank2.<$> page2Fields,
-   page3 = within "Page3" . within "Return-pg3" Rank2.<$> page3Fields,
-   page4 = within "Page4" . within "Return-pg4" Rank2.<$> page4Fields,
-   page5 = within "Page5" . within "Return-pg5" Rank2.<$> page5Fields,
-   page6 = within "Page6" . within "Return-pg6" . within "PartB" Rank2.<$> page6Fields,
-   page7 = within "Page7" . within "Return-pg7" Rank2.<$> page7Fields,
+   page3 = within "Page3" Rank2.<$> page3Fields,
+   page4 = within "Page4" Rank2.<$> page4Fields,
+   page5 = within "Page5" Rank2.<$> page5Fields,
+   page6 = within "Page6" . within "PartB" Rank2.<$> page6Fields,
+   page7 = within "Page7" Rank2.<$> page7Fields,
    page8 = within "Page8" Rank2.<$> page8Fields}
 
 page1Fields :: Page1 FieldConst
@@ -40,12 +40,13 @@ page1IdentificationFields = Identification {
    postalCode = Field ["PostalCode_Comb_BordersAll", "PostalCode"] Textual,
    your_Language = Field ["Your_Language", "RadioButtonlanguaget"] $ RadioButton [English, French],
    id_City = Field ["ID_City"] Textual,
-   sin = Field ["SIN_Comb_BordersAll", "SIN_Comb"] Textual,
+   sin = Field ["NumericField_Comb9_CaptionTop", "NumericField_Comb9_CaptionTop_Field"] Textual,
    id_LastName = Field ["ID_LastName"] Textual,
    dateBirth = Field ["DateBirth_Comb_BordersAll", "DateBirth_Comb"] Date,
    id_FirstNameInitial = Field ["ID_FirstNameInitial"] Textual,
    id_MailingAddress = Field ["ID_MailingAddress"] Textual,
    maritalStatus = Field ["MaritalStatus_Checkbox"] $ RadioButtons 0 1 "MaritalStatus" [Married .. Single],
+   maritalStatusChangeDate = Field ["DateMMDD_Comb_BordersAll_Std", "DateMMDD_Comb"] Date,
    id_RuralRoute = Field ["ID_RuralRoute"] Textual,
    id_POBox = Field ["ID_POBox"] Textual,
    prov_DropDown = Field ["Prov_DropDown"] Province}
@@ -65,14 +66,13 @@ page1SpouseFields = Spouse {
    spouse_First_Name = Field ["Spouse_First_Name"] Textual,
    line_11700 = Field ["Line11700", "Amount"] Amount,
    line_21300 = Field ["Line21300", "Amount"] Amount,
-   sin = Field ["SIN_Comb_BordersAll", "SIN_Comb"] Textual}
+   sin = Field ["NumericField_Comb9_CaptionTop", "NumericField_Comb9_CaptionTop_Field"] Textual}
 
 page2Fields :: Page2 FieldConst
 page2Fields = Page2 {
    foreign_property = Field ["Foreign_property", "Line26600"] $ Switch "Option1" "Option2" "ForeignProperty_CheckBox",
    tax_exempt = Field ["Tax_exempt", "Exempt", "Spouse_SelfEmployed"] Checkbox,
    electionsCanada = within "ElectionsCanada" Rank2.<$> page2ElectionsCanadaFields,
-   cai = Field ["CAI", "CAI_ON", "Tick_box"] Checkbox,
    organ_donor = Field ["Organ_donor", "Question"] $ Switch "Option1" "Option2" "OrganDonor_CheckBox"
 }
 
@@ -105,8 +105,6 @@ page3Fields = Page3 {
    line_12599_12600_RentalIncome = Field ["Line12600", "Line12599", "Line_12599_Amount"] Amount,
    line_12600_Amount = Field ["Line12600", "Line_12600_Amount"] Amount,
    line_12700_TaxableCapitalGains = Field ["Line12700", "Line_12700_Amount"] Amount,
-   line_12701_CapitalGainsReduction = Field ["Line12701", "Line_12701_Amount"] Amount,
-   line16_difference = subCalculationFields "Line16" ["Amount1"] ["Amount2"],
    line_12799_Amount = Field ["Line12800", "Line_12799", "Line_12799_Amount"] Amount,
    line_12800_Amount = Field ["Line12800", "Line_12800_Amount"] Amount,
    line_12900_RRSPIncome = Field ["Line12900", "Line_12900_Amount"] Amount,
@@ -151,9 +149,8 @@ page4Fields = Page4 {
    line_21300_UCCBRepayment = Field ["Line21300", "Line_21300_Amount"] Amount,
    line_21400_ChildCareExpenses = Field ["Line21400", "Line_21400_Amount"] Amount,
    line_21500_DisabilityDeduction = Field ["Line21500", "Line_21500_Amount"] Amount,
-   line_21698_Amount = Field ["Line45", "Line21698", "Line_21698_Amount"] Amount,
    line_21699_Amount = Field ["Line45", "Line21699", "Line_21699_Amount"] Amount,
-   line_21700_Amount = Field ["Line45", "Line21700", "Line_21900_Amount"] Amount,
+   line_21700_Amount = Field ["Line45", "Line_21900_Amount"] Amount,
    line_21900_MovingExpenses = Field ["Line21900", "Line_21900_Amount"] Amount,
    line_21999_Amount = Field ["Line22000", "Line21999", "Line_21999_Amount"] Amount,
    line_22000_Amount = Field ["Line22000", "Line_22000_Amount"] Amount,
@@ -182,7 +179,6 @@ step4Fields = Step4 {
    line_23600_NetIncome_2 = Field ["Line59", "Amount"] Amount,
    line_24400_MilitaryPoliceDeduction = Field ["Line24400", "Line_24400_Amount"] Amount,
    line_24900_SecurityDeductions = Field ["Line24900", "Line_24900_Amount"] Amount,
-   line_24901_SecurityDeductions = Field ["Line24901", "Line_Amount"] Amount,
    line_25000_OtherPayDeductions = Field ["Line25000", "Line_25000_Amount"] Amount,
    line_25100_PartnershipLosses = Field ["Line25100", "Line_25100_Amount"] Amount,
    line_25200_NoncapitalLosses = Field ["Line25200", "Line_25200_Amount"] Amount,
@@ -193,8 +189,6 @@ step4Fields = Step4 {
    line_25600_AdditionalDeductions_Amount = Field ["Line25600", "Line_25600_Amount"] Amount,
    line_25600_AdditionalDeductions_Specify = Field ["Line25600", "Line_25600_Specify"] Textual,
    line_25700_sum = subCalculationFields "Line25700" ["Line_25700_Amount1"] ["Line_25700_Amount2"],
-   line72_difference = Field ["Line72", "Line_26000_Amount"] Amount,
-   line_25999_CapitalGainsReductionAddBack = Field ["Line25999", "Line_Amount"] Amount,
    line_26000_TaxableIncome = Field ["Line26000", "Line_26000_Amount"] Amount}
 
 partAFields :: Text -> Int -> Page5PartA FieldConst
@@ -205,11 +199,12 @@ partAFields = partAFieldsWith fieldNameAt
 
 partAFieldsWith :: (Int -> Int -> Bool -> Text) -> Text -> Int -> Page5PartA FieldConst
 partAFieldsWith fieldNameAt columnPrefix startLine = Page5PartA {
-   column1 = column 1 0 0.15 0,
-   column2 = column 2 55_867.00 0.205 8_380.05,
-   column3 = column 3 111_733.00 0.26 19_832.58,
-   column4 = column 4 173_205.00 0.29 35_815.30,
-   column5 = column 5 246_752.00 0.33 57_143.93}
+   column1 = (column 1 0 0.145 0){rate = Field [columnPrefix <> "1", fieldNameAt (startLine + 3) 2 True]
+                                         $ Constant 0.145 Percent},
+   column2 = column 2 57_375.00 0.205 8_319.38,
+   column3 = column 3 114_750.00 0.26 20_081.25,
+   column4 = column 4 177_882.00 0.29 36_495.57,
+   column5 = column 5 253_414.00 0.33 58_399.85}
    where column n threshold rate baseTax = within (columnPrefix <> toText (decimal n)) Rank2.<$> TaxIncomeBracket {
             income = Field [fieldNameAt startLine n False] Amount,
             threshold = Field [fieldNameAt (startLine + 1) n False] $ Constant threshold Amount,
@@ -248,7 +243,6 @@ page6Fields = Page6 {
    line_31270 = Field ["Line31270", "Line_31270_Amount"] Amount,
    line_31285 = Field ["Line31285", "Line_31285_Amount"] Amount,
    line_31300 = Field ["Line31300", "Line_31300_Amount"] Amount,
-   line_31350 = Field ["Line31350", "Line_31350_Amount"] Amount,
    line102_sum = subCalculationFields "Line102" ["Amount1"] ["Amount2"],
    line_31400 = Field ["Line31400", "Line_31400_Amount"] Amount,
    line104_sum = Field ["Line104", "Amount"] Amount,
@@ -263,9 +257,10 @@ page6Fields = Page6 {
    medical_expenses = page6MedicalExpensesFields,
    line_33200_sum = subCalculationFields "Line33200" ["Line_33200_Amount1"] ["Line_33200_Amount2"],
    line_33500 = Field ["Line33500", "Line_33500_Amount"] Amount,
-   line120_taxCreditRate = Field ["Line120", "Percent"] $ Constant 0.15 Percent,
+   line120_taxCreditRate = Field ["Line120", "Rate"] $ Constant 0.145 Percent,
    line_33800 = Field ["Line33800", "Line_33800_Amount"] Amount,
    line_34900 = Field ["Line34900", "Line_34900_Amount"] Amount,
+   line_34990 = Field ["Line34990", "Line_34990_Amount"] Amount,
    line_35000 = Field ["Line35000", "Line_35000_Amount"] Amount}
 
 page6MedicalExpensesFields :: MedicalExpenses FieldConst

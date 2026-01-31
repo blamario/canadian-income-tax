@@ -86,9 +86,9 @@ properties [dataRootMap, fdfT1Map, fdf428Map, fdf479Map] =
         testProperty "Federal+ON428+ON479" (checkFederalFormIdempotent ON.returnFields ON.fixReturns)]],
     testGroup "Roundtrip" [
       testGroup "T1" [
-        testProperty ("T1 for " <> name) (checkFormFields fields $ List.lookup (prefix <> "-r-fill-24e.fdf") fdfT1Map)
+        testProperty ("T1 for " <> name) (checkFormFields fields $ List.lookup (prefix <> "-r-fill-25e.fdf") fdfT1Map)
         | (name, prefix, fields) <- provincesT1],
-      testProperty "T4" (checkFormFields t4Fields $ List.lookup "t4-fill-24e.fdf" dataRootMap),
+      testProperty "T4" (checkFormFields t4Fields $ List.lookup "t4-fill-25e.fdf" dataRootMap),
       testProperty "Schedule 6" (checkFormFields schedule6Fields $ List.lookup "5000-s6-fill-24e.fdf" dataRootMap),
       testProperty "Schedule 7" (checkFormFields schedule7Fields $ List.lookup "5000-s7-fill-24e.fdf" dataRootMap),
       testProperty "Schedule 8" (checkFormFields schedule8Fields $ List.lookup "5000-s8-fill-24e.fdf" dataRootMap),
@@ -106,16 +106,16 @@ properties [dataRootMap, fdfT1Map, fdf428Map, fdf479Map] =
       | (p1name, p1fdfPrefix, p1fields) <- provincesT1,
         (p2name, p2fdfPrefix, _) <- provincesT1,
         p1name /= p2name,
-        not (p1fdfPrefix == "5012" && p2fdfPrefix == "5010")]]
-  where provincesT1 = [("Newfoundland and Labrador", "5001", NL.t1Fields),
-                       ("PEI", "5002", PE.t1Fields),
+        not (p2fdfPrefix `elem` ["5000", "5009"])]]
+  where provincesT1 = [("Manitoba, New Brunswick, Nova Scotia, PEI, and Saskatchewan", "5000", AB.t1Fields),
+                       ("Newfoundland and Labrador", "5001", NL.t1Fields),
                        ("Quebec", "5005", QC.t1Fields),
                        ("Ontario", "5006", ON.t1Fields),
+                       ("Alberta", "5009", AB.t1Fields),
                        ("British Columbia", "5010", BC.t1Fields),
-                       ("Northwest Territories", "5012", NT.t1Fields),
                        ("Yukon", "5011", YT.t1Fields),
-                       ("Nunavut", "5014", NU.t1Fields),
-                       ("Alberta, Manitoba, New Brunswick, Nova Scotia, and Saskatchewan", "5015", AB.t1Fields)]
+                       ("Northwest Territories", "5012", NT.t1Fields),
+                       ("Nunavut", "5014", NU.t1Fields)]
         provinces428 = [("Ontario",  "5006", checkFormFields ON.on428Fields),
                         ("Manitoba", "5007", checkFormFields MB.mb428Fields),
                         ("Alberta",  "5009", checkFormFields AB.ab428Fields),

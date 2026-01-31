@@ -12,12 +12,7 @@ import Tax.Canada.T1.FieldNames.PE qualified as PE
 
 t1Fields :: T1 FieldConst
 t1Fields = PE.t1Fields{
-   page2 = within "form1" . within "Page2" Rank2.<$> page2Fields,
    page8 = within "form1" . within "Page8" . within "Return-pg8" Rank2.<$> page8Fields}
-
-page2Fields :: Page2 FieldConst
-page2Fields = PE.page2Fields{
-   cai = Field ["CAI", "CAI_2024", "Tick_box"] Checkbox}
 
 page8Fields :: Page8 FieldConst
 page8Fields = PE.page8Fields {

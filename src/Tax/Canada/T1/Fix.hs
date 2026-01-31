@@ -38,8 +38,6 @@ fixPage2 = id
 
 fixPage3 :: Page3 Maybe -> Page3 Maybe
 fixPage3 = fixEq $ \page@Page3{selfEmployment=SelfEmploymentIncome{..}, ..}-> page{
-   line16_difference = fixSubCalculation id $
-                       nonNegativeDifference line_12700_TaxableCapitalGains line_12701_CapitalGainsReduction,
    line23_sum = totalOf [line_10100_EmploymentIncome ,
                          line_10400_OtherEmploymentIncome,
                          line_11300_OldAgeSecurityPension,
@@ -53,7 +51,7 @@ fixPage3 = fixEq $ \page@Page3{selfEmployment=SelfEmploymentIncome{..}, ..}-> pa
                          line_12200_PartnershipIncome,
                          line_12500_RDSP,
                          line_12600_Amount,
-                         line16_difference.result,
+                         line_12700_TaxableCapitalGains,
                          line_12800_Amount,
                          line_12900_RRSPIncome,
                          line_12905_FHSAIncome,
@@ -123,8 +121,7 @@ fixPage6 t1 = fixEq $ \page@Page6{..}-> page{
                           line_31260,
                           line_31270,
                           line_31285,
-                          line_31300,
-                          line_31350],
+                          line_31300],
    line104_sum = totalOf [pageBreakCarry, line102_sum.result, line_31400],
    line107_sum = totalOf [line104_sum, line_31600, line_31800],
    line112_sum = totalOf [line107_sum, line_31900, line_32300, line_32400, line_32600],
@@ -132,7 +129,7 @@ fixPage6 t1 = fixEq $ \page@Page6{..}-> page{
    line_33200_sum = fixSubCalculation id $ totalOf [medical_expenses.difference, medical_expenses.otherDependants],
    line_33500 = totalOf [line112_sum, line_33200_sum.result],
    line_33800 = line120_taxCreditRate `fractionOf` line_33500,
-   line_35000 = totalOf [line_33800, line_34900]}
+   line_35000 = totalOf [line_33800, line_34900, line_34990]}
 
 fixPage7 :: T1 Maybe -> Page7 Maybe -> Page7 Maybe
 fixPage7 t1 = fixEq $ \Page7{partC_NetFederalTax, step6_RefundOrBalanceOwing}-> Page7{
@@ -155,7 +152,6 @@ fixStep4 t1 = fixEq $ \step@Step4{..}-> step{
    line_25700_sum = fixSubCalculation id $
                     totalOf [line_24400_MilitaryPoliceDeduction,
                              line_24900_SecurityDeductions,
-                             line_24901_SecurityDeductions,
                              line_25000_OtherPayDeductions,
                              line_25100_PartnershipLosses,
                              line_25200_NoncapitalLosses,
@@ -164,8 +160,7 @@ fixStep4 t1 = fixEq $ \step@Step4{..}-> step{
                              line_25400_CapitalGainsDeduction,
                              line_25500_NorthernDeductions,
                              line_25600_AdditionalDeductions_Amount],
-   line72_difference = nonNegativeDifference line_23600_NetIncome_2 line_25700_sum.result,
-   line_26000_TaxableIncome = totalOf [line72_difference, line_25999_CapitalGainsReductionAddBack]}
+   line_26000_TaxableIncome = nonNegativeDifference line_23600_NetIncome_2 line_25700_sum.result}
 
 fixPage5PartA :: HasCallStack => T1 Maybe -> Page5PartA Maybe -> Page5PartA Maybe
 fixPage5PartA t1 = fixEq $ \part-> Page5PartA{

@@ -14,16 +14,15 @@ import Tax.Canada.T1.FieldNames.ON qualified as ON
 
 t1Fields :: T1 FieldConst
 t1Fields = within "form1" Rank2.<$> T1 {
-   page1 = within "Page1" . within "Return-pg1" Rank2.<$> ON.page1Fields,
+   page1 = within "Page1" Rank2.<$> ON.page1Fields,
    page2 = within "Page2" . within "Step1-Cont" Rank2.<$> page2Fields,
-   page3 = within "Page3" . within "Return-pg3" Rank2.<$> ON.page3Fields,
-   page4 = within "Page4" . within "Return-pg4" Rank2.<$> ON.page4Fields,
-   page5 = within "Page5" . within "Return-pg5" Rank2.<$> ON.page5Fields,
-   page6 = within "Page6" . within "Return-pg6" . within "PartB" Rank2.<$> ON.page6Fields,
-   page7 = within "Page7" . within "Return-pg7" Rank2.<$> ON.page7Fields,
-   page8 = within "Page8" . within "Return-pg8" Rank2.<$> BC.page8Fields}
+   page3 = within "Page3" Rank2.<$> ON.page3Fields,
+   page4 = within "Page4" Rank2.<$> ON.page4Fields,
+   page5 = within "Page5" Rank2.<$> ON.page5Fields,
+   page6 = within "Page6" . within "PartB" Rank2.<$> ON.page6Fields,
+   page7 = within "Page7" Rank2.<$> ON.page7Fields,
+   page8 = within "Page8" Rank2.<$> BC.page8Fields}
 
 page2Fields :: Page2 FieldConst
 page2Fields = ON.page2Fields {
-   cai = Field ["CAI", "AB_CAI", "Tick_box"] Checkbox,
    organ_donor = NoField}

@@ -22,13 +22,8 @@ t1Fields = NT.t1Fields{
 
 page7Fields :: Page7 FieldConst
 page7Fields = Page7 {
-   partC_NetFederalTax = within "PartC" Rank2.<$> partCFields,
+   partC_NetFederalTax = within "PartC" Rank2.<$> ON.partCFields,
    step6_RefundOrBalanceOwing = within "Step6" Rank2.<$> page7step6Fields}
-
-partCFields :: Page7PartC FieldConst
-partCFields = ON.partCFields {
-   line_40900 = Field ["Line4100", "Line40900", "Line_40900_Amount"] Amount,
-   line_41000 = Field ["Line4100", "Line_41000_Amount"] Amount}
 
 page7step6Fields :: Page7Step6 FieldConst
 page7step6Fields = ON.page7step6Fields {

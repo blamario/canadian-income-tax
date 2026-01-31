@@ -54,6 +54,7 @@ data Identification line = Identification {
    id_FirstNameInitial :: line Text,
    id_MailingAddress :: line Text,
    maritalStatus :: line MaritalStatus,
+   maritalStatusChangeDate :: line Day,
    id_RuralRoute :: line Text,
    id_POBox :: line Text,
    prov_DropDown :: line Province.Code}
@@ -82,7 +83,6 @@ data Page2 line = Page2 {
    foreign_property :: line Bool,
    tax_exempt :: line Bool,
    electionsCanada :: ElectionsCanada line,
-   cai :: line Bool,
    organ_donor :: line Bool}
 
 data ElectionsCanada line = ElectionsCanada {
@@ -113,8 +113,6 @@ data Page3 line = Page3 {
    line_12599_12600_RentalIncome :: line Centi,
    line_12600_Amount :: line Centi,
    line_12700_TaxableCapitalGains :: line Centi,
-   line_12701_CapitalGainsReduction :: line Centi,
-   line16_difference :: SubCalculation line,
    line_12799_Amount :: line Centi,
    line_12800_Amount :: line Centi,
    line_12900_RRSPIncome :: line Centi,
@@ -157,7 +155,6 @@ data Page4 line = Page4 {
    line_21300_UCCBRepayment :: line Centi,
    line_21400_ChildCareExpenses :: line Centi,
    line_21500_DisabilityDeduction :: line Centi,
-   line_21698_Amount :: line Centi,
    line_21699_Amount :: line Centi,
    line_21700_Amount :: line Centi,
    line_21900_MovingExpenses :: line Centi,
@@ -186,7 +183,6 @@ data Step4 line = Step4 {
    line_23600_NetIncome_2 :: line Centi,
    line_24400_MilitaryPoliceDeduction :: line Centi,
    line_24900_SecurityDeductions :: line Centi,
-   line_24901_SecurityDeductions :: line Centi,
    line_25000_OtherPayDeductions :: line Centi,
    line_25100_PartnershipLosses :: line Centi,
    line_25200_NoncapitalLosses :: line Centi,
@@ -197,8 +193,6 @@ data Step4 line = Step4 {
    line_25600_AdditionalDeductions_Amount :: line Centi,
    line_25600_AdditionalDeductions_Specify :: line Text,
    line_25700_sum :: SubCalculation line,
-   line72_difference :: line Centi,
-   line_25999_CapitalGainsReductionAddBack :: line Centi,
    line_26000_TaxableIncome :: line Centi}
 
 data Page5PartA line = Page5PartA {
@@ -236,7 +230,6 @@ data Page6 line = Page6 {
    line_31270 :: line Centi,
    line_31285 :: line Centi,
    line_31300 :: line Centi,
-   line_31350 :: line Centi,
    line102_sum :: SubCalculation line,
    line_31400 :: line Centi,
    line104_sum :: line Centi,
@@ -254,6 +247,7 @@ data Page6 line = Page6 {
    line120_taxCreditRate :: line Rational,
    line_33800 :: line Centi,
    line_34900 :: line Centi,
+   line_34990 :: line Centi,
    line_35000 :: line Centi}
 
 data MedicalExpenses line = MedicalExpenses {
