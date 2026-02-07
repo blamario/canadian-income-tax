@@ -42,13 +42,15 @@ import Tax.Canada.Federal.Schedule6 (Schedule6, fixSchedule6, schedule6Fields)
 import Tax.Canada.Federal.Schedule7 qualified
 import Tax.Canada.Federal.Schedule7 (Schedule7, fixSchedule7, schedule7Fields)
 import Tax.Canada.Federal.Schedule8 qualified as Schedule8
-import Tax.Canada.Federal.Schedule8 (Schedule8(page4, page5, page6, page7, page8, page9, page10),
+import Tax.Canada.Federal.Schedule8 (Schedule8(page4, page5, page6, page7, page9, page10, page11),
                                      fixSchedule8, schedule8Fields,
                                      Page4(line_50339_totalPensionableEarnings,
                                            line_50340_totalContributions,
                                            line_50341_totalSecondContributions),
-                                     Page6(line1_netSelfEmploymentEarnings),
-                                     Page7(line1_netSelfEmploymentEarnings))
+                                     Page6(part4),
+                                     Page6Part4(line1_netSelfEmploymentEarnings),
+                                     Page7(part5),
+                                     Page7Part5(line1_netSelfEmploymentEarnings))
 import Tax.Canada.Federal.Schedule9 (Schedule9(page1), Page1(line23_sum), fixSchedule9, schedule9Fields)
 import Tax.Canada.Federal.Schedule11 (Schedule11(page1), Page1(line5_trainingClaim, line17_sum), fixSchedule11, schedule11Fields)
 import Tax.Canada.FormKey (FormKey)
@@ -126,11 +128,11 @@ fixFederalForms province InputForms{t4 = t4s} = fixEq $
                fromT4s' (additionalT4 ["77"]) (\amt step-> step{line_22900_OtherEmployExpenses =
                                                                 amt <|> step.line_22900_OtherEmployExpenses}) $
                t1.page4{line_20800_RRSPDeduction = schedule7.page3.partC.line20_deduction,
-                        line_22200_CPP_QPP_Contributions = schedule8.page6.line17_sum <|>
-                                                           schedule8.page10.line97_sum,
-                        line_22215_DeductionCPP_QPP = schedule8.page5.part3a.line30_sum <|>
-                                                      schedule8.page5.part3b.line43_sum <|>
-                                                      schedule8.page9.line77_sum},
+                        line_22200_CPP_QPP_Contributions = schedule8.page7.part4.line17_sum <|>
+                                                           schedule8.page11.line88_sum,
+                        line_22215_DeductionCPP_QPP = schedule8.page5.part3a.line28_sum <|>
+                                                      schedule8.page6.part3.line48_sum <|>
+                                                      schedule8.page10.line69_sum},
        page5 = t1.page5{
           step4_TaxableIncome =
              fromT4s' (additionalT4 ["39", "41", "91", "92"])
@@ -144,25 +146,25 @@ fixFederalForms province InputForms{t4 = t4s} = fixEq $
                    _ -> fromT4s' (\t4-> totalOf [t4.slip1.box18_employeeEI, t4.slip1.box55_premiumPPIP])
                            (\amt pg-> pg{line_31200 = amt}) t1.page6)
                {line_30800 = if any hasAnyField t4s
-                             then schedule8.page5.part3a.line27_copy <|>
-                                  schedule8.page5.part3b.line32_join <|>
-                                  schedule8.page9.line60_least
+                             then schedule8.page5.part3a.line25_copy <|>
+                                  schedule8.page5.part3b.line36_sum <|>
+                                  schedule8.page9.line57_sum
                              else t1.page6.line_30800,
                 line_31000 = if any hasAnyField t4s
-                             then schedule8.page6.line15_half.result <|>
-                                  schedule8.page9.line78_half.result
+                             then schedule8.page7.part4.line15_half.result <|>
+                                  schedule8.page10.line70_half.result
                              else t1.page6.line_31000,
                 line_32300 = schedule11.page1.line17_sum,
                 line_34900 = schedule9.page1.line23_sum},
        page7 = t1.page7{
           step6_RefundOrBalanceOwing = t1.page7.step6_RefundOrBalanceOwing{
-             line_42100_CPPContributions = schedule8.page6.line14_sum <|>
-                                           find (> 0) schedule8.page8.line55_difference}},
+             line_42100_CPPContributions = schedule8.page7.part4.line14_sum <|>
+                                           find (> 0) schedule8.page9.line49_difference}},
        page8 = t1.page8{
           step6_RefundOrBalanceOwing =
              (fromT4s' (.slip1.box22_incomeTaxDeducted) (\amt pt-> pt{line_43700_Total_income_tax_ded = amt})
                  t1.page8.step6_RefundOrBalanceOwing)
-             {line_44800_CPPOverpayment = schedule8.page5.part3a.line31_copy <|> schedule8.page9.line56_half.result,
+             {line_44800_CPPOverpayment = schedule8.page5.part3a.line29_copy <|> schedule8.page9.line50_half.result,
               line_45300_CWB = schedule6.page4.step3.line42_sum <|>
                                schedule6.page4.step2.line28_difference,
               line_45350_CTC = schedule11.page1.line5_trainingClaim}}},
@@ -175,11 +177,13 @@ fixFederalForms province InputForms{t4 = t4s} = fixEq $
          line_50340_totalContributions = totalOf . fmap (.slip1.box16_employeeCPP) =<< t4s,
          line_50341_totalSecondContributions = totalOf . fmap (.slip1.box16a_employeeCPP) =<< t4s},
       page6 = schedule8.page6{
-         line1_netSelfEmploymentEarnings = totalOf [t1.page3.line_12200_PartnershipIncome,
-                                                    t1.page3.line29_sum.result]},
+         part4 = schedule8.page6.part4{
+            line1_netSelfEmploymentEarnings = totalOf [t1.page3.line_12200_PartnershipIncome,
+                                                       t1.page3.line29_sum.result]}},
       page7 = schedule8.page7{
-         line1_netSelfEmploymentEarnings = totalOf [t1.page3.line_12200_PartnershipIncome,
-                                                    t1.page3.line29_sum.result]}},
+         part5 = schedule8.page7.part5{
+            line1_netSelfEmploymentEarnings = totalOf [t1.page3.line_12200_PartnershipIncome,
+                                                       t1.page3.line29_sum.result]}}},
    schedule9 = fixSchedule9 t1 schedule9,
    schedule11 = fixSchedule11 t1 schedule11}
 

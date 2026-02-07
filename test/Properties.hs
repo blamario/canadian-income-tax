@@ -89,11 +89,11 @@ properties [dataRootMap, fdfT1Map, fdf428Map, fdf479Map] =
         testProperty ("T1 for " <> name) (checkFormFields fields $ List.lookup (prefix <> "-r-fill-25e.fdf") fdfT1Map)
         | (name, prefix, fields) <- provincesT1],
       testProperty "T4" (checkFormFields t4Fields $ List.lookup "t4-fill-25e.fdf" dataRootMap),
-      testProperty "Schedule 6" (checkFormFields schedule6Fields $ List.lookup "5000-s6-fill-24e.fdf" dataRootMap),
-      testProperty "Schedule 7" (checkFormFields schedule7Fields $ List.lookup "5000-s7-fill-24e.fdf" dataRootMap),
-      testProperty "Schedule 8" (checkFormFields schedule8Fields $ List.lookup "5000-s8-fill-24e.fdf" dataRootMap),
-      testProperty "Schedule 9" (checkFormFields schedule9Fields $ List.lookup "5000-s9-fill-24e.fdf" dataRootMap),
-      testProperty "Schedule 11" (checkFormFields schedule11Fields $ List.lookup "5000-s11-fill-24e.fdf" dataRootMap),
+      testProperty "Schedule 6" (checkFormFields schedule6Fields $ List.lookup "5000-s6-fill-25e.fdf" dataRootMap),
+      testProperty "Schedule 7" (checkFormFields schedule7Fields $ List.lookup "5000-s7-fill-25e.fdf" dataRootMap),
+      testProperty "Schedule 8" (checkFormFields schedule8Fields $ List.lookup "5000-s8-fill-25e.fdf" dataRootMap),
+      testProperty "Schedule 9" (checkFormFields schedule9Fields $ List.lookup "5000-s9-fill-25e.fdf" dataRootMap),
+      testProperty "Schedule 11" (checkFormFields schedule11Fields $ List.lookup "5000-s11-fill-25e.fdf" dataRootMap),
       testGroup "428" [
         testProperty ("Form 428 for " <> name) (checkFields $ List.lookup (prefix <> "-c-fill-24e.fdf") fdf428Map)
         | (name, prefix, checkFields) <- provinces428],
