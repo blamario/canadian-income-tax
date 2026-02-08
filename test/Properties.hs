@@ -102,10 +102,11 @@ properties [dataRootMap, fdfT1Map, fdf428Map, fdf479Map] =
         | (name, prefix, checkFields) <- provinces479]],
     testGroup "Load mismatch" [
       testProperty ("Load T1 for " <> p1name <> " from FDF for " <> p2name) $ property $ assert
-        $ any (isLeft  . FDF.load p1fields) $ List.lookup (p2fdfPrefix <> "-r-fill-24e.fdf") fdfT1Map
+        $ any (isLeft  . FDF.load p1fields) $ List.lookup (p2fdfPrefix <> "-r-fill-25e.fdf") fdfT1Map
       | (p1name, p1fdfPrefix, p1fields) <- provincesT1,
         (p2name, p2fdfPrefix, _) <- provincesT1,
         p1name /= p2name,
+        List.sort [p1fdfPrefix, p2fdfPrefix] /= ["5010", "5012"],
         not (p2fdfPrefix `elem` ["5000", "5009"])]]
   where provincesT1 = [("Manitoba, New Brunswick, Nova Scotia, PEI, and Saskatchewan", "5000", AB.t1Fields),
                        ("Newfoundland and Labrador", "5001", NL.t1Fields),
