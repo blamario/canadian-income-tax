@@ -1,0 +1,630 @@
+%FDF-1.2
+%‚„œ”
+1 0 obj
+
+<<
+/FDF 
+<<
+/Fields [
+<<
+/T (form1[0])
+/Kids [
+<<
+/T (Page3[0])
+/Kids [
+<<
+/T (Line41[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line38[0])
+/Kids [
+<<
+/T (Amount_ReadOnly[0])
+/V ( 400.00)
+>>]
+>> 
+<<
+/T (Line39[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line36[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line45[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Declaration-For-Renters[0])
+/Kids [
+<<
+/T (Table[0])
+/Kids [
+<<
+/T (Row1[0])
+/Kids [
+<<
+/T (Nameoflandlord[0])
+/V ()
+>> 
+<<
+/T (Rentpaid[0])
+/V ()
+>> 
+<<
+/T (Rentaladdress[0])
+/V ()
+>> 
+<<
+/T (Numberofmonths[0])
+/V ()
+>>]
+>> 
+<<
+/T (Headers[0])
+/Kids [
+<<
+/T (Note2[0])
+/V /
+>> 
+<<
+/T (Note3[0])
+/V /
+>>]
+>> 
+<<
+/T (Row2[0])
+/Kids [
+<<
+/T (Nameoflandlord[0])
+/V ()
+>> 
+<<
+/T (Rentpaid[0])
+/V ()
+>> 
+<<
+/T (Rentaladdress[0])
+/V ()
+>> 
+<<
+/T (Numberofmonths[0])
+/V ()
+>>]
+>>]
+>>]
+>> 
+<<
+/T (Line37[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line43[0])
+/Kids [
+<<
+/T (L1[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (L2[0])
+/Kids [
+<<
+/T (Amount2[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line44[0])
+/Kids [
+<<
+/T (I2[0])
+/Kids [
+<<
+/T (Amount2[0])
+/V ()
+>>]
+>> 
+<<
+/T (I1[0])
+/Kids [
+<<
+/T (Amount1[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line42[0])
+/Kids [
+<<
+/T (PercentAmount_ReadOnly[0])
+/V (2%)
+>>]
+>> 
+<<
+/T (Line40[0])
+/Kids [
+<<
+/T (AmountRead_Only[0])
+/V ( 64,764.00)
+>>]
+>>]
+>> 
+<<
+/T (Page2[0])
+/Kids [
+<<
+/T (Line16[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (BCMETC[0])
+/Kids [
+<<
+/T (Line27[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line26[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (BCTTC[0])
+/Kids [
+<<
+/T (Line35[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line34[0])
+/Kids [
+<<
+/T (I2[0])
+/Kids [
+<<
+/T (Amount2[0])
+/V ()
+>>]
+>> 
+<<
+/T (I1[0])
+/Kids [
+<<
+/T (Amount1[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line33[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line31[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line32[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (BCVCTC[0])
+/Kids [
+<<
+/T (Line25[0])
+/Kids [
+<<
+/T (I2[0])
+/Kids [
+<<
+/T (Amount2[0])
+/V ()
+>>]
+>> 
+<<
+/T (I1[0])
+/Kids [
+<<
+/T (Amount1[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line19[0])
+/Kids [
+<<
+/T (Account_Number[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line18[0])
+/Kids [
+<<
+/T (Note1[0])
+/V /
+>> 
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line20[0])
+/Kids [
+<<
+/T (I1[0])
+/Kids [
+<<
+/T (Amount1[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line21[0])
+/Kids [
+<<
+/T (Note1[0])
+/V /
+>> 
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line17[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line24[0])
+/Kids [
+<<
+/T (Account_Number[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line22[0])
+/Kids [
+<<
+/T (Account_Number[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line23[0])
+/Kids [
+<<
+/T (Note1[0])
+/V /
+>> 
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (BCCBTC[0])
+/Kids [
+<<
+/T (Line28[0])
+/Kids [
+<<
+/T (I1[0])
+/Kids [
+<<
+/T (Amount1[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line29[0])
+/Kids [
+<<
+/T (I1[0])
+/Kids [
+<<
+/T (Amount1[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line30[0])
+/Kids [
+<<
+/T (I2[0])
+/Kids [
+<<
+/T (Amount2[0])
+/V ()
+>>]
+>> 
+<<
+/T (I1[0])
+/Kids [
+<<
+/T (Amount1[0])
+/V ()
+>>]
+>>]
+>>]
+>>]
+>> 
+<<
+/T (Page1[0])
+/Kids [
+<<
+/T (Line8[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line7[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Chart[0])
+/Kids [
+<<
+/T (Line5[0])
+/Kids [
+<<
+/T (Col1_Amount[0])
+/V ()
+>> 
+<<
+/T (Col2_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line6[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line1[0])
+/Kids [
+<<
+/T (NumWithoutCurrency[0])
+/V ()
+>> 
+<<
+/T (NumWithoutCurrency2[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line4[0])
+/Kids [
+<<
+/T (Col1_Amount[0])
+/V ()
+>> 
+<<
+/T (Col2_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line3[0])
+/Kids [
+<<
+/T (Col1_Amount[0])
+/V ()
+>> 
+<<
+/T (Col2_Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line2[0])
+/Kids [
+<<
+/T (Col1_Amount[0])
+/V ()
+>> 
+<<
+/T (Col2_Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line9[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line10[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line11[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (BCSHRTC[0])
+/Kids [
+<<
+/T (Line60890[0])
+/Kids [
+<<
+/T (CheckBox[0])
+/V /
+>>]
+>> 
+<<
+/T (Line15[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line14[0])
+/Kids [
+<<
+/T (Line60480[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Amount[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (Line13[0])
+/Kids [
+<<
+/T (Amount[0])
+/V ()
+>>]
+>> 
+<<
+/T (Line12[0])
+/Kids [
+<<
+/T (Amount2[0])
+/V ()
+>> 
+<<
+/T (Amount1[0])
+/V ()
+>>]
+>>]
+>> 
+<<
+/T (#pageSet[0])
+/Kids [
+<<
+/T (Page1[2])
+/Kids [
+<<
+/T (ClearData_EN[0])
+/V /
+>>]
+>> 
+<<
+/T (Page1[1])
+/Kids [
+<<
+/T (ClearData_EN[0])
+/V /
+>>]
+>> 
+<<
+/T (Page1[0])
+/Kids [
+<<
+/T (ClearData_EN[0])
+/V /
+>>]
+>>]
+>>]
+>>]
+>>
+>>
+endobj
+
+trailer
+
+<<
+/Root 1 0 R
+>>
+%%EOF

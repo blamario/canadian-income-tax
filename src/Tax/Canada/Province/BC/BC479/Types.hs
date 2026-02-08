@@ -54,6 +54,9 @@ data Page1 line = Page1 {
 data Page2 line = Page2 {
    line16_copy :: line Centi,
    line17_venture :: line Centi,
+   line_60489_shares :: line Centi,
+   line_60488_certificate :: line Text,
+   line20_sum :: line Centi,
    line_60490_shares :: line Centi,
    line_60491_certificate :: line Text,
    line_60495_shares :: line Centi,

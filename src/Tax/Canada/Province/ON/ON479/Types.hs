@@ -27,6 +27,8 @@ data ON479 line = ON479 {
    page2 :: Page2 line}
 
 data Page1 line = Page1 {
+   line_61268_fertility :: line Centi,
+   line_61268_fraction :: line Centi,
    line_63050_childcare :: line Centi,
    line4_homecare_copy :: line Centi,
    line5_allowable :: line Rational,
@@ -41,16 +43,16 @@ data Page1 line = Page1 {
    line_63095_difference :: SubCalculation line,
    line_63100_transit :: line Centi,
    line_63100_fraction :: line Centi,
-   line16_sum :: line Centi}
-
-data Page2 line = Page2 {
-   line17_copy :: line Centi,
    line_63110_contributions :: line Centi,
    line_63110_credit :: line Centi,
    line_63220_fromT1221 :: line Centi,
    line_63220_fraction :: line Centi,
+   line18_sum :: line Centi}
+
+data Page2 line = Page2 {
+   line19_copy :: line Centi,
    line_63260_placements :: line Word,
-   line_63265_partnership :: line Bool,
+--   line_63265_partnership :: line Bool,
    line_63270_business :: line Text,
    line_63300_total :: line Centi,
    line23_credits :: line Centi}

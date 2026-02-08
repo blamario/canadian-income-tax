@@ -31,7 +31,8 @@ fixPage1 = fixEq $ \page@Page1{..}-> page{
 fixPage2 :: BC479 Maybe -> Page2 Maybe -> Page2 Maybe
 fixPage2 bc479 = fixEq $ \page2@Page2{..}-> page2{
    line16_copy = bc479.page1.line15_sum,
-   line22_sum = fixSubCalculation id $ totalOf [line17_venture, line_60490_shares, line_60495_shares],
+   line20_sum = totalOf [line17_venture, line_60489_shares],
+   line22_sum = fixSubCalculation id $ totalOf [line20_sum, line_60490_shares, line_60495_shares],
    line27_sum = fixSubCalculation id $ totalOf [line_60545_buildings, line_60546_partnership],
    line31_sum = fixSubCalculation id $ totalOf [line_60550_training, line_60560_training, line_60570_ships],
    line32_credits = totalOf [line16_copy, line22_sum.result, line27_sum.result, line_60510_fromT88, line31_sum.result]}

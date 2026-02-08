@@ -98,7 +98,7 @@ properties [dataRootMap, fdfT1Map, fdf428Map, fdf479Map] =
         testProperty ("Form 428 for " <> name) (checkFields $ List.lookup (prefix <> "-c-fill-25e.fdf") fdf428Map)
         | (name, prefix, checkFields) <- provinces428],
       testGroup "479" [
-        testProperty ("Form 479 for " <> name) (checkFields $ List.lookup (prefix <> "-tc-fill-24e.fdf") fdf479Map)
+        testProperty ("Form 479 for " <> name) (checkFields $ List.lookup (prefix <> "-tc-fill-25e.fdf") fdf479Map)
         | (name, prefix, checkFields) <- provinces479]],
     testGroup "Load mismatch" [
       testProperty ("Load T1 for " <> p1name <> " from FDF for " <> p2name) $ property $ assert
