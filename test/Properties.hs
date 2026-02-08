@@ -95,7 +95,7 @@ properties [dataRootMap, fdfT1Map, fdf428Map, fdf479Map] =
       testProperty "Schedule 9" (checkFormFields schedule9Fields $ List.lookup "5000-s9-fill-25e.fdf" dataRootMap),
       testProperty "Schedule 11" (checkFormFields schedule11Fields $ List.lookup "5000-s11-fill-25e.fdf" dataRootMap),
       testGroup "428" [
-        testProperty ("Form 428 for " <> name) (checkFields $ List.lookup (prefix <> "-c-fill-24e.fdf") fdf428Map)
+        testProperty ("Form 428 for " <> name) (checkFields $ List.lookup (prefix <> "-c-fill-25e.fdf") fdf428Map)
         | (name, prefix, checkFields) <- provinces428],
       testGroup "479" [
         testProperty ("Form 479 for " <> name) (checkFields $ List.lookup (prefix <> "-tc-fill-24e.fdf") fdf479Map)

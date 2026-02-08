@@ -42,7 +42,7 @@ fixPage1PartA income = fixEq $ \Page1PartA{..}-> Page1PartA{
 
 fixPage1PartB :: Page1PartB Maybe -> Page1PartB Maybe
 fixPage1PartB = fixEq $ \part@Page1PartB{..}-> part{
-   line9_basic = Just 12_399,
+   line9_basic = Just 12_747,
    spouseAmount = fixBaseCredit spouseAmount,
    dependantAmount = fixBaseCredit dependantAmount,
    line18 = totalOf [line9_basic, line10_age, spouseAmount.cont, dependantAmount.cont, line17_caregiver],
@@ -65,7 +65,7 @@ fixPage2PartB on428 = fixEq $ \part@Page2PartB{..}-> part{
    line28 = totalOf [line26, line27_pension],
    line31 = totalOf [line28, line29_disability, line30],
    line35 = totalOf [line31, line32_interest, line33_education, line34_transferred],
-   medicalExpenses = fixMedicalExpenses 2806 medicalExpenses,
+   medicalExpenses = fixMedicalExpenses 2885 medicalExpenses,
    line43_sum = fixSubCalculation id $ totalOf [medicalExpenses.difference, line42],
    line44 = totalOf [line35, line43_sum.result],
    line46_fraction = line45_rate `fractionOf` line44,
@@ -84,7 +84,7 @@ fixPage2PartC on428 = fixEq $ \part@Page2PartC{..}-> part{
    line55 = totalOf [line53, line54],
    line56 = line53,
    line58 = nonNegativeDifference line56 line57,
-   line59_product = Just 0.3367 `fractionOf` line59_copy,
+   line59_product = Just 0.2463 `fractionOf` line59_copy,
    line60_lesser = min <$> line58 <*> line59_product,
    line61 = nonNegativeDifference line55 line60_lesser}
 
@@ -100,15 +100,15 @@ fixPage3 on428 = fixEq $ \page@Page3{..}-> page{
    line63 = line62,
    line64 = on428.page2.partC.line54,
    line65 = nonNegativeDifference line63 line64,
-   line66_surtax = fixSubCalculation (\x-> 0.2 * max 0 (x - 5554)) line65,
-   line67_surtax = fixSubCalculation (\x-> 0.36 * max 0 (x - 7108)) line65,
+   line66_surtax = fixSubCalculation (\x-> 0.2 * max 0 (x - 5710)) line65,
+   line67_surtax = fixSubCalculation (\x-> 0.36 * max 0 (x - 7307)) line65,
    line68_sum = fixSubCalculation id $ totalOf [line66_surtax.result, line67_surtax.result],
    line69 = totalOf [line62, line68_sum.result],
    line70 = on428.page2.partC.line57,
    line71 = nonNegativeDifference line69 line70,
    line73 = totalOf [line71, line72],
-   line75_amount = ((506 *) . fromIntegral) <$> line75_childrenNum,
-   line76_amount = ((506 *) . fromIntegral) <$> line76_childrenNum,
+   line75_amount = ((544 *) . fromIntegral) <$> line75_childrenNum,
+   line76_amount = ((544 *) . fromIntegral) <$> line76_childrenNum,
    line77 = totalOf [line74_basicReduction, line75_amount, line76_amount],
    line78_double = fixSubCalculation (2 *) line77,
    line79 = line73,
@@ -142,6 +142,7 @@ fixPage4 on428 = fixEq $ \page@Page4{..}-> page{
 
 fixHealthPremium :: Centi -> HealthPremium Maybe -> HealthPremium Maybe
 fixHealthPremium income = fixEq $ \HealthPremium{..}-> HealthPremium{
+   line1_copy = Just income,
    row1 = fixHealthPremiumBracket income 20000 25000 0.06 0 row1,
    row2 = fixHealthPremiumBracket income 36000 38500 0.06 300 row2,
    row3 = fixHealthPremiumBracket income 48000 48600 0.25 450 row3,

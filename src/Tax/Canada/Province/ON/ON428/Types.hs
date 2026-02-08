@@ -137,6 +137,7 @@ data Page4 line = Page4 {
    healthPremium :: HealthPremium line}
 
 data HealthPremium line = HealthPremium {
+   line1_copy :: line Centi,
    row1 :: HealthPremiumBracket line,
    row2 :: HealthPremiumBracket line,
    row3 :: HealthPremiumBracket line,

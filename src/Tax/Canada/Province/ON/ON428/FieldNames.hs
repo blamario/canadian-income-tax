@@ -31,10 +31,10 @@ page1Fields = Page1 {
 page1PartAFields :: Page1PartA FieldConst
 page1PartAFields = Page1PartA {
    column1 = within "Column1" Rank2.<$> taxIncomeBracketFields 0 0.0505 0,
-   column2 = within "Column2" Rank2.<$> taxIncomeBracketFields 51_446.00 0.0915 2_598.02,
-   column3 = within "Column3" Rank2.<$> taxIncomeBracketFields 102_894.00 0.1116 7_305.52,
-   column4 = within "Column4" Rank2.<$> taxIncomeBracketFields 150_000.00 0.1216 12_562.54,
-   column5 = within "Column5" Rank2.<$> taxIncomeBracketFields 220_000.00 0.1316 21_074.54}
+   column2 = within "Column2" Rank2.<$> taxIncomeBracketFields 52_886.00 0.0915 2_670.74,
+   column3 = within "Column3" Rank2.<$> taxIncomeBracketFields 105_775.00 0.1116 7_510.09,
+   column4 = within "Column4" Rank2.<$> taxIncomeBracketFields 150_000.00 0.1216 12_445.60,
+   column5 = within "Column5" Rank2.<$> taxIncomeBracketFields 220_000.00 0.1316 20_957.60}
 
 taxIncomeBracketFields :: Centi -> Rational -> Centi -> TaxIncomeBracket FieldConst
 taxIncomeBracketFields threshold rate baseTax = TaxIncomeBracket {
@@ -51,12 +51,12 @@ page1PartBFields = Page1PartB {
    line9_basic = Field ["Line9", "Amount"] Amount,
    line10_age = Field ["Line10", "Amount"] Amount,
    spouseAmount = within "Spouse-Amount" Rank2.<$> BaseCredit{
-       baseAmount = Field ["Line11", "Amount"] $ Constant 11_581 Amount,
+       baseAmount = Field ["Line11", "Amount"] $ Constant 11_905 Amount,
        reduction = Field ["Line12", "Amount"] Amount,
        difference = Field ["Line13", "Amount1"] Amount,
        cont = Field ["Line13", "Amount2"] Amount},
    dependantAmount = within "Eligible-Dependant" Rank2.<$> BaseCredit{
-       baseAmount = Field ["Line14", "Amount"] $ Constant 11_581 Amount,
+       baseAmount = Field ["Line14", "Amount"] $ Constant 11_905 Amount,
        reduction = Field ["Line15", "Amount"] Amount,
        difference = Field ["Line16", "Amount1"] Amount,
        cont = Field ["Line16", "Amount2"] Amount},
@@ -142,7 +142,7 @@ page3Fields = Page3 {
    line71 = Field ["Line71", "Amount"] Amount,
    line72 = Field ["Line72", "Amount"] Amount,
    line73 = Field ["Line73", "Amount"] Amount,
-   line74_basicReduction = Field ["Line74", "Amount"] $ Constant 286 Amount,
+   line74_basicReduction = Field ["Line74", "Amount"] $ Constant 294 Amount,
    line75_childrenNum = Field ["Line75", "Line_60969", "Number-Child"] Count,
    line75_amount = Field ["Line75", "Amount"] Amount,
    line76_childrenNum = Field ["Line76", "Line_60970", "Number-Dependant"] Count,
@@ -165,15 +165,17 @@ page4Fields = Page4 {
    line88 = Field ["Line88", "Amount"] Amount,
    line89_health = Field ["Line89", "Amount"] Amount,
    line90 = Field ["Line90", "Amount"] Amount,
-   healthPremium = within "ON_Health_Prenium-worksheet" . within "Chart_ON_Health_Prenium" Rank2.<$> healthPremiumFields}
+   healthPremium = within "ON_Health_Prenium-worksheet" Rank2.<$> healthPremiumFields}
 
 healthPremiumFields :: HealthPremium FieldConst
 healthPremiumFields = HealthPremium {
-   row1 = within "Taxable_Line2" Rank2.<$> healthPremiumBracketFields{HealthPremiumBracket.equalsTax = NoField},
-   row2 = within "Taxable_Line4" Rank2.<$> healthPremiumBracketFields,
-   row3 = within "Taxable_Line6" Rank2.<$> healthPremiumBracketFields,
-   row4 = within "Taxable_Line8" Rank2.<$> healthPremiumBracketFields,
-   row5 = within "Taxable_Line10" Rank2.<$> healthPremiumBracketFields}
+   line1_copy = Field ["ON_Health_Prenium_Sub", "Line1", "Amount"] Amount,
+   row1 = within "Chart_ON_Health_Prenium" . within "Taxable_Line2"
+          Rank2.<$> healthPremiumBracketFields{HealthPremiumBracket.equalsTax = NoField},
+   row2 = within "Chart_ON_Health_Prenium" . within "Taxable_Line4" Rank2.<$> healthPremiumBracketFields,
+   row3 = within "Chart_ON_Health_Prenium" . within "Taxable_Line6" Rank2.<$> healthPremiumBracketFields,
+   row4 = within "Chart_ON_Health_Prenium" . within "Taxable_Line8" Rank2.<$> healthPremiumBracketFields,
+   row5 = within "Chart_ON_Health_Prenium" . within "Taxable_Line10" Rank2.<$> healthPremiumBracketFields}
 
 healthPremiumBracketFields :: HealthPremiumBracket FieldConst
 healthPremiumBracketFields = HealthPremiumBracket {

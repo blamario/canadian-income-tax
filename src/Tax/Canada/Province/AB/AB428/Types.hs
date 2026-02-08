@@ -36,7 +36,8 @@ data Page1PartA line = Page1PartA {
    column2 :: TaxIncomeBracket line,
    column3 :: TaxIncomeBracket line,
    column4 :: TaxIncomeBracket line,
-   column5 :: TaxIncomeBracket line}
+   column5 :: TaxIncomeBracket line,
+   column6 :: TaxIncomeBracket line}
 
 data Page1PartB line = Page1PartB {
    line9_basic :: line Centi,
@@ -44,20 +45,20 @@ data Page1PartB line = Page1PartB {
    spouseAmount :: BaseCredit line,
    dependantAmount :: BaseCredit line,
    line17_infirm :: line Centi,
-   line18 :: line Centi,
+   line18 :: line Centi}
+
+data Page2 line = Page2 {
+  partB :: Page2PartB line}
+
+data Page2PartB line = Page2PartB {
+   line26_copy :: line Centi,
    line19_cppQpp :: line Centi,
    line20_cppQpp :: line Centi,
    line21_employmentInsurance :: line Centi,
    line22_employmentInsurance :: line Centi,
    line23_adoption :: line Centi,
    line24_sum :: SubCalculation line,
-   line25 :: line Centi}
-
-data Page2 line = Page2 {
-  partB :: Page2PartB line}
-
-data Page2PartB line = Page2PartB {
-   line26 :: line Centi,
+   line25 :: line Centi,
    line27_pension :: line Centi,
    line28_caregiver :: line Centi,
    line29 :: line Centi,
@@ -104,6 +105,8 @@ data PartC line = PartC {
    line63_difference :: line Centi,
    line64_political :: line Centi,
    line65_political :: line Centi,
+   line73_difference :: line Centi,
+   line_61545_supplemental :: line Centi,
    line66_tax :: line Centi}
 
 $(foldMap

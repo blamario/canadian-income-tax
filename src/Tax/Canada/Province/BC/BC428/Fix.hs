@@ -37,7 +37,7 @@ fixPage1PartA = fixEq $ \Page1PartA{..}-> Page1PartA{
 
 fixPage1PartB :: Page1PartB Maybe -> Page1PartB Maybe
 fixPage1PartB = fixEq $ \part@Page1PartB{..}-> part{
-   line16_basic = Just 12580,
+   line16_basic = Just 12932,
    spouseAmount = fixBaseCredit spouseAmount,
    dependantAmount = fixBaseCredit dependantAmount,
    line25 = totalOf [line16_basic, line17_age, spouseAmount.cont, dependantAmount.cont, line24_caregiver]}
@@ -60,7 +60,7 @@ fixPage2PartB bc428 = fixEq $ \part@Page2PartB{..}-> part{
    line37 = totalOf [line35, line36_pension],
    line40 = totalOf [line37, line38_disability, line39],
    line45 = totalOf [line40, line41_interest, line42_education, line43_transferredChild, line44_transferredSpouse],
-   medicalExpenses = fixMedicalExpenses 2616 medicalExpenses,
+   medicalExpenses = fixMedicalExpenses 2689 medicalExpenses,
    line53_sum = fixSubCalculation id $ totalOf [medicalExpenses.difference, line52],
    line54 = totalOf [line45, line53_sum.result],
    line56_fraction = line55_rate `fractionOf` line54,
@@ -79,17 +79,17 @@ fixPartC bc428 = fixEq $ \part@PartC{..}-> part{
                          bc428.page1.partA.column7.equalsTax],
    line63 = totalOf [line61_tax, line62_splitIncomeTax],
    line64_copy = bc428.page2.partB.line60,
-   line66_fraction = Just 0.337 `fractionOf` line66_copy,
+   line66_fraction = Just 0.349 `fractionOf` line66_copy,
    line67_sum = fixSubCalculation id $ totalOf [line64_copy, line65_dividendCredits, line66_fraction],
    line68 = nonNegativeDifference line63 line67_sum.result,
-   line69_fraction = Just 0.337 `fractionOf` line69_copy,
+   line69_fraction = Just 0.349 `fractionOf` line69_copy,
    line70 = totalOf [line68, line69_fraction],
    line72 = nonNegativeDifference line70 line71_foreignCredit}
 
 fixPage3 :: BC428 Maybe -> Page3 Maybe -> Page3 Maybe
 fixPage3 bc428 = fixEq $ \page@Page3{..}-> page{
    partC = fixPartC bc428 partC,
-   line73_basicReduction = Just 547,
+   line73_basicReduction = Just 562,
    line76_difference = nonNegativeDifference line74_copy line75_base,
    line78_fraction = fixSubCalculation id $ line77_rate `fractionOf` line76_difference,
    line79_difference = fixSubCalculation id $ nonNegativeDifference line73_basicReduction line78_fraction.result,

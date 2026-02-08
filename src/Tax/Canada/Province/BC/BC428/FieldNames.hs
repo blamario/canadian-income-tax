@@ -29,12 +29,12 @@ page1PartAFields :: Page1PartA FieldConst
 page1PartAFields = Page1PartA {
    income = Field ["Line1", "Amount"] Amount,
    column1 = within "Column1" Rank2.<$>  taxIncomeBracketFields        0 0.0506      0,
-   column2 = within "Column2" Rank2.<$>  taxIncomeBracketFields   47_937 0.077   2_425.61,
-   column3 = within "Column3" Rank2.<$>  taxIncomeBracketFields   95_875 0.105   6_116.84,
-   column4 = within "Column4" Rank2.<$>  taxIncomeBracketFields  110_076 0.1229  7_607.94,
-   column5 = within "Column5" Rank2.<$> (taxIncomeBracketFields' 133_664 0.147  10_506.91){equalsTax = Field ["LIne15", "Amount"] Amount},
-   column6 = within "Column6" Rank2.<$> (taxIncomeBracketFields' 181_232 0.168  17_499.40){rate = Field ["Line12", "Percent_ReadOnly"] $ Constant 0.168 Percent},
-   column7 = within "Column7" Rank2.<$>  taxIncomeBracketFields' 252_752 0.205  29_514.76}
+   column2 = within "Column2" Rank2.<$>  taxIncomeBracketFields   49_279 0.077   2_493.52,
+   column3 = within "Column3" Rank2.<$>  taxIncomeBracketFields   98_560 0.105   6_288.15,
+   column4 = within "Column4" Rank2.<$>  taxIncomeBracketFields  113_158 0.1229  7_820.94,
+   column5 = within "Column5" Rank2.<$> (taxIncomeBracketFields' 137_407 0.147  10_801.15){equalsTax = Field ["LIne15", "Amount"] Amount},
+   column6 = within "Column6" Rank2.<$> (taxIncomeBracketFields' 186_306 0.168  17_989.30){rate = Field ["Line12", "Percent_ReadOnly"] $ Constant 0.168 Percent},
+   column7 = within "Column7" Rank2.<$>  taxIncomeBracketFields' 259_829 0.205  30_341.16}
 
 taxIncomeBracketFields :: Centi -> Rational -> Centi -> TaxIncomeBracket FieldConst
 taxIncomeBracketFields threshold rate baseTax = TaxIncomeBracket {
@@ -61,12 +61,12 @@ page1PartBFields = Page1PartB {
    line16_basic = Field ["Line16", "Amount"] Amount,
    line17_age = Field ["Line17", "Amount"] Amount,
    spouseAmount = within "Spouse_CPL_Amount" Rank2.<$> BaseCredit{
-       baseAmount = Field ["Line18", "Amount"] $ Constant 11_850 Amount,
+       baseAmount = Field ["Line18", "Amount"] $ Constant 12_181 Amount,
        reduction = Field ["Line19", "Amount"] Amount,
        difference = Field ["Line20", "Amount1"] Amount,
        cont = Field ["Line20", "Amount2"] Amount},
    dependantAmount = within "Amount_Eligible_Dependant" Rank2.<$> BaseCredit{
-       baseAmount = Field ["Line21", "Amount"] $ Constant 11_850 Amount,
+       baseAmount = Field ["Line21", "Amount"] $ Constant 12_181 Amount,
        reduction = Field ["Line22", "Amount"] Amount,
        difference = Field ["Line23", "Amount1"] Amount,
        cont = Field ["Line23", "Amount2"] Amount},
@@ -142,7 +142,7 @@ page3Fields = Page3 {
    partC = partCFields,
    line73_basicReduction = Field ["Line73", "Amount"] Amount,
    line74_copy = Field ["Line74", "Amount"] Amount,
-   line75_base = Field ["Line75", "Amount_ReadOnly"] $ Constant 24_338 Amount,
+   line75_base = Field ["Line75", "Amount_ReadOnly"] $ Constant 25_020 Amount,
    line76_difference = Field ["Line76", "Amount"] Amount,
    line77_rate = Field ["Line77", "PercentAmount_ReadOnly"] $ Constant 0.0356 Percent,
    line78_fraction = subCalculationFields "Line78" ["Amount1"] ["Amount2"],
