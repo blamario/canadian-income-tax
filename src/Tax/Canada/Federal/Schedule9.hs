@@ -56,7 +56,9 @@ data Page1 line = Page1{
    line16_difference :: line Centi,
    line17_copy :: line Centi,
    line18_threshold :: line Centi,
-   line19_difference :: line Centi,
+   line19_difference :: line Centi}
+
+data Page2 line = Page2{
    lineE_copy :: line Centi,
    line20_min :: line Centi,
    line20_fraction :: line Centi,
@@ -64,9 +66,7 @@ data Page1 line = Page1{
    line21_fraction :: line Centi,
    line22_copy :: line Centi,
    line22_fraction :: line Centi,
-   line23_sum :: line Centi}
-
-data Page2 line = Page2{
+   line23_sum :: line Centi,
    propertyClass :: line Text,
    line1_depreciation :: line Centi,
    line2_dispositionProceeds :: line Centi,
@@ -105,16 +105,16 @@ fixSchedule9 t1 = fixEq $ \form@Schedule9{page1, page2} -> form{
    line14_difference = difference line12_sum line13_min,
    line16_difference = nonNegativeDifference line14_difference line_34210_ecological,
    line17_copy = t1.page5.step4_TaxableIncome.line_26000_TaxableIncome,
-   line19_difference = nonNegativeDifference line17_copy line18_threshold,
-   lineE_copy = line14_difference,
-   line20_min = minimum [line16_difference, line19_difference],
+   line19_difference = nonNegativeDifference line17_copy line18_threshold},
+  page2 = let Page2{..} = page2 in page2{
+   lineE_copy = page1.line14_difference,
+   line20_min = minimum [page1.line16_difference, page1.line19_difference],
    line20_fraction = (0.33 *) <$> line20_min,
    line21_difference = difference lineE_copy line20_min,
    line21_fraction = (0.29 *) <$> line21_difference,
-   line22_copy = line13_min,
+   line22_copy = page1.line13_min,
    line22_fraction = (0.15 *) <$> line22_copy,
-   line23_sum = totalOf [line20_fraction, line21_fraction, line22_fraction]},
-  page2 = let Page2{..} = page2 in page2{
+   line23_sum = totalOf [line20_fraction, line21_fraction, line22_fraction],
    line4_least = minimum [line2_dispositionProceeds, line3_capitalCost],
    line5_least = minimum [line1_depreciation, line4_least],
    line3_difference = nonNegativeDifference line1_capitalGains line2_capitalGainsDeduction}}
@@ -143,8 +143,9 @@ schedule9Fields = within "form1" Rank2.<$> Schedule9 {
    line_34210_ecological = Field ["Line15", "Amount"] Amount,
    line16_difference = Field ["Line16", "Amount"] Amount,
    line17_copy = Field ["Line17", "Amount"] Amount,
-   line18_threshold = Field ["Line18", "Amount"] $ Constant 246_752 Amount,
-   line19_difference = Field ["Line19", "Amount"] Amount,
+   line18_threshold = Field ["Line18", "Amount"] $ Constant 253_414 Amount,
+   line19_difference = Field ["Line19", "Amount"] Amount},
+  page2 = within "Page2" Rank2.<$> Page2{
    lineE_copy = Field ["AmountE", "Amount_Line14"] Amount,
    line20_min = Field ["Line20", "AmountF", "Amount"] Amount,
    line20_fraction = Field ["Line20", "Amount"] Amount,
@@ -152,8 +153,7 @@ schedule9Fields = within "form1" Rank2.<$> Schedule9 {
    line21_fraction = Field ["Line21", "Amount"] Amount,
    line22_copy = Field ["Line22", "AmountH", "Amount_Line14"] Amount,
    line22_fraction = Field ["Line22", "Amount"] Amount,
-   line23_sum = Field ["Line23", "Amount"] Amount},
-  page2 = within "Page2" . within "Charts" Rank2.<$> Page2{
+   line23_sum = Field ["Line23", "Amount"] Amount,
    propertyClass = Field ["Chart1", "TextField_Underlined_Bottom"] Textual,
    line1_depreciation = Field ["Chart1", "Line_1", "Amount"] Amount,
    line2_dispositionProceeds = Field ["Chart1", "Line_2", "Amount"] Amount,
