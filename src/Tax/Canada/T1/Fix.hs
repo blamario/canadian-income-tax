@@ -106,7 +106,7 @@ fixPage5 t1 = fixEq $ \Page5{..}-> Page5{
 fixPage6 :: T1 Maybe -> Page6 Maybe -> Page6 Maybe
 fixPage6 t1 = fixEq $ \page@Page6{..}-> page{
    pageBreakCarry = t1.page5.partB_FederalTaxCredits.pageBreakSummary,
-   line_31260 = minimum [Just 1433,
+   line_31260 = minimum [Just 1471,
                         totalOf [t1.page3.line_10100_EmploymentIncome, t1.page3.line_10400_OtherEmploymentIncome]],
    line102_sum = fixSubCalculation id $
                  totalOf [line_30800,
@@ -174,20 +174,23 @@ fixPage5PartA t1 = fixEq $ \part-> Page5PartA{
 fixPage5PartB :: T1 Maybe -> Page5PartB Maybe -> Page5PartB Maybe
 fixPage5PartB t1 = fixEq $ \part@Page5PartB{..}-> part{
    line_30000 = let income = fromMaybe 0 t1.page4.line_23600_NetIncome
-                    threshold = 173_205
-                    ceiling = 246_752
-                in if income <= threshold then Just 15_705
-                   else if income >= ceiling then Just 14_156
-                        else Just $ 15_705 - (15_705 - 14_156) * (income - threshold) / (ceiling - threshold),
-   line_30100 = if any ((<= (1959 :: Year)) . dayPeriod) t1.page1.identification.dateBirth
+                    threshold = 177_882
+                    ceiling = 253_414
+                    minCredit = 14_538
+                    maxCredit = 16_129
+                in if income <= threshold then Just maxCredit
+                   else if income >= ceiling then Just minCredit
+                        else Just $ maxCredit - (maxCredit - minCredit) * (income - threshold) / (ceiling - threshold),
+   line_30100 = if any ((<= (1960 :: Year)) . dayPeriod) t1.page1.identification.dateBirth
                 then let income = fromMaybe 0 t1.page4.line_23600_NetIncome
-                         threshold = 44_325
-                         ceiling = 102_925
-                     in if income <= threshold then Just 8790
+                         threshold = 45_522
+                         ceiling = 105_709
+                         maxCredit = 9028
+                     in if income <= threshold then Just maxCredit
                         else if income >= ceiling then Just 0
-                             else Just (8790 - (income - threshold) * 0.15)
+                             else Just (maxCredit - (income - threshold) * 0.15)
                 else Nothing,
-   line_30500 =  ((* 2616) . fromIntegral) <$> line_30499_ChildrenNum,
+   line_30500 =  ((* 2687) . fromIntegral) <$> line_30499_ChildrenNum,
    pageBreakSummary = totalOf [line_30000,
                                line_30100,
                                line_30300,
@@ -201,7 +204,7 @@ fixMedicalExpenses t1 = fixEq $ \expenses@MedicalExpenses{familyExpenses, taxabl
                                                           taxableIncomeFraction, threshold}-> expenses{
    taxableIncome = t1.page4.line_23600_NetIncome,
    taxableIncomeFraction = (* 0.03) <$> taxableIncome,
-   threshold = min 2759 <$> taxableIncomeFraction,
+   threshold = min 2834 <$> taxableIncomeFraction,
    difference = nonNegativeDifference familyExpenses threshold}
 
 fixPage7PartC :: T1 Maybe -> Page7PartC Maybe -> Page7PartC Maybe
