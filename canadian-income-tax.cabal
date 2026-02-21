@@ -96,7 +96,7 @@ library
                       time == 1.*, containers >= 0.5 && < 0.9, bitwise-enum ^>= 1.0.0, bifunctors ^>= 5.6,
                       monoid-subclasses == 1.*, rank2classes ^>= 1.5.3,
                       deep-transformations ^>= 0.2.2 || ^>= 0.3 || ^>= 0.4,
-                      ca-province-codes == 1.0.*, forms-data-format ^>= 0.2, typed-process >= 0.1 && ^>=0.2,
+                      ca-province-codes == 1.0.*, forms-data-format >= 0.2.1 && < 0.4, typed-process >= 0.1 && ^>=0.2,
                       template-haskell == 2.*
     hs-source-dirs:   src
     GHC-options: -Wno-ambiguous-fields -Wno-simplifiable-class-constraints
