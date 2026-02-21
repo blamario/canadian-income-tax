@@ -10,29 +10,29 @@ import './App.css';
 
 const provinces = [
     {label: 'Alberta',                   value: {code: 'AB', href: 'alberta',
-                                                 prefixT1: '5015', prefix428: '5009'}},
+                                                 prefixT1: '5009', prefix428: '5009'}},
     {label: 'British Columbia',          value: {code: 'BC', href: 'british-columbia',
                                                  prefixT1: '5010', prefix428: '5010', has479: true}},
     {label: 'Manitoba',                  value: {code: 'MB', href: 'manitoba',
-                                                 prefixT1: '5015', prefix428: '5007'}},
+                                                 prefixT1: '5000', prefix428: '5007'}},
     {label: 'New Brunswick',             value: {code: 'NB', href: 'new-brunswick',
-                                                 prefixT1: '5004'}},
+                                                 prefixT1: '5000'}},
     {label: 'Newfoundland and Labrador', value: {code: 'NL', href: 'newfoundland-labrador',
                                                  prefixT1: '5001'}},
     {label: 'Northwest Territories',     value: {code: 'NT', href: 'northwest-territories',
                                                  prefixT1: '5012'}},
     {label: 'Nova Scotia',               value: {code: 'NS', href: 'nova-scotia',
-                                                 prefixT1: '5015'}},
+                                                 prefixT1: '5000'}},
     {label: 'Nunavut',                   value: {code: 'NU', href: 'nunavut',
                                                  prefixT1: '5014'}},
     {label: 'Ontario',                   value: {code: 'ON', href: 'ontario',
                                                  prefixT1: '5006', prefix428: '5006', has479: true}},
     {label: 'PEI',                       value: {code: 'PE', href: 'prince-edward-island',
-                                                 prefixT1: '5002'}},
+                                                 prefixT1: '5000'}},
     {label: 'Quebec',                    value: {code: 'QC', href: 'quebec',
                                                  prefixT1: '5005'}},
     {label: 'Saskatchewan',              value: {code: 'SK', href: 'saskatchewan',
-                                                 prefixT1: '5015'}},
+                                                 prefixT1: '5000'}},
     {label: 'Yukon',                     value: {code: 'YT', href: 'yukon',
                                                  prefixT1: '5011'}}
 ];
@@ -235,8 +235,8 @@ export default function Uploads() {
 
         {province && <>
          <h3>Step 2. Download the <em>fillable</em> PDF forms from <a target="_blank" href="https://canada.ca">canada.ca</a></h3>
-         <p>or, more precisely, from the <a target="_blank" href={"https://www.canada.ca/en/revenue-agency/services/forms-publications/tax-packages-years/general-income-tax-benefit-package/" + province.value.href + ".html"}>2024 Income tax package</a> page.</p>
-         <p>You will need at least the {province.value.prefix428 ? <>federal tax and {province.value.code}428 forms, <tt>{province.value.prefixT1}-r-fill-24e.pdf</tt> and <tt>{province.value.prefix428}-c-fill-24e.pdf</tt></> : <>federal tax form <tt>{province.value.prefixT1}-r-fill-24e.pdf</tt></>}</p>
+         <p>or, more precisely, from the <a target="_blank" href={"https://www.canada.ca/en/revenue-agency/services/forms-publications/tax-packages-years/general-income-tax-benefit-package/" + province.value.href + ".html"}>2025 Income tax package</a> page.</p>
+         <p>You will need at least the {province.value.prefix428 ? <>federal tax and {province.value.code}428 forms, <tt>{province.value.prefixT1}-r-fill-25e.pdf</tt> and <tt>{province.value.prefix428}-c-fill-25e.pdf</tt></> : <>federal tax form <tt>{province.value.prefixT1}-r-fill-25e.pdf</tt></>}</p>
          <h3>Step 3. Fill in the downloaded {forms}</h3>
          <p>Don't bother with any fields that are calculated from other fields in the same {formsAgain}, that part will be done for you automatically.</p>
          <p>You can leave out your name, SIN, and other private data, since they're not affecting any numbers.</p>

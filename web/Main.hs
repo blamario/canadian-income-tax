@@ -56,10 +56,10 @@ import Prelude hiding (log)
 main :: IO ()
 main = do
   dataDir <- getDataDir
-  t4fdfBytes <- ByteString.readFile (dataDir </> "fdf" </> "t4-fill-24e.fdf")
+  t4fdfBytes <- ByteString.readFile (dataDir </> "fdf" </> "t4-fill-25e.fdf")
   let readEmptyForm baseName = (,) completeName <$> ByteString.Lazy.readFile completePath
         where completePath = dataDir </> "pdf" </> completeName
-              completeName = Text.unpack baseName <> "-fill-24e.pdf"
+              completeName = Text.unpack baseName <> "-fill-25e.pdf"
   emptyForms <- traverse readEmptyForm Federal.formFileNames
   let t4fdf = case FDF.parse t4fdfBytes of
         Left err -> error ("Can't load built-in T4 FDF: " <> err)
