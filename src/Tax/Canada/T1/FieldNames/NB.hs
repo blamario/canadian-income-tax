@@ -4,17 +4,9 @@
 
 module Tax.Canada.T1.FieldNames.NB where
 
-import Rank2 qualified
-
-import Tax.FDF (FieldConst (Field), Entry (..), within)
+import Tax.FDF (FieldConst)
 import Tax.Canada.T1.Types
-import Tax.Canada.T1.FieldNames.PE qualified as PE
+import Tax.Canada.T1.FieldNames.AB qualified as AB
 
 t1Fields :: T1 FieldConst
-t1Fields = PE.t1Fields{
-   page8 = within "form1" . within "Page8" . within "Return-pg8" Rank2.<$> page8Fields}
-
-page8Fields :: Page8 FieldConst
-page8Fields = PE.page8Fields {
-   line_48400_Refund = Field ["Refund_or_Balance-Owing", "Line48400", "Line_48400_Amount"] Amount,
-   line_48500_BalanceOwing = Field ["Refund_or_Balance-Owing", "Line48500", "Line_48500_Amount"] Amount}
+t1Fields = AB.t1Fields

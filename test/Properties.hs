@@ -13,7 +13,6 @@ import Tax.Canada.Province.BC qualified as BC
 import Tax.Canada.Province.MB qualified as MB
 import Tax.Canada.Province.NL qualified as NL
 import Tax.Canada.Province.ON qualified as ON
-import Tax.Canada.Province.PE qualified as PE
 import Tax.Canada.Province.QC qualified as QC
 import Tax.Canada.Territory.NT qualified as NT
 import Tax.Canada.Territory.NU qualified as NU
