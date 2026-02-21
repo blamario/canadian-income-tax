@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE ImportQualifiedPost #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE GADTs #-}
@@ -9,7 +10,8 @@
 -- | Utility functions for dealing with 'FDF' forms
 
 module Tax.FDF (FDFs, FieldConst(..), Entry(..),
-                mapForm, mapForm2, mapForms, load, loadAll, store, storeAll, update, updateAll, formKeys, within) where
+                mapForm, mapForm2, mapForms, load, loadAll, store, storeAll, update, updateAll, formKeys,
+                taxYear, within) where
 
 import Data.Biapplicative (biliftA2, biliftA3)
 import Data.Bifunctor (bimap)
@@ -26,6 +28,7 @@ import Data.Semigroup (Endo (Endo, appEndo))
 import Data.Semigroup.Cancellative (stripSuffix)
 import Data.Text (Text)
 import Data.Text qualified as Text
+import Data.Text.Read (decimal)
 import Data.Time (Day, MonthOfYear, defaultTimeLocale, formatTime, parseTimeM)
 import Rank2 qualified
 import Text.FDF (FDF, foldMapWithKey, mapWithKey)
@@ -40,6 +43,7 @@ data Entry a where
   Constant :: (Eq a, Show a) => a -> Entry a -> Entry a
   Count :: Entry Word
   Date :: Entry Day
+  ShortDate :: Entry Day
   Year :: Entry Int
   Month :: Entry MonthOfYear
   Province :: Entry Province.Code
@@ -57,6 +61,9 @@ deriving instance Show a => Show (Entry a)
 -- | A collection of 'FDF' forms keyed by an identifier. The identifier type must be a lawful instance of 'Ord',
 -- 'Read', and 'Show' classes, and its 'show' must be injective and inverse of 'read'.
 type FDFs a = Map a FDF
+
+taxYear :: Int
+Right (taxYear, _) = decimal CURRENT_PACKAGE_VERSION
 
 -- | Add a head component to a field path
 within :: Text -> FieldConst x -> FieldConst x
@@ -169,6 +176,7 @@ textualFields = Rank2.liftA2 pairKey
         fromEntry (Constant c e) _ = fromEntry e c
         fromEntry Textual v = Right v
         fromEntry Date v = Right $ Text.pack $ formatTime defaultTimeLocale "%Y%m%d" v
+        fromEntry ShortDate v = Right $ Text.pack $ formatTime defaultTimeLocale "%m%d" v
         fromEntry Checkbox True = Right "Yes"
         fromEntry Checkbox False = Right "No"
         fromEntry e@(RadioButton values) v = case elemIndex v values
@@ -222,7 +230,9 @@ toEntry (Constant expected entry) v = do
     then pure e
     else Left ("Expected " <> show expected <> ", got " <> show (v, e))
 toEntry Count v = bimap (<> " for the count of " <> show v) Just $ readEither $ Text.unpack v
-toEntry Date v =  bimap (<> " for date " <> show v) Just $ parseTimeM False defaultTimeLocale "%Y%m%d" $ Text.unpack v
+toEntry Date v = bimap (<> " for date " <> show v) Just $ parseTimeM False defaultTimeLocale "%Y%m%d" $ Text.unpack v
+toEntry ShortDate v = bimap (<> " for date " <> show v) Just $ parseTimeM False defaultTimeLocale "%Y%m%d"
+                      $ show taxYear <> Text.unpack v
 toEntry Month v = bimap (<> " for month " <> show v) Just $ readEither $ Text.unpack v
 toEntry Year v = bimap (<> " for year " <> show v) Just $ readEither $ Text.unpack v
 toEntry Province v = bimap (<> " for province code " <> show v) Just $ readEither $ Text.unpack v
@@ -251,7 +261,7 @@ toEntry Checkbox "Off" = Right $ Just False
 toEntry Checkbox "1" = Right $ Just True
 toEntry Checkbox v = Left ("Bad checkbox value: " <> show v)
 toEntry e@(RadioButton values) v
-  | Right n <- readEither $ Text.unpack v, n > 0, x:_ <- drop (n - 1) values = Right $ Just x
+  | Right (n, "") <- decimal v, n > 0, x:_ <- drop (n - 1) values = Right $ Just x
   | otherwise = Left ("Bad radio button value: " <> show (e, v))
 toEntry e@RadioButtons{} v = Left (show (e, v))
 toEntry e@Switch{} v = Left (show (e, v))

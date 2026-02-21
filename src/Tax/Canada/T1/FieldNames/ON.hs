@@ -46,7 +46,7 @@ page1IdentificationFields = Identification {
    id_FirstNameInitial = Field ["ID_FirstNameInitial"] Textual,
    id_MailingAddress = Field ["ID_MailingAddress"] Textual,
    maritalStatus = Field ["MaritalStatus_Checkbox"] $ RadioButtons 0 1 "MaritalStatus" [Married .. Single],
-   maritalStatusChangeDate = Field ["DateMMDD_Comb_BordersAll_Std", "DateMMDD_Comb"] Date,
+   maritalStatusChangeDate = Field ["DateMMDD_Comb_BordersAll_Std", "DateMMDD_Comb"] ShortDate,
    id_RuralRoute = Field ["ID_RuralRoute"] Textual,
    id_POBox = Field ["ID_POBox"] Textual,
    prov_DropDown = Field ["Prov_DropDown"] Province}
@@ -55,8 +55,8 @@ page1ResidenceFields :: Residence FieldConst
 page1ResidenceFields = Residence {
    prov_DropDown_Business = Field ["Prov_DropDown-Business"] Province,
    prov_DropDown_Residence = Field ["Prov_DropDown-Residence"] Province,
-   date_Departure = Field ["Date_Departure", "DateMMDD_Comb_BordersAll_Std", "DateMMDD_Comb"] Date,
-   date_Entry = Field ["Date_Entry", "DateMMDD_Comb_BordersAll_Std", "DateMMDD_Comb"] Date,
+   date_Departure = Field ["Date_Departure", "DateMMDD_Comb_BordersAll_Std", "DateMMDD_Comb"] ShortDate,
+   date_Entry = Field ["Date_Entry", "DateMMDD_Comb_BordersAll_Std", "DateMMDD_Comb"] ShortDate,
    prov_DropDown = Field ["Prov_DropDown"] Textual}
   
 page1SpouseFields :: Spouse FieldConst

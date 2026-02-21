@@ -27,7 +27,7 @@ import Hedgehog.Range qualified as Range
 import Transformation (Transformation (Domain, Codomain), At)
 import Transformation qualified
 
-import Tax.FDF (FieldConst (Field, NoField), Entry (Constant))
+import Tax.FDF (FieldConst (Field, NoField), Entry (Constant, Date, ShortDate), taxYear)
 import Tax.Canada.T1 (LanguageOfCorrespondence, MaritalStatus)
 import Data.Fixed (Centi, Fixed (MkFixed))
 
@@ -69,7 +69,9 @@ instance Gen `At` Province.Code where
   _ $ _ = adjust $ Gen.element Province.all
 
 instance Gen `At` Day where
-  _ $ _ = adjust $ Gen.enum (fromGregorian 1910 1 1) (fromGregorian 2050 12 31)
+  _ $ Field _ Date = adjust $ Gen.enum (fromGregorian 1910 1 1) (fromGregorian 2050 12 31)
+  _ $ Field _ ShortDate =
+    adjust $ Gen.enum (fromGregorian (fromIntegral taxYear) 1 1) (fromGregorian (fromIntegral taxYear) 12 31)
 
 instance Gen `At` LanguageOfCorrespondence where
   _ $ _ = adjust Gen.enumBounded
