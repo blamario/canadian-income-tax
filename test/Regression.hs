@@ -21,6 +21,7 @@ import Data.ByteString.Lazy (fromStrict)
 import Data.Foldable (toList)
 import Data.List qualified as List
 import Data.Map qualified as Map
+import GHC.Stack (HasCallStack)
 import System.Directory (doesDirectoryExist, listDirectory)
 import System.Exit (die)
 import System.FilePath.Posix (combine)
@@ -80,10 +81,10 @@ testReturn path = do
            -> testGroup path . toList <$> Map.traverseWithKey verify fdfOutputs
 
 
-formKey :: FilePath -> FormKey
-formKey "5000-s6-fill-24e.fdf" = FormKey.Schedule6
-formKey "5000-s8-fill-24e.fdf" = FormKey.Schedule8
-formKey "5006-c-fill-24e.fdf" = FormKey.Provincial428
-formKey "5006-r-fill-24e.fdf" = FormKey.T1
-formKey "t4-fill-24e.fdf" = FormKey.T4
+formKey :: HasCallStack => FilePath -> FormKey
+formKey "5000-s6-fill-25e.fdf" = FormKey.Schedule6
+formKey "5000-s8-fill-25e.fdf" = FormKey.Schedule8
+formKey "5006-c-fill-25e.fdf" = FormKey.Provincial428
+formKey "5006-r-fill-25e.fdf" = FormKey.T1
+formKey "t4-fill-25e.fdf" = FormKey.T4
 formKey name = error ("File name " <> name <> " is not recognized as a form.")
