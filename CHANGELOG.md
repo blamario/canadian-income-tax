@@ -1,5 +1,13 @@
 # Revision history for `canadian-income-tax`
 
+## 2025.0
+
+* Breaking changes to the library:
+  * Removed some form fields and added new ones for the 2025 tax return forms
+* Fixes and maintenance:
+  * Introduced `ShortDate` and `taxYear` to `Tax.FDF`, fixed the type of MMDD fields in T1
+  * Updated dependency bounds for `form-data-fields`
+
 ## 2024.1.0.1
 
 * Bumped the upper `deep-transformations` dependency bounds
