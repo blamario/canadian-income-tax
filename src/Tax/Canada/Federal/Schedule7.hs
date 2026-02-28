@@ -93,12 +93,13 @@ $(foldMap
    [''Schedule7, ''Page2, ''Page3, ''Page4, ''PartB, ''PartC, ''PartD, ''PartE])
 
 fixSchedule7 :: T1 Maybe -> Schedule7 Maybe -> Schedule7 Maybe
-fixSchedule7 t1  = fixEq $ \Schedule7{page2, page3, page4} -> Schedule7{
-   page2 = let Page2{..} = page2 in page2{
+fixSchedule7 t1 = fixEq defaultSchedule7 . fixEq calculateSchedule7 where
+  calculateSchedule7 Schedule7{page2, page3, page4} = Schedule7{
+    page2 = let Page2{..} = page2 in page2{
       line_24500_contributions_sum =
          fixSubCalculation id $ totalOf [line2_pastYearContributions, line3_thisYearContributions],
       line5_sum = totalOf [line1_pastUnused, line_24500_contributions_sum.result]},
-   page3 = let Page3{partB = partB@PartB{..}, partC = partC@PartC{..}} = page3 in Page3{
+    page3 = let Page3{partB = partB@PartB{..}, partC = partC@PartC{..}} = page3 in Page3{
       partB = partB{
          line6_contributions_copy = page2.line5_sum,
          line9_repayments_sum = fixSubCalculation id $ totalOf [line_24600_hbp, line_24620_llp],
@@ -110,14 +111,17 @@ fixSchedule7 t1  = fixEq $ \Schedule7{page2, page3, page4} -> Schedule7{
          line15_cont = line_24640_transfers,
          line16_difference = difference line14_copy line15_cont,
          line17_lesser = min line13_difference line16_difference,
-         line18_deducting = line18_deducting <|> line17_lesser,
          line19_sum = totalOf [line15_cont, line18_deducting],
          line20_deduction = min line10_difference line19_sum}},
-   page4 = page4{
+    page4 = page4{
       partD = let PartD{line21_copy, line22_copy} = page4.partD in PartD{
          line21_copy = page3.partB.line10_difference,
          line22_copy = page3.partC.line20_deduction,
          line23_difference = difference line21_copy line22_copy}}}
+  defaultSchedule7 s7@Schedule7{page3 = page3@Page3{partC = partC@PartC{..}}} = calculateSchedule7 s7{
+    page3 = page3{
+      partC = partC{
+         line18_deducting = line18_deducting <|> line17_lesser}}}
 
 schedule7Fields :: Schedule7 FieldConst
 schedule7Fields = within "form1" Rank2.<$> Schedule7{
