@@ -9,6 +9,7 @@ module Tax.Canada (completeForms, completeRelevantForms, formFileNames) where
 import Data.CAProvinceCodes qualified as Province
 import Data.Map (Map)
 import Data.Map qualified as Map
+import Data.Set (Set)
 import Data.Set qualified as Set
 import Data.Text (Text)
 import Rank2 qualified
@@ -28,41 +29,46 @@ import Tax.FDF qualified as FDF
 -- | Complete all FDF forms in the given map, keyed by 'FormKey'. The inter-form field references are resolved as
 -- well.
 completeForms :: Province.Code -> Federal.InputForms Maybe -> FDFs FormKey -> Either String (FDFs FormKey)
-completeForms Province.AB = FDF.mapForms AB.returnFields . AB.fixReturns
-completeForms Province.BC = FDF.mapForms BC.returnFields . BC.fixReturns
-completeForms Province.MB = FDF.mapForms MB.returnFields . MB.fixReturns
-completeForms Province.ON = FDF.mapForms ON.returnFields . ON.fixReturns
-completeForms p = FDF.mapForms (Federal.formFieldsForProvince p) . fixFederalForms p
+completeForms p = completeAndFilterForms (const $ Map.keysSet) p
 
--- | Complete the FDF forms in the given map, keyed by identifiers (@T1@, @428@, @Schedule9@, etc). The inter-form
--- field references are resolved as well. Only the relevant forms that affect T1 are kept.
+-- | Complete the FDF forms in the given map, keyed by 'FormKey'. The inter-form field references are resolved as
+-- well. Only the relevant forms that affect T1 are kept.
 completeRelevantForms :: Province.Code -> Federal.InputForms Maybe -> FDFs FormKey -> Either String (FDFs FormKey)
-completeRelevantForms Province.AB =
-  fmap (uncurry filterRelevant <$>)
+completeRelevantForms p = completeAndFilterForms (\t1 _-> relevantFormKeys t1 <> alwaysRelevant) p
+  where alwaysRelevant = Set.fromList [FormKey.Provincial428, FormKey.Provincial479, FormKey.T1]
+
+-- | Complete the FDF forms in the given map, keyed by 'FormKey', then filter them to the 'FormKey' subset calculated
+-- by the given function.
+completeAndFilterForms
+  :: (T1 Maybe -> FDFs FormKey -> Set FormKey) -- ^ keys of completed forms to keep
+  -> Province.Code
+  -> Federal.InputForms Maybe                  -- ^ input-only forms like 'Tax.Canada.T4.T4'
+  -> FDFs FormKey                              -- ^ forms to complete
+  -> Either String (FDFs FormKey)              -- ^ completed and filtered forms
+completeAndFilterForms keysToKeep Province.AB =
+  fmap (filterForms keysToKeep <$>)
   . mapFormsWithT1 AB.returnFields ((.t1) . Rank2.fst :: Rank2.Product Federal.Forms AB.AB428 Maybe -> T1 Maybe)
   . AB.fixReturns
-completeRelevantForms Province.BC =
-  fmap (uncurry filterRelevant <$>)
+completeAndFilterForms keysToKeep Province.BC =
+  fmap (filterForms keysToKeep <$>)
   . mapFormsWithT1 BC.returnFields ((.federal.t1) :: BC.Returns Maybe -> T1 Maybe)
   . BC.fixReturns
-completeRelevantForms Province.MB =
-  fmap (uncurry filterRelevant <$>)
+completeAndFilterForms keysToKeep Province.MB =
+  fmap (filterForms keysToKeep <$>)
   . mapFormsWithT1 MB.returnFields ((.t1) . Rank2.fst :: Rank2.Product Federal.Forms MB.MB428 Maybe -> T1 Maybe)
   . MB.fixReturns
-completeRelevantForms Province.ON =
-  fmap (uncurry filterRelevant <$>)
+completeAndFilterForms keysToKeep Province.ON =
+  fmap (filterForms keysToKeep <$>)
   . mapFormsWithT1 ON.returnFields ((.federal.t1) :: ON.Returns Maybe -> T1 Maybe)
   . ON.fixReturns
-completeRelevantForms p =
-  fmap (uncurry filterRelevant <$>)
+completeAndFilterForms keysToKeep p =
+  fmap (filterForms keysToKeep <$>)
   . mapFormsWithT1 (Federal.formFieldsForProvince p) (.t1)
   . fixFederalForms p
 
--- | Trim down the 'FDFs' to contain only the forms that have some effect on the given 'T1' form. The 'T1' itself is
--- also kept, as well as any provincial forms.
-filterRelevant :: T1 Maybe -> FDFs FormKey -> FDFs FormKey
-filterRelevant t1 = flip Map.restrictKeys (relevantFormKeys t1 <> alwaysRelevant)
-  where alwaysRelevant = Set.fromList [FormKey.Provincial428, FormKey.Provincial479, FormKey.T1]
+-- | Filter the 'FDFs' according to the supplied function
+filterForms :: (T1 Maybe -> FDFs FormKey -> Set FormKey) -> (T1 Maybe, FDFs FormKey) -> FDFs FormKey
+filterForms keysToKeep (t1, forms) = Map.restrictKeys forms (keysToKeep t1 forms)
 
 -- | Like 'mapForms', but also returns the T1 form by itself.
 mapFormsWithT1 :: (Rank2.Apply form, Rank2.Traversable form)
