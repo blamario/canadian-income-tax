@@ -30,7 +30,7 @@ import System.FilePath (combine, replaceDirectory, takeFileName)
 import Text.FDF (FDF, parse, serialize)
 
 import Paths_canadian_income_tax (getDataDir)
-import Tax.Canada (completeForms, completeRelevantForms, formFileNames)
+import Tax.Canada (completeAndFilterForms, allFormKeys, relevantFormKeys, formFileNames)
 import Tax.Canada.Federal (loadInputForms)
 import Tax.Canada.FormKey (FormKey)
 import Tax.Canada.FormKey qualified as FormKey
@@ -135,8 +135,8 @@ process Options{province, t1InputPath, t4InputPaths, p428InputPath, p479InputPat
        fdfs = getCompose <$> traverse (parse . Lazy.toStrict . snd) (Compose inputs) :: Either String [(FormKey, FDF)]
    case do (inputFDFs, ioFDFs) <- List.partition ((FormKey.T4 ==) . fst) <$> fdfs
            inputForms <- loadInputForms inputFDFs
-           let complete = if keepIrrelevantForms then completeForms else completeRelevantForms
-           complete province inputForms (Map.fromAscList ioFDFs)
+           let formKeys = if keepIrrelevantForms then allFormKeys else relevantFormKeys
+           completeAndFilterForms formKeys province inputForms (Map.fromAscList ioFDFs)
      of
       Left err -> error err
       Right fixedFDFs -> do

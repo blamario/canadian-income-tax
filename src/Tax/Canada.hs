@@ -4,7 +4,8 @@
 {-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Tax.Canada (completeForms, completeRelevantForms, formFileNames) where
+module Tax.Canada (completeAndFilterForms, completeForms, completeRelevantForms,
+                   allFormKeys, relevantFormKeys, formFileNames) where
 
 import Data.CAProvinceCodes qualified as Province
 import Data.Map (Map)
@@ -15,7 +16,6 @@ import Data.Text (Text)
 import Rank2 qualified
 
 import Tax.Canada.Federal qualified as Federal
-import Tax.Canada.Federal (fixFederalForms, relevantFormKeys)
 import Tax.Canada.FormKey qualified as FormKey
 import Tax.Canada.FormKey (FormKey)
 import Tax.Canada.Province.AB qualified as AB
@@ -29,16 +29,20 @@ import Tax.FDF qualified as FDF
 -- | Complete all FDF forms in the given map, keyed by 'FormKey'. The inter-form field references are resolved as
 -- well.
 completeForms :: Province.Code -> Federal.InputForms Maybe -> FDFs FormKey -> Either String (FDFs FormKey)
-completeForms p = completeAndFilterForms (const $ Map.keysSet) p
+completeForms p = completeAndFilterForms allFormKeys p
+
+allFormKeys, relevantFormKeys :: T1 Maybe -> FDFs FormKey -> Set FormKey
+allFormKeys = const $ Map.keysSet
+relevantFormKeys t1 _ = Federal.relevantFormKeys t1 <> alwaysRelevant
+  where alwaysRelevant = Set.fromList [FormKey.Provincial428, FormKey.Provincial479, FormKey.T1]
 
 -- | Complete the FDF forms in the given map, keyed by 'FormKey'. The inter-form field references are resolved as
 -- well. Only the relevant forms that affect T1 are kept.
 completeRelevantForms :: Province.Code -> Federal.InputForms Maybe -> FDFs FormKey -> Either String (FDFs FormKey)
-completeRelevantForms p = completeAndFilterForms (\t1 _-> relevantFormKeys t1 <> alwaysRelevant) p
-  where alwaysRelevant = Set.fromList [FormKey.Provincial428, FormKey.Provincial479, FormKey.T1]
+completeRelevantForms p = completeAndFilterForms relevantFormKeys p
 
 -- | Complete the FDF forms in the given map, keyed by 'FormKey', then filter them to the 'FormKey' subset calculated
--- by the given function.
+-- by the given first argument function: typically 'allFormKeys' or 'relevantFormKeys'.
 completeAndFilterForms
   :: (T1 Maybe -> FDFs FormKey -> Set FormKey) -- ^ keys of completed forms to keep
   -> Province.Code
@@ -64,7 +68,7 @@ completeAndFilterForms keysToKeep Province.ON =
 completeAndFilterForms keysToKeep p =
   fmap (filterForms keysToKeep <$>)
   . mapFormsWithT1 (Federal.formFieldsForProvince p) (.t1)
-  . fixFederalForms p
+  . Federal.fixFederalForms p
 
 -- | Filter the 'FDFs' according to the supplied function
 filterForms :: (T1 Maybe -> FDFs FormKey -> Set FormKey) -> (T1 Maybe, FDFs FormKey) -> FDFs FormKey
