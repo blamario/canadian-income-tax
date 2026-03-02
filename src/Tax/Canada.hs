@@ -49,40 +49,27 @@ completeAndFilterForms
   -> Federal.InputForms Maybe                  -- ^ input-only forms like 'Tax.Canada.T4.T4'
   -> FDFs FormKey                              -- ^ forms to complete
   -> Either String (FDFs FormKey)              -- ^ completed and filtered forms
-completeAndFilterForms keysToKeep Province.AB =
-  fmap (filterForms keysToKeep <$>)
-  . mapFormsWithT1 AB.returnFields ((.t1) . Rank2.fst :: Rank2.Product Federal.Forms AB.AB428 Maybe -> T1 Maybe)
-  . AB.fixReturns
-completeAndFilterForms keysToKeep Province.BC =
-  fmap (filterForms keysToKeep <$>)
-  . mapFormsWithT1 BC.returnFields ((.federal.t1) :: BC.Returns Maybe -> T1 Maybe)
-  . BC.fixReturns
-completeAndFilterForms keysToKeep Province.MB =
-  fmap (filterForms keysToKeep <$>)
-  . mapFormsWithT1 MB.returnFields ((.t1) . Rank2.fst :: Rank2.Product Federal.Forms MB.MB428 Maybe -> T1 Maybe)
-  . MB.fixReturns
-completeAndFilterForms keysToKeep Province.ON =
-  fmap (filterForms keysToKeep <$>)
-  . mapFormsWithT1 ON.returnFields ((.federal.t1) :: ON.Returns Maybe -> T1 Maybe)
-  . ON.fixReturns
+completeAndFilterForms keysToKeep Province.AB = mapFormsWithT1 keysToKeep AB.returnFields Rank2.fst . AB.fixReturns
+completeAndFilterForms keysToKeep Province.BC = mapFormsWithT1 keysToKeep BC.returnFields (.federal) . BC.fixReturns
+completeAndFilterForms keysToKeep Province.MB = mapFormsWithT1 keysToKeep MB.returnFields Rank2.fst . MB.fixReturns
+completeAndFilterForms keysToKeep Province.ON = mapFormsWithT1 keysToKeep ON.returnFields (.federal) . ON.fixReturns
 completeAndFilterForms keysToKeep p =
-  fmap (filterForms keysToKeep <$>)
-  . mapFormsWithT1 (Federal.formFieldsForProvince p) (.t1)
-  . Federal.fixFederalForms p
+  mapFormsWithT1 keysToKeep (Federal.formFieldsForProvince p) id . Federal.fixFederalForms p
 
--- | Filter the 'FDFs' according to the supplied function
-filterForms :: (T1 Maybe -> FDFs FormKey -> Set FormKey) -> (T1 Maybe, FDFs FormKey) -> FDFs FormKey
-filterForms keysToKeep (t1, forms) = Map.restrictKeys forms (keysToKeep t1 forms)
-
--- | Like 'mapForms', but also returns the T1 form by itself.
+-- | Like 'mapForms', but filters the result using the first argument function
 mapFormsWithT1 :: (Rank2.Apply form, Rank2.Traversable form)
-               => form FDF.FieldConst -> (form Maybe -> T1 Maybe) -> (form Maybe -> form Maybe) -> FDFs FormKey
-               -> Either String (T1 Maybe, FDFs FormKey)
-mapFormsWithT1 fields getT1 f fdfs = do
+               => (T1 Maybe -> FDFs FormKey -> Set FormKey)
+               -> form FDF.FieldConst
+               -> (form Maybe -> Federal.Forms Maybe)
+               -> (form Maybe -> form Maybe)
+               -> FDFs FormKey
+               -> Either String (FDFs FormKey)
+mapFormsWithT1 keysToKeep fields getFederal f fdfs = do
   forms <- FDF.loadAll fields fdfs
   let forms' = f forms
-      t1' = getT1 forms'
-  (,) t1' <$> FDF.storeAll fields fdfs forms'
+      t1' = (getFederal forms').t1
+      fdfs' = FDF.storeAll fields fdfs forms'
+  (\x-> Map.restrictKeys x $ keysToKeep t1' x) <$> fdfs'
 
 -- | A map of standard file paths of all supported forms for the given province, without the common file suffix and
 -- extension.
