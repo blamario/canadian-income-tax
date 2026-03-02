@@ -134,7 +134,7 @@ main = do
         of Left (code, err) ->
              log ("Error " <> toLogStr code.statusCode <> ": " <> toLogStr err)
              >> status code >> text (fromString err)
-           Right fdfs' -> do
+           Right (msgs, fdfs') -> do
              log ("Completed " <> toLogStr provinceCode <> ": " <> toLogStr (show (Map.keys fdfs')))
              let fdfBytes' = Lazy.fromStrict . FDF.serialize <$> fdfs'
                  replaceContent :: FormKey -> Lazy.ByteString

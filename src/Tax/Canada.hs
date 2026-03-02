@@ -4,7 +4,7 @@
 {-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Tax.Canada (completeAndFilterForms, completeForms, completeRelevantForms,
+module Tax.Canada (completeAndFilterForms, completeForms, completeRelevantForms, examine,
                    allFormKeys, relevantFormKeys, formFileNames) where
 
 import Data.CAProvinceCodes qualified as Province
@@ -17,7 +17,7 @@ import Rank2 qualified
 
 import Tax.Canada.Federal qualified as Federal
 import Tax.Canada.FormKey qualified as FormKey
-import Tax.Canada.FormKey (FormKey)
+import Tax.Canada.FormKey (FormKey, Message)
 import Tax.Canada.Province.AB qualified as AB
 import Tax.Canada.Province.BC qualified as BC
 import Tax.Canada.Province.MB qualified as MB
@@ -28,7 +28,8 @@ import Tax.FDF qualified as FDF
 
 -- | Complete all FDF forms in the given map, keyed by 'FormKey'. The inter-form field references are resolved as
 -- well.
-completeForms :: Province.Code -> Federal.InputForms Maybe -> FDFs FormKey -> Either String (FDFs FormKey)
+completeForms :: Province.Code -> Federal.InputForms Maybe -> FDFs FormKey
+              -> Either String ([Message], FDFs FormKey)
 completeForms p = completeAndFilterForms allFormKeys p
 
 allFormKeys, relevantFormKeys :: T1 Maybe -> FDFs FormKey -> Set FormKey
@@ -38,7 +39,8 @@ relevantFormKeys t1 _ = Federal.relevantFormKeys t1 <> alwaysRelevant
 
 -- | Complete the FDF forms in the given map, keyed by 'FormKey'. The inter-form field references are resolved as
 -- well. Only the relevant forms that affect T1 are kept.
-completeRelevantForms :: Province.Code -> Federal.InputForms Maybe -> FDFs FormKey -> Either String (FDFs FormKey)
+completeRelevantForms :: Province.Code -> Federal.InputForms Maybe -> FDFs FormKey
+                      -> Either String ([Message], FDFs FormKey)
 completeRelevantForms p = completeAndFilterForms relevantFormKeys p
 
 -- | Complete the FDF forms in the given map, keyed by 'FormKey', then filter them to the 'FormKey' subset calculated
@@ -48,13 +50,17 @@ completeAndFilterForms
   -> Province.Code
   -> Federal.InputForms Maybe                  -- ^ input-only forms like 'Tax.Canada.T4.T4'
   -> FDFs FormKey                              -- ^ forms to complete
-  -> Either String (FDFs FormKey)              -- ^ completed and filtered forms
+  -> Either String ([Message], FDFs FormKey)
 completeAndFilterForms keysToKeep Province.AB = mapFormsWithT1 keysToKeep AB.returnFields Rank2.fst . AB.fixReturns
 completeAndFilterForms keysToKeep Province.BC = mapFormsWithT1 keysToKeep BC.returnFields (.federal) . BC.fixReturns
 completeAndFilterForms keysToKeep Province.MB = mapFormsWithT1 keysToKeep MB.returnFields Rank2.fst . MB.fixReturns
 completeAndFilterForms keysToKeep Province.ON = mapFormsWithT1 keysToKeep ON.returnFields (.federal) . ON.fixReturns
 completeAndFilterForms keysToKeep p =
   mapFormsWithT1 keysToKeep (Federal.formFieldsForProvince p) id . Federal.fixFederalForms p
+
+-- | Given the original and filled-in federal forms, return a list of observations for the user
+examine :: Federal.Forms Maybe -> Federal.Forms Maybe -> [Message]
+examine inputs outputs = []
 
 -- | Like 'mapForms', but filters the result using the first argument function
 mapFormsWithT1 :: (Rank2.Apply form, Rank2.Traversable form)
@@ -63,13 +69,14 @@ mapFormsWithT1 :: (Rank2.Apply form, Rank2.Traversable form)
                -> (form Maybe -> Federal.Forms Maybe)
                -> (form Maybe -> form Maybe)
                -> FDFs FormKey
-               -> Either String (FDFs FormKey)
+               -> Either String ([Message], FDFs FormKey)
 mapFormsWithT1 keysToKeep fields getFederal f fdfs = do
   forms <- FDF.loadAll fields fdfs
   let forms' = f forms
-      t1' = (getFederal forms').t1
+      fed' = getFederal forms'
+      msgs = examine (getFederal forms) fed'
       fdfs' = FDF.storeAll fields fdfs forms'
-  (\x-> Map.restrictKeys x $ keysToKeep t1' x) <$> fdfs'
+  (\x-> (msgs, Map.restrictKeys x $ keysToKeep fed'.t1 x)) <$> fdfs'
 
 -- | A map of standard file paths of all supported forms for the given province, without the common file suffix and
 -- extension.

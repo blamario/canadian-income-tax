@@ -18,12 +18,16 @@
 module Tax.Canada.Federal.Schedule7 where
 
 import Control.Applicative ((<|>))
+import Control.Monad (guard)
 import Data.Fixed (Centi)
+import Data.Maybe (catMaybes)
 import Language.Haskell.TH qualified as TH
 import Rank2 qualified
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
+import Tax.Canada.FormKey (Message(..), Severity(Error))
+import Tax.Canada.FormKey qualified as FormKey
 import Tax.Canada.Shared (SubCalculation(result), fixSubCalculation, subCalculationFields)
 import Tax.Canada.T1.Types (T1)
 import Tax.Canada.T1.Types qualified as T1
@@ -122,6 +126,16 @@ fixSchedule7 t1 = fixEq defaultSchedule7 . fixEq calculateSchedule7 where
     page3 = page3{
       partC = partC{
          line18_deducting = line18_deducting <|> line17_lesser}}}
+
+examine :: Schedule7 Maybe -> Schedule7 Maybe -> [Message]
+examine initial filled = catMaybes [
+  guard (initial.page3.partC.line18_deducting > initial.page3.partC.line17_lesser)
+  *> Just Message{
+    severity = Error,
+    line = "18",
+    form = FormKey.Schedule7,
+    explanation= "The amount on line 18 cannot be greater than on line 17"}]
+  
 
 schedule7Fields :: Schedule7 FieldConst
 schedule7Fields = within "form1" Rank2.<$> Schedule7{

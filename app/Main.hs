@@ -16,13 +16,14 @@ import Data.ByteString.Lazy qualified as Lazy
 import Data.ByteString.Lazy qualified as ByteString.Lazy
 import Data.CAProvinceCodes qualified as Province
 import Data.Char (toUpper)
-import Data.Foldable (toList)
+import Data.Foldable (for_, toList)
 import Data.Functor.Compose (Compose(Compose, getCompose))
 import Data.List qualified as List
 import Data.Map.Lazy qualified as Map
 import Data.Maybe (catMaybes)
 import Data.Semigroup.Cancellative (isPrefixOf, isSuffixOf)
 import Data.Text qualified as Text
+import Data.Text.IO qualified as Text.IO
 import Options.Applicative (Parser, ReadM, long, metavar, short)
 import Options.Applicative qualified as OptsAp
 import System.Directory (createDirectoryIfMissing, doesDirectoryExist, doesFileExist)
@@ -31,8 +32,8 @@ import Text.FDF (FDF, parse, serialize)
 
 import Paths_canadian_income_tax (getDataDir)
 import Tax.Canada (completeAndFilterForms, allFormKeys, relevantFormKeys, formFileNames)
-import Tax.Canada.Federal (loadInputForms)
-import Tax.Canada.FormKey (FormKey)
+import Tax.Canada.Federal qualified as Federal
+import Tax.Canada.FormKey (FormKey, messageText)
 import Tax.Canada.FormKey qualified as FormKey
 import Tax.PDFtk (fdf2pdf, pdf2fdf)
 
@@ -100,7 +101,7 @@ readFDF inputPath = do
 process :: Options -> IO ()
 process Options{province, t1InputPath, t4InputPaths, p428InputPath, p479InputPath,
                 schedule6InputPath, schedule7InputPath, schedule8InputPath, schedule9InputPath, schedule11InputPath,
-                outputPath, onlyGivenForms, keepIrrelevantForms} = do
+                outputPath, onlyGivenForms, keepIrrelevantForms, verbose} = do
    dataDir <- getDataDir
    let inputFiles :: [(FormKey, FilePath)]
        inputFiles = List.sortOn fst $
@@ -134,12 +135,12 @@ process Options{province, t1InputPath, t4InputPaths, p428InputPath, p479InputPat
                    else ByteString.writeFile outputPath content'
        fdfs = getCompose <$> traverse (parse . Lazy.toStrict . snd) (Compose inputs) :: Either String [(FormKey, FDF)]
    case do (inputFDFs, ioFDFs) <- List.partition ((FormKey.T4 ==) . fst) <$> fdfs
-           inputForms <- loadInputForms inputFDFs
+           inputForms <- Federal.loadInputForms inputFDFs
            let formKeys = if keepIrrelevantForms then allFormKeys else relevantFormKeys
            completeAndFilterForms formKeys province inputForms (Map.fromAscList ioFDFs)
      of
       Left err -> error err
-      Right fixedFDFs -> do
+      Right (msgs, fixedFDFs) -> do
          let bytesMap' = serialize <$> fixedFDFs
              tarEntries = Map.traverseWithKey fdfEntry bytesMap'
              fdfEntry key content
@@ -155,3 +156,4 @@ process Options{province, t1InputPath, t4InputPaths, p428InputPath, p479InputPat
                     if isDir
                        then void $ Map.traverseWithKey writeFrom bytesMap'
                        else ByteString.writeFile outputPath tarFile
+         when verbose $ for_ msgs $ Text.IO.putStrLn . messageText
