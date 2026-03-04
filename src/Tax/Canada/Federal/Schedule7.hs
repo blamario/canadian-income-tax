@@ -20,13 +20,14 @@ module Tax.Canada.Federal.Schedule7 where
 import Control.Applicative ((<|>))
 import Control.Monad (guard)
 import Data.Fixed (Centi)
-import Data.Maybe (catMaybes)
+import Data.Maybe (catMaybes, isNothing)
+import Data.Text qualified as Text
 import Language.Haskell.TH qualified as TH
 import Rank2 qualified
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
-import Tax.Canada.FormKey (Message(..), Severity(Error))
+import Tax.Canada.FormKey (Message(..), Severity(Error, Notice))
 import Tax.Canada.FormKey qualified as FormKey
 import Tax.Canada.Shared (SubCalculation(result), fixSubCalculation, subCalculationFields)
 import Tax.Canada.T1.Types (T1)
@@ -127,14 +128,25 @@ fixSchedule7 t1 = fixEq defaultSchedule7 . fixEq calculateSchedule7 where
       partC = partC{
          line18_deducting = line18_deducting <|> line17_lesser}}}
 
-examine :: Schedule7 Maybe -> Schedule7 Maybe -> [Message]
+examine :: Schedule7 Maybe -> Schedule7 Maybe -> [FormKey.Message]
 examine initial filled = catMaybes [
-  guard (initial.page3.partC.line18_deducting > initial.page3.partC.line17_lesser)
+  guard (initial.page3.partC.line18_deducting > filled.page3.partC.line17_lesser)
   *> Just Message{
     severity = Error,
     line = "18",
     form = FormKey.Schedule7,
-    explanation= "The amount on line 18 cannot be greater than on line 17"}]
+    explanation= "You cannot deduct on line 18 more than "
+      <> foldMap Text.show filled.page3.partC.line17_lesser <> " available on line 17."},
+  guard (isNothing initial.page3.partC.line18_deducting && filled.page3.partC.line17_lesser > Just 0)
+  *> Just Message{
+    severity = Notice,
+    line = "18",
+    form = FormKey.Schedule7,
+    explanation= "The amount to deduct on line 18 has been defaulted to be equal to "
+      <> foldMap Text.show filled.page3.partC.line17_lesser
+      <> ", all available contributions from line 17. "
+      <> "If you wish to deduct less and carry forward the rest enter the amount manually."}
+    ]
   
 
 schedule7Fields :: Schedule7 FieldConst

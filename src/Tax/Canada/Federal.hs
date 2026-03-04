@@ -14,7 +14,7 @@
 
 -- | The federal income tax forms
 
-module Tax.Canada.Federal (InputForms, Forms(..), loadInputForms, fixFederalForms,
+module Tax.Canada.Federal (InputForms, Forms(..), loadInputForms, fixFederalForms, examine,
                            formFieldsForProvince, formFileNames, relevantFormKeys) where
 
 import Control.Applicative ((<|>))
@@ -38,7 +38,7 @@ import Text.FDF (FDF)
 
 import Tax.Canada.Federal.Schedule6 qualified as Schedule6
 import Tax.Canada.Federal.Schedule6 (Schedule6, fixSchedule6, schedule6Fields)
-import Tax.Canada.Federal.Schedule7 qualified
+import Tax.Canada.Federal.Schedule7 qualified as Schedule7
 import Tax.Canada.Federal.Schedule7 (Schedule7, fixSchedule7, schedule7Fields)
 import Tax.Canada.Federal.Schedule8 qualified as Schedule8
 import Tax.Canada.Federal.Schedule8 (Schedule8(page4, page5, page6, page7, page9, page10, page11),
@@ -52,7 +52,7 @@ import Tax.Canada.Federal.Schedule8 (Schedule8(page4, page5, page6, page7, page9
                                      Page7Part5(line1_netSelfEmploymentEarnings))
 import Tax.Canada.Federal.Schedule9 (Schedule9(page2), Page2(line23_sum), fixSchedule9, schedule9Fields)
 import Tax.Canada.Federal.Schedule11 (Schedule11(page1), Page1(line5_trainingClaim, line17_sum), fixSchedule11, schedule11Fields)
-import Tax.Canada.FormKey (FormKey)
+import Tax.Canada.FormKey (FormKey, Message)
 import Tax.Canada.FormKey qualified as FormKey
 import Tax.Canada.T1 (fixT1, t1FieldsForProvince)
 import Tax.Canada.T1.Types (T1(page3, page4, page5, page6, page7, page8),
@@ -185,6 +185,10 @@ fixFederalForms province InputForms{t4 = t4s} = fixEq $
                                                        t1.page3.line29_sum.result]}}},
    schedule9 = fixSchedule9 t1 schedule9,
    schedule11 = fixSchedule11 t1 schedule11}
+
+-- | Given the original and filled-in federal forms, return a list of observations for the user
+examine :: Forms Maybe -> Forms Maybe -> [Message]
+examine inputs outputs = Schedule7.examine inputs.schedule7 outputs.schedule7
 
 -- | The paths of all the fields in all federal forms, with the form key added as the head of every field path.
 formFieldsForProvince :: Province.Code -> Forms FieldConst

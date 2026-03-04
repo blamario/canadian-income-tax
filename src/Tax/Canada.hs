@@ -4,7 +4,7 @@
 {-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Tax.Canada (completeAndFilterForms, completeForms, completeRelevantForms, examine,
+module Tax.Canada (completeAndFilterForms, completeForms, completeRelevantForms, Federal.examine,
                    allFormKeys, relevantFormKeys, formFileNames) where
 
 import Data.CAProvinceCodes qualified as Province
@@ -58,10 +58,6 @@ completeAndFilterForms keysToKeep Province.ON = mapFormsWithT1 keysToKeep ON.ret
 completeAndFilterForms keysToKeep p =
   mapFormsWithT1 keysToKeep (Federal.formFieldsForProvince p) id . Federal.fixFederalForms p
 
--- | Given the original and filled-in federal forms, return a list of observations for the user
-examine :: Federal.Forms Maybe -> Federal.Forms Maybe -> [Message]
-examine inputs outputs = []
-
 -- | Like 'mapForms', but filters the result using the first argument function
 mapFormsWithT1 :: (Rank2.Apply form, Rank2.Traversable form)
                => (T1 Maybe -> FDFs FormKey -> Set FormKey)
@@ -74,7 +70,7 @@ mapFormsWithT1 keysToKeep fields getFederal f fdfs = do
   forms <- FDF.loadAll fields fdfs
   let forms' = f forms
       fed' = getFederal forms'
-      msgs = examine (getFederal forms) fed'
+      msgs = Federal.examine (getFederal forms) fed'
       fdfs' = FDF.storeAll fields fdfs forms'
   (\x-> (msgs, Map.restrictKeys x $ keysToKeep fed'.t1 x)) <$> fdfs'
 
