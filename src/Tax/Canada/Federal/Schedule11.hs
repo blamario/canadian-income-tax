@@ -87,7 +87,7 @@ fixSchedule11 t1 = fixEq $ \Schedule11{page1 = page1@Page1{..}, page2 = page2@Pa
       line8_sum = totalOf [line6_difference, line_32001_eligible],
       line10_sum = totalOf [line9_pastUnused, line8_sum],
       line11_copy = if taxableIncomeUnderThreshold then Nothing else t1.page7.partC_NetFederalTax.tax_copy,
-      line11_numerator = if taxableIncomeUnderThreshold then taxableIncome else (/ 0.15) <$> line11_copy,
+      line11_numerator = if taxableIncomeUnderThreshold then taxableIncome else (/ 0.145) <$> line11_copy,
       line12_copy = t1.page6.line107_sum,
       line13_difference = nonNegativeDifference line11_numerator line12_copy,
       line14_minUnused = fixSubCalculation id $ minimum [line9_pastUnused, line13_difference],
