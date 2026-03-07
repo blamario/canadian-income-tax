@@ -54,6 +54,7 @@ import Tax.Canada.Federal.Schedule9 (Schedule9(page2), Page2(line23_sum), fixSch
 import Tax.Canada.Federal.Schedule11 (Schedule11(page1), Page1(line5_trainingClaim, line17_sum), fixSchedule11, schedule11Fields)
 import Tax.Canada.FormKey (FormKey)
 import Tax.Canada.FormKey qualified as FormKey
+import Tax.Canada.T1 qualified as T1
 import Tax.Canada.T1 (fixT1, t1FieldsForProvince)
 import Tax.Canada.T1.Types (T1(page3, page4, page5, page6, page7, page8),
                             Page3(line_10100_EmploymentIncome, line_10120_Commissions, line_12200_PartnershipIncome,
@@ -188,7 +189,7 @@ fixFederalForms province InputForms{t4 = t4s} = fixEq $
 
 -- | Given the original and filled-in federal forms, return a list of observations for the user
 examine :: Forms Maybe -> Forms Maybe -> [Message]
-examine inputs outputs = Schedule7.examine inputs.schedule7 outputs.schedule7
+examine inputs outputs = T1.examine inputs.t1 outputs.t1 <> Schedule7.examine inputs.schedule7 outputs.schedule7
 
 -- | The paths of all the fields in all federal forms, with the form key added as the head of every field path.
 formFieldsForProvince :: Province.Code -> Forms FieldConst

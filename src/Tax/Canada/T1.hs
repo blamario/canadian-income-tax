@@ -1,18 +1,26 @@
 {-# LANGUAGE ImportQualifiedPost #-}
 {-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE NoFieldSelectors #-}
+{-# LANGUAGE NumericUnderscores #-}
+{-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 -- | The T1 forms look similar, but there are subtle differences between different provinces and
 -- territories. Therefore they share the same 'T1' form type and the same 'fixT1' completion function, but field
 -- paths are separately provided by 't1FieldsForProvince'.
-module Tax.Canada.T1 (fixT1, fileNameForProvince, formPrefixForProvince, t1FieldsForProvince,
+module Tax.Canada.T1 (examine, fixT1, fileNameForProvince, formPrefixForProvince, t1FieldsForProvince,
                       module Tax.Canada.T1.Types) where
 
 import Data.CAProvinceCodes qualified as Province
+import Control.Monad (guard)
 import Data.Enum.Memo (memoize)
+import Data.Maybe (catMaybes, fromMaybe, isJust, isNothing)
 import Data.Text (Text)
+import Data.Text qualified as Text
 
 import Tax.FDF (FieldConst)
+import Tax.Canada.FormKey qualified as FormKey
+import Tax.Canada.Shared(Message(..), Severity(..))
 import Tax.Canada.T1.Types
 import Tax.Canada.T1.Fix (fixT1)
 import Tax.Canada.T1.FieldNames.AB qualified as AB
@@ -24,6 +32,57 @@ import Tax.Canada.T1.FieldNames.NU qualified as NU
 import Tax.Canada.T1.FieldNames.ON qualified as ON
 import Tax.Canada.T1.FieldNames.QC qualified as QC
 import Tax.Canada.T1.FieldNames.YT qualified as YT
+
+-- | Reports summary and potential problems from input and output T1 forms
+-- | Given the original and filled-in federal forms, return a list of observations for the user
+examine :: T1 Maybe -> T1 Maybe -> [Message]
+examine _inputs outputs = catMaybes [
+  guard (isNothing outputs.page3.line_15000_TotalIncome)
+  *> Just Message{
+    severity = Warning,
+    line = "15000",
+    form = FormKey.T1,
+    explanation= "You've reported no income to tax in Step 2 of the T1 form."},
+  guard (isJust outputs.page3.line_10100_EmploymentIncome)
+  *> guard (isNothing outputs.page6.line_30800 || isNothing outputs.page6.line_31200)
+  *> Just Message{
+    severity = Warning,
+    line = if isNothing outputs.page6.line_30800 then "30800" else "31200",
+    form = FormKey.T1,
+    explanation= "You have reported employment income on line 15000 but no "
+      <> if isNothing outputs.page6.line_30800 then "CPP contributions on line 30800"
+         else "EI contributions on line 31200"},
+  do let limit = 1077.48
+     guard (outputs.page6.line_31200 > Just limit)
+     Just Message{
+       severity = Error,
+       line = "31200",
+       form = FormKey.T1,
+       explanation= "EI contributions can't be larger then " <> Text.show limit},
+  do let limit = 10_000
+     guard (outputs.page6.line_31270 > Just limit)
+     Just Message{
+       severity = Error,
+       line = "31270",
+       form = FormKey.T1,
+       explanation= "Home buyers' amount can't be larger then " <> Text.show limit},
+  do let limit = 20_000
+     guard (outputs.page6.line_31285 > Just limit)
+     Just Message{
+       severity = Error,
+       line = "31285",
+       form = FormKey.T1,
+       explanation= "Home accessibility expenses can't be larger then " <> Text.show limit},
+  Just Message{
+      severity = Summary,
+      line = if isJust outputs.page8.line_48400_Refund then "48400"
+             else if isJust outputs.page8.line_48500_BalanceOwing then "48500"
+             else "167",
+      form = FormKey.T1,
+      explanation = "You " <> (if isJust outputs.page8.line_48400_Refund then "have refund" else "owe balance")
+        <> " of "
+        <> Text.show (abs $ fromMaybe 0 outputs.page8.step6_RefundOrBalanceOwing.line164_Refund_or_BalanceOwing)
+        <> " dollars"}]
 
 fileNameForProvince :: Province.Code -> Text
 fileNameForProvince p = formPrefixForProvince p <> "-r-fill-24e"

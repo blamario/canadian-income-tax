@@ -145,7 +145,7 @@ examine initial filled = catMaybes [
     explanation= "The amount to deduct on line 18 has been defaulted to be equal to "
       <> foldMap Text.show filled.page3.partC.line17_lesser
       <> ", all available contributions from line 17. "
-      <> "If you wish to deduct less and carry forward the rest enter the amount manually."}
+      <> "If you wish to deduct less and carry forward the rest, enter the amount manually."}
     ]
   
 
