@@ -27,9 +27,9 @@ import Rank2 qualified
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
-import Tax.Canada.FormKey (Message(..), Severity(Error, Notice))
 import Tax.Canada.FormKey qualified as FormKey
-import Tax.Canada.Shared (SubCalculation(result), fixSubCalculation, subCalculationFields)
+import Tax.Canada.Shared (Message(..), Severity(Error, Notice), SubCalculation(result),
+                          fixSubCalculation, subCalculationFields)
 import Tax.Canada.T1.Types (T1)
 import Tax.Canada.T1.Types qualified as T1
 import Tax.FDF (Entry (Amount, Checkbox), FieldConst (Field), within)
@@ -128,7 +128,7 @@ fixSchedule7 t1 = fixEq defaultSchedule7 . fixEq calculateSchedule7 where
       partC = partC{
          line18_deducting = line18_deducting <|> line17_lesser}}}
 
-examine :: Schedule7 Maybe -> Schedule7 Maybe -> [FormKey.Message]
+examine :: Schedule7 Maybe -> Schedule7 Maybe -> [Message]
 examine initial filled = catMaybes [
   guard (initial.page3.partC.line18_deducting > filled.page3.partC.line17_lesser)
   *> Just Message{

@@ -17,11 +17,12 @@ import Rank2 qualified
 
 import Tax.Canada.Federal qualified as Federal
 import Tax.Canada.FormKey qualified as FormKey
-import Tax.Canada.FormKey (FormKey, Message)
+import Tax.Canada.FormKey (FormKey)
 import Tax.Canada.Province.AB qualified as AB
 import Tax.Canada.Province.BC qualified as BC
 import Tax.Canada.Province.MB qualified as MB
 import Tax.Canada.Province.ON qualified as ON
+import Tax.Canada.Shared (Message)
 import Tax.Canada.T1 as T1 (T1, fileNameForProvince)
 import Tax.FDF (FDFs)
 import Tax.FDF qualified as FDF

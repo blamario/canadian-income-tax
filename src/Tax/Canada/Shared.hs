@@ -4,8 +4,10 @@
 {-# LANGUAGE ImportQualifiedPost #-}
 {-# LANGUAGE InstanceSigs #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE NoFieldSelectors #-}
 {-# LANGUAGE OverloadedRecordDot #-}
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE StandaloneDeriving #-}
@@ -19,14 +21,27 @@ module Tax.Canada.Shared where
 import Control.Monad (guard, mfilter)
 import Data.Fixed (Centi)
 import Data.Text (Text)
+import Data.Text qualified as Text
 import Language.Haskell.TH qualified as TH
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
 import Tax.FDF (FieldConst(Field), Entry(Amount))
+import Tax.Canada.FormKey (FormKey)
 import Tax.Util (fixEq, fractionOf, nonNegativeDifference)
 
 import Prelude hiding (floor, ceiling)
+
+-- | Message for the user about a potential issue discovered in the return by the function 'examine'
+data Message = Message{
+  severity :: Severity,
+  form :: FormKey,
+  line :: Text,
+  explanation :: Text}
+  deriving (Eq, Show)
+
+-- | 'Message' severity
+data Severity = Notice | Summary | Warning | Error deriving (Eq, Ord, Show)
 
 data TaxIncomeBracket line = TaxIncomeBracket {
    income :: line Centi,
@@ -69,6 +84,10 @@ $(foldMap
        Rank2.TH.deriveAll t,
        Transformation.Shallow.TH.deriveAll t])
    [''BaseCredit, ''MedicalExpenses, ''SubCalculation, ''TaxIncomeBracket])
+
+messageText :: Message -> Text
+messageText Message{form, line, explanation} =
+  "At line " <> line <> " of " <> Text.pack (show form) <> ": " <> explanation
 
 fixTaxIncomeBracket :: Maybe Centi -> Maybe (TaxIncomeBracket Maybe) -> TaxIncomeBracket Maybe -> TaxIncomeBracket Maybe
 fixTaxIncomeBracket theIncome nextBracket = fixEq $ \bracket@TaxIncomeBracket{..} -> bracket{

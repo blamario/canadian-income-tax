@@ -52,7 +52,7 @@ import Tax.Canada.Federal.Schedule8 (Schedule8(page4, page5, page6, page7, page9
                                      Page7Part5(line1_netSelfEmploymentEarnings))
 import Tax.Canada.Federal.Schedule9 (Schedule9(page2), Page2(line23_sum), fixSchedule9, schedule9Fields)
 import Tax.Canada.Federal.Schedule11 (Schedule11(page1), Page1(line5_trainingClaim, line17_sum), fixSchedule11, schedule11Fields)
-import Tax.Canada.FormKey (FormKey, Message)
+import Tax.Canada.FormKey (FormKey)
 import Tax.Canada.FormKey qualified as FormKey
 import Tax.Canada.T1 (fixT1, t1FieldsForProvince)
 import Tax.Canada.T1.Types (T1(page3, page4, page5, page6, page7, page8),
@@ -72,7 +72,7 @@ import Tax.Canada.T1.Types (T1(page3, page4, page5, page6, page7, page8),
                             LanguageOfCorrespondence, MaritalStatus)
 import Tax.Canada.T4 (T4, T4Slip(box16_employeeCPP, box26_pensionableEarnings))
 import Tax.Canada.T4 qualified as T4
-import Tax.Canada.Shared (SubCalculation(result))
+import Tax.Canada.Shared (Message, SubCalculation(result))
 import Tax.FDF (FieldConst, load, within)
 import Tax.Util (fixEq, totalOf)
 

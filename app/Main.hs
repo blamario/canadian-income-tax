@@ -33,8 +33,9 @@ import Text.FDF (FDF, parse, serialize)
 import Paths_canadian_income_tax (getDataDir)
 import Tax.Canada (completeAndFilterForms, allFormKeys, relevantFormKeys, formFileNames)
 import Tax.Canada.Federal qualified as Federal
-import Tax.Canada.FormKey (FormKey, messageText)
+import Tax.Canada.FormKey (FormKey)
 import Tax.Canada.FormKey qualified as FormKey
+import Tax.Canada.Shared (messageText)
 import Tax.PDFtk (fdf2pdf, pdf2fdf)
 
 main :: IO ()
