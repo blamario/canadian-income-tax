@@ -189,11 +189,11 @@ export default function Uploads() {
         }
 
         return <dd ref={inputRef} key={index}>
-                   <button className="enter T4" name="enter" onClick={handleOverlay}>Enter slip #{index+1}</button>
+                   <button className="btn-secondary enter T4" name="enter" onClick={handleOverlay}>Enter slip #{index+1}</button>
                    <ReactModal isOpen={showT4 === index} onRequestClose={() => setShowT4(-1)}>
                        {T4(t4, setT4_)}
                    </ReactModal>
-                   <button className="delete T4" name="delete" onClick={handleDelete}>Delete slip #{index+1}</button>
+                   <button className="btn-secondary delete T4" name="delete" onClick={handleDelete}>Delete slip #{index+1}</button>
                </dd>;
     }
 
@@ -224,71 +224,108 @@ export default function Uploads() {
           : {name: "T1.pdf", type: 'application/PDF'};
 
     return (
-      <>
-        <a href="/" className="homelink">taxell.ca</a>
-        <hr/>
-        <h2>Tax form completion
-            <button class="top save" name="save" disabled={saved} onClick={handleSave}>Save</button>
-            <button class="top load" name="load">
-                <label for="load">Load</label>
-                <input id="load" type="file" class="load" accept=".zip" name="Load" onChange={handleLoad}/>
+      <div className="app-container">
+        <header className="app-header">
+          <div className="app-header-title">
+            <a href="/" className="homelink">taxell.ca</a>
+            <span style={{fontWeight: 600, fontSize: '1.1rem'}}>Tax form completion</span>
+          </div>
+          <div className="app-header-actions">
+            <button className="btn-secondary top save" name="save" disabled={saved} onClick={handleSave}>Save</button>
+            <button className="btn-secondary top load" name="load">
+                <label htmlFor="load">Load</label>
+                <input id="load" type="file" className="load" accept=".zip" name="Load" onChange={handleLoad}/>
             </button>
-        </h2>
+          </div>
+        </header>
 
-        <h3>Step 1. <Dropdown className='provinceRoot' menuClassName='provinceMenu' options={provinces} value={province} onChange={setProvince} placeholder="Select your province"/></h3>
+        <div className="step">
+          <span className="step-badge">1</span>
+          <span className="step-label">
+            <Dropdown className='provinceRoot' menuClassName='provinceMenu' options={provinces} value={province} onChange={setProvince} placeholder="Select your province or territory"/>
+          </span>
+        </div>
 
         {province && <>
-         <h3>Step 2. Download the <em>fillable</em> PDF forms from <a target="_blank" href="https://canada.ca">canada.ca</a></h3>
-         <p>or, more precisely, from the <a target="_blank" href={"https://www.canada.ca/en/revenue-agency/services/forms-publications/tax-packages-years/general-income-tax-benefit-package/" + province.value.href + ".html"}>2025 Income tax package</a> page.</p>
-         <p>You will need at least the {province.value.prefix428 ? <>federal tax and {province.value.code}428 forms, <tt>{province.value.prefixT1}-r-fill-25e.pdf</tt> and <tt>{province.value.prefix428}-c-fill-25e.pdf</tt></> : <>federal tax form <tt>{province.value.prefixT1}-r-fill-25e.pdf</tt></>}</p>
-         <h3>Step 3. Fill in the downloaded {forms}</h3>
-         <p>Don't bother with any fields that are calculated from other fields in the same {formsAgain}, that part will be done for you automatically.</p>
-         <p>You can leave out your name, SIN, and other private data, since they're not affecting any numbers.</p>
-         <h3>Step 4. Upload the filled {formsAgain}:</h3>
-         <dl>
-         <dt>T1</dt>
-         {formInput("T1 PDF", "T1")}
-         {province.value.prefix428
-          ? <>
-          <dt>{province.value.code}428</dt>
-          {formInput("428 PDF", "Provincial428")}
-          </>
-          : ""}
-         </dl>
-         <h4>You can also optionally upload the following forms, if they apply:</h4>
-         <dl>
-         <dt>T4 slips</dt>
-         {formInput("T4 fillable PDFs", "T4")}
-         <dd>or enter the slips manually:</dd>
-         {t4s.map(slipInput)}
-         <dd><button className="add T4" name="add" onClick={handleAddT4}>+</button></dd>
-         {province.value.has479
-          ? <>
-          <dt>{province.value.code}479 tax credits form</dt>
-          {formInput("479 PDF", "Provincial479")}
-          </>
-          : ""}
-         <dt>Schedule 6</dt>
-         {formInput("Schedule 6 PDF", "Schedule6")}
-         <dt>Schedule 7</dt>
-         {formInput("Schedule 7 PDF", "Schedule7")}
-         <dt>Schedule 8</dt>
-         {formInput("Schedule 8 PDF", "Schedule8")}
-         <dt>Schedule 9</dt>
-         {formInput("Schedule 9 PDF", "Schedule9")}
-         <dt>Schedule 11</dt>
-         {formInput("Schedule 11 PDF", "Schedule11")}
-         </dl>
-         <h3>Step 5. <button name="Calculate"
+         <div className="step">
+           <span className="step-badge">2</span>
+           <span className="step-label">Download the <em>fillable</em> PDF forms from <a target="_blank" href="https://canada.ca">canada.ca</a></span>
+         </div>
+         <div className="section-body">
+           <p>More precisely, from the <a target="_blank" href={"https://www.canada.ca/en/revenue-agency/services/forms-publications/tax-packages-years/general-income-tax-benefit-package/" + province.value.href + ".html"}>2025 Income tax package</a> page.</p>
+           <p>You will need at least the {province.value.prefix428 ? <>federal tax and {province.value.code}428 forms, <tt>{province.value.prefixT1}-r-fill-25e.pdf</tt> and <tt>{province.value.prefix428}-c-fill-25e.pdf</tt></> : <>federal tax form <tt>{province.value.prefixT1}-r-fill-25e.pdf</tt></>}</p>
+         </div>
+
+         <div className="step">
+           <span className="step-badge">3</span>
+           <span className="step-label">Fill in the downloaded {forms}</span>
+         </div>
+         <div className="section-body">
+           <p>Don't bother with any fields that are calculated from other fields in the same {formsAgain}, that part will be done for you automatically.</p>
+           <p>You can leave out your name, SIN, and other private data, since they're not affecting any numbers.</p>
+         </div>
+
+         <div className="step">
+           <span className="step-badge">4</span>
+           <span className="step-label">Upload the filled {formsAgain}:</span>
+         </div>
+         <div className="section-body">
+           <dl className="upload-list">
+           <dt>T1</dt>
+           {formInput("T1 PDF", "T1")}
+           {province.value.prefix428
+            ? <>
+            <dt>{province.value.code}428</dt>
+            {formInput("428 PDF", "Provincial428")}
+            </>
+            : ""}
+           </dl>
+           <h4>Optional forms (upload if they apply to you):</h4>
+           <dl className="upload-list">
+           <dt>T4 slips</dt>
+           {formInput("T4 fillable PDFs", "T4")}
+           <dd>or enter the slips manually:</dd>
+           {t4s.map(slipInput)}
+           <dd><button className="btn-secondary add T4" name="add" onClick={handleAddT4}>+</button></dd>
+           {province.value.has479
+            ? <>
+            <dt>{province.value.code}479 tax credits form</dt>
+            {formInput("479 PDF", "Provincial479")}
+            </>
+            : ""}
+           <dt>Schedule 6</dt>
+           {formInput("Schedule 6 PDF", "Schedule6")}
+           <dt>Schedule 7</dt>
+           {formInput("Schedule 7 PDF", "Schedule7")}
+           <dt>Schedule 8</dt>
+           {formInput("Schedule 8 PDF", "Schedule8")}
+           <dt>Schedule 9</dt>
+           {formInput("Schedule 9 PDF", "Schedule9")}
+           <dt>Schedule 11</dt>
+           {formInput("Schedule 11 PDF", "Schedule11")}
+           </dl>
+         </div>
+
+         <div className="step">
+           <span className="step-badge">5</span>
+           <span className="step-label">
+             <button className="btn-primary" name="Calculate"
                              disabled={submitted !== false
                                        || !province || !inputs || !inputs["T1"]
                                        || province.value.prefix428 && !inputs["Provincial428"]}
-                             onClick={handleSubmit}>Calculate</button></h3>
+                             onClick={handleSubmit}>Calculate</button>
+           </span>
+         </div>
+
          {output && <>
-          <h3>Step 6. <a name="Download" download={download.name}
-                       href={URL.createObjectURL(new File([output], download))}>Download</a>
-          </h3>
-          {messages.length > 0 && <div className="messages">
+          <div className="step">
+            <span className="step-badge">6</span>
+            <span className="step-label">
+              <a className="download-link" name="Download" download={download.name}
+                   href={URL.createObjectURL(new File([output], download))}>Download {download.name}</a>
+            </span>
+          </div>
+          {messages.length > 0 && <div className="messages section-body">
             <h4>Notes on your return:</h4>
             <ul>
               {messages.map((msg, i) =>
@@ -296,14 +333,23 @@ export default function Uploads() {
               )}
             </ul>
           </div>}
-          <h3>Step 7. Carefully examine the downloaded {forms}. You can also make adjustments and go to Step 4 again.</h3>
-          <h3>Step 8. Fill in your name, address, SIN, and other private information.</h3>
-          <h3>Step 9. Print the {formsAgain} and mail your return to CRA.</h3>
+          <div className="step">
+            <span className="step-badge">7</span>
+            <span className="step-label">Carefully examine the downloaded {forms}. You can also make adjustments and go to Step 4 again.</span>
+          </div>
+          <div className="step">
+            <span className="step-badge">8</span>
+            <span className="step-label">Fill in your name, address, SIN, and other private information.</span>
+          </div>
+          <div className="step">
+            <span className="step-badge">9</span>
+            <span className="step-label">Print the {formsAgain} and mail your return to CRA.</span>
+          </div>
           </>
          }
          </>
         }
-        <p>{error.toString()}</p>
-      </>
+        {error && <p className="error-box">{error.toString()}</p>}
+      </div>
     );
 }

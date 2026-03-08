@@ -1,9 +1,17 @@
 a.homelink {
-    background-color: #880000;
+    background-color: #c8102e;
     color: white;
     font-weight: bold;
-    padding: 1ex 4em;
-    text-decoration: inherit;
+    font-size: 1.15rem;
+    padding: 0.3em 1em;
+    text-decoration: none;
+    border-radius: 3px;
+    letter-spacing: 0.03em;
+}
+
+a.homelink:hover {
+    background-color: #a00d24;
+    color: white;
 }
 
 span.email-identifier {
@@ -12,8 +20,27 @@ span.email-identifier {
     margin: 0.1em;
 }
 
+footer {
+    margin-top: 2rem;
+    padding: 1rem 0 0.5rem;
+    border-top: 1px solid #ddd;
+    font-size: 0.875rem;
+    color: #555;
+}
+
+footer a {
+    color: #555;
+    text-decoration: none;
+    margin-right: 1.5rem;
+}
+
+footer a:hover {
+    color: #c8102e;
+    text-decoration: underline;
+}
+
 footer a + a {
-    margin: 2em;
+    margin: 0;
 }
 
 button.T4 {
@@ -30,4 +57,13 @@ button.top {
 
 input.load {
     display: none;
+}
+
+.page-container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 1rem 2rem;
+    background: #fff;
+    min-height: 100vh;
+    box-shadow: 0 0 0 1px #e0e0e0;
 }

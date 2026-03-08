@@ -2,42 +2,75 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="/favicon.ico">
     <link rel="stylesheet" href="shared.css">
+    <title>About – taxell.ca</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.6;
+        color: #1a1a1a;
+        background-color: #f5f5f5;
+      }
+      code {
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        font-size: 0.9em;
+        background-color: #eef;
+        padding: 0.1em 0.3em;
+        border-radius: 3px;
+      }
+      a { color: #c8102e; }
+      a:hover { color: #a00d24; }
+      h1 { font-size: 1.6rem; margin-top: 0; }
+      p { margin: 0.75em 0; }
+      ul { padding-inline-start: 1.5rem; }
+      li { margin-bottom: 0.5em; }
+    </style>
   </head>
   <body>
-    <a href="/" class="homelink">taxell.ca</a>
-    <hr/>
-    <h1>About</h1>
-    <p>This Web site is running an instance of free and
-    open, <a href="https://www.gnu.org/licenses/#GPL">GPL</a>-licensed software for calculating Canadian income taxes.
-    <p>It does not collect your private information, nor does it even ask for any. If in doubt, you can
-      <a href="https://github.com/blamario/canadian-income-tax">download</a>, build, and run the same software on your
-      home computer. Or you can use this site and submit your forms without filling in any identifying information.
-    <p>That being said, there are some limitations to what the software can do:
-      <ul>
-        <li>If you're married or live with a common-law partner, congratulations, but you'll have to complete your two
-          returns separately and take care to manually update any cross-referencing fields.
-        <li>If you live in Quebec, the only form we can complete is T1 because Revenu Québec does not provide any
-          electronically fillable forms. If you're mad about that, complain to Revenu Québec.
-        <li>If you live outside of Alberta, British Columbia, Manitoba, or Ontario, your provincial forms are not
-          supported <em>yet</em>, and even for Manitoba the provincial credit form <code>MB479</code> is not
-          supported. That's because life is short, there are many provinces and territories, and every one of them
-          has different forms. If you're mad that your province or territory is not
-          on the list, <a href="https://github.com/blamario/canadian-income-tax/issues">complain</a> and we'll help you
-          contribute the missing code.
-        <li>Finally there are many federal tax schedule forms that you may or may not need. Presently we can complete
-          only schedule 6, 7, 8, 9, and 11 &mdash; any others you'll have to complete manually. We plan to add
-          support for more schedules in time. If you need one of the missing schedules you can complete it manually
-          or contribute code to complete it automatically.
-      </ul>
-    <p>If you're happy to, you can contribute some code to improve the software or donate by Interac email transfer
-      to <span class="email-identifier">donate@taxell.ca</span>.
-    <p><b>We do <em>not</em> provide any guarantees</b>; after using this software you are still responsible for
-      completing any missing data (including your identification for CRA) and verifying the overall correctness of the
-      tax return.
-    <p>Furthermore, you'll need to print your tax return forms, sign them, and mail them yourself. For some reason CRA
-      does not permit electronic submissions from open-source software. If you're mad about that, complain to CRA.
-    <p>Go and <a href="/">complete your taxes</a> already!</p>
+    <div class="page-container">
+      <header style="display:flex;align-items:center;gap:1rem;padding:0.75rem 0;border-bottom:3px solid #c8102e;margin-bottom:1.5rem;">
+        <a href="/" class="homelink">taxell.ca</a>
+        <span style="font-weight:600;font-size:1.1rem;">About</span>
+      </header>
+      <h1>About taxell.ca</h1>
+      <p>This Web site is running an instance of free and
+      open, <a href="https://www.gnu.org/licenses/#GPL">GPL</a>-licensed software for calculating Canadian income taxes.</p>
+      <p>It does not collect your private information, nor does it even ask for any. If in doubt, you can
+        <a href="https://github.com/blamario/canadian-income-tax">download</a>, build, and run the same software on your
+        home computer. Or you can use this site and submit your forms without filling in any identifying information.</p>
+      <p>That being said, there are some limitations to what the software can do:</p>
+        <ul>
+          <li>If you're married or live with a common-law partner, congratulations, but you'll have to complete your two
+            returns separately and take care to manually update any cross-referencing fields.</li>
+          <li>If you live in Quebec, the only form we can complete is T1 because Revenu Québec does not provide any
+            electronically fillable forms. If you're mad about that, complain to Revenu Québec.</li>
+          <li>If you live outside of Alberta, British Columbia, Manitoba, or Ontario, your provincial forms are not
+            supported <em>yet</em>, and even for Manitoba the provincial credit form <code>MB479</code> is not
+            supported. That's because life is short, there are many provinces and territories, and every one of them
+            has different forms. If you're mad that your province or territory is not
+            on the list, <a href="https://github.com/blamario/canadian-income-tax/issues">complain</a> and we'll help you
+            contribute the missing code.</li>
+          <li>Finally there are many federal tax schedule forms that you may or may not need. Presently we can complete
+            only schedule 6, 7, 8, 9, and 11 &mdash; any others you'll have to complete manually. We plan to add
+            support for more schedules in time. If you need one of the missing schedules you can complete it manually
+            or contribute code to complete it automatically.</li>
+        </ul>
+      <p>If you're happy to, you can contribute some code to improve the software or donate by Interac email transfer
+        to <span class="email-identifier">donate@taxell.ca</span>.</p>
+      <p><b>We do <em>not</em> provide any guarantees</b>; after using this software you are still responsible for
+        completing any missing data (including your identification for CRA) and verifying the overall correctness of the
+        tax return.</p>
+      <p>Furthermore, you'll need to print your tax return forms, sign them, and mail them yourself. For some reason CRA
+        does not permit electronic submissions from open-source software. If you're mad about that, complain to CRA.</p>
+      <p><a href="/">Complete your taxes</a> already!</p>
+      <footer>
+        <a href="about.html">About</a>
+        <a href="https://github.com/blamario/canadian-income-tax">GitHub</a>
+      </footer>
+    </div>
   </body>
 </html>
