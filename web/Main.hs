@@ -10,7 +10,7 @@ import Codec.Archive.Zip (addEntryToArchive, emptyArchive, fromArchive, toEntry)
 import Control.Category ((>>>))
 import Control.Monad (forM)
 import Control.Monad.IO.Class (liftIO)
-import Data.Aeson (decode)
+import Data.Aeson (decode, encode, object, (.=))
 import Data.Bifunctor (first)
 import Data.ByteString (ByteString)
 import Data.ByteString qualified as ByteString
@@ -29,6 +29,7 @@ import Data.Time.Clock.POSIX (getPOSIXTime)
 import Data.Text (Text)
 import Data.Text qualified as Text
 import Data.Text.Lazy qualified as Text.Lazy
+import Data.Text.Lazy.Encoding (decodeUtf8)
 import Network.HTTP.Types.Status (statusCode, ok200, internalServerError500,
                                   notFound404, unsupportedMediaType415, unprocessableEntity422)
 import Network.Wai.Middleware.RequestLogger
@@ -49,6 +50,7 @@ import Tax.Canada (completeRelevantForms)
 import Tax.Canada.Federal qualified as Federal
 import Tax.Canada.FormKey (FormKey)
 import Tax.Canada.FormKey qualified as FormKey
+import Tax.Canada.Shared (Message(..), messageText)
 import Tax.PDFtk (fdf2pdf, pdfFile2fdf)
 
 import Prelude hiding (log)
@@ -137,6 +139,9 @@ main = do
            Right (msgs, fdfs') -> do
              log ("Completed " <> toLogStr provinceCode <> ": " <> toLogStr (show (Map.keys fdfs')))
              let fdfBytes' = Lazy.fromStrict . FDF.serialize <$> fdfs'
+                 msgsJson = decodeUtf8 $ encode
+                              $ map (\msg-> object ["severity" .= show msg.severity,
+                                                    "text"     .= messageText msg]) msgs
                  replaceContent :: FormKey -> Lazy.ByteString
                                 -> IO (Either String (FilePath, Lazy.ByteString))
                  replaceContent key content = case List.lookup key allPdfFiles of
@@ -152,6 +157,7 @@ main = do
                  setHeader "Content-Type" "application/pdf"
                  setHeader "Content-Disposition" ("attachment; filename=\"" <> Text.Lazy.pack name
                                                   <> "\"; filename*=\"" <> Text.Lazy.pack name <> "\"")
+                 setHeader "X-Tax-Messages" msgsJson
                  raw pdf
                Right pdfFiles'' -> do
                  now <- liftIO $ round . nominalDiffTimeToSeconds <$> getPOSIXTime
@@ -159,6 +165,7 @@ main = do
                      addPDF (name, c) = addEntryToArchive (toEntry name now c)
                  status ok200
                  setHeader "Content-Type" "application/zip"
+                 setHeader "X-Tax-Messages" msgsJson
                  raw (fromArchive pdfArchive)
       liftIO $ removeDirectoryRecursive dir
    middleware $ staticPolicy (noDots >-> addBase "web/client/build")

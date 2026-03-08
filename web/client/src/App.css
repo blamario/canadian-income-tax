@@ -7,3 +7,37 @@
     height: fit-content;
     max-height: inherit;
 }
+
+.messages ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.message {
+    margin: 0.3em 0;
+    padding: 0.3em 0.6em;
+    border-left: 4px solid transparent;
+}
+
+.message.error {
+    color: #b00020;
+    border-left-color: #b00020;
+    background-color: #fff0f0;
+}
+
+.message.warning {
+    color: #7a4f00;
+    border-left-color: #e6a817;
+    background-color: #fffbea;
+}
+
+.message.summary {
+    color: #1a1a1a;
+    border-left-color: #555;
+    font-weight: bold;
+}
+
+.message.notice {
+    color: #444;
+    border-left-color: #999;
+}

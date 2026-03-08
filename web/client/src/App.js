@@ -44,6 +44,7 @@ export default function Uploads() {
     const [saved, setSaved] = useState(false);
     const [output, setOutput] = useState(null);
     const [error, setError] = useState("");
+    const [messages, setMessages] = useState([]);
     const [t4s, setT4s] = useState([]);
     const [showT4, setShowT4] = useState(-1);
     const inputRef = useRef(null);
@@ -149,11 +150,14 @@ export default function Uploads() {
             setSubmitted(false);
             setError("");
             setOutput(null);
+            setMessages([]);
         }
     }
 
     function handleResponse (response) {
         if (response.ok) {
+            const msgsHeader = response.headers.get('X-Tax-Messages');
+            setMessages(msgsHeader ? JSON.parse(msgsHeader) : []);
             response.blob().then(setOutput);
         }
         else {
@@ -284,6 +288,14 @@ export default function Uploads() {
           <h3>Step 6. <a name="Download" download={download.name}
                        href={URL.createObjectURL(new File([output], download))}>Download</a>
           </h3>
+          {messages.length > 0 && <div className="messages">
+            <h4>Notes on your return:</h4>
+            <ul>
+              {messages.map((msg, i) =>
+                <li key={i} className={"message " + msg.severity.toLowerCase()}>{msg.text}</li>
+              )}
+            </ul>
+          </div>}
           <h3>Step 7. Carefully examine the downloaded {forms}. You can also make adjustments and go to Step 4 again.</h3>
           <h3>Step 8. Fill in your name, address, SIN, and other private information.</h3>
           <h3>Step 9. Print the {formsAgain} and mail your return to CRA.</h3>
