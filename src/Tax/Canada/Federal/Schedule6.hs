@@ -17,13 +17,15 @@
 
 module Tax.Canada.Federal.Schedule6 where
 
+import Data.Foldable (toList)
 import Data.Fixed (Centi)
 import Language.Haskell.TH qualified as TH
 import Rank2 qualified
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
-import Tax.Canada.Shared (SubCalculation(result), fixSubCalculation, subCalculationFields)
+import Tax.Canada.FormKey qualified as FormKey
+import Tax.Canada.Shared (Message, SubCalculation(result), fixSubCalculation, subCalculationFields, overLimitMessage)
 import Tax.Canada.T1.Types (T1)
 import Tax.Canada.T1.Types qualified as T1
 import Tax.FDF (Entry (Amount, Constant, Percent, Switch'), FieldConst (Field), within)
@@ -124,6 +126,10 @@ $(foldMap
        Rank2.TH.deriveAll t,
        Transformation.Shallow.TH.deriveAll t])
    [''Schedule6, ''Page2, ''Page3, ''Page4, ''Page5, ''Questions, ''PartAColumn, ''PartBColumn, ''Step2, ''Step3])
+
+examine :: Schedule6 Maybe -> Schedule6 Maybe -> [Message]
+examine _initial filled =
+  toList $ overLimitMessage 16_386 filled.page3.line14_least "14" FormKey.Schedule6 "Secondary earner exemption"
 
 fixSchedule6 :: Maybe (T1 Maybe) -> T1 Maybe -> Schedule6 Maybe -> Schedule6 Maybe
 fixSchedule6 t1spouse t1  =
