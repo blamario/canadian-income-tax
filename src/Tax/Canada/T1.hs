@@ -52,9 +52,18 @@ examine _inputs outputs = catMaybes [
     explanation= "You have reported employment income on line 15000 but no "
       <> if isNothing outputs.page6.line_30800 then "CPP contributions on line 30800"
          else "EI contributions on line 31200"},
+  overLimitMessage 1074 outputs.page4.line_22215_DeductionCPP_QPP "22215" FormKey.T1
+    "Deduction for CPP or QPP enhanced contributions on employment income",
+  overLimitMessage 16_129 outputs.page5.partB_FederalTaxCredits.line_30000 "30000" FormKey.T1 "Basic personal amount",
+  overLimitMessage 9028 outputs.page5.partB_FederalTaxCredits.line_30100 "30100" FormKey.T1 "Age amount",
   overLimitMessage 1077.48 outputs.page6.line_31200 "31200" FormKey.T1 "EI contributions",
   overLimitMessage 10_000 outputs.page6.line_31270 "31270" FormKey.T1 "Home buyers' amount",
   overLimitMessage 20_000 outputs.page6.line_31285 "31285" FormKey.T1 "Home accessibility expenses",
+  overLimitMessage 2000 outputs.page6.line_31400 "31400" FormKey.T1 "Pension income amount",
+  overLimitMessage 650 outputs.page7.partC_NetFederalTax.line_41000 "41000" FormKey.T1
+    "Federal political contribution tax credit",
+  overLimitMessage 1000 outputs.page8.step6_RefundOrBalanceOwing.line_46900 "46900" FormKey.T1
+    "School supplies expenses",
   Just Message{
       severity = Summary,
       line = if isJust outputs.page8.line_48400_Refund then "48400"
