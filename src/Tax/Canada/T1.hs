@@ -20,7 +20,7 @@ import Data.Text qualified as Text
 
 import Tax.FDF (FieldConst)
 import Tax.Canada.FormKey qualified as FormKey
-import Tax.Canada.Shared(Message(..), Severity(..))
+import Tax.Canada.Shared(Message(..), Severity(..), overLimitMessage)
 import Tax.Canada.T1.Types
 import Tax.Canada.T1.Fix (fixT1)
 import Tax.Canada.T1.FieldNames.AB qualified as AB
@@ -52,27 +52,9 @@ examine _inputs outputs = catMaybes [
     explanation= "You have reported employment income on line 15000 but no "
       <> if isNothing outputs.page6.line_30800 then "CPP contributions on line 30800"
          else "EI contributions on line 31200"},
-  do let limit = 1077.48
-     guard (outputs.page6.line_31200 > Just limit)
-     Just Message{
-       severity = Error,
-       line = "31200",
-       form = FormKey.T1,
-       explanation= "EI contributions can't be larger then " <> Text.show limit},
-  do let limit = 10_000
-     guard (outputs.page6.line_31270 > Just limit)
-     Just Message{
-       severity = Error,
-       line = "31270",
-       form = FormKey.T1,
-       explanation= "Home buyers' amount can't be larger then " <> Text.show limit},
-  do let limit = 20_000
-     guard (outputs.page6.line_31285 > Just limit)
-     Just Message{
-       severity = Error,
-       line = "31285",
-       form = FormKey.T1,
-       explanation= "Home accessibility expenses can't be larger then " <> Text.show limit},
+  overLimitMessage 1077.48 outputs.page6.line_31200 "31200" FormKey.T1 "EI contributions",
+  overLimitMessage 10_000 outputs.page6.line_31270 "31270" FormKey.T1 "Home buyers' amount",
+  overLimitMessage 20_000 outputs.page6.line_31285 "31285" FormKey.T1 "Home accessibility expenses",
   Just Message{
       severity = Summary,
       line = if isJust outputs.page8.line_48400_Refund then "48400"

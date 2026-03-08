@@ -89,6 +89,17 @@ messageText :: Message -> Text
 messageText Message{form, line, explanation} =
   "At line " <> line <> " of " <> Text.pack (show form) <> ": " <> explanation
 
+-- | Given the limit, the line value, the line number, the form, and the value name, construct the error message
+-- if the value is above the limit.
+overLimitMessage :: Centi -> Maybe Centi -> Text -> FormKey -> Text -> Maybe Message
+overLimitMessage limit value line form name =
+  guard (value > Just limit)
+  *> Just Message{
+    severity = Error,
+    line,
+    form,
+    explanation= name <> " can't be larger then " <> Text.show limit}
+
 fixTaxIncomeBracket :: Maybe Centi -> Maybe (TaxIncomeBracket Maybe) -> TaxIncomeBracket Maybe -> TaxIncomeBracket Maybe
 fixTaxIncomeBracket theIncome nextBracket = fixEq $ \bracket@TaxIncomeBracket{..} -> bracket{
    income = do i <- theIncome
