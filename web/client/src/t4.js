@@ -1,9 +1,9 @@
 
 export default function T4 (values, setValues) {
     function t4box (number, english, french) {
-        return <div class="box">
-                 <label class="bilingual-text">{english}<br/>{french}</label>
-                 <span class="box-number">{number}</span>
+        return <div className="box">
+                 <label className="bilingual-text">{english}<br/>{french}</label>
+                 <span className="box-number">{number}</span>
                  <input type="number" step="0.01" value={values[number]} onChange={handleEntry(number)}/>
                </div>;
     }
@@ -16,7 +16,7 @@ export default function T4 (values, setValues) {
         }
     }
     
-    return <div class="grid-container">
+    return <div className="grid-container">
         {t4box("14", "Employment income", "Revenus d'emploi")}
         {t4box("22", "Income tax deducted", "Impôt sur le revenu retenu")}
         {t4box("16", "Employee's CPP contributions", "Cotisations de l'employé au RPC")}

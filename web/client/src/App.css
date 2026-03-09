@@ -1,6 +1,90 @@
+/* ── Layout ───────────────────────────────────────────────── */
+
+.app-container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 1rem 2rem;
+    background: #fff;
+    min-height: 100vh;
+    box-shadow: 0 0 0 1px #e0e0e0;
+}
+
+/* ── Header ───────────────────────────────────────────────── */
+
+.app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 3px solid #c8102e;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.app-header-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.app-header-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+/* ── Buttons ──────────────────────────────────────────────── */
+
+button {
+    font-family: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    padding: 0.4rem 0.9rem;
+    transition: background-color 0.15s, opacity 0.15s;
+}
+
+button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+button.btn-primary {
+    background-color: #c8102e;
+    color: #fff;
+}
+
+button.btn-primary:not(:disabled):hover {
+    background-color: #a00d24;
+}
+
+button.btn-secondary {
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #bbb;
+}
+
+button.btn-secondary:not(:disabled):hover {
+    background-color: #f0f0f0;
+}
+
+button.btn-success {
+    background-color: #1a7a3d;
+    color: #fff;
+}
+
+button.btn-success:not(:disabled):hover {
+    background-color: #145f30;
+}
+
+/* ── Province Dropdown ────────────────────────────────────── */
+
 .provinceRoot {
     display: inline-block;
     vertical-align: middle;
+    min-width: 220px;
 }
 
 .provinceMenu {
@@ -8,20 +92,149 @@
     max-height: inherit;
 }
 
+/* ── Steps ────────────────────────────────────────────────── */
+
+.step {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    margin: 1.25rem 0 0.4rem;
+}
+
+.step-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.7rem;
+    height: 1.7rem;
+    border-radius: 50%;
+    background-color: #c8102e;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.step-label {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+/* ── Section bodies ───────────────────────────────────────── */
+
+.section-body {
+    margin-left: 2.3rem;
+    margin-bottom: 0.5rem;
+}
+
+/* ── Form upload lists ────────────────────────────────────── */
+
+dl.upload-list {
+    margin: 0;
+}
+
+dl.upload-list dt {
+    font-weight: 600;
+    margin-top: 0.9rem;
+    margin-bottom: 0.2rem;
+    color: #333;
+}
+
+dl.upload-list dd {
+    margin: 0 0 0.25rem 0;
+}
+
+dl.upload-list dd input[type="file"] {
+    font-size: 0.9rem;
+}
+
+/* ── T4 slip buttons ──────────────────────────────────────── */
+
+button.T4 {
+    margin-right: 0.6rem;
+    font-size: 0.85rem;
+}
+
+button.enter.T4 {
+    min-width: 7em;
+}
+
+button.add.T4 {
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 0.25rem 0.7rem;
+}
+
+/* ── Save / Load (header) buttons ────────────────────────── */
+
+button.top {
+    font-size: 0.85rem;
+}
+
+input.load {
+    display: none;
+}
+
+/* ── Download link as button ──────────────────────────────── */
+
+a.download-link {
+    display: inline-block;
+    background-color: #1a7a3d;
+    color: #fff;
+    text-decoration: none;
+    padding: 0.4rem 0.9rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: background-color 0.15s;
+}
+
+a.download-link:hover {
+    background-color: #145f30;
+    color: #fff;
+}
+
+/* ── Error display ────────────────────────────────────────── */
+
+.error-box {
+    margin-top: 1rem;
+    padding: 0.5rem 0.8rem;
+    background-color: #fff0f0;
+    border-left: 4px solid #c8102e;
+    color: #b00020;
+    border-radius: 0 4px 4px 0;
+    font-size: 0.9rem;
+}
+
+/* ── Messages block ───────────────────────────────────────── */
+
+.messages {
+    margin: 0.75rem 0 0;
+}
+
+.messages h4 {
+    font-size: 1rem;
+    margin-bottom: 0.4rem;
+}
+
 .messages ul {
     list-style: none;
     padding-left: 0;
+    margin: 0;
 }
 
 .message {
     margin: 0.3em 0;
-    padding: 0.3em 0.6em;
+    padding: 0.35em 0.7em;
     border-left: 4px solid transparent;
+    border-radius: 0 4px 4px 0;
+    font-size: 0.9rem;
 }
 
 .message.error {
     color: #b00020;
-    border-left-color: #b00020;
+    border-left-color: #c8102e;
     background-color: #fff0f0;
 }
 
@@ -34,10 +247,12 @@
 .message.summary {
     color: #1a1a1a;
     border-left-color: #555;
+    background-color: #f4f4f4;
     font-weight: bold;
 }
 
 .message.notice {
     color: #444;
     border-left-color: #999;
+    background-color: #fafafa;
 }
