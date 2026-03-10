@@ -60,7 +60,7 @@ ul {
 }
 
 a {
-  color: #c8102e;
+  color: #b0102e;
 }
 
 a:hover {
@@ -84,6 +84,6 @@ a:hover {
 }
 
 .site-footer a:hover {
-  color: #c8102e;
+  color: #b0102e;
   text-decoration: underline;
 }

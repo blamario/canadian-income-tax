@@ -1,5 +1,5 @@
 a.homelink {
-    background-color: #c8102e;
+    background-color: #b0102e;
     color: white;
     font-weight: bold;
     font-size: 1.15rem;
@@ -35,7 +35,7 @@ footer a {
 }
 
 footer a:hover {
-    color: #c8102e;
+    color: #b0102e;
     text-decoration: underline;
 }
 

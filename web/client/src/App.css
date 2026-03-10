@@ -16,7 +16,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 0.75rem 0;
-    border-bottom: 3px solid #c8102e;
+    border-bottom: 3px solid #b0102e;
     margin-bottom: 1.5rem;
     flex-wrap: wrap;
     gap: 0.5rem;
@@ -52,7 +52,7 @@ button:disabled {
 }
 
 button.btn-primary {
-    background-color: #c8102e;
+    background-color: #b0102e;
     color: #fff;
 }
 
@@ -108,7 +108,7 @@ button.btn-success:not(:disabled):hover {
     width: 1.7rem;
     height: 1.7rem;
     border-radius: 50%;
-    background-color: #c8102e;
+    background-color: #b0102e;
     color: #fff;
     font-size: 0.85rem;
     font-weight: 700;
@@ -201,7 +201,7 @@ a.download-link:hover {
     margin-top: 1rem;
     padding: 0.5rem 0.8rem;
     background-color: #fff0f0;
-    border-left: 4px solid #c8102e;
+    border-left: 4px solid #b0102e;
     color: #b00020;
     border-radius: 0 4px 4px 0;
     font-size: 0.9rem;
