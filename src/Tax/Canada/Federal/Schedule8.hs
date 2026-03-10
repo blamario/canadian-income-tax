@@ -18,15 +18,19 @@
 
 module Tax.Canada.Federal.Schedule8 where
 
+import Control.Monad (guard)
 import Control.Applicative ((<|>))
 import Data.Fixed (Centi)
+import Data.Maybe (catMaybes, isNothing)
 import Data.Time.Calendar (MonthOfYear)
 import Language.Haskell.TH qualified as TH
 import Rank2 qualified
 import Rank2.TH qualified
 import Transformation.Shallow.TH qualified
 
-import Tax.Canada.Shared (SubCalculation(calculation, result), fixSubCalculation, subCalculationFields)
+import Tax.Canada.FormKey qualified as FormKey
+import Tax.Canada.Shared (Message(..), Severity(..), SubCalculation(calculation, result),
+                          fixSubCalculation, overLimitMessage, subCalculationFields)
 import Tax.FDF (Entry (Amount, Count, Month), FieldConst (Field), within)
 import Tax.Util (fixEq, difference, nonNegativeDifference, totalOf)
 
@@ -279,6 +283,28 @@ $(foldMap
     ''Page7, ''Page7Part4, ''Page7Part5, ''Page7Cond1, ''Page7Cond2,
     ''Page8, ''Page8Cond1, ''Page8Cond2,
     ''Page9, ''Page10, ''Page11])
+
+examine :: Schedule8 Maybe -> Schedule8 Maybe -> [Message]
+examine initial filled = catMaybes [
+  guard (isNothing initial.page3.lineA_months)
+  *> Just Message{
+    severity = Notice,
+    line = "A",
+    form = FormKey.Schedule8,
+    explanation= "You have not entered the number of months that CPP applied, it will default to 12."},
+  overLimitMessage 71_300 filled.page3.lineB_maxPensionableEarnings "B" FormKey.Schedule8
+    "Maximum pensionable earnings",
+  overLimitMessage 9_900 filled.page3.lineC_maxSubjectToSecondAdditionalContributions "C" FormKey.Schedule8
+    "Maximum amount subject to second additional contributions",
+  overLimitMessage 81_200 filled.page3.lineD_additionalMaxPensionableEarnings "D" FormKey.Schedule8
+    "Additional maximum pensionable earnings",
+  overLimitMessage 3_500 filled.page3.lineE_maxBasicExemption "E" FormKey.Schedule8 "Maximum basic exemption",
+  overLimitMessage 81_200 filled.page4.line_50339_totalPensionableEarnings "50339" FormKey.Schedule8
+    "Total CPP pensionable earnings",
+  overLimitMessage 396 filled.page4.line22_fraction.result "22" FormKey.Schedule8
+    "Required second additional contributions on CPP pensionable earnings",
+  overLimitMessage 67_800 filled.page6.part4.line9_difference "9" FormKey.Schedule8
+    "Earnings subject to base and first additional contributions"]
 
 fixSchedule8 :: Schedule8 Maybe -> Schedule8 Maybe
 fixSchedule8 = fixEq $ \Schedule8{page2, page3, page4, page5, page6, page7, page8, page9, page10, page11}-> Schedule8{

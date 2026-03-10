@@ -189,7 +189,11 @@ fixFederalForms province InputForms{t4 = t4s} = fixEq $
 
 -- | Given the original and filled-in federal forms, return a list of observations for the user
 examine :: Forms Maybe -> Forms Maybe -> [Message]
-examine inputs outputs = T1.examine inputs.t1 outputs.t1 <> Schedule7.examine inputs.schedule7 outputs.schedule7
+examine initial filled =
+  T1.examine initial.t1 filled.t1
+  <> Schedule6.examine initial.schedule6 filled.schedule6
+  <> Schedule7.examine initial.schedule7 filled.schedule7
+  <> Schedule8.examine initial.schedule8 filled.schedule8
 
 -- | The paths of all the fields in all federal forms, with the form key added as the head of every field path.
 formFieldsForProvince :: Province.Code -> Forms FieldConst
