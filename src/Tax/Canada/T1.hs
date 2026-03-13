@@ -36,7 +36,13 @@ import Tax.Canada.T1.FieldNames.YT qualified as YT
 -- | Reports summary and potential problems from input and output T1 forms
 -- | Given the original and filled-in federal forms, return a list of observations for the user
 examine :: T1 Maybe -> T1 Maybe -> [Message]
-examine _inputs outputs = catMaybes [
+examine inputs outputs = catMaybes [
+  guard (isNothing inputs.page1.identification.dateBirth)
+  *> Just Message{
+    severity = Notice,
+    line = "Date of Birth",
+    form = FormKey.T1,
+    explanation= "You have not entered your date of birth. I'll assume you were under 65 years old."},
   guard (isNothing outputs.page3.line_15000_TotalIncome)
   *> Just Message{
     severity = Warning,
