@@ -16,7 +16,9 @@
 module Tax.Canada.Province.BC (Returns(..), BC428, bc428Fields, bc479Fields, formFileNames,
                                fixBC428, fixBC479, fixReturns, returnFields, t1Fields) where
 
+import Control.Applicative ((<|>))
 import Data.CAProvinceCodes (Code(BC))
+import Data.Maybe (isNothing)
 import Data.Map (Map, fromList)
 import Data.Text (Text)
 import Rank2 qualified
@@ -104,11 +106,13 @@ fixReturns inputs =
                                                BCC.line1_netIncome_spouse = t1.page1.spouse.line_23600,
                                                BCC.line4_uccb_rdsp_income_self = totalOf [t1.page3.line_11700_UCCB,
                                                                                           t1.page3.line_12500_RDSP],
-                                               BCC.line7_threshold = if t1.page1.identification.maritalStatus
-                                                                        `elem` [Just T1.Married,
-                                                                                Just T1.LivingCommonLaw]
-                                                                     then Just 18_000
-                                                                     else 15_000 <$ t1.page1.identification.maritalStatus}}}
+                                               BCC.line7_threshold = if isNothing t1.page1.identification.maritalStatus
+                                                                     then bc479.page1.line7_threshold <|> Just 15_000
+                                                                     else if t1.page1.identification.maritalStatus
+                                                                             `elem` [Just T1.Married,
+                                                                                     Just T1.LivingCommonLaw]
+                                                                          then Just 18_000
+                                                                          else Just 15_000}}}
 
 returnFields :: Returns FieldConst
 returnFields = Returns{

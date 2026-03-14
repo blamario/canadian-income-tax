@@ -40,9 +40,16 @@ examine inputs outputs = catMaybes [
   guard (isNothing inputs.page1.identification.dateBirth)
   *> Just Message{
     severity = Notice,
-    line = "Date of Birth",
+    line = "Date of birth",
     form = FormKey.T1,
     explanation= "You have not entered your date of birth. I'll assume you were under 65 years old."},
+  guard (isNothing inputs.page1.identification.maritalStatus)
+  *> Just Message{
+    severity = Notice,
+    line = "Marital status",
+    form = FormKey.T1,
+    explanation= "You have not entered your marital status.\
+                 \ I'll assume you were single, with no spouse or common-law partner credits."},
   guard (isNothing outputs.page3.line_15000_TotalIncome)
   *> Just Message{
     severity = Warning,
