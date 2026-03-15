@@ -1,5 +1,17 @@
 # Revision history for `canadian-income-tax`
 
+## 2025.1
+
+* Breaking changes to the library:
+  * Changed ther result type of `completeForms` and `completeRelevantForms` to also report the post-processing messages
+* Features and improvements:
+  * Added the `Message` and `Severity` types
+  * Specify `-v` or `--verbose` on the command line to see the messages
+  * Improved the visual design of web pages
+* Fixes:
+  * Updated the benefit amounts in Schedule 6 to the 2025 values
+  * Updated 15% to the 2025 value of 14.5% in Schedules 9 and 11
+
 ## 2025.0
 
 * Breaking changes to the library:

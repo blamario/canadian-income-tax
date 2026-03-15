@@ -1,6 +1,6 @@
 cabal-version:      2.4
 name:               canadian-income-tax
-version:            2025.0
+version:            2025.1
 
 synopsis: Canadian income tax calculation
 
