@@ -7,7 +7,6 @@
 module Main where
 
 import Codec.Archive.Zip (addEntryToArchive, emptyArchive, fromArchive, toEntry)
-import Control.Category ((>>>))
 import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (decode, encode, object, (.=))
 import Data.Bifunctor (bimap, first)
@@ -17,6 +16,7 @@ import Data.ByteString.Lazy qualified as Lazy
 import Data.ByteString.Lazy qualified as ByteString.Lazy
 import Data.Fixed (Centi)
 import Data.Foldable (fold, toList)
+import Data.Functor.Compose (Compose(Compose))
 import Data.List qualified as List
 import Data.Map.Lazy (Map)
 import Data.Map.Lazy qualified as Map
@@ -41,7 +41,7 @@ import System.Log.FastLogger.Date (newTimeCache, simpleTimeFormat)
 import System.Posix.Temp (mkdtemp)
 import Text.FDF (FDF)
 import Text.FDF qualified as FDF (mapWithKey, parse)
-import Text.FDF.PDF (parsePDF, fillPDF)
+import Text.FDF.PDF (PDF(form), fillPDF, parsePDF, serializePDF)
 import Text.Read (readMaybe)
 import Web.Scotty (file, files, finish, formParamMaybe, get, middleware, pathParam, post, raw,
                    scotty, setHeader, status, text)
@@ -116,12 +116,15 @@ main = do
         Right fs -> pure fs
       log ("Complete " <> toLogStr provinceCode <> ": "
            <> toLogStr (length t4m) <> " T4s, " <> toLogStr (show (fst <$> pdfFiles)))
-      let allPdfFiles = Map.toList (Map.fromList pdfFiles <> emptyForms)
-          pdfBytes = (snd <$>) <$> allPdfFiles
+      let allPdfFiles :: [(FormKey, (String, Lazy.ByteString))]
+          allPdfs :: [(FormKey, (String, Either String PDF))]
+          allPdfFiles = Map.toList (Map.fromList pdfFiles <> emptyForms)
+          Compose (Compose allPdfs) = parsePDF . Lazy.toStrict <$> Compose (Compose allPdfFiles)
       dir <- liftIO $ mkdtemp "tax"
-      case do fdfs <- first ((,) unsupportedMediaType415 . traceShowId)
-                      $ traverse (\(k, v)-> bimap (<> (" in " <> show k)) ((,) k) $ parsePDF $ Lazy.toStrict v) pdfBytes
-              let (inputFDFs, _ioFDFs) = List.partition ((FormKey.T4 ==) . fst) fdfs
+      case do pdfs <- first ((,) unsupportedMediaType415 . traceShowId)
+                      $ traverse (\(k, (_, v))-> bimap (<> (" in " <> show k)) ((,) k) v) allPdfs
+              let Compose fdfs = form <$> Compose pdfs
+                  (inputFDFs, _ioFDFs) = List.partition ((FormKey.T4 ==) . fst) fdfs
                   inputT4s = foldMap injectT4 t4m
                   injectT4 values = [(FormKey.T4, FDF.mapWithKey injectT4box t4fdf)]
                     where injectT4box keyPath ""
@@ -139,9 +142,10 @@ main = do
                               $ map (\msg-> object ["severity" .= show msg.severity,
                                                     "text"     .= messageText msg]) msgs
                  replaceContent :: FormKey -> FDF -> Either String (FilePath, Lazy.ByteString)
-                 replaceContent key form = case List.lookup key allPdfFiles of
-                   Just (name, pdfBytes') -> ((,) name) . Lazy.fromStrict <$> fillPDF form (Lazy.toStrict pdfBytes')
+                 replaceContent key form = case List.lookup key allPdfs of
                    Nothing -> Left $ "Unknown key " <> show key
+                   Just (name, Left err) -> Left $ err <> " in " <> name
+                   Just (name, Right pdf) -> ((,) name) . Lazy.fromStrict . serializePDF <$> fillPDF form pdf
                  pdfFiles' = Map.traverseWithKey replaceContent fdfs'
              case toList <$> pdfFiles' of
                Left err -> do
