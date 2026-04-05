@@ -56,6 +56,14 @@ examine inputs outputs = catMaybes [
     line = "15000",
     form = FormKey.T1,
     explanation= "You've reported no income to tax in Step 2 of the T1 form."},
+  guard (isNothing outputs.page5.step4_TaxableIncome.line_25000_OtherPayDeductions)
+  *> guard (isJust outputs.page3.line_14600_NetFedSupplements)
+  *> Just Message{
+    severity = Error,
+    line = "25000",
+    form = FormKey.T1,
+    explanation=
+        "You've reported federal supplements on line 14600, you must also report a deduction amount on line 25000"},
   guard (isJust outputs.page3.line_10100_EmploymentIncome)
   *> guard (isNothing outputs.page6.line_30800 || isNothing outputs.page6.line_31200)
   *> Just Message{

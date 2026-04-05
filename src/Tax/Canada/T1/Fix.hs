@@ -149,6 +149,9 @@ fixPage8 t1 = fixEq $ \Page8{..}-> Page8{
 fixStep4 :: T1 Maybe -> Step4 Maybe -> Step4 Maybe
 fixStep4 t1 = fixEq $ \step@Step4{..}-> step{
    line_23600_NetIncome_2 = t1.page4.line_23600_NetIncome,
+   line_25000_OtherPayDeductions = case t1.page3.line_14600_NetFedSupplements of
+       Nothing -> t1.page3.line_14700_sum.result
+       Just supplements -> line_25000_OtherPayDeductions,
    line_25700_sum = fixSubCalculation id $
                     totalOf [line_24400_MilitaryPoliceDeduction,
                              line_24900_SecurityDeductions,
