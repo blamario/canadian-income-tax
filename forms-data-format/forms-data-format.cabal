@@ -1,0 +1,101 @@
+cabal-version:      2.4
+name:               forms-data-format
+version:            0.4
+
+synopsis: Parse, serialize, and manipulate FDF: the Forms Data Format
+
+description: This is a hacked-together library to parse and serialize FDF,
+             Adobe's [Forms Data
+             Format](https://helpx.adobe.com/acrobat/kb/acrobat-forms-form-data-web.html). It
+             does not follow the specification, but seems to work for simple
+             cases.
+
+category:           data, text
+license:            BSD-3-Clause
+license-files:      LICENSE
+copyright:          (c) 2023 Mario Blažević
+author:             Mario Blažević
+maintainer:         blamario@protonmail.com
+bug-reports:        https://github.com/blamario/forms-data-format/issues
+
+extra-source-files: CHANGELOG.md, README.md
+source-repository head
+  type:     git
+  location: https://github.com/blamario/forms-data-format
+
+library
+    exposed-modules:  Text.FDF
+                      Text.FDF.PDF
+    other-modules:    Text.FDF.PDF.ContentStream
+                      Text.FDF.PDF.Decompress
+                      Text.FDF.PDF.Decrypt
+                      Text.FDF.PDF.Labels
+                      Text.FDF.PDF.Parse
+                      Text.FDF.PDF.Serialize
+                      Text.FDF.PDF.Types
+                      Text.FDF.PDF.XRef
+
+    -- Modules included in this library but not exported.
+    -- other-modules:
+    other-extensions: ImportQualifiedPost LambdaCase NamedFieldPuns OverloadedStrings
+    build-depends:    base == 4.*, bytestring >=0.9 && < 0.13, text >= 2.0.2 && < 2.2,
+                      containers >= 0.6 && < 0.9,
+                      zlib >= 0.6 && < 0.8,
+                      crypton >= 1.0 && < 2,
+                      ram >= 0.19 && < 0.22,
+                      monoid-subclasses == 1.*, rank2classes >= 1 && < 1.6,
+                      scientific >= 0.3 && < 0.4,
+                      parsers < 0.13, grammatical-parsers >= 0.5 && < 0.8
+    hs-source-dirs:   src
+    default-language: Haskell2010
+    ghc-options:      -Wall
+
+executable fdfdiff
+    main-is:          Diff.hs
+    other-modules:    Common
+    hs-source-dirs:   app
+    default-language: Haskell2010
+    build-depends:    base == 4.*, bytestring, text,
+                      directory >= 1.2 && < 1.4, optparse-applicative >= 0.15 && < 0.19,
+                      forms-data-format
+
+executable fdfpatch
+    main-is:          Patch.hs
+    other-modules:    Common
+    hs-source-dirs:   app
+    default-language: Haskell2010
+    build-depends:    base == 4.*, bytestring, text,
+                      directory >= 1.2 && < 1.4, optparse-applicative >= 0.15 && < 0.19,
+                      forms-data-format
+
+executable pdf-to-fdf
+    main-is:          PdfToFdf.hs
+    hs-source-dirs:   app
+    default-language: Haskell2010
+    build-depends:    base == 4.*, bytestring,
+                      optparse-applicative >= 0.15 && < 0.19,
+                      forms-data-format
+
+executable fdf-to-pdf
+    main-is:          FdfToPdf.hs
+    hs-source-dirs:   app
+    default-language: Haskell2010
+    build-depends:    base == 4.*, bytestring,
+                      optparse-applicative >= 0.15 && < 0.19,
+                      forms-data-format
+
+executable pdf-to-labels
+    main-is:          PdfToLabels.hs
+    hs-source-dirs:   app
+    default-language: Haskell2010
+    build-depends:    base == 4.*, bytestring,
+                      optparse-applicative >= 0.15 && < 0.19,
+                      forms-data-format
+
+test-suite pdf-round-trip
+    type:             exitcode-stdio-1.0
+    main-is:          PdfRoundTrip.hs
+    hs-source-dirs:   test
+    default-language: Haskell2010
+    build-depends:    base == 4.*, bytestring,
+                      forms-data-format

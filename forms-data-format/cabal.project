@@ -1,0 +1,8 @@
+packages: .
+
+-- The following transitive dependencies have overly strict upper bounds on
+-- `base` that exclude GHC 9.6+.  Relax those bounds so the package can be
+-- built with a modern GHC toolchain.
+allow-newer: data-functor-logistic:base,
+             indexed-traversable:base,
+             indexed-traversable-instances:base

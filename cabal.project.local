@@ -1,3 +1,2 @@
 allow-newer: all
-packages: .
-optional-packages: /tmp/forms-data-format/
+packages: ., forms-data-format/
