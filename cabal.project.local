@@ -1,0 +1,2 @@
+allow-newer: all
+packages: ., forms-data-format/

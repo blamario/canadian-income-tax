@@ -17,7 +17,7 @@ import Data.ByteString.Lazy qualified as ByteString.Lazy
 import Data.CAProvinceCodes qualified as Province
 import Data.Char (toUpper)
 import Data.Foldable (for_, toList)
-import Data.Functor.Compose (Compose(Compose, getCompose))
+import Data.Functor.Compose (Compose(Compose))
 import Data.List qualified as List
 import Data.Map.Lazy qualified as Map
 import Data.Maybe (catMaybes)
@@ -29,6 +29,7 @@ import Options.Applicative qualified as OptsAp
 import System.Directory (createDirectoryIfMissing, doesDirectoryExist, doesFileExist)
 import System.FilePath (combine, replaceDirectory, takeFileName)
 import Text.FDF (FDF, parse, serialize)
+import Text.FDF.PDF (fillPDF, parsePDF, serializePDF, PDF(form))
 
 import Paths_canadian_income_tax (getDataDir)
 import Tax.Canada (completeAndFilterForms, allFormKeys, relevantFormKeys, formFileNames)
@@ -36,7 +37,6 @@ import Tax.Canada.Federal qualified as Federal
 import Tax.Canada.FormKey (FormKey)
 import Tax.Canada.FormKey qualified as FormKey
 import Tax.Canada.Shared (messageText)
-import Tax.PDFtk (fdf2pdf, pdf2fdf)
 
 main :: IO ()
 main = OptsAp.execParser (OptsAp.info optionsParser
@@ -96,7 +96,7 @@ readFDF inputPath = do
    if "%FDF-1." `isPrefixOf` content
       then pure (False, content)
       else if "%PDF-1." `isPrefixOf` content
-           then either error ((,) True) <$> pdf2fdf content
+           then pure (True, content)
            else error "Expecting an FDF or PDF file"
 
 process :: Options -> IO ()
@@ -121,20 +121,27 @@ process Options{province, t1InputPath, t4InputPaths, p428InputPath, p479InputPat
        emptyFiles = completePath <$> Map.delete FormKey.Provincial479 (formFileNames province)
        completePath baseName = combine dataDir $ combine "pdf" $ Text.unpack baseName <> "-fill-25e.pdf"
    inputs <- traverse (traverse readFDF) allFiles :: IO [(FormKey, (Bool, Lazy.ByteString))]
-   let writeFrom :: FormKey -> ByteString.ByteString -> IO ()
-       writeFrom key content = do
+   let parsedInputs :: Either String [(FormKey, Either FDF PDF)]
+       parsedInputs = traverse (traverse parseInput) inputs
+       parseInput :: (Bool, Lazy.ByteString) -> Either String (Either FDF PDF)
+       parseInput (False, bytes) = Left <$> parse (Lazy.toStrict bytes)
+       parseInput (True, bytes) = Right <$> parsePDF (Lazy.toStrict bytes)
+       writeFrom :: FormKey -> FDF -> IO ()
+       writeFrom key form = do
           let Just inputPath = List.lookup key allFiles
-              Just (asPDF, _) = List.lookup key inputs
-              fromFDF = if asPDF then (either error Lazy.toStrict <$>) . fdf2pdf inputPath . Lazy.fromStrict else pure
-          content' <- fromFDF content
+              outputBytes = case List.lookup key <$> parsedInputs
+                of Right (Just Left{}) -> serialize form
+                   Right (Just (Right pdf)) -> either error serializePDF $ fillPDF form pdf
+                   _ -> error ("Can't find parsed form with key " <> show key)
           if outputPath == "-"
-             then ByteString.putStr content'
+             then ByteString.putStr outputBytes
              else do
                 isDir <- doesDirectoryExist outputPath
                 if isDir
-                   then ByteString.writeFile (replaceDirectory inputPath outputPath) content'
-                   else ByteString.writeFile outputPath content'
-       fdfs = getCompose <$> traverse (parse . Lazy.toStrict . snd) (Compose inputs) :: Either String [(FormKey, FDF)]
+                   then ByteString.writeFile (replaceDirectory inputPath outputPath) outputBytes
+                   else ByteString.writeFile outputPath outputBytes
+       fdfs :: Either String [(FormKey, FDF)]
+       Compose (Compose fdfs) = either id form <$> Compose (Compose parsedInputs)
    case do (inputFDFs, ioFDFs) <- List.partition ((FormKey.T4 ==) . fst) <$> fdfs
            inputForms <- Federal.loadInputForms inputFDFs
            let formKeys = if keepIrrelevantForms then allFormKeys else relevantFormKeys
@@ -148,13 +155,13 @@ process Options{province, t1InputPath, t4InputPaths, p428InputPath, p479InputPat
                | Just path <- List.lookup key allFiles
                = (`fileEntry` ByteString.Lazy.fromStrict content) <$> toTarPath False (takeFileName path)
                | otherwise = Left (show key)
-             tarFile = either (error . ("Can't tar: " <>)) (ByteString.Lazy.toStrict . Tar.write . toList) tarEntries
+             tarFile = either (error . ("Can't tar: " <>)) (Lazy.toStrict . Tar.write . toList) tarEntries
          -- when verbose (hPutStrLn stderr $ show (form'T1, form'ON))
          when ("/" `isSuffixOf` outputPath) (createDirectoryIfMissing True outputPath)
          if outputPath == "-"
             then ByteString.putStr tarFile
             else do isDir <- doesDirectoryExist outputPath
                     if isDir
-                       then void $ Map.traverseWithKey writeFrom bytesMap'
+                       then void $ Map.traverseWithKey writeFrom fixedFDFs
                        else ByteString.writeFile outputPath tarFile
          when verbose $ for_ msgs $ Text.IO.putStrLn . messageText
